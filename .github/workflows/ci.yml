@@ -22,6 +22,7 @@ jobs:
           for i in 1 2 3 4 5; do curl -fsS http://127.0.0.1:8788/ > /dev/null && break || sleep 1; done
           npm run test:browser
           npm run test:client
+          npm run test:manual
   secrets:
     runs-on: ubuntu-latest
     steps:

@@ -1,3 +1,4 @@
+import {manual} from './build-manual.mjs';
 import {build} from 'esbuild';
 import {readFile,writeFile,mkdir,copyFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
@@ -9,7 +10,7 @@ await writeFile('public/version.json',JSON.stringify({version:'0.1.0',commit,bui
 for(const lang of ['th','en']){
  const text=await readFile(`docs/GUIDE.${lang}.md`,'utf8');
  const diagrammed=text.replace(/```mermaid\n([\s\S]*?)```/g,(_,body)=>{const nodes=[...body.matchAll(/\w+\["([^"]+)"\]/g)].map(m=>m[1]);return '<div class="doc-diagram" aria-label="Workflow">'+nodes.map((n,i)=>`<div>${n}</div>${i<nodes.length-1?'<span aria-hidden="true">↓</span>':''}`).join('')+'</div>';});
- await writeFile(`public/guide-${lang}.html`,`<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${lang==='th'?'คู่มือ':'User guide'} · Forest Carbon Thailand</title><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="css/malaysia.css"><link rel="stylesheet" href="css/app.css"><link rel="stylesheet" href="css/guide.css"></head><body class="guide"><nav><a href="/?lang=${lang}">← ${lang==='th'?'กลับไปเครื่องมือ':'Open workbench'}</a><a href="guide-${lang==='th'?'en':'th'}.html">${lang==='th'?'English':'ภาษาไทย'}</a><a href="research-${lang}.html">${lang==='th'?'งานวิจัย':'Research'}</a><a href="https://github.com/Nonarkara/carbon">GitHub</a></nav><main>${marked.parse(diagrammed)}</main><footer>Forest Carbon Thailand · ${commit}</footer></body></html>`);
+ await writeFile(`public/guide-${lang}.html`,`<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${lang==='th'?'คู่มือ':'User guide'} · Forest Carbon Thailand</title><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="css/malaysia.css"><link rel="stylesheet" href="css/app.css"><link rel="stylesheet" href="css/guide.css"></head><body class="guide manual"><nav><a href="/?lang=${lang}">← ${lang==='th'?'กลับไปเครื่องมือ':'Open workbench'}</a><a href="guide-${lang==='th'?'en':'th'}.html">${lang==='th'?'English':'ภาษาไทย'}</a><a href="research-${lang}.html">${lang==='th'?'งานวิจัย':'Research'}</a><a href="https://github.com/Nonarkara/carbon">GitHub</a></nav><main>${await manual(lang,marked.parse(diagrammed))}</main><footer>Forest Carbon Thailand · ${commit}</footer></body></html>`);
 }
 console.log('Built static site at',commit);
 

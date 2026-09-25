@@ -12,7 +12,8 @@
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node scripts/browser-test.mjs",
     "deploy": "npm run build && npm test && wrangler pages deploy public --project-name forest-carbon-thailand",
-    "test:client": "node scripts/client-demo-test.mjs"
+    "test:client": "node scripts/client-demo-test.mjs",
+    "test:manual": "node scripts/manual-walkthrough.mjs"
   },
   "dependencies": {
     "@fontsource/ibm-plex-sans-thai": "^5.3.0",
