@@ -1,0 +1,13 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {parseCSV} from '../public/js/imports.js';
+import {validateBoundary} from '../src/geometry.js';
+const headers='plot_id,tree_id,plot_area_m2,dbh_cm,height_m\n';
+const poly=(x=100,y=14,s=.01)=>({type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:[[[x,y],[x+s,y],[x+s,y+s],[x,y+s],[x,y]]]}});
+test('quoted CSV, BOM and embedded newline supported',()=>{const rows=parseCSV('\uFEFF'+headers+'"p,1","t\n1",1600,20,15\r\n');assert.equal(rows[0].plot_id,'p,1');assert.equal(rows[0].tree_id,'t\n1');});
+test('bad CSV is rejected',()=>{for(const s of [headers,headers+'"oops',headers+'p,t,1,2\n','x,x\n1,2'])assert.throws(()=>parseCSV(s));});
+test('geodesic boundary area and hole subtraction',()=>{const p=poly();const a=validateBoundary(p);assert.ok(a.hectares>110&&a.hectares<125);assert.ok(Math.abs(a.rai-a.hectares*6.25)<1e-8);const h=poly(100.002,14.002,.002);p.geometry.coordinates.push(h.geometry.coordinates[0]);assert.ok(validateBoundary(p).m2<a.m2);});
+test('overlap, containment and multipolygon overlaps rejected',()=>{for(const fs of [[poly(),poly(100.005)],[poly(),poly(100.002,14.002,.001)]])assert.throws(()=>validateBoundary({type:'FeatureCollection',features:fs}));assert.throws(()=>validateBoundary({type:'MultiPolygon',coordinates:[poly().geometry.coordinates,poly().geometry.coordinates]}));});
+test('disjoint polygons and shared edge allowed',()=>{assert.equal(validateBoundary({type:'FeatureCollection',features:[poly(),poly(100.01)]}).featureCount,2);});
+test('projected coordinates, unclosed and crossing rings rejected',()=>{assert.throws(()=>validateBoundary({...poly(),crs:{name:'EPSG:32647'}}));assert.throws(()=>validateBoundary(poly(650000,1500000)));const p=poly();p.geometry.coordinates[0].pop();assert.throws(()=>validateBoundary(p));p.geometry.coordinates=[[[100,14],[100.01,14.01],[100.01,14],[100,14.01],[100,14]]];assert.throws(()=>validateBoundary(p));});
+test('outside holes rejected',()=>{const p=poly();p.geometry.coordinates.push(poly(101).geometry.coordinates[0]);assert.throws(()=>validateBoundary(p));});

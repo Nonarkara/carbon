@@ -1,0 +1,123 @@
+[
+  {
+    "province_th": "สระบุรี",
+    "year_be": 2561,
+    "year_ce": 2018,
+    "forest_area_rai": 522573.34,
+    "forest_area_ha": 83611.7344,
+    "forest_percent": 23.89,
+    "source": "https://data.go.th/dataset/saraburi-forest-area",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  },
+  {
+    "province_th": "สระบุรี",
+    "year_be": 2562,
+    "year_ce": 2019,
+    "forest_area_rai": 529689.38,
+    "forest_area_ha": 84750.3008,
+    "forest_percent": 24.22,
+    "source": "https://data.go.th/dataset/saraburi-forest-area",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  },
+  {
+    "province_th": "สระบุรี",
+    "year_be": 2563,
+    "year_ce": 2020,
+    "forest_area_rai": 532568.92,
+    "forest_area_ha": 85211.02720000001,
+    "forest_percent": 24.35,
+    "source": "https://data.go.th/dataset/saraburi-forest-area",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  },
+  {
+    "province_th": "สระบุรี",
+    "year_be": 2564,
+    "year_ce": 2021,
+    "forest_area_rai": 532016.71,
+    "forest_area_ha": 85122.6736,
+    "forest_percent": 24.33,
+    "source": "https://data.go.th/dataset/saraburi-forest-area",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  },
+  {
+    "province_th": "สระบุรี",
+    "year_be": 2565,
+    "year_ce": 2022,
+    "forest_area_rai": 534855.42,
+    "forest_area_ha": 85576.86720000001,
+    "forest_percent": 24.46,
+    "source": "https://data.go.th/dataset/saraburi-forest-area",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  },
+  {
+    "province_th": "สระบุรี",
+    "year_be": 2566,
+    "year_ce": 2023,
+    "forest_area_rai": 531337.53,
+    "forest_area_ha": 85014.00480000001,
+    "forest_percent": 24.3,
+    "source": "https://data.go.th/dataset/saraburi-forest-area",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  },
+  {
+    "province_th": "สระบุรี",
+    "year_be": 2567,
+    "year_ce": 2024,
+    "forest_area_rai": 532177.56,
+    "forest_area_ha": 85148.40960000001,
+    "forest_percent": 24.33,
+    "source": "https://data.go.th/dataset/saraburi-forest-area",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  },
+  {
+    "province_th": "กาญจนบุรี",
+    "year_be": 2564,
+    "year_ce": 2021,
+    "forest_area_rai": 7493626.874,
+    "forest_area_ha": 1198980.29984,
+    "forest_percent": 61.85243287,
+    "source": "https://data.go.th/dataset/forest-area-2567",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  },
+  {
+    "province_th": "กาญจนบุรี",
+    "year_be": 2565,
+    "year_ce": 2022,
+    "forest_area_rai": 7494409.58,
+    "forest_area_ha": 1199105.5328,
+    "forest_percent": 61.85889332,
+    "source": "https://data.go.th/dataset/forest-area-2567",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  },
+  {
+    "province_th": "กาญจนบุรี",
+    "year_be": 2566,
+    "year_ce": 2023,
+    "forest_area_rai": 7478716.75,
+    "forest_area_ha": 1196594.68,
+    "forest_percent": 61.72927052,
+    "source": "https://data.go.th/dataset/forest-area-2567",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  },
+  {
+    "province_th": "กาญจนบุรี",
+    "year_be": 2567,
+    "year_ce": 2024,
+    "forest_area_rai": 7478170.33,
+    "forest_area_ha": 1196507.2528000001,
+    "forest_percent": 61.72476037,
+    "source": "https://data.go.th/dataset/forest-area-2567",
+    "tier": "official-statistical-reference",
+    "retrieved_at": "2026-09-25"
+  }
+]

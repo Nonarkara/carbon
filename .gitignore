@@ -4,3 +4,9 @@
 !.env.example
 node_modules/
 .venv/
+.wrangler/
+test-results/
+public/version.json
+public/js/geometry.js
+public/guide-en.html
+public/guide-th.html

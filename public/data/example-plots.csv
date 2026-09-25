@@ -1,0 +1,5 @@
+plot_id,tree_id,plot_area_m2,dbh_cm,height_m
+P01,T01,1600,20,15
+P01,T02,1600,30,20
+P02,T01,1600,25,18
+P02,T02,1600,18,12

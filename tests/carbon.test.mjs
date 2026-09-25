@@ -1,0 +1,11 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {calculate,stock,treeAGB,plotEstimate} from '../public/js/carbon.js';
+const input={start:'2021-01-01',end:'2026-01-01',unit:'agb',previous:1000,current:1100,r:.27,cf:.47,burnedPercent:0,canopyDeath:'no',fireEmissions:''};
+test('stock and net change preserve dimensional arithmetic',()=>{assert.ok(Math.abs(stock(1000,.27,.47)-2188.6333333333)<1e-7);const x=calculate(input);assert.ok(Math.abs(x.net-218.86333333333)<1e-7);assert.equal(x.issuedCredits,null);});
+test('tCO2e inputs bypass root and molecular conversion',()=>{const x=calculate({...input,unit:'co2',previous:2000,current:2200});assert.equal(x.net,200);});
+test('loss is retained, missing input is not zero',()=>{assert.ok(calculate({...input,current:900}).net<0);for(const k of ['previous','current','burnedPercent'])assert.throws(()=>calculate({...input,[k]:''}));assert.throws(()=>calculate({...input,current:Infinity}));});
+test('fire boundaries and missing fire evidence',()=>{assert.equal(calculate({...input,burnedPercent:5,canopyDeath:'yes',fireEmissions:50}).pe,0);assert.equal(calculate({...input,burnedPercent:5.1,canopyDeath:'yes',fireEmissions:50}).pe,50);assert.throws(()=>calculate({...input,burnedPercent:6,canopyDeath:'yes'}));assert.throws(()=>calculate({...input,canopyDeath:'unknown'}));assert.throws(()=>calculate({...input,burnedPercent:101}));});
+test('invalid period and dates fail',()=>{assert.throws(()=>calculate({...input,end:input.start}));assert.throws(()=>calculate({...input,start:'2025-02-30'}));assert.throws(()=>calculate({...input,end:'bad'}));});
+test('Ogawa dry dipterocarp coefficients match TGO appendix',()=>{const x=20**2*15,stem=.0396*x**.933,branch=.00349*x**1.030;assert.equal(treeAGB(20,15),(stem+branch+1/(28/(stem+branch)+.025))/1000);assert.throws(()=>treeAGB(4,10));});
+test('plot area counted once and weighted expansion reproducible',()=>{const rows=[{plot_id:'p1',tree_id:'t1',plot_area_m2:1000,dbh_cm:20,height_m:15},{plot_id:'p1',tree_id:'t2',plot_area_m2:1000,dbh_cm:20,height_m:15}];const r=plotEstimate(rows,10);assert.equal(r.surveyedHa,.1);assert.equal(r.agbTonnes,treeAGB(20,15)*200);assert.throws(()=>plotEstimate([...rows,rows[0]],10));assert.throws(()=>plotEstimate(rows,.01));assert.throws(()=>plotEstimate([rows[0],{...rows[1],plot_area_m2:2000}],10));});
