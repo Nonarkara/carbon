@@ -4,9 +4,11 @@
 
 **คู่มือภาษาไทย:** [การใช้งาน สูตรคำนวณ รูปแบบไฟล์ และการติดตั้ง](docs/GUIDE.th.md) · **English:** [Full user and developer guide](docs/GUIDE.en.md)
 
+เปิดมาที่ **แผนที่คาร์บอน**: แตะจังหวัดหรือวาดกรอบ แล้วเห็นคาร์บอนสะสมในป่า การดูดซับ และการปล่อย (การสูญเสียป่า ไฟ และเชื้อเพลิงฟอสซิล) ทันที จากข้อมูลดาวเทียมที่เผยแพร่แล้ว พร้อมแหล่งที่มา ปี และช่วงความไม่แน่นอนทุกตัวเลข
+
 เครื่องมือภาษาไทย/อังกฤษสำหรับประเมินคาร์บอนป่าไม้: นำเข้าขอบเขต GeoJSON และแปลงสำรวจ CSV คำนวณคาร์บอนคงเหลือกับผลต่างตามช่วงเวลา และส่งออก JSON/CSV ที่ตรวจสอบย้อนกลับได้ ข้อมูลผู้ใช้ประมวลผลในเบราว์เซอร์ ไม่ส่งไปเก็บบนเซิร์ฟเวอร์
 
-A Thai/English assessment workbench using the supplied Malaysia visual system. Import a boundary, review field evidence, calculate a monitoring-period estimate, and export its inputs and provenance. **An estimate is not an issued credit.** No trained AI model or registry is connected in this release.
+Opens on the **carbon map**: tap a province or draw a box and see forest carbon stock, forest removals and emissions, landscape fire and fossil CO₂ at once, each with its dataset, year and uncertainty. Then a Thai/English assessment workbench using the supplied Malaysia visual system. Import a boundary, review field evidence, calculate a monitoring-period estimate, and export its inputs and provenance. **An estimate is not an issued credit.** No trained AI model or registry is connected in this release.
 
 ```mermaid
 flowchart LR
@@ -30,13 +32,16 @@ Open `http://127.0.0.1:8788`. Select **ลองข้อมูลตัวอ�
 
 | Capability / ความสามารถ | Scope / ขอบเขต |
 |---|---|
+| Carbon map / แผนที่คาร์บอน | Province, drawn box or imported boundary → stock (ESA CCI v7.0 2020 × JAXA FNF 2020), forest flux (GFW v1.4.3, 2001–2025), fire (GFED5.1), fossil CO₂ (ODIAC2025); Climate TRACE and BTR1 cross-checks; never summed across datasets |
+| About / เกี่ยวกับ | Illustrated, native TH/EN explanation of the open-data method; every figure filled live from the shipped ledger |
+| Atmosphere / บรรยากาศ | NASA GIBS aerosol, fire detections, CO and column CO₂ as labelled pictures, never numbers |
 | Map / แผนที่ | Leaflet, street/imagery context, imported project polygons, mobile navigation |
 | Geometry / ขอบเขต | WGS84, ≤2 MB, holes, overlap and self-intersection rejection; geodesic area |
 | Accounting / คำนวณ | AGB or already-converted tCO₂e; explicit interval; prescribed fire deduction; negative losses retained |
 | Field import / แปลงสำรวจ | Single-stratum mixed deciduous/dry dipterocarp tree CSV; named Ogawa equation |
 | Evidence / หลักฐาน | User-file hashes, report reference, dated source catalogue, full JSON and numeric CSV exports |
 | Context / ข้อมูลอ้างอิง | 11 historical province-year observations; full research catalogue kept separately |
-| Not implemented / ยังไม่รองรับ | Trained AI inference, uncertainty estimates, land-rights verification, all forest methodologies, registry access, issuance |
+| Not implemented / ยังไม่รองรับ | GFW flux inside drawn boxes (needs a GFW API key), trained AI inference, project-level uncertainty estimates, land-rights verification, all forest methodologies, registry access, issuance |
 
 ## Publish / เผยแพร่
 
@@ -53,6 +58,8 @@ Commit and push before deployment so the build's `/version.json` identifies its 
 ## Development and verification / พัฒนาและตรวจสอบ
 
 `npm test` covers numeric units, signed change, fire thresholds, date validation, plot expansion, malformed CSV and boundary topology. `npm run test:browser` exercises imports, TH/EN state, exports, mobile views and guide diagrams. Install Chromium with `npx playwright install chromium` first and keep `npm run dev` running for local browser tests.
+
+Refresh carbon-map data with the offline pipeline in `scripts/ingest/` (see the guide, section 8). `npm test` enforces the conservation rule: provinces, grid cells and the national total agree for every quantity.
 
 Styling is adapted from [Nonarkara/Malaysia](https://github.com/Nonarkara/Malaysia) commit `6c4651bf525000555217cde55e5b7989b176e4cb`; provenance and library/font licences are recorded in [THIRD_PARTY.md](THIRD_PARTY.md). No licence is implied for third-party datasets beyond each provider's terms. Read [SECURITY.md](SECURITY.md) before adding network services.
 

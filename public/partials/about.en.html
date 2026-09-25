@@ -1,0 +1,154 @@
+<p class="about-kicker">About this project · How it works</p>
+<h1>Weighing Thailand's forests from space, with open data anyone can check</h1>
+<p class="about-deck">Tap a province and three numbers appear: how much carbon the forest holds, how much it takes in each year, and how much is released. This page explains, step by step, where those numbers come from, and where they stop being trustworthy.</p>
+
+<section>
+<h2><span>01</span> Three questions, not one</h2>
+<p>"How much carbon is in this forest?" sounds like one question. It is really three, and each needs different evidence.</p>
+<figure class="il">
+<svg viewBox="0 0 640 230" role="img" aria-labelledby="f1t"><title id="f1t">A tree with carbon stored inside, an arrow of carbon going in, and an arrow coming out</title>
+<line class="il-ground" x1="20" y1="190" x2="620" y2="190"/>
+<g transform="translate(90,0)"><rect class="il-trunk" x="-9" y="120" width="18" height="70"/><circle class="il-canopy" cx="0" cy="95" r="48"/><text class="il-num" x="0" y="100" text-anchor="middle">tCO₂e</text><text class="il-label" x="0" y="218" text-anchor="middle">1 · Stock: what is held</text></g>
+<g transform="translate(320,0)"><rect class="il-trunk" x="-9" y="120" width="18" height="70"/><circle class="il-canopy" cx="0" cy="95" r="48"/><path class="il-in" d="M0 10 V38"/><path class="il-in-head" d="M-7 30 L0 44 L7 30Z"/><text class="il-small" x="12" y="24">CO₂</text><text class="il-label" x="0" y="218" text-anchor="middle">2 · Absorbed each year</text></g>
+<g transform="translate(550,0)"><rect class="il-trunk" x="-9" y="120" width="18" height="70"/><circle class="il-canopy il-lost" cx="0" cy="95" r="40"/><path class="il-out" d="M0 44 V10"/><path class="il-out-head" d="M-7 18 L0 4 L7 18Z"/><text class="il-small" x="12" y="24">CO₂</text><text class="il-label" x="0" y="218" text-anchor="middle">3 · Released each year</text></g>
+</svg>
+<figcaption>A large stock does not mean a large yearly uptake. Neither is a carbon credit: credits also need a baseline, proof of extra benefit, permanence and independent verification.</figcaption>
+</figure>
+</section>
+
+<section>
+<h2><span>02</span> How a satellite weighs a forest</h2>
+<p>No satellite can put a tree on a scale. Radar satellites, including JAXA's ALOS-2 PALSAR-2 and Europe's Sentinel-1, send microwaves down and listen to the echo. Tall, dense forest returns a different echo from grass or rice. Scientists at the European Space Agency's Climate Change Initiative turned those echoes into weight with models calibrated on forest data, and published a map of <b>aboveground biomass</b>, the dry weight of trunks, branches and leaves, for every 100 m square on Earth. Each square also comes with its own error estimate.</p>
+<figure class="il">
+<svg viewBox="0 0 640 250" role="img" aria-labelledby="f2t"><title id="f2t">A radar satellite sends a beam to the forest and the echo becomes a 100 metre biomass pixel</title>
+<g transform="translate(110,40)"><rect class="il-sat" x="-18" y="-12" width="36" height="24"/><rect class="il-panel" x="-70" y="-6" width="46" height="12"/><rect class="il-panel" x="24" y="-6" width="46" height="12"/><text class="il-small" x="0" y="-22" text-anchor="middle">ALOS-2 / Sentinel-1 radar</text></g>
+<path class="il-beam" d="M110 54 L60 170 L170 170Z"/>
+<line class="il-ground" x1="20" y1="190" x2="330" y2="190"/>
+<g class="il-forest"><circle cx="70" cy="165" r="18"/><circle cx="100" cy="160" r="22"/><circle cx="135" cy="166" r="17"/><circle cx="160" cy="162" r="19"/></g>
+<path class="il-arrow" d="M340 130 H400"/><path class="il-arrow-head" d="M392 123 L406 130 L392 137Z"/>
+<g transform="translate(420,60)">
+<rect class="il-px il-px4" x="0" y="0" width="44" height="44"/><rect class="il-px il-px3" x="44" y="0" width="44" height="44"/><rect class="il-px il-px2" x="88" y="0" width="44" height="44"/><rect class="il-px il-px4" x="132" y="0" width="44" height="44"/>
+<rect class="il-px il-px3" x="0" y="44" width="44" height="44"/><rect class="il-px il-px5" x="44" y="44" width="44" height="44"/><rect class="il-px il-px4" x="88" y="44" width="44" height="44"/><rect class="il-px il-px1" x="132" y="44" width="44" height="44"/>
+<rect class="il-px il-px2" x="0" y="88" width="44" height="44"/><rect class="il-px il-px4" x="44" y="88" width="44" height="44"/><rect class="il-px il-px3" x="88" y="88" width="44" height="44"/><rect class="il-px il-px1" x="132" y="88" width="44" height="44"/>
+<text class="il-small" x="88" y="152" text-anchor="middle">each square = 100 m × 100 m</text><text class="il-small" x="88" y="170" text-anchor="middle">tonnes of biomass per hectare ± error</text></g>
+</svg>
+<figcaption>ESA CCI Biomass v7.0, year 2020. Radar sees how much wood there is; it does not know whether a tree is natural forest, plantation or orchard.</figcaption>
+</figure>
+<p>To decide which part of each square is forest, the map uses JAXA's own <b>forest / non-forest map</b> for the same year, made from the same kind of radar. It calls <b data-fig="forestPct"></b> of Thailand forest. The Royal Forest Department counts 31.64% for 2020, because radar sees any tree canopy, including rubber and fruit orchards. That difference is a reminder that "forest" always depends on who is defining it.</p>
+</section>
+
+<section>
+<h2><span>03</span> From a tonne of wood to tonnes of CO₂</h2>
+<p>Satellites measure wood above the ground. Carbon accounting needs CO₂. Three conversions get there, the same ones Thailand's T-VER tree tool uses for general trees.</p>
+<figure class="il">
+<svg viewBox="0 0 640 210" role="img" aria-labelledby="f3t"><title id="f3t">One tonne of wood grows to 1.27 tonnes with roots, becomes 0.60 tonnes of carbon, then 2.19 tonnes of CO2</title>
+<g class="il-step"><rect class="il-bar" x="20" y="40" width="60" height="36"/><text class="il-num" x="50" y="64" text-anchor="middle">1</text><text class="il-small" x="20" y="100">tonne of wood</text><text class="il-small" x="20" y="116">above ground</text></g>
+<text class="il-op" x="104" y="64" text-anchor="middle">+ roots</text>
+<g class="il-step"><rect class="il-bar" x="140" y="40" width="76" height="36"/><text class="il-num" x="178" y="64" text-anchor="middle">1.27</text><text class="il-small" x="140" y="100">× 1.27: roots are</text><text class="il-small" x="140" y="116">27% of the top</text></g>
+<text class="il-op" x="248" y="64" text-anchor="middle">× 0.47</text>
+<g class="il-step"><rect class="il-bar il-carbon" x="276" y="40" width="50" height="36"/><text class="il-num" x="301" y="64" text-anchor="middle">0.60</text><text class="il-small" x="280" y="100">tonnes of carbon:</text><text class="il-small" x="280" y="116">47% of dry wood</text></g>
+<text class="il-op" x="382" y="64" text-anchor="middle">× 44/12</text>
+<g class="il-step"><rect class="il-bar il-co2" x="430" y="40" width="131" height="36"/><text class="il-num" x="495" y="64" text-anchor="middle">2.19</text><text class="il-small" x="430" y="100">tonnes of CO₂: each carbon atom</text><text class="il-small" x="430" y="116">picks up two oxygen atoms</text></g>
+<text class="il-label" x="20" y="176">Every tonne of aboveground wood holds 2.19 tonnes of CO₂.</text>
+</svg>
+<figcaption>Root share varies by forest type. International defaults for Asian tropical forests range from about 0.21 to 0.44, which could shift totals by about −5% to +13%.</figcaption>
+</figure>
+</section>
+
+<section>
+<h2><span>04</span> Count every square once</h2>
+<p>A number that changes depending on how you add it up is not a number you can trust. So the system follows one rule. Every 100 m square belongs to exactly one province, decided by where its centre falls, and to exactly one 2.8 km cell of the drawing grid. Add up all the provinces, all the cells, or the whole country, and you get the same total. The software checks this every time it is built.</p>
+<figure class="il">
+<svg viewBox="0 0 640 240" role="img" aria-labelledby="f4t"><title id="f4t">A grid of squares split by a province border; each square is coloured by the province its centre falls in</title>
+<g id="abgrid" transform="translate(40,20)"></g>
+<path class="il-border" d="M40 60 C 120 80, 150 120, 170 150 S 250 200, 300 215"/>
+<rect class="il-cell" x="160" y="100" width="100" height="100"/>
+<text class="il-small" x="160" y="236">one 2.8 km drawing cell</text>
+<g transform="translate(360,40)"><text class="il-label" x="0" y="0">The conservation rule</text>
+<text class="il-small" x="0" y="30">sum of 77 provinces</text><text class="il-num" x="0" y="54">=  Thailand</text><text class="il-small" x="0" y="84">=  sum of every drawing cell</text>
+<text class="il-small" x="0" y="124">Thailand's land area, pixel by pixel:</text><text class="il-num" x="0" y="148" data-fig="areaKm2"></text><text class="il-small" x="0" y="170">official figure 513,120 km²</text></g>
+</svg>
+<figcaption>Yellow line: a province border. Square colour: which province owns the square. Nothing is counted twice and nothing falls through the gaps.</figcaption>
+</figure>
+</section>
+
+<section>
+<h2><span>05</span> Two sides of the ledger</h2>
+<p>For all of Thailand, Global Forest Watch's model estimates how much CO₂ forests took up and released each year on average from 2001 to 2025. Beside those figures the map shows two other kinds of emission from the same land: all fires, and fossil fuels. They are drawn on one scale so you can compare sizes. They are <b>never added up</b>, because each comes from a different dataset, period and method, and some overlap.</p>
+<figure class="il">
+<div class="ab-bars" id="abLedger" role="img" aria-label="Forest removals compared with forest, fire and fossil emissions, million tonnes per year"></div>
+<figcaption>Million tonnes per year. Forest: GFW v1.4.3, average 2001–2025. Fire: GFED5.1, gross CO₂, mean 2013–2022, which includes burning of fields and dry forest that later regrows. Fossil fuels: ODIAC2025, 2024. Thailand's own inventory (BTR1) reports a larger land sink, −107.9 Mt in 2022, most of it on cropland, not forest.</figcaption>
+</figure>
+</section>
+
+<section>
+<h2><span>06</span> The fire calendar</h2>
+<p>Satellites that detect burned ground show a clear rhythm. Most fire carbon in Thailand is released between February and April, when northern forests and fields burn in the dry season. That is the same season the haze arrives.</p>
+<figure class="il">
+<div class="bars ab-fire" id="abFire" role="img" aria-label="Fire carbon by month, Thailand, average 2013 to 2022"></div>
+<figcaption><b data-fig="febApr"></b> of fire carbon falls in February–April (GFED5.1, 2013–2022 average). Highlighted months: the burning season.</figcaption>
+</figure>
+</section>
+
+<section>
+<h2><span>07</span> Smoke is not carbon dioxide</h2>
+<p>Haze maps are easy to find, so it is tempting to read them as carbon maps. They measure different things.</p>
+<figure class="il">
+<svg viewBox="0 0 640 220" role="img" aria-labelledby="f7t"><title id="f7t">Aerosol particles, CO2 molecules in the air, and an emission flow are three different measurements</title>
+<g transform="translate(20,20)"><rect class="il-frame" x="0" y="0" width="185" height="150"/><g class="il-dots"><circle cx="30" cy="40" r="5"/><circle cx="70" cy="60" r="7"/><circle cx="120" cy="35" r="4"/><circle cx="150" cy="80" r="6"/><circle cx="50" cy="100" r="5"/><circle cx="100" cy="110" r="8"/><circle cx="140" cy="125" r="4"/></g><text class="il-label" x="0" y="175">Aerosol (AOD)</text><text class="il-small" x="0" y="194">dust and smoke particles</text></g>
+<g transform="translate(228,20)"><rect class="il-frame" x="0" y="0" width="185" height="150"/><g class="il-mol"><text x="30" y="50">O=C=O</text><text x="95" y="85">O=C=O</text><text x="25" y="120">O=C=O</text><text x="110" y="130">O=C=O</text></g><text class="il-label" x="0" y="175">CO₂ concentration</text><text class="il-small" x="0" y="194">parts per million in the air</text></g>
+<g transform="translate(436,20)"><rect class="il-frame" x="0" y="0" width="185" height="150"/><path class="il-out" d="M92 130 V40"/><path class="il-out-head" d="M84 50 L92 30 L100 50Z"/><text class="il-num" x="92" y="146" text-anchor="middle">t / year</text><text class="il-label" x="0" y="175">Emission</text><text class="il-small" x="0" y="194">tonnes released per year</text></g>
+</svg>
+<figcaption>The atmosphere layers on the map (NASA GIBS) show the first two as pictures. Only big, isolated sources such as large power plants can be converted directly from concentration into emission today, so the carbon map never turns them into numbers.</figcaption>
+</figure>
+</section>
+
+<section>
+<h2><span>08</span> Honest about uncertainty</h2>
+<p>Every 100 m square has an error estimate. How those errors add up across a province depends on whether neighbouring squares tend to be wrong in the same direction, and nobody knows that exactly. So the map shows two ranges and lets you see the gap between them.</p>
+<figure class="il">
+<svg viewBox="0 0 640 170" role="img" aria-labelledby="f8t"><title id="f8t">A narrow range for independent errors and a wide range for errors that all go the same way</title>
+<line class="il-axis" x1="40" y1="110" x2="600" y2="110"/>
+<rect class="il-range-wide" x="60" y="92" width="520" height="12"/><rect class="il-range-narrow" x="316" y="72" width="8" height="12"/><circle class="il-dot" cx="320" cy="110" r="6"/>
+<text class="il-small" x="320" y="62" text-anchor="middle">if errors cancel out: ±<tspan data-fig="bandInd"></tspan>%</text>
+<text class="il-small" x="60" y="136">if every square errs the same way: ±<tspan data-fig="bandCorr"></tspan>%</text>
+<text class="il-label" x="320" y="160" text-anchor="middle">National forest carbon stock</text>
+</svg>
+<figcaption>The truth is expected between the two. Neither range includes bias in the map itself. Global biomass maps tend to overestimate thin forest and underestimate dense forest. Only field plots can correct that.</figcaption>
+</figure>
+</section>
+
+<section>
+<h2><span>09</span> The open-data recipe</h2>
+<p>Everything here is built from data published openly by space agencies, research groups and governments. Anyone can repeat it.</p>
+<figure class="il">
+<ol class="ab-flow">
+<li><b>Download</b>Seven public datasets, about 5 GB, each fingerprinted with SHA-256 so any change is detectable.</li>
+<li><b>Align</b>Put everything on one 100 m grid of Thailand's 77 provinces.</li>
+<li><b>Count once</b>Every square to one province and one drawing cell.</li>
+<li><b>Test</b>Provinces, cells and the country must agree; land area must match the official figure.</li>
+<li><b>Publish</b>Small static files, about 4 MB. Your browser adds up any box you draw, and nothing leaves your device.</li>
+</ol>
+</figure>
+<div class="ab-sources">
+<article><b>ESA CCI Biomass v7.0</b><span>Wood per 100 m square, 2020</span><small>European Space Agency · free with citation</small></article>
+<article><b>JAXA PALSAR-2 FNF v2.1.0</b><span>Forest / non-forest map, 2020</span><small>JAXA · free with credit</small></article>
+<article><b>Global Forest Watch flux v1.4.3</b><span>Forest uptake and release, 2001–2025</span><small>WRI and partners · CC BY 4.0</small></article>
+<article><b>GFED5.1</b><span>Fire emissions by month, 2013–2022</span><small>Wageningen University, UC Irvine and partners · CC BY 4.0</small></article>
+<article><b>ODIAC2025</b><span>Fossil-fuel CO₂ at 1 km, 2024</span><small>NIES Japan · CC BY 4.0</small></article>
+<article><b>COD-AB v01</b><span>77 province boundaries</span><small>Royal Thai Survey Department via OCHA · CC BY-IGO</small></article>
+<article><b>Climate TRACE v7</b><span>Independent forest estimates, 2024</span><small>Climate TRACE · CC BY 4.0</small></article>
+<article><b>Thailand BTR1</b><span>The national greenhouse-gas inventory, 2022</span><small>Department of Climate Change and Environment</small></article>
+<article><b>NASA GIBS</b><span>Daily haze, fire and CO₂ imagery</span><small>NASA EOSDIS · open</small></article>
+</div>
+</section>
+
+<section>
+<h2><span>10</span> What this cannot tell you</h2>
+<ul class="ab-limits">
+<li><b>It is not a carbon credit.</b> Credits need a baseline, proof of additional benefit, permanence, leakage checks and independent verification. For project work, use the T-VER workbench tabs, which rely on your own field measurements.</li>
+<li><b>It is not today.</b> Stock is for 2020, forest flux is a 2001–2025 average, fire is 2013–2022, and fossil CO₂ is 2024.</li>
+<li><b>It is not a parcel survey.</b> Drawn boxes work at about 2.8 km. A single farm or community forest needs field plots.</li>
+<li><b>It is not approved.</b> TGO must approve any remote-sensing method used for T-VER credits. These products have no such approval.</li>
+</ul>
+</section>

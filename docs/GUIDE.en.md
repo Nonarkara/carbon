@@ -6,7 +6,7 @@ An independent Thai/English workbench for assessing forest carbon from supplied 
 
 **Live:** [Open the workbench](https://forest-carbon-thailand.pages.dev/?lang=en). **Source:** [Nonarkara/carbon](https://github.com/Nonarkara/carbon).
 
-The default view is Thai. Select **EN** at the top to translate the interface without losing inputs. On a phone, use the bottom navigation to switch between Map, Project, Calculate, Evidence and Sources. On desktop, the map and assessment rail remain side by side.
+The default view is Thai. Select **EN** at the top to translate the interface without losing inputs. The app opens on the **Carbon map**. On a phone, use the bottom navigation to switch between Map, Carbon, Project, Calculate, Evidence and Sources. On desktop, the map and assessment rail remain side by side.
 
 ```mermaid
 flowchart TD
@@ -14,6 +14,19 @@ flowchart TD
  B --> C["3. Inspect stock change and prescribed deductions"]
  C --> D["4. Export the assessment for independent review"]
 ```
+
+## Carbon map: absorption and emission by province or box
+
+The carbon map opens first. It answers a landscape question from published satellite products; it never feeds the project calculation below.
+
+1. **Choose an area.** Tap a province on the map, pick one in the list at the top, or select **Draw a box** and drag across the map (touch works; the map stops panning while you draw). **Use project boundary** sums a boundary imported in the Project tab. **All Thailand** returns to the national view.
+2. **Read the four headline figures.** Selected area; forest carbon stock (tCO₂e, ESA CCI Biomass v7.0, 2020, forest defined by JAXA FNF 2020) with its 95% range; forest removals and forest emissions per year (Global Forest Watch flux v1.4.3, average of 2001–2025).
+3. **Read the ledger in the rail.** Stock and absorption first, then emission: forest loss (GFW), all landscape fire (GFED5.1, 2013–2022 mean, with a monthly chart and land-type shares) and fossil-fuel CO₂ from all sectors (ODIAC2025, 2024). Provinces add cross-checks from Climate TRACE 2024; the national view adds Thailand's BTR1 inventory for 2022.
+4. **Never add the rows together.** Each row has its own dataset, year and method. GFW's own net (emissions − removals) is the only net shown; a negative value means a net sink.
+5. **Layers.** *Data layers* shows forest carbon density, the JAXA forest map, or province net flux. *Atmosphere* shows NASA GIBS images of aerosol, fire detections, carbon monoxide or column CO₂ for a chosen date. These are concentrations or detections, not emissions, and never produce numbers.
+6. **Export.** *Export JSON* saves the rows with dataset versions, conversion factors and the conservation check; *Export CSV* saves the rows with both uncertainty ranges.
+
+Limits you will see on screen: a box counts Thai land only; datasets coarser than a box are greyed out (fire 28 km, fossil 1 km); GFW flux inside a drawn box is marked *not ingested* because its 30 m grids need an API key. The **About** button at the top opens an illustrated explanation inside the app, without losing your inputs. The [research notebook, section 06](research-en.html#section-6) gives every method, source and check in full.
 
 ## 1. Try the complete flow
 
@@ -145,6 +158,9 @@ flowchart TD
 | Path | Responsibility |
 |---|---|
 | `public/js/carbon.js` | Numeric validation, biomass expansion, stock and period calculations |
+| `public/js/ledger.js` | Carbon-map arithmetic: grid sums, box overlap, uncertainty ranges, ledger rows (pure, tested) |
+| `public/js/landscape.js` | Carbon-map interface: province layer, box drawing, overlays, atmosphere layers, export |
+| `scripts/ingest/` | Offline Python pipeline: `fetch.py` downloads sources with hashes; `build_ledger.py` writes `public/data/ledger/` |
 | `src/geometry.js` | Turf-based boundary, topology and overlap checks |
 | `public/js/imports.js` | Bounded CSV/file decoding and SHA-256 hashes |
 | `public/js/app.js` | Session state, inputs, map and exports |
@@ -155,5 +171,7 @@ flowchart TD
 | `scripts/build.mjs` | Geometry bundle, fonts, guide pages and version stamp |
 | `tests/` | Accounting and ingestion regression checks |
 | `research/` | Original research, provenance, quarantined data and extraction evidence |
+
+To refresh the carbon map data: `python3 -m venv .venv && .venv/bin/pip install -r scripts/ingest/requirements.txt`, then `.venv/bin/python scripts/ingest/fetch.py` (about 5 GB into the git-ignored `research/raw/landscape/`) and `.venv/bin/python scripts/ingest/build_ledger.py` (about 3 minutes and 40 GB of memory). The build stops if provinces, grid cells and the national total disagree for any quantity, or if the land area drifts more than 1% from the official figure. Then run `npm test`.
 
 Before extending the model, read `context.md`, `IMPLEMENTATION_PLAN.md`, and `RESEARCH.md`. Preserve the Malaysia reference and every source/date/quality label. A credible next milestone is reproducing one independently measured project and validating its uncertainty, not adding a nationwide “AI credits” number.

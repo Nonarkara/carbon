@@ -83,6 +83,17 @@ Files:
 - `research/extracted/geometry-probe.json`: independent shapefile-header/CRS checks.
 - `research/raw/`: catalogue snapshots, original downloads, and TGO methodology PDFs.
 
+## Landscape carbon ledger — added 26 September 2026
+
+Implemented as the app's default carbon map. Full method, checks and limits: `docs/RESEARCH.en.md` / `.th.md` section 06. Summary:
+
+- Stock: ESA CCI Biomass v7.0 AGB 2020 (100 m, per-pixel SD) × JAXA PALSAR-2 FNF v2.1.0 2020 forest fraction × 2.1886 tCO₂e/t AGB. Thailand: 8,423 MtCO₂e in FNF forest (44.7% of land; RFD reports 31.64% for 2020). 95% range ±0.03% (independent errors) to ±110% (fully correlated); map bias excluded.
+- Flux: GFW v1.4.3 province summary (keyless CSV, tree cover >30%). Thailand 2001–2025 average: removals 92.9, emissions 71.7, net −21.2 MtCO₂e/yr; the sum of provinces equals GFW's country table.
+- Fire: GFED5.1 mean 2013–2022, 102.3 MtCO₂/yr, 83% in Feb–Apr; mostly savanna/shrub/grass classes; largely regrows.
+- Fossil: ODIAC2025 2024, 290.0 MtCO₂ (BTR1 2022 CO₂ excluding LULUCF: 271.1 Mt, Table 2-3).
+- BTR1 2022 (Table 2-184): forest land remaining forest −29.3 Mt net; cropland remaining cropland −91.5 Mt; LULUCF −107.9 Mt. JAXA offers no carbon stock product; aerosol and XCO₂ are concentrations, not emissions.
+- Rule: every pixel counted once; provinces, grid and nation reconcile exactly (tested). No figure is a credit or a T-VER input.
+
 ## What to discuss with Khun Aphisit
 
 Suggested framing: “ระบบช่วยประเมินและติดตามคาร์บอนภาคป่าไม้ โดยเชื่อมข้อมูลดาวเทียมกับข้อมูลสำรวจภาคสนาม แสดงที่มาและความไม่แน่นอนของผลประเมิน และจัดเตรียมหลักฐานสำหรับการทวนสอบตาม T-VER”

@@ -1,0 +1,317 @@
+{
+ "schemaVersion": 1,
+ "pipeline": "scripts/ingest/build_ledger.py",
+ "pipelineSha256": "45dadae286ae16246f379ac6d3d552b4f4c16015fe02c930cee2b52499650c33",
+ "conservation": {
+  "rule": "each CCI 100 m pixel centre → ≤1 province and 1 grid cell; sum(provinces) == national == sum(grid) for every layer",
+  "area_km2": 515415.5,
+  "official_area_km2": 513120,
+  "codab_area_km2": 515415.6,
+  "gfw_gadm_area_worst_deviation": 0.0669,
+  "odiac_tc_unallocated_in_window": 0.0,
+  "odiac_thai_tc_pixel_allocation": 79094982.5,
+  "odiac_thai_tc_cell_centre": 78851659.6
+ },
+ "grid": {
+  "west": 97.0,
+  "north": 20.8,
+  "step": 0.025,
+  "cols": 360,
+  "rows": 624,
+  "count": 71810,
+  "layers": [
+   "forest_agb_mg",
+   "forest_sd_mg",
+   "forest_var_mg2",
+   "agb_mg",
+   "area_ha",
+   "forest_area_ha",
+   "fossil_c_t",
+   "fire_co2_t"
+  ],
+  "layout": "Uint32 cell index (row*cols+col), then Float32 per layer; little-endian; additive totals per cell"
+ },
+ "overlayBounds": [
+  [
+   5.2,
+   97.0
+  ],
+  [
+   20.8,
+   106.0
+  ]
+ ],
+ "conversion": {
+  "agb_to_co2e": 2.188633333333333,
+  "root_shoot": 0.27,
+  "carbon_fraction": 0.47,
+  "c_to_co2": 3.6666666666666665,
+  "basis": "TGO T-VER-S-TOOL-01-01 v2 general-tree convention"
+ },
+ "datasets": {
+  "cci": {
+   "name": "ESA CCI Biomass AGB",
+   "version": "v7.0",
+   "year": 2020,
+   "resolution": "100 m",
+   "unit": "Mg/ha (AGB, SD)",
+   "doi": "10.5285/6429d1aafe1e43b9b414e4a5a7f8b903",
+   "licence": "ESA CCI data policy: free use with acknowledgement and DOI citation",
+   "files": {
+    "cci/N10E090_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "126f0e7b6e1a680853817628600e208f9b07800bc806ac0f62d1c9f2f735bbca",
+     "bytes": 29739842,
+     "retrieved": "2026-09-25T19:26:12Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N10E090_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N10E090_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "32efbc45708e04dd18bd47c833e2f0bca9ab8cbec662db85652db05c63e95dc9",
+     "bytes": 28027548,
+     "retrieved": "2026-09-25T19:26:12Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N10E090_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N10E100_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "789f2e2aad9cc5979e7d53e19fb617bfd2ac6b67eff6a1f654f2fb91ebe9b7a3",
+     "bytes": 41392782,
+     "retrieved": "2026-09-25T19:26:26Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N10E100_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N10E100_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "e4bac72c3158529e8d53538831b844a3b7999bcef73872e6eae637c466b9e91e",
+     "bytes": 38237752,
+     "retrieved": "2026-09-25T19:26:26Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N10E100_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N20E090_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "33141ff7e9cd7792731da8d21733b7557695f1166b0aea15163b99aad545be17",
+     "bytes": 52168145,
+     "retrieved": "2026-09-25T19:26:26Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N20E090_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N20E090_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "a6ca711b0f0512b1623fde87b25f59f21b6c035bc5b1d2f41efaa28469edcc29",
+     "bytes": 48405354,
+     "retrieved": "2026-09-25T19:26:26Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N20E090_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N20E100_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "6a031c3955492c435767676284ba60b1b032dd7cbc57d68f8b61dd96457bd0a3",
+     "bytes": 97485240,
+     "retrieved": "2026-09-25T19:26:26Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N20E100_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N20E100_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "40037ecc1a25fab5ce841d6043261a7e9ec687f1f5f34c9fb76ec8aae41fac91",
+     "bytes": 87971653,
+     "retrieved": "2026-09-25T19:26:26Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N20E100_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N30E090_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "2e2ba04c056a18df89148364fab35fcc7c4f81856c5e5b0617cc2d08fb8f78b8",
+     "bytes": 130591480,
+     "retrieved": "2026-09-25T19:26:44Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N30E090_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N30E090_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "be834d504d61e73b7cd034099df0a1d9d8ca39be086f650a93a7043541e38da4",
+     "bytes": 120246817,
+     "retrieved": "2026-09-25T19:26:52Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N30E090_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N30E100_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "c8d8e406a6ec1a6d3763789f86b1d0f607909c6b085dffeb600b0ffa6248ff42",
+     "bytes": 141618531,
+     "retrieved": "2026-09-25T19:26:56Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N30E100_ESACCI-BIOMASS-L4-AGB-MERGED-100m-2020-fv7.0.tif"
+    },
+    "cci/N30E100_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif": {
+     "sha256": "517cb96027666da5179b2b29c418e333c9d7efe6939206f2185ac0bc764a7cd4",
+     "bytes": 126660075,
+     "retrieved": "2026-09-25T19:26:56Z",
+     "url": "https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/geotiff/2020/N30E100_ESACCI-BIOMASS-L4-AGB_SD-MERGED-100m-2020-fv7.0.tif"
+    }
+   }
+  },
+  "fnf": {
+   "name": "JAXA ALOS-2 PALSAR-2 Forest/Non-Forest",
+   "version": "v2.1.0",
+   "year": 2020,
+   "resolution": "25 m (served at 1″)",
+   "forest_classes": [
+    1,
+    2
+   ],
+   "licence": "JAXA Terms of Use of Research Data (credit JAXA; notify JAXA before commercial use)",
+   "url": "https://data.earth.jaxa.jp/",
+   "files": {
+    "tiles": 142
+   }
+  },
+  "gfw": {
+   "name": "GFW forest carbon flux (Harris et al. 2021; Gibbs et al. 2025)",
+   "version": "v1.4.3 (data-api v20260327)",
+   "period": "2001–2025",
+   "years": 25,
+   "tree_cover_threshold": 30,
+   "unit": "Mg CO2e over the period",
+   "licence": "CC BY 4.0",
+   "files": {
+    "gfw/carbonflux_adm1_tha_area.csv": {
+     "sha256": "06b3415c4e1d7faed08925eed433bc34f16ab85148c774b833dd001a3348e58f",
+     "bytes": 2406,
+     "retrieved": "2026-09-25T19:40:29Z",
+     "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql=select%20adm1%2C%20sum%28area__ha%29%20as%20area_ha%20from%20data%20where%20iso%3D%27THA%27%20and%20umd_tree_cover_density_2000__threshold%3D0%20group%20by%20adm1%20order%20by%20adm1"
+    },
+    "gfw/carbonflux_adm1_tha_tcd30.csv": {
+     "sha256": "5aba65112f3e4d54df495cb9a8e025e1f4ca4a0665d94ce79039d4ceceacd4f7",
+     "bytes": 8409,
+     "retrieved": "2026-09-25T19:40:29Z",
+     "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql=select%20adm1%2C%20sum%28%22gfw_full_extent_gross_removals__Mg_CO2%22%29%20as%20removals_mg_co2%2C%20sum%28%22gfw_full_extent_gross_emissions_biomass_soil__Mg_CO2e%22%29%20as%20emissions_mg_co2e%2C%20sum%28%22gfw_full_extent_net_flux__Mg_CO2e%22%29%20as%20net_mg_co2e%2C%20sum%28%22gfw_flux_model_extent__ha%22%29%20as%20extent_ha%20from%20data%20where%20iso%3D%27THA%27%20and%20is__flux_model_extent%20%3D%20true%20and%20umd_tree_cover_density_2000__threshold%3D30%20group%20by%20adm1%20order%20by%20adm1"
+    }
+   },
+   "grid": null
+  },
+  "gfed": {
+   "name": "GFED5.1",
+   "period": "2013–2022",
+   "resolution": "0.25°",
+   "cellKm": 28,
+   "unit": "fire carbon (t C) and CO2 (t CO2)",
+   "doi": "10.5281/zenodo.16794692",
+   "licence": "CC BY 4.0",
+   "files": {
+    "gfed/GFED5.1_ecosystem.zip": {
+     "sha256": "6ad8ecca35b780f25e49a2eddefbac9d77a677bc8721c1effd6d2f7f307cfc27",
+     "bytes": 304341787,
+     "retrieved": "2026-09-25T19:41:18Z",
+     "url": "https://zenodo.org/records/16794692/files/GFED5.1_ecosystem.zip?download=1"
+    },
+    "gfed/GFED5.1_monthly.zip": {
+     "sha256": "98f7993c405d11294be27c5b256309a22207284aa5387ae3ae18c5a9e458eac7",
+     "bytes": 1744750696,
+     "retrieved": "2026-09-25T19:40:29Z",
+     "url": "https://zenodo.org/records/16794692/files/GFED5.1_monthly.zip?download=1"
+    }
+   }
+  },
+  "odiac": {
+   "name": "ODIAC fossil CO2",
+   "version": "ODIAC2025",
+   "year": 2024,
+   "resolution": "1 km",
+   "cellKm": 1,
+   "unit": "tonne C per cell (converted ×44/12)",
+   "doi": "10.17595/20170411.001",
+   "licence": "CC BY 4.0",
+   "files": {
+    "odiac/odiac2025_1km_checksum_2024.md5.txt": {
+     "sha256": "0fbde7db49f4c9b096fba49ee6735622838d17fdeff2fd7246740ee085aad349",
+     "bytes": 924,
+     "retrieved": "2026-09-25T19:28:39Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_checksum_2024.md5.txt"
+    },
+    "odiac/odiac2025_1km_excl_intl_2401.tif.gz": {
+     "sha256": "0e46488912eef11a44d549a3ad675019da2f2c4fbb9b5651c9c90ec658f9ba1b",
+     "bytes": 120846804,
+     "retrieved": "2026-09-25T19:27:30Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2401.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2402.tif.gz": {
+     "sha256": "4cec9b41f5c8f801f0a82debc3d2588f6b7c572941921a5790f4b6dae2602cd5",
+     "bytes": 120830672,
+     "retrieved": "2026-09-25T19:27:46Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2402.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2403.tif.gz": {
+     "sha256": "33737eb4534f2b6f6f8b65b8b7263d8423d8f2ca06c217f0eeea8d7b17978bb6",
+     "bytes": 120818337,
+     "retrieved": "2026-09-25T19:28:16Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2403.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2404.tif.gz": {
+     "sha256": "bbed099c110be33fba62c6089977135ccf5ee355f0a3237f49f18beef7f71ead",
+     "bytes": 120795245,
+     "retrieved": "2026-09-25T19:28:16Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2404.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2405.tif.gz": {
+     "sha256": "388d2968a40f8db6baf0f915c4ae4dcedd9c1fb3c3eaec38016a66e86866b86a",
+     "bytes": 120734969,
+     "retrieved": "2026-09-25T19:28:16Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2405.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2406.tif.gz": {
+     "sha256": "68fc5f83cc6fa41a5e7ed2a7984f0649fcf481a7156989cecfa8caf0b04e7656",
+     "bytes": 120674312,
+     "retrieved": "2026-09-25T19:28:16Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2406.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2407.tif.gz": {
+     "sha256": "1d48d39f93de62bae2a4c3b33081e18ba778a57d3c97a76d6aa7160471092a16",
+     "bytes": 120578507,
+     "retrieved": "2026-09-25T19:28:16Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2407.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2408.tif.gz": {
+     "sha256": "72b40743c61e2edc548200493b7e1caebcb9b90d7b3783247e870f1ff3022408",
+     "bytes": 120630612,
+     "retrieved": "2026-09-25T19:28:16Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2408.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2409.tif.gz": {
+     "sha256": "8bef22133bcb35cdce4baf7101a96e73328853668d5522ff68ea0162f5868bf2",
+     "bytes": 120733723,
+     "retrieved": "2026-09-25T19:28:16Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2409.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2410.tif.gz": {
+     "sha256": "74bd6b2b17502344d3be241ff50977f9e88ff7b0ad508302a79e9e000964034f",
+     "bytes": 120798785,
+     "retrieved": "2026-09-25T19:28:28Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2410.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2411.tif.gz": {
+     "sha256": "6a969f8648ab03df39c1c745d928c727d11265ad9850d2566c840de51741af04",
+     "bytes": 120886461,
+     "retrieved": "2026-09-25T19:28:35Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2411.tif.gz"
+    },
+    "odiac/odiac2025_1km_excl_intl_2412.tif.gz": {
+     "sha256": "96585897bcafbbed3528205974689ad07dec553464654e5db8517519d1544c2c",
+     "bytes": 120917195,
+     "retrieved": "2026-09-25T19:28:39Z",
+     "url": "https://db.cger.nies.go.jp/nies_data/10.17595/20170411.001/odiac2025/1km_tiff/2024/odiac2025_1km_excl_intl_2412.tif.gz"
+    }
+   }
+  },
+  "codab": {
+   "name": "Thailand subnational boundaries (COD-AB, RTSD via OCHA/HDX)",
+   "version": "v01 (valid 2022-01-22)",
+   "licence": "CC BY-IGO",
+   "files": {
+    "codab/tha_admin_boundaries.geojson.zip": {
+     "sha256": "02370dc5bd824563de71fd71cc1ee0b88df717c935a09bd7f15611560ef8bfd1",
+     "bytes": 436725731,
+     "retrieved": "2026-09-25T19:40:29Z",
+     "url": "https://data.humdata.org/dataset/d24bdc45-eb4c-4e3d-8b16-44db02667c27/resource/89a09f13-7b83-458a-9531-4f2418613065/download/tha_admin_boundaries.geojson.zip"
+    }
+   }
+  },
+  "climatetrace": {
+   "name": "Climate TRACE",
+   "version": "API v7",
+   "year": 2024,
+   "unit": "t CO2e (100-yr GWP)",
+   "licence": "CC BY 4.0",
+   "files": {
+    "provinces": 77
+   }
+  },
+  "btr1": {
+   "name": "Thailand's First Biennial Transparency Report",
+   "year": 2022,
+   "citation": "Table 2-184, p. 2-241",
+   "url": "https://www.dcce.go.th/wp-content/uploads/2024/12/Submitted-1st-BTR_compressed-1.pdf"
+  }
+ }
+}

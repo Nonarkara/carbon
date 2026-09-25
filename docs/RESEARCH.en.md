@@ -74,7 +74,7 @@ NDVI compares red and near-infrared reflectance. It can help describe greenness,
 | [NASA GEDI L4A v3](https://doi.org/10.3334/ORNLDAAC/2508) | Footprint estimates of aboveground biomass density, prediction errors and quality information | Samples are not a continuous parcel census or error-free field truth |
 | Measured field plots | Local evidence for fitting and independently testing a model | Record sampling design, coordinates, dates, species/group and measurement quality |
 
-The imagery products above are research candidates. This release does not download their rasters or run a satellite biomass model. A basemap visible in the workbench is a navigation aid, not evidence that those products have been analysed.
+The project workbench does not use these products: its numbers come only from the user's own measurements. The carbon map (section 06) does use published satellite products — ESA CCI Biomass and JAXA's forest map among them. It runs no model of its own: it re-grids, masks and converts those products, and its landscape figures never feed a project calculation. The street and imagery basemaps are navigation aids, not evidence.
 
 ## 04 · Give AI a job it can be tested on
 
@@ -112,7 +112,104 @@ The [Royal Forest Department dashboard](https://fp.forest.go.th/rfd_app/rfd_dash
 
 The northern drill-down returned 9,480 registrants in Nan and 9,538 in Uttaradit. These counts can inform a discussion about where to seek pilot partners. They cannot establish current living biomass. Public endpoints returned HTML and chart configuration without login; no documented API contract was established. These observations are a dated research snapshot, not a live integration or calculator input.
 
-## 06 · The first pilot should earn the next one
+## 06 · Absorption and emission from space
+
+The workbench answers a project question: how much has this parcel's measured carbon changed? The carbon map answers a landscape question. How much carbon do a province's forests hold? How much do they take up and release each year? What else is emitted in the same place? It uses published satellite-derived products and runs no model of its own: it re-grids, masks and converts those products, as described below. Every figure in it is a screening estimate, never a credit, and never an input to the project workbench.
+
+```mermaid
+flowchart TD
+ A["100 m satellite biomass (ESA CCI 2020) and the JAXA forest map (FNF 2020)"] --> B["Each pixel counted once: one province, one 2.8 km grid cell"]
+ B --> C["Forest carbon stock, with a 95% range"]
+ C --> D["Beside it, never added: GFW forest flux, GFED fire, ODIAC fossil CO₂"]
+ D --> E["Cross-checked against Climate TRACE and Thailand's own inventory (BTR1)"]
+```
+
+### Four quantities, four datasets
+
+| Quantity | What the map shows | Dataset | Period | Resolution |
+|---|---|---|---|---|
+| Carbon **stock** | Carbon held in forest trees, tCO₂e | [ESA CCI Biomass v7.0](https://catalogue.ceda.ac.uk/uuid/6429d1aafe1e43b9b414e4a5a7f8b903) aboveground biomass, masked with [JAXA PALSAR-2 FNF v2.1.0](https://www.eorc.jaxa.jp/ALOS/en/dataset/fnf_e.htm) | 2020 | 100 m |
+| Forest **flux** | Gross removals, gross emissions and their net, tCO₂e per year | [GFW forest carbon flux v1.4.3](https://essd.copernicus.org/articles/17/1217/2025/) (Harris et al. 2021; Gibbs et al. 2025) | Average of 2001–2025 | 30 m model, summarised by province |
+| **Fire** | CO₂ from all landscape fire, with the share by land type and month | [GFED5.1](https://zenodo.org/records/16794692) | Mean of 2013–2022 | 0.25° (about 28 km) |
+| **Fossil** CO₂ | Energy, industry and transport emissions | [ODIAC2025](https://db.cger.nies.go.jp/dataset/ODIAC/) | 2024 | 1 km |
+
+Cross-checks: [Climate TRACE API v7](https://api.climatetrace.org/v7/docs) forest subsectors by province for 2024, and [Thailand's First Biennial Transparency Report](https://www.dcce.go.th/wp-content/uploads/2024/12/Submitted-1st-BTR_compressed-1.pdf) (BTR1) for the nation in 2022. Province boundaries are the Royal Thai Survey Department's, published by [OCHA/HDX (COD-AB v01)](https://data.humdata.org/dataset/cod-ab-tha).
+
+### Where JAXA fits
+
+JAXA's vegetation page offers NDVI, leaf area and a forest/non-forest map. None of these is a carbon stock. The carbon map uses JAXA's 2020 forest/non-forest map in three ways. It is the visible "JAXA forest map (FNF 2020)" layer. It decides which part of each biomass pixel counts as forest. Its land classes also weight how coarse fire and fossil data are spread over land. Both FNF forest classes count: canopy of 90% or more, and canopy between 10% and 90%.
+
+FNF forest is not the Royal Forest Department's forest. FNF maps **44.7%** of Thailand as forest in 2020. The [Royal Forest Department](https://data.forest.go.th/dataset/https-www-forest-go-th-land) reports **31.64%** (102,353,484.76 rai) for the same year. A radar forest mask sees tree canopy. It does not know whether the trees are natural forest, plantation or a tree crop. Read "forest" on this map as "tree canopy seen by radar", not as a legal or administrative forest.
+
+### How a number is computed
+
+**One pixel, counted once.** Every 100 m biomass pixel is assigned by its centre to at most one province and exactly one 2.8 km grid cell. Provinces, grid cells and the national total are therefore sums of the same pixels. Automated tests check this for every quantity. Thailand's land area computed pixel by pixel is 515,415 km². That matches the boundary file's own attribute (515,416 km²) and is within 0.45% of the official 513,120 km².
+
+**From biomass to CO₂e.** Stock (tCO₂e) = aboveground biomass (t) × (1 + 0.27) × 0.47 × 44/12. That is 2.1886 tCO₂e per tonne of aboveground biomass. These are the general-tree values of TGO's tree tool, the same ones the workbench uses. IPCC 2019 root-to-shoot ratios for Asian tropical natural forests range from about 0.21 to 0.44 by forest type and biomass class ([2019 Refinement, Vol. 4, Ch. 4, Table 4.4](https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/4_Volume4/19R_V4_Ch04_Forest%20Land.pdf)). Using that range instead would move total biomass by about −5% to +13%.
+
+**Forest share of a pixel.** ESA CCI biomass is a mean over the whole pixel, forest or not. Each pixel's biomass is multiplied by the fraction of the pixel that FNF classes as forest. This assumes biomass is spread evenly within the pixel. It also keeps forest plus non-forest equal to the total, so nothing is created or lost.
+
+**Coarse data.** Fire (0.25°) and fossil CO₂ (1 km) are spread over the 100 m land pixels in each coarse cell in proportion to land area. A coarse cell with no land in the JAXA map, such as a coastal sliver, falls back to plain area, so no emission is lost in the allocation step. Emissions allocated outside Thai province boundaries, such as offshore or across a border, are excluded by design. The Thai fossil total from this allocation differs by 0.3% from a crude alternative that assigns whole 1 km cells by their centre.
+
+**Drawn boxes.** A box is summed from 2.8 km cells, each weighted by the share of its area on the sphere that falls inside the box. Values are assumed to be spread evenly within a cell. The sum counts Thai land only; parts of a box outside Thailand add nothing. A project boundary imported in the workbench is summed with 16 sample points per cell. In practice box figures therefore have about 2.8 km resolution, not 100 m. A figure is greyed out when the box's shorter side is narrower than the dataset's cell: 2.8 km for stock, 28 km for fire, 1 km for fossil CO₂.
+
+### Uncertainty, stated as a range rather than a decimal
+
+ESA CCI publishes a standard deviation for every pixel. How those errors add up over a province depends on something the map does not know: how much neighbouring pixels err together. The carbon map therefore gives two 95% ranges:
+
+- **Independent errors**, where errors cancel as pixels are added. For Thailand this gives ±0.03%.
+- **Fully correlated errors**, where every pixel errs in the same direction. For Thailand this gives ±110%, and the lower end stops at zero.
+
+Fully correlated error is the hard ceiling; the truth is expected between the two ranges. A study of biomass estimates for New York State parcels found that spatially correlated residual error dominated ([Johnson et al.](https://arxiv.org/abs/2412.16403)), which suggests the narrow range is too optimistic for large areas. Neither range includes systematic map bias. Global biomass maps tend to overestimate low biomass and underestimate high biomass ([Araza et al. 2022](https://doi.org/10.1016/j.rse.2022.112917)). The CCI Biomass fact sheet (written for v5; the map uses v7.0) advises checking regional totals against a national forest inventory or field plots, and says estimates for individual full-resolution pixels should not be used on their own ([CCI Biomass v5 fact sheet](https://climate.esa.int/documents/2791/CCI_Biomass_product_fact_sheet_V5.0_20240319.pdf)). GFW's province summaries carry only partial variance components, not a complete flux uncertainty, and the map does not use them. Its global estimate of removals for 2001–2023 is −14.5 ± 7.7 GtCO₂ per year (Gibbs et al. 2025). GFED and ODIAC publish no pixel uncertainty. The ODIAC spatial pattern is itself a model: national totals spread by night lights and point sources.
+
+### Why these figures are never added together
+
+- **GFW forest emissions already include forest loss caused by fire.** GFED fire in forest classes, especially its "deforestation" class, may describe some of the same events. They are marked and never added.
+- **GFED counts all landscape fire.** Its land types come from its own land-cover map. In Thailand 79% of fire carbon falls in its savanna, shrub and grass classes, and only 9% in cropland; in Chiang Mai, where JAXA maps 80% of the land as forest, the savanna group is 90%. Much of this is deciduous forest by Thai definitions, and Thailand's inventory reports wildfire carbon losses on forest land. IPCC practice treats CO₂ from cropland and grassland burning as balanced by regrowth; that assumption does not cover all of this fire. Fire CO₂ is shown as gross emission from burning, not as a net loss of stock.
+- **ODIAC excludes land use and biomass burning.** Its scope complements the others, but its year and method differ. It sits beside the forest figures and is not netted against them.
+- **The only net shown is GFW's own**: emissions minus removals within one model. A negative value means the forest is a net sink.
+- **Two stock years are never subtracted.** ESA warns that differences between CCI years "may be affected by substantial biases" (fact sheet above). The Global Forest Observations Initiative rates change estimated from two biomass maps as research-level ([GFOI 2025](https://www.reddcompass.org/mgd/resources/GFOI_BiomassMaps_Guidance-20251022.pdf)).
+
+### Aerosol is not carbon
+
+The atmosphere layers answer a different question from the ledger:
+
+- **Aerosol optical depth** measures particles: dust and smoke. It shows the burning season clearly and contains no CO₂.
+- **Carbon monoxide** indicates combustion, but it is not CO₂.
+- **Column CO₂ (XCO₂)** from OCO-2 is a concentration along a narrow orbit track, not an emission.
+
+Directly, plume by plume, satellites can turn XCO₂ into an emission only for large, isolated sources. A study of power plants seen by OCO-2 and OCO-3 kept 106 usable cases out of about 23,000 candidate tracks ([Atmospheric Chemistry and Physics, 2023](https://acp.copernicus.org/articles/23/6599/2023/)). Atmospheric inversions using OCO-2 estimate coarse national and regional net fluxes ([Byrne et al. 2023](https://essd.copernicus.org/articles/15/963/2023/)), not provincial totals. For this reason the atmosphere layers ([NASA GIBS](https://nasa-gibs.github.io/gibs-api-docs/)) are pictures with labels and never numbers.
+
+### Two national accounts, side by side
+
+| Account | Removals | Emissions | Net | Scope |
+|---|---:|---:|---:|---|
+| GFW, average 2001–2025 | 92.9 Mt/yr | 71.7 Mt CO₂e/yr | −21.2 Mt CO₂e/yr | Satellite-mapped forest with >30% tree cover in 2000, or later gain; stand-replacing loss |
+| BTR1 2022, forest land remaining forest | 49.0 Mt | 19.7 Mt | −29.3 Mt | Managed land by national definitions |
+| BTR1 2022, land converted to cropland | — | 12.5 Mt | +12.5 Mt | Conversion to cropland |
+| BTR1 2022, whole LULUCF sector | 156.8 Mt | 48.6 Mt | −107.9 Mt | Includes cropland remaining cropland, −91.5 Mt |
+
+Sources: GFW row, sum of the 77 province summaries divided by 25 (equal to GFW's own country table); GFW emissions include methane and nitrous oxide. BTR1 rows, Table 2-184, page 2-241, million tonnes; removals and emissions are CO₂, and the sector net also includes 0.27 Mt of methane and nitrous oxide from biomass burning. Most of Thailand's reported land sink sits in cropland remaining cropland, not forest. A satellite forest model and a national inventory also define "forest" and "anthropogenic" differently. Global bookkeeping models and national inventories differ by about 6.7 GtCO₂ per year for similar definitional reasons ([Grassi et al. 2023](https://essd.copernicus.org/articles/15/1093/2023/)). The carbon map shows both and chooses neither.
+
+### Checks performed
+
+Run on 26 September 2026:
+
+- **Conservation.** Provinces, grid cells and a box covering Thailand all reproduce the national total for every quantity. Split boxes add up to the whole box.
+- **Boundary crosswalk.** All 77 COD-AB province names match Climate TRACE's GADM names one to one. GFW rows are joined by the same GADM numbers, and GFW's province areas agree with COD-AB within 6.7%, which confirms the numbering.
+- **Fossil CO₂.** ODIAC's 2024 total for Thailand is 290.0 Mt. BTR1 reports 271.1 Mt of CO₂ excluding land use for 2022 (Table 2-3), of which energy is 241.3 Mt and industrial processes 28.6 Mt. The scopes differ (ODIAC covers fossil combustion, cement and flaring), the years differ, and ODIAC projects recent years from energy statistics.
+- **Fire season.** 83% of fire carbon falls in February–April, and March alone is 44%. This matches the northern burning season.
+- **Chiang Mai.** GFED fire CO₂ is 12.1 Mt per year (2013–2022, all land types). Climate TRACE forest-land fires are 6.3 MtCO₂e (2024, forest only). The scopes differ; the order of magnitude agrees.
+- **Provenance.** Every source file's URL, size, SHA-256 and retrieval date is in the [ledger manifest](data/ledger/manifest.json). The processing code is `scripts/ingest/build_ledger.py`.
+
+### What this map cannot tell you
+
+- **Credits, eligibility or additionality.** A satellite removal figure has no baseline, no leakage deduction, no permanence buffer and no independent verification. See the [ICVCM Core Carbon Principles](https://icvcm.org/wp-content/uploads/2024/05/CCP-Book-V3-FINAL-LowRes-10May24.pdf).
+- **An approved method.** T-VER remote-sensing models need TGO approval. These products have none for project use.
+- **Current conditions.** Stock is for 2020, forest flux is a 2001–2025 average, fire is 2013–2022 and fossil CO₂ is 2024.
+- **Flux inside a drawn box.** GFW's 30 m grids require an API key and are not yet ingested. The map says so instead of showing zero.
+
+## 07 · The first pilot should earn the next one
 
 Start with one project whose boundary, rights, methodology and field records can be checked. Agree on the decision first: screening a candidate, estimating stock, or preparing monitoring evidence. Each requires a different level of proof.
 
@@ -128,7 +225,7 @@ A useful pilot pack includes a versioned boundary, the project's registration de
 
 The pilot succeeds when another qualified person can reproduce the result, explain its limits and identify the measurements that would change the conclusion. That is a harder target than making the map look convincing. It is also a target worth building for.
 
-## 07 · The person behind the work
+## 08 · The person behind the work
 
 <div class="author-profile">
 <img src="images/dr-non.jpg" width="800" height="800" alt="Dr Non Arkaraprasertkul speaking with a microphone" loading="lazy">
@@ -137,7 +234,7 @@ The pilot succeeds when another qualified person can reproduce the result, expla
 
 Portrait source: [RMIT Vietnam's profile](https://www.rmit.edu.vn/research/hubs/rmit-vietnam-smart-and-sustainable-cities-hub/people/dr-non-arkaraprasertkul). Biography checked against that page and the [personal website](https://www.nonarkara.org/) on 25 September 2026. Institutional affiliations provide background; this independent pilot does not claim institutional endorsement. No personal quotation or fieldwork story has been invented for this page.
 
-## 08 · Keep the evidence within reach
+## 09 · Keep the evidence within reach
 
 The [Thai guide](guide-th.html) and [English guide](guide-en.html) cover actual use, formulas, file formats and deployment. The [source catalogue](data/source-catalog.json) records the supplied references. [Code and tests](https://github.com/Nonarkara/carbon) are public, together with the original research audit. Official documents linked above govern their own methods; this page is an explanation, not a replacement.
 
