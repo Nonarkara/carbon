@@ -81,3 +81,21 @@ Raw downloads are retained for provenance. A successful download does not establ
 ## Research / งานวิจัย
 
 Read the illustrated [Thai research notebook](https://forest-carbon-thailand.pages.dev/research-th) or [English research notebook](https://forest-carbon-thailand.pages.dev/research-en): purpose, worked calculation, satellite and AI workflow, Thai dataset audit, RFD observations, pilot design and Dr Non's profile. Source text lives in `docs/RESEARCH.th.md` and `docs/RESEARCH.en.md`; build renders accessible diagrams and navigation. The workbench Research link opens separately so current inputs remain available.
+
+
+## Start on the map
+
+Open [carbon.nonarkara.org](https://carbon.nonarkara.org). **Explore 77 provinces** lists fossil emissions, forest stock or annual forest net flux. Choose a province to see substituted equations. **Select an area** accepts a drag or two opposite-corner clicks/taps; Escape cancels. Small areas below dataset resolution are suppressed. Missing flux is never zero.
+
+**Vegetation** shows JAXA forest cover; **Aerosols** shows atmospheric particles, not CO2. Neither layer alone issues credits. **Research** holds explanations, diagrams and the author profile. **T-VER project tools** retains the measured-project workflow.
+
+The global column (World tab on phones) separates concentrations, emissions, allowances and credits, with source dates and fetched/cache/fallback status. Quarterly auctions and annual inventories are not real-time quotes.
+
+
+## เริ่มจากแผนที่
+
+เปิด [carbon.nonarkara.org](https://carbon.nonarkara.org) แล้วเลือกจังหวัด หรือกดลูกศรเลือกพื้นที่ ลากกรอบหรือแตะมุมตรงข้ามสองจุด แล้วดูตัวเลขแทนค่าในสมการ กด Escape เพื่อยกเลิก ข้อมูลที่ยังไม่มีจะไม่แสดงเป็นศูนย์
+
+พืชพรรณแสดงพื้นที่ป่าจาก JAXA ละอองลอยแสดงอนุภาคในบรรยากาศ ไม่ใช่ CO2 สองชั้นข้อมูลนี้ไม่ได้ออกเครดิตโดยอัตโนมัติ ปุ่มงานวิจัยรวมคำอธิบาย ภาพประกอบ และประวัติผู้พัฒนา เครื่องมือโครงการ T-VER ยังใช้ข้อมูลภาคสนามได้
+
+คอลัมน์ข้อมูลโลกแสดงแหล่งข้อมูล วันที่ และสถานะข้อมูลสำรอง โทรศัพท์มีแท็บข้อมูลโลก ราคาประมูลรายไตรมาสและบัญชีรายปีไม่ใช่ข้อมูลเรียลไทม์

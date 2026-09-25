@@ -1,6 +1,8 @@
 // Carbon map lens: province / drawn box / project boundary → landscape ledger. Rendering only; arithmetic lives in ledger.js.
 import {readGrid,sumSelection,ledgerRows,polygonsOf,boxSideKm} from './ledger.js';
 
+import {renderCalculations} from './selection-view.js';
+
 const GIBS='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/';
 const ATMOS={
   aod:{layer:'VIIRS_NOAA20_AOD_Deep_Blue_Land_Ocean',matrix:'GoogleMapsCompatible_Level6',max:6,lag:2,note:'aerosolNote'},
@@ -11,18 +13,18 @@ const ATMOS={
 const FLUX_CLASSES=[[-Infinity,'#1f5f4a'],[-1,'#5e9480'],[-.25,'#d9d6cc'],[.25,'#d39a6a'],[1,'#9c4a1a']]; // diverging, neutral midpoint
 const GROUP_ORDER=['forest','savanna_shrub_grass','cropland','deforestation','peat','other'];
 
-export function initLandscape({map,t,fmt,getLang,getBoundary,download,message}){
+export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,onSelect=()=>{}}){
   const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const S={data:null,manifest:null,grid:null,gridPromise:null,sel:null,src:null,rows:[],layer:null,shape:null,overlay:null,atmos:null,drawing:false};
-  const byCode=new Map();
+  const byCode=new Map();let suppressMapClickUntil=0;let selectionRevision=0;
 
   const ready=Promise.all(['manifest.json','provinces.json','provinces.geojson'].map(f=>fetch('data/ledger/'+f).then(r=>{if(!r.ok)throw Error('ledger:'+f);return r.json();})))
     .then(([manifest,data,geo])=>{
       S.manifest=manifest;S.data=data;
       data.provinces.forEach(p=>byCode.set(p.pcode,p));byCode.set('TH',data.national);
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
-        onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
-      fillPlaces();select({kind:'national',code:'TH'},false);
+        onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
+      fillPlaces();select({kind:'national',code:'TH'},false);setOverlay('stock');
     });
 
   function fillPlaces(){
@@ -40,18 +42,18 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message}){
   }
 
   async function select(sel,fit=true){
-    S.sel=sel;if(S.shape){map.removeLayer(S.shape);S.shape=null;}
+    const revision=++selectionRevision;onSelect();S.sel=sel;$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;if(S.shape){map.removeLayer(S.shape);S.shape=null;}
     styleProvinces();
     if(sel.kind==='province'||sel.kind==='national'){
       S.src=byCode.get(sel.code);$('#place').value=sel.code;
       if(fit){if(sel.kind==='national')map.setView([13.3,101],5.7);else S.layer.eachLayer(l=>{if(l.feature.properties.pcode===sel.code)map.fitBounds(l.getBounds(),{padding:[30,30]});});}
     }else{
-      $('#place').value='box';$('#kStock').textContent=t('loading');
+      $('#place').value='box';S.src=null;$('#calculationTrace').textContent=t('loading');$('#ledger').replaceChildren();$('#kStock').textContent=t('loading');$('#kRemove').textContent=$('#kEmit').textContent='—';
       const grid=await loadGrid(),{totals,cells}=sumSelection(grid,sel.box?{box:sel.box}:{polygons:sel.polygons});
-      S.src={...totals,cells,pcode:null};
+      if(revision!==selectionRevision)return;S.src={...totals,cells,pcode:null};
       S.shape=(sel.box?L.rectangle([[sel.box.south,sel.box.west],[sel.box.north,sel.box.east]]):L.geoJSON(sel.geojson)).setStyle({color:'#ffcc00',weight:3,fillOpacity:.08,interactive:false}).addTo(map);
     }
-    render();
+    render();if(innerWidth<=700&&sel.kind!=='national'){document.body.dataset.view='rail';document.querySelectorAll('.bottom-nav button').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.tab==='carbon')));}
   }
 
   function rowsFor(){
@@ -74,6 +76,10 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message}){
     $('#kRemoveHint').textContent=$('#kEmitHint').textContent=rem?'GFW v1.4.3 · 2001–2025':t('gridNotIngested').split('.')[0];
     $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):t('verdictBox').replace('{s}',big(stock?.value));
     $('#ledger').innerHTML=ledgerHTML(s);
+    $('#selectionName').textContent=S.sel.kind==='province'||S.sel.kind==='national'?placeName(s):getLang()==='th'?'พื้นที่ที่เลือก':'Selected area';
+    $('#mapLabel').textContent=$('#selectionName').textContent;
+    $('#calculationTrace').innerHTML=renderCalculations({src:s,rows:S.rows,datasets:S.manifest.datasets,t,fmt,esc,getLang});
+    if(!$('#provinceBrowser').hidden)renderProvinces();
   }
 
   function line(label,value,unit,meta,note,cls=''){
@@ -118,26 +124,47 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message}){
   }
 
   // ---- drawing a box: pointer events, touch-friendly; map panning paused while drawing ----
-  const box={start:null,rect:null};
+  const box={start:null,rect:null,pointer:null,second:false};
   function setDrawing(on){
-    S.drawing=on;$('#drawBox').setAttribute('aria-pressed',String(on));$('#drawBox').textContent=t(on?'drawing':'drawBox');$('#drawHint').hidden=!on;
+    S.drawing=on;$('#drawBox').setAttribute('aria-pressed',String(on));$('#drawBox').textContent=t(on?'drawing':'drawBox');$('#pickArea').setAttribute('aria-pressed',String(on));$('#drawHint').hidden=!on;$('#drawPrompt').hidden=!on;
     map.getContainer().classList.toggle('drawing',on);on?map.dragging.disable():map.dragging.enable();
-    if(on)document.body.dataset.view='map';
+    if(on){onSelect();document.body.dataset.view='map';delete document.body.dataset.layers;map.invalidateSize();loadGrid().catch(()=>{});}
+    else{box.start=null;box.rect?.remove();box.rect=null;box.pointer=null;}
   }
-  if(innerWidth>700)$('#layerMore').open=true;
   const el=map.getContainer();
-  el.addEventListener('pointerdown',e=>{if(!S.drawing||e.target.closest('.layer-panel,.leaflet-control'))return;e.preventDefault();el.setPointerCapture(e.pointerId);box.start=map.mouseEventToLatLng(e);box.rect?.remove();box.rect=L.rectangle([box.start,box.start],{color:'#ffcc00',weight:2,dashArray:'4 4',fillOpacity:.05,interactive:false}).addTo(map);});
+  el.addEventListener('pointerdown',e=>{if(!S.drawing||e.target.closest('.leaflet-control'))return;e.preventDefault();el.setPointerCapture(e.pointerId);box.pointer={x:e.clientX,y:e.clientY};box.second=!!box.start;if(!box.start){box.start=map.mouseEventToLatLng(e);box.rect=L.rectangle([box.start,box.start],{color:'#ffcc00',weight:2,dashArray:'4 4',fillOpacity:.05,interactive:false}).addTo(map);}});
   el.addEventListener('pointermove',e=>{if(S.drawing&&box.start)box.rect.setBounds([box.start,map.mouseEventToLatLng(e)]);});
   el.addEventListener('pointerup',e=>{
-    if(!S.drawing||!box.start)return;const end=map.mouseEventToLatLng(e),a=box.start;box.start=null;box.rect.remove();box.rect=null;setDrawing(false);
+    if(!S.drawing||!box.start||!box.pointer)return;
+    const moved=Math.hypot(e.clientX-box.pointer.x,e.clientY-box.pointer.y)>5;
+    if(!moved&&!box.second){box.pointer=null;return;}
+    const end=map.mouseEventToLatLng(e),a=box.start;
     const b={west:Math.min(a.lng,end.lng),east:Math.max(a.lng,end.lng),south:Math.min(a.lat,end.lat),north:Math.max(a.lat,end.lat)};
-    if(b.east-b.west<1e-4||b.north-b.south<1e-4)return;
+    suppressMapClickUntil=Date.now()+400;setDrawing(false);if(b.east-b.west<1e-4||b.north-b.south<1e-4)return;
     select({kind:'box',box:b}).catch(err=>message(String(err.message||err)));
   });
+  el.addEventListener('pointercancel',()=>setDrawing(false));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')setDrawing(false);});
   $('#drawBox').onclick=()=>setDrawing(!S.drawing);
+  $('#pickArea').onclick=()=>ready.then(()=>setDrawing(!S.drawing));
+  $('#moreLayers').onclick=()=>{document.body.dataset.layers=document.body.dataset.layers==='open'?'closed':'open';$('#layerMore').open=true;document.body.dataset.view='map';map.invalidateSize();};
+  const showMap=()=>{onSelect();document.body.dataset.view='map';map.invalidateSize();};
+  $('#showVegetation').onclick=()=>ready.then(()=>{showMap();document.querySelector('input[name=overlay][value=fnf]').checked=true;setOverlay('fnf');});
+  $('#showAerosol').onclick=()=>{showMap();document.body.dataset.layers='open';$('#layerMore').open=true;$('#atmos').value=$('#atmos').value==='aod'?'':'aod';$('#atmosDate').value='';setAtmos();};
+  function renderProvinces(){
+    const metric=$('#provinceMetric').value;
+    const value=p=>metric==='stock'?p.forest_agb_mg*S.manifest.conversion.agb_to_co2e:metric==='net'?p.gfw_net_mg_co2e/S.manifest.datasets.gfw.years:p.fossil_c_t*44/12;
+    const unit=metric==='stock'?'tCO₂e':metric==='net'?'tCO₂e / yr':'tCO₂ / yr';
+    const source=metric==='stock'?'CCI + JAXA · 2020':metric==='net'?'GFW · 2001–2025':'ODIAC2025 · 2024';
+    $('#provinceRanking').innerHTML=[...S.data.provinces].sort((a,b)=>value(b)-value(a)).map(p=>`<button class="province-row" data-province="${p.pcode}"><span>${esc(placeName(p))}</span><b>${fmt(value(p)/1e6,2)} M</b><small>${unit} · ${source} · ${esc(t('globalRef'))}</small></button>`).join('');
+    $('#provinceRanking').querySelectorAll('button').forEach(b=>b.onclick=()=>select({kind:'province',code:b.dataset.province}));
+  }
+  $('#exploreProvinces').onclick=()=>ready.then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=false;document.body.dataset.provinces='open';document.body.dataset.view='rail';renderProvinces();document.querySelector('input[name=overlay][value=flux]').checked=true;setOverlay('flux');$('#tabBody').scrollTop=0;});
+  $('#provinceMetric').onchange=renderProvinces;
+  $('#closeProvinces').onclick=()=>{$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;};
   $('#nationalView').onclick=()=>select({kind:'national',code:'TH'});
   $('#useBoundary').onclick=()=>{const b=getBoundary();if(!b){message(t('noBoundaryYet'));return;}const polygons=polygonsOf(b.geojson);select({kind:'boundary',polygons,geojson:b.geojson,box:null}).then(()=>map.fitBounds(S.shape.getBounds(),{padding:[30,30]})).catch(err=>message(String(err.message||err)));};
-  $('#place').addEventListener('change',()=>{const v=$('#place').value;if(v==='TH')select({kind:'national',code:'TH'});else if(byCode.has(v))select({kind:'province',code:v});});
+  $('#place').addEventListener('change',()=>{setDrawing(false);const v=$('#place').value;if(v==='TH')select({kind:'national',code:'TH'});else if(byCode.has(v))select({kind:'province',code:v});});
 
   // ---- overlays ----
   function legend(html){$('#overlayLegend').innerHTML=html;$('#overlayLegend').hidden=!html;}

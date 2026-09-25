@@ -175,3 +175,12 @@ flowchart TD
 To refresh the carbon map data: `python3 -m venv .venv && .venv/bin/pip install -r scripts/ingest/requirements.txt`, then `.venv/bin/python scripts/ingest/fetch.py` (about 5 GB into the git-ignored `research/raw/landscape/`) and `.venv/bin/python scripts/ingest/build_ledger.py` (about 3 minutes and 40 GB of memory). The build stops if provinces, grid cells and the national total disagree for any quantity, or if the land area drifts more than 1% from the official figure. Then run `npm test`.
 
 Before extending the model, read `context.md`, `IMPLEMENTATION_PLAN.md`, and `RESEARCH.md`. Preserve the Malaysia reference and every source/date/quality label. A credible next milestone is reproducing one independently measured project and validating its uncertainty, not adding a nationwide “AI credits” number.
+
+
+## Start on the map
+
+Open [carbon.nonarkara.org](https://carbon.nonarkara.org). **Explore 77 provinces** lists fossil emissions, forest stock or annual forest net flux. Choose a province to see substituted equations. **Select an area** accepts a drag or two opposite-corner clicks/taps; Escape cancels. Small areas below dataset resolution are suppressed. Missing flux is never zero.
+
+**Vegetation** shows JAXA forest cover; **Aerosols** shows atmospheric particles, not CO2. Neither layer alone issues credits. **Research** holds explanations, diagrams and the author profile. **T-VER project tools** retains the measured-project workflow.
+
+The global column (World tab on phones) separates concentrations, emissions, allowances and credits, with source dates and fetched/cache/fallback status. Quarterly auctions and annual inventories are not real-time quotes.

@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {selectionCalculations} from '../public/js/selection-view.js';import {ledgerRows} from '../public/js/ledger.js';
+const d=JSON.parse(readFileSync('public/data/ledger/manifest.json')).datasets;const n=JSON.parse(readFileSync('public/data/ledger/provinces.json')).national;
+test('displayed substitution conserves stock and fossil totals',()=>{const rows=[{id:'stock_forest',value:n.forest_agb_mg*1.27*.47*44/12},{id:'fossil',value:n.fossil_c_t*44/12}];const r=selectionCalculations(n,rows,d);assert.ok(Math.abs(r[0].inputs[0]*r[0].factor-r[0].value)<1e-5);assert.equal(r[1].inputs[0]*r[1].factor,r[1].value);assert.equal(r[2].value,null);});
+test('coarse selection cannot expose numeric stock',()=>{assert.equal(selectionCalculations(n,[{id:'stock_forest',value:42,tooCoarse:true}],d)[0].value,null);});
