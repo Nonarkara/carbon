@@ -34,3 +34,9 @@ Verified against https://forest-carbon-thailand.pages.dev on 25 September 2026:
 
 The release build embeds its current Git commit in `/version.json`; documentation-only releases can therefore have a later identifier than the application commit tested above. Deployment is Cloudflare Pages Direct Upload, not automatic deployment on Git push.
 
+
+## Research page addition — 25 September 2026
+
+Added Thai/English research notebooks with four accessible ordered diagrams each, eight-section contents navigation, linked primary sources, dated RFD observations, and the author portrait attributed to RMIT. No calculator equations or inputs were changed. Research opens separately to preserve browser-memory inputs.
+
+Local verification passed all 14 unit tests and the existing browser regressions. Added browser cases at 1280, 768 and 375 pixels exercise both language links, all research diagram counts, author section navigation, decoded portrait, no document overflow, language switching and preservation of the project name in the original workbench. Desktop English, phone Thai and phone workbench screenshots were visually inspected. npm audit reported zero vulnerabilities. Release verification repeats this suite against the public URL; CI results are available in GitHub Actions.

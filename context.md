@@ -13,3 +13,5 @@ Invariant: stock is not period sequestration, and estimates are not issued credi
 Release tier: demonstration/assessment pilot; no trained model, official approval, registry integration or issuance authority. Methodology reference: Standard T-VER-S-METH-13-01 v2; full eligibility/verification remain external.
 Privacy: user files processed in memory; no analytics, backend upload, browser persistence or paid API. Export before leaving. External map tiles disclose viewport requests to providers.
 Public assets only in public/. Raw research does not ship to Cloudflare.
+
+Research surface: editorial reading page based on Malaysia research.html, with its paper/navy/yellow tokens; the argument leads, a narrow contents rail supports reading. 5px yellow intro rule, 3px section rules and 1px row dividers. Real author portrait sourced from his RMIT public profile at user request; no invented quotations. Research opens separately to retain browser-memory assessment inputs.

@@ -31,4 +31,27 @@ for(const width of [1280,768,390,375]){
  await page.screenshot({path:`test-results/viewport-${width}.png`,fullPage:true});
 }
 for(const lang of ['en','th']){await page.goto(base+`/guide-${lang}.html`);assert.equal(await page.locator('.doc-diagram').count(),3);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
-assert.deepEqual(errors,[]);await writeFile('test-results/browser-summary.json',JSON.stringify({base,checkedAt:new Date().toISOString(),viewports:[1440,1280,768,390,375],checks:['example arithmetic','JSON export and provenance','language state','loss','unknown fire','unit switch','plot import','factor edit','boundary replacement','malformed geometry','reset','mobile navigation','guide diagrams'],pageErrors:errors},null,2));await browser.close();console.log('PASS: browser flows, export, unit/provenance regressions, 5 viewports, 2 guides; '+base);
+// Research opens separately, preserving browser-local project inputs.
+for(const width of [1280,768,375]){
+ await page.setViewportSize({width,height:900});
+ for(const lang of ['en','th']){
+  await page.goto(base+`/?lang=${lang}`);
+  await page.locator('#researchLink').waitFor({state:'visible'});
+  assert.equal(await page.locator('#researchLink').getAttribute('href'),`research-${lang}.html`);
+  if(width<=700)await page.locator('.bottom-nav [data-tab=project]').click();
+  await page.locator('#projectName').fill('Research preserves my project');
+  const popupEvent=page.waitForEvent('popup');await page.locator('#researchLink').click();const research=await popupEvent;
+  await research.waitForLoadState();
+  assert.equal(await research.locator('html').getAttribute('lang'),lang);
+  assert.equal(await research.locator('.research-diagram').count(),4);
+  assert.equal(await research.locator('.research-toc a').count(),8);
+  await research.locator('.research-toc a[href="#section-7"]').click();
+  const portrait=research.locator('.author-profile img');await portrait.scrollIntoViewIfNeeded();
+  await portrait.evaluate(img=>img.decode());assert.ok(await portrait.evaluate(img=>img.naturalWidth>=400));
+  assert.ok(await research.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`research overflow ${lang} ${width}`);
+  await research.locator('nav a[lang]').click();assert.equal(await research.locator('html').getAttribute('lang'),lang==='en'?'th':'en');
+  await research.screenshot({path:`test-results/research-${lang}-${width}.png`,fullPage:true});
+  await research.close();assert.equal(await page.locator('#projectName').inputValue(),'Research preserves my project');
+ }
+}
+assert.deepEqual(errors,[]);await writeFile('test-results/browser-summary.json',JSON.stringify({base,checkedAt:new Date().toISOString(),viewports:[1440,1280,768,390,375],checks:['example arithmetic','JSON export and provenance','language state','loss','unknown fire','unit switch','plot import','factor edit','boundary replacement','malformed geometry','reset','mobile navigation','guide diagrams','research navigation and language','research diagrams and portrait','research preserves input'],pageErrors:errors},null,2));await browser.close();console.log('PASS: browser flows, export, unit/provenance regressions, 5 viewports, 2 guides, bilingual research with portrait and preserved inputs; '+base);

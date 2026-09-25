@@ -70,3 +70,7 @@ Research and extracted data for a Thai/English forest-carbon assessment system r
 Research date: 25 September 2026. The workspace began empty. The original research snapshot preceded application implementation; the guides above describe the implemented release. Trained AI models and official credit issuance remain outside this release.
 
 Raw downloads are retained for provenance. A successful download does not establish fitness for carbon accounting or permission to republish. Follow the source-specific quality and licence notes in the research report.
+
+## Research / งานวิจัย
+
+Read the illustrated [Thai research notebook](https://forest-carbon-thailand.pages.dev/research-th) or [English research notebook](https://forest-carbon-thailand.pages.dev/research-en): purpose, worked calculation, satellite and AI workflow, Thai dataset audit, RFD observations, pilot design and Dr Non's profile. Source text lives in `docs/RESEARCH.th.md` and `docs/RESEARCH.en.md`; build renders accessible diagrams and navigation. The workbench Research link opens separately so current inputs remain available.

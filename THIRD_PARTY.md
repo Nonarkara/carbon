@@ -27,3 +27,7 @@ Province CSV records originate from Saraburi and Kanchanaburi government catalog
 OpenStreetMap tiles: © OpenStreetMap contributors, ODbL data attribution and applicable tile-use policy. Esri World Imagery: Esri, Maxar, Earthstar Geographics and the service's contributing providers. Attribution is visible on the map. Neither provider's basemap is used as a dated carbon measurement.
 
 Public research snapshots are sanitized: upstream token patterns and API-key values embedded in provider resource URLs were removed before publication. Original acquisition hashes are preserved separately from sanitized public-file hashes. Requests needing credentials require your own authorized access.
+
+## Author portrait
+
+`public/images/dr-non.jpg`: Dr Non Arkaraprasertkul portrait from his [RMIT Vietnam profile](https://www.rmit.edu.vn/research/hubs/rmit-vietnam-smart-and-sustainable-cities-hub/people/dr-non-arkaraprasertkul), used at the subject's request on 25 September 2026. Source asset: https://www.rmit.edu.vn/content/dam/rmit/vn/en/assets-for-production/images/hubs/smart-sustainable-cities/people/non-arkarapra.jpg . No blanket open-image licence is claimed; portrait rights are separate from application code.
