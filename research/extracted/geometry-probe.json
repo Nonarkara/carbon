@@ -1,0 +1,39 @@
+[
+  {
+    "url": "https://data.go.th/dataset/95ae2605-01c5-4423-a5fd-44228be058d9/resource/077b365f-3e30-40de-b22a-0154cbca854f/download/forestarea_2562_wgs84.dbf",
+    "status": 200,
+    "content_length": "4970102",
+    "content_range": null,
+    "prefix_hex": "03780416348c01008100310000000000"
+  },
+  {
+    "url": "https://data.go.th/dataset/95ae2605-01c5-4423-a5fd-44228be058d9/resource/27d19517-8914-45c2-8317-e93380a6baab/download/forestarea_2562_wgs84.prj",
+    "status": 200,
+    "content_length": "401",
+    "content_range": null,
+    "prefix_hex": "50524f4a43535b225747535f31393834",
+    "crs": "PROJCS[\"WGS_1984_UTM_Zone_47N\",GEOGCS[\"GCS_WGS_1984\",DATUM[\"D_WGS_1984\",SPHEROID[\"WGS_1984\",6378137.0,298.257223563]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"false_easting\",500000.0],PARAMETER"
+  },
+  {
+    "url": "https://data.go.th/dataset/95ae2605-01c5-4423-a5fd-44228be058d9/resource/8f4567bf-e23b-4ff2-9529-f785e738953f/download/forestarea_2562_wgs84.shp",
+    "status": 200,
+    "content_length": "244918572",
+    "content_range": null,
+    "prefix_hex": "0000270a000000000000000000000000",
+    "shapefile_code": 9994,
+    "declared_bytes": 244918572,
+    "bbox": [
+      325300.5509000011,
+      620829.7594878674,
+      1213666.7502342307,
+      2261095.7684000023
+    ]
+  },
+  {
+    "url": "https://data.go.th/dataset/95ae2605-01c5-4423-a5fd-44228be058d9/resource/877be6d1-9c5b-44bd-ad94-1dc68a55b51c/download/forestarea_2562_wgs84.shx",
+    "status": 200,
+    "content_length": "811524",
+    "content_range": null,
+    "prefix_hex": "0000270a000000000000000000000000"
+  }
+]

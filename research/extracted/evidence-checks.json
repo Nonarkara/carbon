@@ -1,0 +1,133 @@
+{
+  "checked_on": "2026-09-25",
+  "catalogue_query": "https://data.go.th/api/3/action/package_search?q=%E0%B8%9B%E0%B9%88%E0%B8%B2%E0%B9%84%E0%B8%A1%E0%B9%89&rows=100&start=0&sort=id%20asc",
+  "pagination_starts": [
+    0,
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "checks": {
+    "unique_datasets": 570,
+    "resource_records": 2111,
+    "selected_download_hashes_verified": 9,
+    "normalized_province_year_rows": 11,
+    "rai_ha_conversions": "passed",
+    "BE_CE_conversions": "passed",
+    "kanchanaburi_rai_km2_crosscheck": "passed within 0.001 km2"
+  },
+  "raw_files": [
+    {
+      "path": "research/raw/_frm4-04.csv",
+      "bytes": 165662,
+      "sha256": "f5a8256936246102a71aa7ea706c73dc4025f435666946e342ed3239957bbf1e"
+    },
+    {
+      "path": "research/raw/approved-ai.html",
+      "bytes": 120307,
+      "sha256": "765876cfa3f40b8bf5040c5712cf742692f3f8e80ac2962365a9fdcd2631f66b"
+    },
+    {
+      "path": "research/raw/community-forest.csv",
+      "bytes": 350,
+      "sha256": "f63d6caee6a545494c44283c8100a34d268dc253e7b3d8e1b69520d80520daeb"
+    },
+    {
+      "path": "research/raw/data-go-th-search-000.json",
+      "bytes": 1333133,
+      "sha256": "65e60c372300fd26767ae151b1672e66ac31660f76774aa0bad84288c5b519c6",
+      "public_sha256": "b9c8c73dd40d5c86cf8f7be9e913032e1effc0a4a52bca22d9431b54d9e7629f",
+      "sanitized": true
+    },
+    {
+      "path": "research/raw/data-go-th-sorted-000.json",
+      "bytes": 2150529,
+      "sha256": "73bab474597e1de09c4d530886adf21f986a941b068e2fc3faaa60c2640ab6f7",
+      "public_sha256": "428718a2d6e7f165f9745a91f34a7b2ae062f235fd0393ac9a4d08d16f633325",
+      "sanitized": true
+    },
+    {
+      "path": "research/raw/data-go-th-sorted-100.json",
+      "bytes": 1457086,
+      "sha256": "413fbdaec1ba3f2654bc8f51d9817369b9f73f4c91f7bda00e1f769a9afe9322",
+      "public_sha256": "ac38957ca41947c2c05e952652bf0c022252d29cab82ef26296bdf705f0ea705",
+      "sanitized": true
+    },
+    {
+      "path": "research/raw/data-go-th-sorted-200.json",
+      "bytes": 1846726,
+      "sha256": "25fd9602552545748029574b3bbdc774abbb57f369d5045e950915a698605161",
+      "public_sha256": "fcbf1f6fd94a895192e7eb3d7f2d59e5c57502fc9d86a23ec342a6bb9d7f543c",
+      "sanitized": true
+    },
+    {
+      "path": "research/raw/data-go-th-sorted-300.json",
+      "bytes": 1311546,
+      "sha256": "19c9b6783b230e8789d34df823a52a22596561ba339227de985f12193961354b",
+      "public_sha256": "c36e28cfadb570449400d07248f433697f1f473599870d0fe52ab1d9123994c7",
+      "sanitized": true
+    },
+    {
+      "path": "research/raw/data-go-th-sorted-400.json",
+      "bytes": 1129907,
+      "sha256": "0826610bbdf320caee101926b0dfdaa169584e18c32705f6ffee3a44bd76922e",
+      "public_sha256": "e9d9823a01ad51fca427cf703340272b5a1e37c90a306d29eae42a3a644b1b98",
+      "sanitized": true
+    },
+    {
+      "path": "research/raw/data-go-th-sorted-500.json",
+      "bytes": 1018831,
+      "sha256": "6ac7be2441c03c5e290c0672989e681952be39ba8047f05bcf832430f61be919",
+      "public_sha256": "15aa9b90cf51c83c7a3fe1ae5391d6f353b97594512a32069f2e51ff67e85d88",
+      "sanitized": true
+    },
+    {
+      "path": "research/raw/forest-area-2567.csv",
+      "bytes": 4039,
+      "sha256": "09e13e1bf5ebb2bff752358b94ed4dc678cffc0e64ed654381ea18c652335aed"
+    },
+    {
+      "path": "research/raw/forestarea_2562_wgs84.zip",
+      "bytes": 793,
+      "sha256": "2774e2a3ce3cd25a2a61357b91f363f35bb3abf4771a55b4cfb75bd96bd11b71"
+    },
+    {
+      "path": "research/raw/foret.csv",
+      "bytes": 184,
+      "sha256": "25e8f1457225071fa09a709f9e760a88132e8b0a35f3a748f600f317e4de2d43"
+    },
+    {
+      "path": "research/raw/gdpublish-67-dnp07-31-02.csv",
+      "bytes": 28028,
+      "sha256": "ef9cefada0644eaaaffdd5a84783a24329a19f1148a7669a0b68164ada1f6618"
+    },
+    {
+      "path": "research/raw/gdpublish-froms-dnp.csv",
+      "bytes": 6266,
+      "sha256": "761a65b592aa2de0c219a2fee03198ef1dcda13aad8622dad4bac5b49902097d"
+    },
+    {
+      "path": "research/raw/gdpublish-https-www-forest-go-th-land.csv",
+      "bytes": 5031,
+      "sha256": "42cf04791e03f82765f9745b7d9bb3112c0c1f182a441d814747aebc06137d19"
+    },
+    {
+      "path": "research/raw/method-v2.pdf",
+      "bytes": 356154,
+      "sha256": "086edcbd9e6dcd496567cbd77f49e3162d763d30d89d3470bebb9f418af53a54"
+    },
+    {
+      "path": "research/raw/saraburi-forest-area.csv",
+      "bytes": 607,
+      "sha256": "0981a730e4307a473a50f32cab134b069cffb9e4fc3de7fc54771a03039d7e2a"
+    },
+    {
+      "path": "research/raw/tree-tool-v2.pdf",
+      "bytes": 511860,
+      "sha256": "2beefc13c7027aa99fb75e441a167f55cd41129c043d5e171b272b7b109eac9d"
+    }
+  ],
+  "redaction_note": "Before public release, upstream token patterns and API-key query values in catalogue metadata were removed. Original pre-redaction hashes are retained for provenance; public-file hashes below describe sanitized files."
+}
