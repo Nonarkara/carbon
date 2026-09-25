@@ -20,4 +20,17 @@ A fresh reviewer reproduced two P1 problems in Chromium: baseline reinterpretati
 - `npx axiom-audit public --strict` could not run: the npm registry returned 404 for `axiom-audit`. This is an unavailable check, not a passed check. Visual inspection and executable overflow/navigation checks were used; the documented user-requested Malaysia palette exception remains intentional.
 - No independent native-speaker editorial review has been performed. Thai instructions and UI were authored and visually checked; no external language-review claim is made.
 - Basemap tile availability depends on third-party providers. Raster biomass, formal inventory sampling validity, official approval and field accuracy remain outside this release.
-- See live deployment evidence added after release, including the served Git version and public-browser test results.
+
+## Live deployment evidence
+
+Verified against https://forest-carbon-thailand.pages.dev on 25 September 2026:
+
+- Served `version.json` identified application commit `e8f7426`.
+- `BASE_URL=https://forest-carbon-thailand.pages.dev npm run test:browser` passed the complete browser flow suite above against the public deployment.
+- Both Thai and English guides, source catalogue and application JavaScript returned HTTP 200 with redirects followed. The served application JavaScript SHA-256 matched the local build.
+- Unknown paths and non-public research files returned HTTP 404. CSP, frame denial and MIME sniffing protection were present.
+- Chromium and curl succeeded. Python urllib requests received HTTP 403; that client-specific behavior remains unexplained and is not represented as a successful check.
+- GitHub's initial test job passed build, unit tests, dependency audit and browser flows. Its secret-scanning action failed before scanning because its initial-push range referenced the nonexistent parent of the root commit. Local reachable-history scanning passed; a subsequent push runs the action over an ordinary commit range.
+
+The release build embeds its current Git commit in `/version.json`; documentation-only releases can therefore have a later identifier than the application commit tested above. Deployment is Cloudflare Pages Direct Upload, not automatic deployment on Git push.
+
