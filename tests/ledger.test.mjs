@@ -94,3 +94,11 @@ test('every manifest dataset version is cited in both research notebooks',()=>{
     for(const [k,d] of Object.entries(manifest.datasets))if(d.version)assert.ok(doc.includes(d.version.split(' ')[0]),`${lang}: ${k} ${d.version}`);
   }
 });
+test('coarse and empty selections withhold numeric rows and uncertainty in exports',()=>{
+  for(const [src,minSideKm] of [[national,1.5],[{...national,area_ha:0},100]]){
+    const rows=ledgerRows(src,manifest.datasets,{minSideKm});
+    for(const id of ['stock_forest','stock_all','fossil','fire']){
+      const r=rows.find(r=>r.id===id);assert.equal(r.value,null,id);assert.equal(r.conservative,null);assert.equal(r.optimistic,null);
+    }
+  }
+});

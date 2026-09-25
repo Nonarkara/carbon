@@ -72,7 +72,7 @@ function row(id,value,unit,dataset,extra={}){return {id,value,unit,dataset,...ex
 // Assemble ledger rows from a province record or a grid sum. Missing inputs stay null, never zero.
 // minSideKm: shortest side of the selection. A dataset is greyed out when its cell is wider than that side.
 export function ledgerRows(src,datasets,{minSideKm}={}){
-  const rows=[],d=datasets,coarse=km=>minSideKm!=null&&minSideKm<km;
+  const rows=[],d=datasets,coarse=km=>minSideKm!=null&&minSideKm<Math.max(GRID_KM,km);
   if(src.forest_agb_mg!=null)rows.push(row('stock_forest',null,'tCO2e',d.cci,{...stockBand(src.forest_agb_mg,src.forest_sd_mg,src.forest_var_mg2),side:'stock',tooCoarse:coarse(GRID_KM)}));
   if(src.agb_mg!=null)rows.push(row('stock_all',src.agb_mg*AGB_TO_CO2E,'tCO2e',d.cci,{side:'stock',tooCoarse:coarse(GRID_KM)}));
   const years=d.gfw.years;
@@ -83,5 +83,5 @@ export function ledgerRows(src,datasets,{minSideKm}={}){
   }else rows.push(row('forest_flux',null,'tCO2e/yr',d.gfw,{side:'net',unavailable:'gridNotIngested'}));
   if(src.fire_co2_t!=null)rows.push(row('fire',src.fire_co2_t,'tCO2/yr',d.gfed,{side:'emit',byCategory:src.fire_c_t_groups||null,monthly:src.fire_c_t_monthly||null,tooCoarse:coarse(d.gfed.cellKm)}));
   if(src.fossil_c_t!=null)rows.push(row('fossil',src.fossil_c_t*C_TO_CO2,'tCO2/yr',d.odiac,{side:'emit',tooCoarse:coarse(d.odiac.cellKm)}));
-  return rows;
+  return rows.map(r=>r.tooCoarse||src.area_ha===0?{...r,value:null,conservative:null,optimistic:null,byCategory:null,monthly:null,...(src.area_ha===0?{unavailable:'emptySelection'}:{})}:r);
 }

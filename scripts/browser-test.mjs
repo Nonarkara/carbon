@@ -71,7 +71,7 @@ for(const width of [1280,768,375]){
   await research.waitForLoadState();
   assert.equal(await research.locator('html').getAttribute('lang'),lang);
   assert.equal(await research.locator('.research-diagram').count(),5);
-  assert.equal(await research.locator('.research-toc a').count(),9);
+  assert.equal(await research.locator('.research-toc a').count(),10);
   await research.locator('.research-toc a[href="#section-8"]').click();
   const portrait=research.locator('.author-profile img');await portrait.scrollIntoViewIfNeeded();
   await portrait.evaluate(img=>img.decode());assert.ok(await portrait.evaluate(img=>img.naturalWidth>=400));

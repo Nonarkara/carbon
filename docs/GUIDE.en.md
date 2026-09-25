@@ -184,3 +184,5 @@ Open [carbon.nonarkara.org](https://carbon.nonarkara.org). **Explore 77 province
 **Vegetation** shows JAXA forest cover; **Aerosols** shows atmospheric particles, not CO2. Neither layer alone issues credits. **Research** holds explanations, diagrams and the author profile. **T-VER project tools** retains the measured-project workflow.
 
 The global column (World tab on phones) separates concentrations, emissions, allowances and credits, with source dates and fetched/cache/fallback status. Quarterly auctions and annual inventories are not real-time quotes.
+
+Selection resolution: ODIAC's upstream fossil grid is approximately 1 km, but this deployment serves aggregated 2.8 km cells. All cell-derived quantities are withheld below the served selection floor; fire data retains its coarser 28 km limit. Boundary exports include the selected GeoJSON and withheld values remain null.

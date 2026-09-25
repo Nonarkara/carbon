@@ -1,5 +1,5 @@
 // Carbon map lens: province / drawn box / project boundary → landscape ledger. Rendering only; arithmetic lives in ledger.js.
-import {readGrid,sumSelection,ledgerRows,polygonsOf,boxSideKm} from './ledger.js';
+import {readGrid,sumSelection,ledgerRows,polygonsOf,boxSideKm,bboxOf} from './ledger.js';
 
 import {renderCalculations} from './selection-view.js';
 
@@ -57,7 +57,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   }
 
   function rowsFor(){
-    const s=S.src,side=S.sel.kind==='box'?boxSideKm(S.sel.box):S.sel.kind==='boundary'?Math.sqrt(getBoundary()?.hectares||0)/10:null;
+    const s=S.src,side=S.sel.kind==='box'?boxSideKm(S.sel.box):S.sel.kind==='boundary'?Math.min(boxSideKm(bboxOf(S.sel.polygons)),Math.sqrt(S.src.area_ha||0)/10):null;
     return ledgerRows(s,S.manifest.datasets,{minSideKm:side});
   }
   const num=(v,d=0)=>v==null?'—':fmt(v,d);
@@ -71,10 +71,10 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#kAreaHint').textContent=s.cells!=null?t('boxHint').replace('{c}',fmt(s.cells)):t('forestShare').replace('{f}',fmt(100*s.forest_area_ha/s.area_ha,1));
     $('#kStock').textContent=stock?.tooCoarse?'—':big(stock?.value);
     const pct=b=>fmt(100*(b[1]-stock.value)/stock.value,b[1]-stock.value<.01*stock.value?2:0);
-    $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?`${t('band')}: ±${pct(stock.optimistic)}% – ±${pct(stock.conservative)}% · CCI v7.0`:'—';
+    $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?.value!=null&&stock.value>0?`${t('band')}: ±${pct(stock.optimistic)}% – ±${pct(stock.conservative)}% · CCI v7.0`:'—';
     $('#kRemove').textContent=big(rem?.value);$('#kEmit').textContent=big(em?.value);
     $('#kRemoveHint').textContent=$('#kEmitHint').textContent=rem?'GFW v1.4.3 · 2001–2025':t('gridNotIngested').split('.')[0];
-    $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):t('verdictBox').replace('{s}',big(stock?.value));
+    $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):!s.area_ha?t('emptySelection'):stock?.tooCoarse?t('tooCoarseGrid'):t('verdictBox').replace('{s}',big(stock?.value));
     $('#ledger').innerHTML=ledgerHTML(s);
     $('#selectionName').textContent=S.sel.kind==='province'||S.sel.kind==='national'?placeName(s):getLang()==='th'?'พื้นที่ที่เลือก':'Selected area';
     $('#mapLabel').textContent=$('#selectionName').textContent;
@@ -92,7 +92,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const sf=r('stock_forest'),sa=r('stock_all');
     h.push(`<h3 class="lside">${esc(t('absorbSide'))}</h3>`);
     if(sf&&sf.tooCoarse)h.push(line(t('rStockForest'),'—','tCO₂e',dsMeta(ds.cci),t('tooCoarseGrid'),'unavailable'));
-    else if(sf)h.push(line(t('rStockForest'),big(sf.value),'tCO₂e',dsMeta(ds.cci)+' · '+dsMeta(ds.fnf),'',`verdict-row`)+
+    else if(sf&&sf.value!=null)h.push(line(t('rStockForest'),big(sf.value),'tCO₂e',dsMeta(ds.cci)+' · '+dsMeta(ds.fnf),'',`verdict-row`)+
       `<p class="band">${esc(t('band'))}: ${big(sf.optimistic[0])}–${big(sf.optimistic[1])} <small>${esc(t('bandOpt'))}</small><br>${big(sf.conservative[0])}–${big(sf.conservative[1])} <small>${esc(t('bandCons'))}</small></p><p class="hint">${esc(t('bandNote'))}</p>`);
     if(sa&&!sa.tooCoarse)h.push(line(t('rStockAll'),big(sa.value),'tCO₂e',dsMeta(ds.cci)));
     const rem=r('forest_removals'),em=r('forest_emissions'),net=r('forest_net'),fl=r('forest_flux');
@@ -102,7 +102,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     if(em)h.push(line(t('rEmissions'),big(em.value),'tCO₂e/yr',dsMeta(ds.gfw)));
     if(net)h.push(line(t('rNet'),big(net.value),'tCO₂e/yr','GFW',net.value<0?(getLang()==='th'?'ค่าติดลบ = ป่าเป็นแหล่งดูดซับสุทธิ':'Negative = net forest sink'):''));
     const fire=r('fire');
-    if(fire)h.push(line(t('rFire'),fire.tooCoarse?'—':big(fire.value),'tCO₂/yr',dsMeta(ds.gfed),fire.tooCoarse?t('tooCoarse'):t('fireNote'),fire.tooCoarse?'unavailable':'')+(fire.tooCoarse?'':fireCharts(s)));
+    if(fire)h.push(line(t('rFire'),fire.tooCoarse?'—':big(fire.value),'tCO₂/yr',dsMeta(ds.gfed),fire.tooCoarse?t('tooCoarse'):t('fireNote'),fire.tooCoarse?'unavailable':'')+(fire.tooCoarse||fire.value==null?'':fireCharts(s)));
     const fos=r('fossil');
     if(fos)h.push(line(t('rFossil'),fos.tooCoarse?'—':big(fos.value),'tCO₂/yr',dsMeta(ds.odiac),fos.tooCoarse?t('tooCoarse'):t('fossilNote'),fos.tooCoarse?'unavailable':''));
     if(s.climatetrace_2024||s.btr1_2022)h.push(`<h3 class="lside">${esc(t('crossSide'))}</h3>`);
@@ -209,7 +209,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   // ---- export ----
   function payload(){
     return {schemaVersion:1,exportedAt:new Date().toISOString(),language:getLang(),kind:'landscape-screening-estimate',notCredits:true,
-      selection:S.sel.kind==='box'?{kind:'box',bbox:S.sel.box}:S.sel.kind==='boundary'?{kind:'project-boundary'}:{kind:S.sel.kind,pcode:S.src.pcode,name_en:S.src.name_en,name_th:S.src.name_th},
+      selection:S.sel.kind==='box'?{kind:'box',bbox:S.sel.box}:S.sel.kind==='boundary'?{kind:'project-boundary',geojson:S.sel.geojson}:{kind:S.sel.kind,pcode:S.src.pcode,name_en:S.src.name_en,name_th:S.src.name_th},
       rows:S.rows,crossChecks:{climatetrace_2024:S.src.climatetrace_2024||null,btr1_2022:S.src.btr1_2022||null},
       conversion:S.manifest.conversion,conservation:S.manifest.conservation,datasets:S.manifest.datasets};
   }
