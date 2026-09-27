@@ -71,9 +71,9 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#kAreaHint').textContent=s.cells!=null?t('boxHint').replace('{c}',fmt(s.cells)):t('forestShare').replace('{f}',fmt(100*s.forest_area_ha/s.area_ha,1));
     $('#kStock').textContent=stock?.tooCoarse?'—':big(stock?.value);
     const pct=b=>fmt(100*(b[1]-stock.value)/stock.value,b[1]-stock.value<.01*stock.value?2:0);
-    $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?.value!=null&&stock.value>0?`${t('band')}: ±${pct(stock.optimistic)}% – ±${pct(stock.conservative)}% · CCI v7.0`:'—';
+    $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?.value!=null&&stock.value>0?`${t('band')}: ±${pct(stock.optimistic)}% – ±${pct(stock.conservative)}% · CCI ${S.manifest.datasets.cci.version}`:'—';
     $('#kRemove').textContent=big(rem?.value);$('#kEmit').textContent=big(em?.value);
-    $('#kRemoveHint').textContent=$('#kEmitHint').textContent=rem?'GFW v1.4.3 · 2001–2025':t('gridNotIngested').split('.')[0];
+    $('#kRemoveHint').textContent=$('#kEmitHint').textContent=rem?`GFW ${S.manifest.datasets.gfw.version.split(' ')[0]} · ${S.manifest.datasets.gfw.period}`:t('gridNotIngested').split('.')[0];
     $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):!s.area_ha?t('emptySelection'):stock?.tooCoarse?t('tooCoarseGrid'):t('verdictBox').replace('{s}',big(stock?.value));
     $('#ledger').innerHTML=ledgerHTML(s);
     $('#selectionName').textContent=S.sel.kind==='province'||S.sel.kind==='national'?placeName(s):getLang()==='th'?'พื้นที่ที่เลือก':'Selected area';
@@ -152,10 +152,10 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   $('#showVegetation').onclick=()=>ready.then(()=>{showMap();document.querySelector('input[name=overlay][value=fnf]').checked=true;setOverlay('fnf');});
   $('#showAerosol').onclick=()=>{showMap();document.body.dataset.layers='open';$('#layerMore').open=true;$('#atmos').value=$('#atmos').value==='aod'?'':'aod';$('#atmosDate').value='';setAtmos();};
   function renderProvinces(){
-    const metric=$('#provinceMetric').value;
-    const value=p=>metric==='stock'?p.forest_agb_mg*S.manifest.conversion.agb_to_co2e:metric==='net'?p.gfw_net_mg_co2e/S.manifest.datasets.gfw.years:p.fossil_c_t*44/12;
+    const metric=$('#provinceMetric').value,ds=S.manifest.datasets;
+    const value=p=>metric==='stock'?p.forest_agb_mg*S.manifest.conversion.agb_to_co2e:metric==='net'?p.gfw_net_mg_co2e/ds.gfw.years:p.fossil_c_t*44/12;
     const unit=metric==='stock'?'tCO₂e':metric==='net'?'tCO₂e / yr':'tCO₂ / yr';
-    const source=metric==='stock'?'CCI + JAXA · 2020':metric==='net'?'GFW · 2001–2025':'ODIAC2025 · 2024';
+    const source=metric==='stock'?`CCI + JAXA · ${ds.cci.year}`:metric==='net'?`GFW · ${ds.gfw.period}`:`${ds.odiac.version} · ${ds.odiac.year}`;
     $('#provinceRanking').innerHTML=[...S.data.provinces].sort((a,b)=>value(b)-value(a)).map(p=>`<button class="province-row" data-province="${p.pcode}"><span>${esc(placeName(p))}</span><b>${fmt(value(p)/1e6,2)} M</b><small>${unit} · ${source} · ${esc(t('globalRef'))}</small></button>`).join('');
     $('#provinceRanking').querySelectorAll('button').forEach(b=>b.onclick=()=>select({kind:'province',code:b.dataset.province}));
   }

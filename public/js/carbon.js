@@ -1,7 +1,7 @@
 export const METHOD = {code:'T-VER-S-METH-13-01', version:2, tool:'T-VER-S-TOOL-01-01 v2', url:'https://tver.tgo.or.th/database/Uploads/Methodology/482ce748-b43f-4432-aef8-d7745dcc2692.pdf'};
 export const FACTORS = {general:{r:0.27,cf:0.47},rhizophora:{r:0.48,cf:0.4715},palm:{r:0.41,cf:0.413}};
 export function number(value, name, min=0, max=1e12) {
-  if(value === '' || value == null || typeof value === 'boolean') throw new Error(`missing:${name}`);
+  if(value === '' || value == null || typeof value === 'boolean' || (typeof value === 'string' && !value.trim())) throw new Error(`missing:${name}`);
   const n=Number(value);
   if(!Number.isFinite(n)||n<min||n>max) throw new Error(`invalid:${name}`);
   return n;

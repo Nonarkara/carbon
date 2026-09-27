@@ -3,27 +3,31 @@
 import {AGB_TO_CO2E,Z95,C_TO_CO2} from './ledger.js';
 
 export function initAbout({getLang,fmt}){
-  const body=document.querySelector('#aboutBody');let shown=null,national=null;
-  const data=()=>national?Promise.resolve(national):fetch('data/ledger/provinces.json').then(r=>{if(!r.ok)throw Error('ledger:provinces');return r.json();}).then(d=>national=d.national);
+  const body=document.querySelector('#aboutBody');let shown=null,store=null;
+  const data=()=>store?Promise.resolve(store):Promise.all([
+    fetch('data/ledger/provinces.json').then(r=>{if(!r.ok)throw Error('ledger:provinces');return r.json();}),
+    fetch('data/ledger/manifest.json').then(r=>{if(!r.ok)throw Error('ledger:manifest');return r.json();})
+  ]).then(([p,m])=>store={national:p.national,gfwYears:m.datasets.gfw.years,cciYear:m.datasets.cci.year});
   async function show(){
     const lang=getLang();if(shown===lang)return;
-    const [html,n]=await Promise.all([fetch(`partials/about.${lang}.html`).then(r=>{if(!r.ok)throw Error('about:'+lang);return r.text();}),data()]);
-    body.innerHTML=html;fill(n,lang);shown=lang;
+    const [html,s]=await Promise.all([fetch(`partials/about.${lang}.html`).then(r=>{if(!r.ok)throw Error('about:'+lang);return r.text();}),data()]);
+    body.innerHTML=html;fill(s,lang);shown=lang;
   }
-  function fill(n,lang){
+  function fill(s,lang){
+    const n=s.national;
     const th=lang==='th',m=fmt(n.fire_c_t_monthly.slice(1,4).reduce((a,b)=>a+b,0)/n.fire_c_t_monthly.reduce((a,b)=>a+b,0)*100,0)+'%';
     const fig={forestPct:fmt(100*n.forest_area_ha/n.area_ha,1)+'%',areaKm2:fmt(n.area_ha/100,0)+(th?' ตร.กม.':' km²'),febApr:m,
       bandInd:fmt(100*Z95*Math.sqrt(n.forest_var_mg2)/n.forest_agb_mg,2),bandCorr:fmt(100*Z95*n.forest_sd_mg/n.forest_agb_mg,0)};
     body.querySelectorAll('[data-fig]').forEach(e=>e.textContent=fig[e.dataset.fig]??'—');
     const mt=v=>v/1e6,rows=[
-      ['absorb',th?'ป่าดูดซับ (GFW)':'Forests absorb (GFW)',mt(n.gfw_removals_mg_co2/25)],
-      ['emit',th?'ป่าปล่อยจากการสูญเสียป่า (GFW)':'Forests release through loss (GFW)',mt(n.gfw_emissions_mg_co2e/25)],
+      ['absorb',th?'ป่าดูดซับ (GFW)':'Forests absorb (GFW)',mt(n.gfw_removals_mg_co2/s.gfwYears)],
+      ['emit',th?'ป่าปล่อยจากการสูญเสียป่า (GFW)':'Forests release through loss (GFW)',mt(n.gfw_emissions_mg_co2e/s.gfwYears)],
       ['emit',th?'ไฟทุกประเภท CO₂ ขั้นต้น (GFED)':'All fires, gross CO₂ (GFED)',mt(n.fire_co2_t)],
       ['emit',th?'เชื้อเพลิงฟอสซิล (ODIAC)':'Fossil fuels (ODIAC)',mt(n.fossil_c_t*C_TO_CO2)]];
     const max=Math.max(...rows.map(r=>r[2]));
     const head=k=>`<p class="ab-side ${k}">${k==='absorb'?(th?'ด้านดูดซับ':'Taken up'):(th?'ด้านปล่อย · แสดงคู่กัน ไม่นำมาบวกกัน':'Released · shown side by side, never added')}</p>`;
     body.querySelector('#abLedger').innerHTML=head('absorb')+rows.map((r,i)=>(i===1?head('emit'):'')+`<div class="ab-row ${r[0]}"><span>${r[1]}</span><i style="width:${(100*r[2]/max).toFixed(1)}%"></i><b>${fmt(r[2],1)}</b></div>`).join('')+
-      `<p class="ab-net">${th?'สุทธิของป่าตาม GFW':'Forest net, GFW'}: <b>${fmt(mt(n.gfw_net_mg_co2e/25),1)}</b> ${th?'ล้านตัน CO₂e ต่อปี (ติดลบ = ดูดซับสุทธิ)':'Mt CO₂e per year (negative = net sink)'} · ${th?'คาร์บอนสะสมในป่า':'forest carbon stock'} <b>${fmt(n.forest_agb_mg*AGB_TO_CO2E/1e9,2)}</b> ${th?'พันล้านตัน CO₂e (2020)':'billion t CO₂e (2020)'}</p>`;
+      `<p class="ab-net">${th?'สุทธิของป่าตาม GFW':'Forest net, GFW'}: <b>${fmt(mt(n.gfw_net_mg_co2e/s.gfwYears),1)}</b> ${th?'ล้านตัน CO₂e ต่อปี (ติดลบ = ดูดซับสุทธิ)':'Mt CO₂e per year (negative = net sink)'} · ${th?'คาร์บอนสะสมในป่า':'forest carbon stock'} <b>${fmt(n.forest_agb_mg*AGB_TO_CO2E/1e9,2)}</b> ${th?`พันล้านตัน CO₂e (${s.cciYear})`:`billion t CO₂e (${s.cciYear})`}</p>`;
     const mon=n.fire_c_t_monthly,mx=Math.max(...mon),names=th?['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.']:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     body.querySelector('#abFire').innerHTML=mon.map((v,i)=>`<div class="bar${i>=1&&i<=3?' season':''}" title="${names[i]}: ${fmt(v/1e6,2)} Mt C"><i style="height:${(100*v/mx).toFixed(1)}%"></i><span>${names[i]}</span></div>`).join('');
     // Conservation illustration: 10 × 8 squares, each owned by the side of the border its centre falls on.

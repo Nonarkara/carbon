@@ -9,12 +9,21 @@ page.on('pageerror',e=>errors.push(e.message));
 await page.goto(base+'/?lang=en');await page.locator('#provinceRows tr').first().waitFor({state:'attached'});
 assert.match(await page.locator('#provinceRows tr').first().innerText(),/^Saraburi2561/);
 // Carbon map is the default lens: national figures, province selection, drawn box, overlays, export.
-const ledger=JSON.parse(await readFile('public/data/ledger/provinces.json','utf8')),F=1.27*.47*44/12;
+const ledger=JSON.parse(await readFile('public/data/ledger/provinces.json','utf8')),mf=JSON.parse(await readFile('public/data/ledger/manifest.json','utf8')),F=1.27*.47*44/12;
 const mt=v=>new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(v/1e6)+' M';
 await page.waitForFunction(()=>document.querySelector('#kStock').textContent.includes('M'));
 assert.equal(await page.locator('#kStock').innerText(),mt(ledger.national.forest_agb_mg*F));
 assert.equal(await page.locator('#kRemove').innerText(),mt(ledger.national.gfw_removals_mg_co2/25));
-await page.locator('#exploreProvinces').click();await page.locator('.province-row').first().waitFor();assert.equal(await page.locator('.province-row').count(),77);await page.locator('.province-row').first().click();
+// Source labels on KPI hints travel from the manifest, not hardcoded strings.
+assert.equal(await page.locator('#kRemoveHint').textContent(),`GFW ${mf.datasets.gfw.version.split(' ')[0]} · ${mf.datasets.gfw.period}`);
+assert.ok((await page.locator('#kStockHint').textContent()).endsWith(`CCI ${mf.datasets.cci.version}`));
+await page.locator('#exploreProvinces').click();await page.locator('.province-row').first().waitFor();assert.equal(await page.locator('.province-row').count(),77);
+const rankSource=()=>page.locator('.province-row small').first().textContent();
+assert.ok((await rankSource()).includes(`${mf.datasets.odiac.version} · ${mf.datasets.odiac.year}`));
+await page.locator('#provinceMetric').selectOption('net');assert.ok((await rankSource()).includes(`GFW · ${mf.datasets.gfw.period}`));
+await page.locator('#provinceMetric').selectOption('stock');assert.ok((await rankSource()).includes(`CCI + JAXA · ${mf.datasets.cci.year}`));
+await page.locator('#provinceMetric').selectOption('fossil');
+await page.locator('.province-row').first().click();
 const cm=ledger.provinces.find(p=>p.pcode==='TH50');
 await page.locator('#place').selectOption('TH50');await page.waitForFunction(()=>document.querySelector('#carbonVerdict').textContent.startsWith('Chiang Mai'));
 assert.equal(await page.locator('#kStock').innerText(),mt(cm.forest_agb_mg*F));assert.equal(await page.locator('#kEmit').innerText(),mt(cm.gfw_emissions_mg_co2e/25));
@@ -64,6 +73,11 @@ for(const width of [1280,768,375]){
   await page.locator('#aboutTab').click();await page.locator('#aboutBody h1').waitFor({state:'visible'});
   assert.equal(await page.locator('#aboutBody figure.il').count(),9);assert.equal(await page.locator('#abFire .bar').count(),12);
   assert.match(await page.locator('#aboutBody [data-fig=forestPct]').innerText(),/^44[.,]7%$/);assert.equal(await page.locator('#abgrid rect').count(),80);
+  // About annualisation and stock year travel from the manifest too.
+  const netText=await page.locator('#abLedger .ab-net').textContent();
+  const expectedNet=new Intl.NumberFormat(lang==='th'?'th-TH':'en-GB',{maximumFractionDigits:1}).format(ledger.national.gfw_net_mg_co2e/mf.datasets.gfw.years/1e6);
+  assert.ok(netText.includes(expectedNet),`about net ${expectedNet} missing in: ${netText}`);
+  assert.ok(netText.includes(`(${mf.datasets.cci.year})`),`about stock year missing in: ${netText}`);
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`about overflow ${lang} ${width}`);
   await page.screenshot({path:`test-results/about-${lang}-${width}.png`});
   await page.locator('#researchLink').waitFor({state:'visible'});
@@ -82,4 +96,4 @@ for(const width of [1280,768,375]){
   await research.close();assert.equal(await page.locator('#projectName').inputValue(),'Research preserves my project');
  }
 }
-assert.deepEqual(errors,[]);await writeFile('test-results/browser-summary.json',JSON.stringify({base,checkedAt:new Date().toISOString(),viewports:[1440,1280,768,390,375],checks:['about tab TH/EN with ledger-driven illustrations','carbon map national figures','province selection matches ledger','drawn box','overlays','ledger export','example arithmetic','JSON export and provenance','language state','loss','unknown fire','unit switch','plot import','factor edit','boundary replacement','malformed geometry','reset','mobile navigation','guide diagrams','research navigation and language','research diagrams and portrait','research preserves input'],pageErrors:errors},null,2));await browser.close();console.log('PASS: browser flows, export, unit/provenance regressions, 5 viewports, 2 guides, bilingual research with portrait and preserved inputs; '+base);
+assert.deepEqual(errors,[]);await writeFile('test-results/browser-summary.json',JSON.stringify({base,checkedAt:new Date().toISOString(),viewports:[1440,1280,768,390,375],checks:['about tab TH/EN with ledger-driven illustrations','carbon map national figures','manifest-derived KPI and source labels','province selection matches ledger','drawn box','overlays','ledger export','example arithmetic','JSON export and provenance','language state','loss','unknown fire','unit switch','plot import','factor edit','boundary replacement','malformed geometry','reset','mobile navigation','guide diagrams','research navigation and language','research diagrams and portrait','research preserves input'],pageErrors:errors},null,2));await browser.close();console.log('PASS: browser flows, export, unit/provenance regressions, 5 viewports, 2 guides, bilingual research with portrait and preserved inputs; '+base);
