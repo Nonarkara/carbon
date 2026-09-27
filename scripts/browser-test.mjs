@@ -7,6 +7,7 @@ const browser=await chromium.launch({headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:1000}});const errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 await page.goto(base+'/?lang=en');await page.locator('#provinceRows tr').first().waitFor({state:'attached'});
+assert.match(await page.locator('#provinceRows tr').first().innerText(),/^Saraburi2561/);
 // Carbon map is the default lens: national figures, province selection, drawn box, overlays, export.
 const ledger=JSON.parse(await readFile('public/data/ledger/provinces.json','utf8')),F=1.27*.47*44/12;
 const mt=v=>new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(v/1e6)+' M';
@@ -33,7 +34,7 @@ await page.locator('#example').click();await page.locator('#boundaryInfo').waitF
 await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator('.lenses [data-tab=calculate]').click();await page.locator('[type=submit]').click();
 assert.match(await page.locator('#result').innerText(),/218\.86/);
 const downloaded=page.waitForEvent('download');await page.locator('#exportJSON').click();const dl=await downloaded;await dl.saveAs('test-results/export.json');const report=JSON.parse(await readFile('test-results/export.json','utf8'));assert.equal(report.status,'illustrative-unverified-estimate');assert.ok(Math.abs(report.result.net-218.8633333)<.00001);assert.equal(report.issuedCredits,null);
-await page.locator('[data-lang=th]').click();assert.equal(await page.locator('html').getAttribute('lang'),'th');assert.match(await page.locator('#result').innerText(),/218\.86/);
+await page.locator('[data-lang=th]').click();assert.equal(await page.locator('html').getAttribute('lang'),'th');assert.match(await page.locator('#result').innerText(),/218\.86/);assert.match(await page.locator('#provinceRows tr').first().innerText(),/^สระบุรี2561/);
 await page.screenshot({path:'test-results/desktop-th.png',fullPage:true});
 await page.locator('[data-lang=en]').click();
 await page.locator('#current').fill('900');assert.equal(await page.locator('#result').innerText(),'');await page.locator('[type=submit]').click();assert.match(await page.locator('#result').innerText(),/Carbon loss/);

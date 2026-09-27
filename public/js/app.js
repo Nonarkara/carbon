@@ -6,7 +6,9 @@ import {initLandscape} from './landscape.js';
 import {initWorld} from './world.js';
 import {initAbout} from './about.js';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const state={tab:'carbon',boundary:null,boundaryFile:null,plots:null,plotFile:null,rows:null,result:null,input:null,sample:false,plotUsed:false,sources:[],province:[],version:'0.1.0'};
+ const PROVINCE_EN={'สระบุรี':'Saraburi','กาญจนบุรี':'Kanchanaburi'};
+ const provName=r=>getLang()==='th'?r.province_th:PROVINCE_EN[r.province_th]||r.province_th;
+ const state={tab:'carbon',boundary:null,boundaryFile:null,plots:null,plotFile:null,rows:null,result:null,input:null,sample:false,plotUsed:false,sources:[],province:[],version:'0.1.0'};
 const map=L.map('map',{zoomControl:false,minZoom:5,maxZoom:18}).setView([13.3,101],5.7);
 L.control.zoom({position:'bottomright'}).addTo(map);
 const tiles={dark:L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}),sat:L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'Esri, Maxar, Earthstar Geographics'})};
@@ -41,8 +43,8 @@ function renderResult(){if(!state.result)return;const r=state.result;$('#result'
 function renderPlots(){if(!state.plots)return;const p=state.plots;$('#plotResult').innerHTML=`<div class="notice"><b>${fmt(p.agbTonnes)} t AGB</b><p>${fmt(p.densityTonnesHa)} t/ha · ${p.treeCount} ${t('trees')} · ${p.plotCount} ${t('plots')}</p><small>${esc(state.plotFile?.name)} · ${t('imported')}</small></div>`;}
 function renderSources(){
  $('#sourceList').innerHTML=state.sources.map(s=>`<article class="source-item"><h3>${esc(s.name[getLang()])}</h3><p>${esc(s.use[getLang()])}</p><small>${esc(s.date)} · ${esc(s.tier[getLang()])}</small><p><a href="${esc(s.url)}" target="_blank" rel="noopener">${t('viewSource')} ↗</a></p></article>`).join('');
- $('#provinceRows').innerHTML=state.province.map(r=>`<tr><td>${getLang()==='th'?r.province_th:r.province_th==='สระบุรี'?'Saraburi':'Kanchanaburi'}</td><td>${r.year_be}</td><td>${fmt(r.forest_area_rai)}</td></tr>`).join('');
- const latest=state.province.filter(r=>r.year_ce===2024);$('#provincePreview').innerHTML=latest.map(r=>`<dl><dt>${getLang()==='th'?r.province_th:r.province_th==='สระบุรี'?'Saraburi':'Kanchanaburi'}</dt><dd>${fmt(r.forest_area_rai)} ${t('rai')}</dd></dl>`).join('')+`<small>2024 / 2567 · data.go.th · ${t('reference')}</small>`;
+  $('#provinceRows').innerHTML=state.province.map(r=>`<tr><td>${esc(provName(r))}</td><td>${r.year_be}</td><td>${fmt(r.forest_area_rai)}</td></tr>`).join('');
+  const latest=state.province.filter(r=>r.year_ce===2024);$('#provincePreview').innerHTML=latest.map(r=>`<dl><dt>${esc(provName(r))}</dt><dd>${fmt(r.forest_area_rai)} ${t('rai')}</dd></dl>`).join('')+`<small>2024 / 2567 · data.go.th · ${t('reference')}</small>`;
 }
 async function example(){const res=await fetch('data/example-boundary.geojson');if(!res.ok)throw Error('example');clearPlots();state.boundary=validateBoundary(await res.json());state.boundaryFile={name:'example-boundary.geojson',tier:'illustrative'};state.sample=true;$('#projectName').value=getLang()==='th'?'ตัวอย่างการคำนวณ — ไม่ใช่โครงการจริง':'Illustrative assessment — not a real project';Object.entries({start:'2021-01-01',end:'2026-01-01',previous:'1000',current:'1100',unit:'agb',group:'general',burnedPercent:'0',canopyDeath:'no',inputSource:'Illustrative arithmetic example / ตัวอย่างสมมติ',fireEmissions:'',fireSource:''}).forEach(([k,v])=>$('#'+k).value=v);invalidate();fields();redrawBoundary();summary();message(t('sampleText'));}
 document.querySelectorAll('[data-tab]').forEach(e=>e.addEventListener('click',()=>tab(e.dataset.tab)));
