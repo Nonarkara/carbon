@@ -44,6 +44,8 @@ await page.locator('#ledgerDetails').evaluate(e=>e.open=true);assert.match(await
 // T-VER registry ledger block: appears below the landscape ledger with a side heading, snapshot line, and project list.
 assert.match(await page.locator('#ledger .tver-summary').first().innerText(),/T-VER|ทะเบียน/);assert.ok(await page.locator('#ledger .tver-item').count()>=1);assert.match(await page.locator('#ledger').innerText(),/tver\.tgo\.or\.th/);
 await page.locator('#nationalView').click();assert.match(await page.locator('#ledger .tver-summary').first().innerText(),/multi-province projects and \d+ with no province named/);assert.ok((await page.locator('#ledger .tver-market').count())>=1);
+// T-VER portfolio analytics: pipeline bar, methodology families, project sizes, developer table, issuance timeline.
+assert.equal(await page.locator('#ledger .tver-portfolio').count(),5);assert.match(await page.locator('#ledger .tver-portfolio').first().innerText(),/12\.1%/);assert.ok(await page.locator('#ledger .tver-portfolio').first().locator('.tver-pipeline-bar i').evaluate(e=>e.style.width).then(w=>parseFloat(w)>10));assert.ok((await page.locator('#ledger .tver-portfolio table.tver-market').count())>=1);assert.match(await page.locator('#ledger').innerText(),/Royal Forest Department|กรมป่าไม้/);
 await page.locator('#pickArea').click();const mb=await page.locator('#map').boundingBox();
 await page.mouse.move(mb.x+mb.width*.35,mb.y+mb.height*.3);await page.mouse.down();await page.mouse.move(mb.x+mb.width*.6,mb.y+mb.height*.6,{steps:8});await page.mouse.up();
 await page.waitForFunction(()=>document.querySelector('#carbonVerdict').textContent.startsWith('Drawn box'));

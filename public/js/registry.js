@@ -46,8 +46,41 @@ export function initRegistry({t,fmt,getLang}){
 ${nat?`<p class="hint">${esc(t('tverNationNote').replace('{m}',D.multi.projects).replace('{u}',D.unlocated.projects))}</p>`:(agg.multi_province_projects?`<p class="hint">${esc(t('tverMultiNote').replace('{n}',agg.multi_province_projects))}</p>`:'')}
 <p class="hint">${esc(t('tverDefs'))}</p></div>`);
     if(list.length)h.push(listHTML(list));else h.push(`<p class="hint">${esc(t('tverNone'))}</p>`);
-    if(nat)h.push(marketHTML());
+    if(nat){h.push(portfolioHTML());h.push(marketHTML());}
     return h.join('');
+  }
+  // National portfolio analytics: what TGO wants to see at a glance — pipeline health, methodology coverage,
+  // top developers, issuance timeline. Derived once from the snapshot; numbers reconcile with D.national.
+  function portfolioHTML(){
+    const today=D.snapshot;
+    const issued=D.projects.filter(p=>p.issued_tco2e>0);
+    const std=D.projects.filter(p=>p.program==='standard');
+    const prem=D.projects.filter(p=>p.program==='premium');
+    const single=D.projects.filter(p=>p.provinces.length===1);
+    const poa=D.projects.filter(p=>p.form==='poa');
+    const byFam={};for(const p of D.projects)for(const f of (p.families.length?p.families:['unknown']))byFam[f]=(byFam[f]||0)+1;
+    const famEntries=Object.entries(byFam).sort((a,b)=>b[1]-a[1]);
+    const famMax=Math.max(...famEntries.map(([,c])=>c),1);
+    const bySize={};for(const p of D.projects){const k=p.size||'unspecified';bySize[k]=(bySize[k]||0)+1;}
+    const sizeEntries=Object.entries(bySize).sort((a,b)=>b[1]-a[1]);
+    const sizeMax=Math.max(...sizeEntries.map(([,c])=>c),1);
+    const byDev={};for(const p of D.projects){const k=p.developer||'—';if(!byDev[k])byDev[k]={n:0,exp:0,iss:0};byDev[k].n++;byDev[k].exp+=p.expected_tco2e_yr||0;byDev[k].iss+=p.issued_tco2e||0;}
+    const topDev=Object.entries(byDev).sort((a,b)=>b[1].exp-a[1].exp).slice(0,5);
+    const timeline={};for(const p of D.projects)for(const i of p.issuances){const y=i.certified?i.certified.slice(0,4):null;if(!y)continue;timeline[y]=(timeline[y]||0)+(i.tco2e||0);}
+    const tlEntries=Object.entries(timeline).filter(([y])=>y>='2016'&&y<=today.slice(0,4)).sort();
+    const tlMax=Math.max(...tlEntries.map(([,v])=>v),1);
+    const issuedPct=D.projects.length?(issued.length/D.projects.length*100):0;
+    const pipeline=`<div class="lrow tver-portfolio"><p class="lmeta">${esc(t('tverPortfolioPipeline'))}</p><div class="tver-pipeline-bar"><i style="width:${issuedPct.toFixed(1)}%"></i></div><dl class="cross"><dt>${esc(t('tverPortfolioIssued'))}</dt><dd>${n0(issued.length)} / ${n0(D.projects.length)} (${issuedPct.toFixed(1)}%)</dd><dt>${esc(t('tverPortfolioPipelineIss'))}</dt><dd>${n0(D.national.issued_tco2e)} tCO₂e</dd><dt>${esc(t('tverPortfolioPipelineExpected'))}</dt><dd>${n0(D.national.expected_tco2e_yr)} tCO₂e/${esc(t('yr'))}</dd><dt>${esc(t('tverPortfolioStandard'))}</dt><dd>${n0(std.length)}</dd><dt>${esc(t('tverPortfolioPremium'))}</dt><dd>${n0(prem.length)}</dd><dt>${esc(t('tverPortfolioSingle'))}</dt><dd>${n0(single.length)}</dd><dt>${esc(t('tverPortfolioPoa'))}</dt><dd>${n0(poa.length)}</dd></dl><p class="hint">${esc(t('tverPipelineNote'))}</p></div>`;
+    const famBars=famEntries.map(([f,c])=>`<div class="share"><span>${esc(t('fam_'+f))}</span><i style="width:${(100*c/famMax).toFixed(1)}%;background:var(--ink-mid)"></i><b>${fmt(c,0)}</b></div>`).join('');
+    const family=`<div class="lrow tver-portfolio"><p class="lmeta">${esc(t('tverPortfolioFamilies'))}</p>${famBars}<p class="hint">${esc(t('tverFamiliesNote'))}</p></div>`;
+    const sizeLabel=s=>{if(th())return s;return s.replace('ขนาดเล็กมาก','Micro').replace('ขนาดเล็ก','Small').replace('ขนาดใหญ่','Large').replace('ไม่ระบุ','Unspecified');};
+    const sizeBars=sizeEntries.map(([s,c])=>`<div class="share"><span>${esc(sizeLabel(s))}</span><i style="width:${(100*c/sizeMax).toFixed(1)}%;background:var(--ink-mid)"></i><b>${fmt(c,0)}</b></div>`).join('');
+    const sizes=`<div class="lrow tver-portfolio"><p class="lmeta">${esc(t('tverPortfolioSizes'))}</p>${sizeBars}<p class="hint">${esc(t('tverSizesNote'))}</p></div>`;
+    const devRows=topDev.map(([n,v])=>`<tr><td>${esc(n)}</td><td>${n0(v.n)}</td><td>${n0(v.exp)}</td><td>${n0(v.iss)}</td></tr>`).join('');
+    const devs=`<div class="lrow tver-portfolio"><p class="lmeta">${esc(t('tverPortfolioDevelopers'))}</p><div class="table-scroll"><table class="tver-market"><thead><tr><th>${esc(t('tverDeveloper'))}</th><th>${esc(t('tverCount'))}</th><th>${esc(t('tverExpectedSum'))}</th><th>${esc(t('tverIssuedSum'))}</th></tr></thead><tbody>${devRows}</tbody></table></div><p class="hint">${esc(t('tverDevelopersNote'))}</p></div>`;
+    const years=tlEntries.map(([y,v])=>`<div class="share"><span>${y}</span><i style="width:${(100*v/tlMax).toFixed(1)}%;background:var(--accent)"></i><b>${n0(v)}</b></div>`).join('');
+    const tl=tlEntries.length?`<div class="lrow tver-portfolio"><p class="lmeta">${esc(t('tverPortfolioTimeline'))}</p>${years}</div>`:'';
+    return [pipeline,family,sizes,devs,tl].join('');
   }
   // Provinces touched by an imported boundary (vertices and centre), for the double-counting check.
   function provincesOf(geojson){

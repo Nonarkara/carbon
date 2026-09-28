@@ -37,6 +37,13 @@ body{display:grid;padding-bottom:0}
 .tver-more{margin-top:6px;font-size:11px}.tver-more summary{cursor:pointer;padding:6px 0;border-top:1px solid var(--rule);color:var(--ink-mid)}
 .tver-market{width:100%;font-size:11px;border-collapse:collapse;margin-top:6px}.tver-market th,.tver-market td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--rule)}.tver-market th{font-weight:600;color:var(--ink-mid);text-align:right}.tver-market th:first-child,.tver-market td:first-child{text-align:left;font-family:var(--num)}.tver-market td:first-child b{font-family:var(--num);color:var(--accent);margin-left:4px}
 .tver-check{border-top:5px solid var(--brand);padding:14px 0;margin-top:16px}.tver-check h3{font:600 14px/1.4 var(--display);margin:0 0 6px}.tver-check>p{font-size:12px;line-height:1.7;margin:0 0 8px}html[lang=th] .tver-check h3{font-family:var(--font)}
+.tver-portfolio .tver-pipeline-bar{height:8px;background:var(--well-2);border:1px solid var(--rule-strong);margin:4px 0 8px}.tver-portfolio .tver-pipeline-bar i{display:block;height:100%;background:var(--accent);min-width:1px}
+.tver-portfolio .share i{background:var(--ink-mid)}html[lang=th] .tver-portfolio .share b{font-family:var(--font)}
+.tver-overlap-stats{font-size:12px;color:var(--ink-mid);margin:4px 0 8px;padding:6px 10px;background:var(--well-2);border-left:3px solid var(--brand)}
+.tver-rule{font-size:11px;color:var(--ink-low);margin-top:6px;font-style:italic}
+.tver-badge-issued{display:inline-block;font-size:10px;font-weight:600;padding:2px 6px;background:var(--brand);color:var(--ink);margin-left:6px;vertical-align:middle;letter-spacing:.02em}
+.tver-item.with-issuance{border-left:3px solid var(--brand);padding-left:8px}
+.tver-item-head{display:flex;justify-content:space-between;align-items:start;gap:6px;flex-wrap:wrap}
 .tver-check .notice{padding:8px 12px;background:var(--well-2);border-left:3px solid var(--brand);font-size:12px}
 .tver-overlap-stats{font-size:11px;font-family:var(--num);color:var(--ink-mid);background:var(--well-2);padding:6px 8px;border-left:2px solid var(--accent);margin:6px 0 10px}
 .tver-rule{margin-top:8px;padding:6px 8px;background:var(--well-2);border-left:2px solid var(--brand);font-size:11px;color:var(--ink-mid)}

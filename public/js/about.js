@@ -20,12 +20,24 @@ export function initAbout({getLang,fmt}){
     const tgo=s.tgo,topPCode=Object.entries(tgo.provinces).sort((a,b)=>b[1].projects-a[1].projects)[0];
     const topName=topPCode?(s.provinceNames[topPCode[0]]?(th?s.provinceNames[topPCode[0]].name_th:s.provinceNames[topPCode[0]].name_en):'—'):'—';
     const restLabel=th?`${fmt(tgo.multi.projects,0)} ครอบคลุมหลายจังหวัด · ${fmt(tgo.unlocated.projects,0)} ไม่ระบุจังหวัด`:`${fmt(tgo.multi.projects,0)} multi-province · ${fmt(tgo.unlocated.projects,0)} no province`;
+    const std=tgo.projects.filter(p=>p.program==='standard').length,prem=tgo.projects.filter(p=>p.program==='premium').length;
+    const byFam={};for(const p of tgo.projects)for(const f of (p.families.length?p.families:['unknown']))byFam[f]=(byFam[f]||0)+1;
+    const topFam=Object.entries(byFam).sort((a,b)=>b[1]-a[1])[0];
+    const byDev={};for(const p of tgo.projects){const k=p.developer||'—';if(!byDev[k])byDev[k]={n:0,exp:0,iss:0};byDev[k].n++;byDev[k].exp+=p.expected_tco2e_yr||0;byDev[k].iss+=p.issued_tco2e||0;}
+    const topDev=Object.entries(byDev).sort((a,b)=>b[1].exp-a[1].exp)[0];
+    const tl={};for(const p of tgo.projects)for(const i of p.issuances){const y=i.certified?i.certified.slice(0,4):null;if(y)tl[y]=(tl[y]||0)+(i.tco2e||0);}
+    const peakYear=Object.entries(tl).sort((a,b)=>b[1]-a[1])[0];
+    const famLabel=th?{ar:'AR · ป่าและพื้นที่ปลูก',redd:'REDD+',ar_large:'AR ขนาดใหญ่',plantation:'สวนป่า',mangrove:'ป่าชายเลน',ifm:'IFM',agri_land:'พื้นที่เกษตร',perennial:'ไม้ยืนต้น',peat:'พีท',unknown:'ไม่ระบุ'}:{ar:'AR · forest & plantations',redd:'REDD+',ar_large:'AR large scale',plantation:'Plantation',mangrove:'Mangrove',ifm:'IFM',agri_land:'Agricultural land',perennial:'Perennials',peat:'Peatland',unknown:'Unstated'};
     const fig={forestPct:fmt(100*n.forest_area_ha/n.area_ha,1)+'%',areaKm2:fmt(n.area_ha/100,0)+(th?' ตร.กม.':' km²'),febApr:m,
       bandInd:fmt(100*Z95*Math.sqrt(n.forest_var_mg2)/n.forest_agb_mg,2),bandCorr:fmt(100*Z95*n.forest_sd_mg/n.forest_agb_mg,0),
       tverCount:fmt(tgo.national.projects,0),tverExpected:fmt(tgo.national.expected_tco2e_yr/1e6,2)+' M tCO₂e/yr',
       tverIssued:fmt(tgo.national.issued_tco2e,0)+' tCO₂e',tverWithIssue:fmt(tgo.national.projects_with_issuance,0)+' / '+fmt(tgo.national.projects,0),
       tverTop:topName+' ('+fmt(topPCode?topPCode[1].projects:0,0)+(th?' โครงการ)':' projects)'),
-      tverRest:restLabel,tverSnapshot:tgo.snapshot};
+      tverRest:restLabel,tverSnapshot:tgo.snapshot,
+      tverProgSplit:`${fmt(std,0)} / ${fmt(prem,0)}`,
+      tverTopFam:(topFam?famLabel[topFam[0]]:topFam?topFam[0]:'—')+' · '+fmt(topFam?topFam[1]:0,0)+(th?' โครงการ':' projects'),
+      tverTopDev:(topDev?topDev[0]:'—')+' · '+fmt(topDev?topDev[1].exp:0,0)+' tCO₂e/'+(th?'ปี':'yr'),
+      tverPeakYear:peakYear?`${peakYear[0]} · ${fmt(peakYear[1]/1e3,1)}k tCO₂e`:'—'};
     body.querySelectorAll('[data-fig]').forEach(e=>e.textContent=fig[e.dataset.fig]??'—');
     const mt=v=>v/1e6,rows=[
       ['absorb',th?'ป่าดูดซับ (GFW)':'Forests absorb (GFW)',mt(n.gfw_removals_mg_co2/s.gfwYears)],

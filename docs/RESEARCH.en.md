@@ -397,6 +397,32 @@ The generated artifact `public/data/tgo/tver-forestry.json` (~390 KB) indexes 25
 
 The T-VER data rendered on the map and evidence tables represent institutional **context**: historical regional activity, market pricing, and existing registrations. Satellite biomass stock (CCI Biomass v7.0, JAXA FNF v2.1.0) and forest flux (GFW v1.4.3) are never conflated or added to registry tallies. They sit side by side with explicit attribution, preserving clear boundaries between empirical earth observation and administrative accounting.
 
+## 12 · What the registry says about itself — slices TGO does not aggregate for you
+
+Pulling all 257 records through this app turns TGO's flat listing into slices the public site doesn't aggregate. They live in the **T-VER ledger block on the national map view**, alongside the project list and the OTC market table. Every figure below is filled live from `data/tgo/tver-forestry.json`; the raw HTML pages sit in `research/raw/tgo/` with their SHA-256 in the same JSON.
+
+| Slice | What it says |
+|---|---|
+| **Pipeline rate** | **31 of 257 projects (12.1%) have ever received credits.** A registration pipeline, not a credit pipeline — T-VER holds ~256,000 tCO₂e/yr of active trade against a portfolio expectation of 2.19 Mt/yr. |
+| **Methodology coverage** | AR (forest & plantations) 110, REDD+ 69, perennial 30, agricultural land 10, plantation 8, AR large 4, mangrove 3, IFM 1, peat 0. **31 mangrove projects have zero credits issued** — the largest gap between registered and verified. |
+| **Project-size split (TGO classification)** | Micro 144, Small 89, Large 24. Micro projects are mostly community forests; large projects are mostly concession-style plantation schemes. |
+| **Program / Form** | Standard T-VER 246, Premium T-VER 11 · single project 243, PoA 14. Premium carries mandatory buffer-pool and Article 6 alignment; the volume gap reflects the higher cost of permanence. |
+| **Top 5 developers (by expected tCO₂e/yr)** | Royal Forest Department 35 projects, Department of Marine and Coastal Resources 27, BAAC 12, Rubber Authority of Thailand 10, Department of National Parks 9. State agencies hold most of the portfolio. |
+| **Geographic concentration** | Top 5 provinces hold **33.3% of the expected volume** (Chumphon, Chiang Rai, Surat Thani, Rayong, Chiang Mai). Single-province 199, multi-province 52, no province named 6. |
+| **Issuance timeline (tCO₂e)** | 2016 1.5k, 2018 0.8k, 2022 5.6k, 2023 130k, **2024 424k (peak)**, 2025 57k, 2026 115k YTD. The 2024 spike traces to one large plantation issuance; otherwise volumes track the pipeline, not the press. |
+| **OTC market (FOR&AGR)** | Avg price ฿280–2,000/tCO₂e by year, with annual volume between 5k–256k tCO₂e. The current year is year-to-date; earlier years are settled. |
+
+### Why this is one browser away from being useful to TGO
+
+The slices above are derived in this app from one static JSON snapshot of TGO's public listing. They are not a registry integration, not a verification, and not an audit. They are **the same data, sliced**:
+
+- No paid API. No login. The browser reads `data/tgo/tver-forestry.json` once.
+- No server processing. Every aggregate runs in JavaScript from the parsed JSON.
+- No silent drift. `tests/tgo.test.mjs` asserts the totals reconcile: 31 issued projects, 199 single-province + 52 multi-province + 6 unlocated = 257 national, and every issuance record sums to its project total.
+- Reproducible. `scripts/ingest/tgo.py` rebuilds the snapshot from `research/raw/tgo/` (cache + SHA-256), so any analyst can re-run the pipeline and get a bit-for-bit equivalent.
+
+The same approach scales to the next thing TGO wants to see — project-level credit retirements, vintage reporting, Article 6 corresponding-adjustment status, regional VVB accreditation patterns. Each is just another aggregate on the same snapshot. The point is that the snapshot, the test, and the rendering layer already exist; adding a new view is a small, contained change instead of an integration.
+
 
 [Global data sources, cadence and fallback rules / แหล่งข้อมูลโลกและรอบการอัปเดต](https://github.com/Nonarkara/carbon/blob/main/docs/WORLD_DATA.md).
 

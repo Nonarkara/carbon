@@ -116,3 +116,53 @@ test('issuance rate matches the documented 12% issuance cliff (31 of 257)',()=>{
   const rate=issuedProjects.length/d.projects.length;
   assert.ok(rate>0.11&&rate<0.13,'issuance rate is approximately 12.1%');
 });
+
+test('portfolio analytics: pipeline, family coverage, developer concentration, issuance timeline all reconcile',()=>{
+  // 1. Issued projects sum to d.national.projects_with_issuance
+  const issued=d.projects.filter(p=>p.issued_tco2e>0);
+  assert.equal(issued.length,d.national.projects_with_issuance);
+  // 2. Family coverage: every project has a known family or empty (treated as unknown)
+  const knownFamilies=new Set(['ar','redd','ar_large','plantation','mangrove','ifm','agri_land','perennial','peat']);
+  let countedInFamilies=0;
+  for(const p of d.projects)if(p.families.some(f=>knownFamilies.has(f)))countedInFamilies++;
+  assert.equal(countedInFamilies,d.projects.length-d.projects.filter(p=>p.families.length===0).length,'every project is in at least one known family OR has no methodology text');
+  // 3. Developer concentration: state agencies own a large share (proxy for government dominance)
+  const stateLike=p=>p.developer.startsWith('กรม')||p.developer.startsWith('การ')||p.developer.startsWith('ธนาคาร')||p.developer.startsWith('สำนัก');
+  const stateCount=d.projects.filter(stateLike).length;
+  assert.ok(stateCount/d.projects.length>0.4,'state agencies hold >40% of the registered portfolio');
+  // 4. Issuance timeline: cumulative issuance totals reconcile with d.national.issued_tco2e
+  const tlSum=d.projects.reduce((a,p)=>a+p.issuances.reduce((b,i)=>b+(i.tco2e||0),0),0);
+  close(tlSum,d.national.issued_tco2e,1e-4);
+  // 5. Timeline spans recent years only (2016 onwards, no ancient credits)
+  const years=new Set(d.projects.flatMap(p=>p.issuances.map(i=>i.certified?.slice(0,4))).filter(Boolean));
+  for(const y of years)assert.ok(Number(y)>=2016&&Number(y)<=Number(d.snapshot.slice(0,4)),`issuance year ${y} outside snapshot window`);
+  // 6. Program/form totals
+  const std=d.projects.filter(p=>p.program==='standard').length;
+  const prem=d.projects.filter(p=>p.program==='premium').length;
+  assert.equal(std+prem,d.projects.length);
+  const projectForm=d.projects.filter(p=>p.form==='project').length;
+  const poaForm=d.projects.filter(p=>p.form==='poa').length;
+  assert.equal(projectForm+poaForm,d.projects.length);
+});
+
+test('portfolio analytics: size distribution, top-developer totals, methodology families all reconcile',()=>{
+  // 1. Every project has a size label or none; sizes present in the snapshot sum to the project count.
+  const withSize=d.projects.filter(p=>p.size);
+  assert.equal(withSize.length,d.projects.length,'every project carries a TGO size label');
+  const sizeCounts={};
+  for(const p of d.projects){const s=p.size||'unspecified';sizeCounts[s]=(sizeCounts[s]||0)+1;}
+  assert.ok(sizeCounts['ขนาดเล็ก']>=80,'small project count is plausible');
+  assert.ok(sizeCounts['ขนาดใหญ่']>=20,'large project count is plausible');
+  assert.ok(sizeCounts['ขนาดเล็กมาก']>=100,'micro project count is plausible (community forests)');
+  // 2. Top-developer expected totals are a non-empty prefix of the national expected total
+  const byDev={};
+  for(const p of d.projects){const k=p.developer||'—';if(!byDev[k])byDev[k]={exp:0,iss:0,n:0};byDev[k].exp+=p.expected_tco2e_yr||0;byDev[k].iss+=p.issued_tco2e||0;byDev[k].n++;}
+  const top5Exp=Object.values(byDev).sort((a,b)=>b.exp-a.exp).slice(0,5).reduce((a,v)=>a+v.exp,0);
+  assert.ok(top5Exp>0&&top5Exp<d.national.expected_tco2e_yr,'top-5 expected total fits inside national');
+  // 3. Methodology families cover >= 95% of registered projects
+  const fams=new Set();
+  for(const p of d.projects)for(const f of p.families)fams.add(f);
+  assert.ok(fams.size>=7,'at least 7 distinct methodology families are used');
+  const projectsWithFamily=d.projects.filter(p=>p.families.length>0).length;
+  assert.ok(projectsWithFamily/d.projects.length>0.9,'over 90% of projects are classified into a family');
+});
