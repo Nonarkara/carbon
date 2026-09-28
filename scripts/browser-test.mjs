@@ -7,7 +7,10 @@ const browser=await chromium.launch({headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:1000}});const errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 await page.goto(base+'/?lang=en');await page.locator('#provinceRows tr').first().waitFor({state:'attached'});
-assert.match(await page.locator('.brand h1').innerText(),/^คาบอนนะ/);assert.ok(await page.locator('.kabonna-mark').isVisible());
+assert.match(await page.locator('.brand h1').innerText(),/^คาบอนนะ/);
+const markBox=await page.locator('.kabonna-mark').boundingBox();
+assert.ok(markBox.width<=48&&markBox.height<=48,`logo expanded to ${markBox.width}×${markBox.height}`);
+assert.ok((await page.locator('#map').boundingBox()).height>300,'map is not the page');
 assert.match(await page.locator('#provinceRows tr').first().innerText(),/^Saraburi2561/);
 // Carbon map is the default lens: national figures, province selection, drawn box, overlays, export.
 const ledger=JSON.parse(await readFile('public/data/ledger/provinces.json','utf8')),mf=JSON.parse(await readFile('public/data/ledger/manifest.json','utf8')),F=1.27*.47*44/12;
