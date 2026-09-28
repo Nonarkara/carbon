@@ -120,7 +120,7 @@ test('all project methodology families map to valid known family keys',()=>{
   }
 });
 
-test('issuance rate matches the documented 12% issuance cliff (31 of 257)',()=>{
+test('issuance rate is 31 of 257 projects (12.1%)',()=>{
   const issuedProjects=d.projects.filter(p=>p.issued_tco2e>0);
   assert.equal(issuedProjects.length,31);
   assert.equal(d.projects.length,257);

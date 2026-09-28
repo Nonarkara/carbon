@@ -356,99 +356,101 @@ Open the workbench, try the clearly labelled synthetic example, and follow a num
 
 ## 11 · TGO's T-VER registry — context, not an input
 
-[Thailand Greenhouse Gas Management Organization (TGO)](https://tver.tgo.or.th/) is a public organisation under the Ministry of Natural Resources and Environment (MONRE), established by royal decree in 2007. It administers Thailand's domestic carbon market: managing the Thailand Voluntary Emission Reduction Program (T-VER), certifying carbon labels, accrediting Validation and Verification Bodies (VVBs), and serving as the national greenhouse-gas data repository.
+[Thailand Greenhouse Gas Management Organization (TGO)](https://tver.tgo.or.th/) is a public organisation under the Ministry of Natural Resources and Environment, established by royal decree in 2007 (amended 2019 and 2025). It runs the Thailand Voluntary Emission Reduction Program (T-VER) and its registry, licenses carbon labels, and registers the external bodies that validate and verify projects. The national greenhouse-gas inventory is now reported by the Department of Climate Change and Environment (DCCE); Thailand's BTR1, cited in section 06, is a DCCE publication.
 
-In June 2025, TGO approved four digital remote-sensing platforms under an AI sandbox for forestry carbon verification: GISTDA Carbon Atlas, THAICOM CarbonWatch, SCGC CERT+, and Varuna Smart Forest (developed by ARV/PTTEP). Each platform's approval applies to its proprietary system; this application operates as an independent, open-access screening workbench that neither claims nor inherits TGO accreditation.
+On 13 June 2025 TGO presented four remote-sensing platforms that had met its assessment criteria for estimating forest carbon sequestration in T-VER forestry projects: GISTDA Carbon Atlas, THAICOM CarbonWatch, SCGC CERT+ and Varuna Smart Forest (PTT group) ([TGO news](https://ghgreduction.tgo.or.th/th/news/news-all/item/6114-tgo-ai-2.html)). The release says they reduce time and cost; it gives no percentage, and it does not describe them as verification. External bodies still verify. Each recognition belongs to that platform. This application is an independent, open screening tool and claims no TGO recognition.
 
-The [TGO T-VER database](https://tver.tgo.or.th/database/public/projects/1/1) publishes, without login, its full catalogue of registered projects. An automated snapshot taken on 28 September 2026 reveals:
+The [TGO T-VER database](https://tver.tgo.or.th/database/public/projects/1/1) publishes its full project list without login. A snapshot taken on 28 September 2026, limited to the forestry and agriculture sector (FOR&AGR), shows:
 
-- **257 registered projects** in forestry and agriculture (FOR&AGR), with an aggregate ex-ante expectation of **2,194,333 tCO₂e per year**
-- **31 projects** have ever reached credit certification and issuance, totaling **733,914 tCO₂e**
-- **75 projects** include ป่าชุมชน in the registered name. The extract does not record the legal instrument.
-- **32 projects** mention mangrove (ชายเลน) in the name or methodology. The mangrove family tag is on 3 of them; the rest use a general forestry method. The Department of Marine and Coastal Resources is the developer on 30 of the 32.
-- **246 projects** are Standard T-VER and **11** are Premium T-VER
+- **257 registered projects**, with a combined ex-ante expectation of **2,194,333 tCO₂e per year** (median project 771 tCO₂e/yr)
+- **31 projects** have had credits issued, **733,914 tCO₂e** in total
+- **75 projects** include ป่าชุมชน (community forest) in the registered name. The extract does not record the legal instrument behind them.
+- **32 projects** mention mangrove (ชายเลน) in the name or methodology. The mangrove methodology tag is on 3; the rest use a general forestry method. The Department of Marine and Coastal Resources is the developer on 30 of the 32.
+- **246 projects** are Standard T-VER and **11** are Premium T-VER. Status: 253 active, 2 ended, 1 in revalidation, 1 withdrawn.
 
-### The 12.1% issuance cliff: the unit economics of verification
+### Few issuances so far — mostly because most projects are new
 
-Only 31 of 257 forestry projects (12.1%) have ever converted registered potential into certified credits. Over 87% remain in unissued pre-verification status, representing nearly 2 million tCO₂e/year of unverified estimates.
+31 of 257 projects (12.1%) have received credits. Read by the year of registration, the figure is a timing effect before it is anything else:
 
-Understanding this bottleneck requires examining project unit economics:
+| Registered | Projects | With credits issued | Share |
+|---|---:|---:|---:|
+| 2021 or earlier | 27 | 15 | 56% |
+| 2022–2023 | 30 | 12 | 40% |
+| 2024–2026 | 200 | 4 | 2% |
 
-1. **What the OTC tape shows.** Across the forestry and agriculture years in this snapshot, traded volume is 379,304 tCO₂e and the volume-weighted average price is **฿416/tCO₂e**. Yearly averages run from ฿279 in 2023 (308,030 tCO₂e, the largest year) to ฿2,000 in 2022 (1,270 tCO₂e). This extract does not contain a steady ฿280–400 band.
-2. **What this extract does not price.** Validation and verification fees are not published per project here, so this page does not estimate them and does not claim a cut in field hours.
-3. **What the map is for.** The province list and the boundary check name registered projects in the same province. That is a double-counting screen. It is not a verifier and it is not a credit.
+Four in five projects were registered in 2024–2026. Most have not yet reached the end of a first monitoring period, so no credit could have been issued. This snapshot cannot tell whether verification cost also holds projects back: it contains no verification fees, and the page does not estimate them.
 
-### Standard T-VER versus Premium T-VER architecture
+What the OTC tape in the snapshot shows: forestry and agriculture trades total 379,304 tCO₂e at a volume-weighted average of **฿416/tCO₂e**. Yearly averages run from ฿279 in 2023 (308,030 tCO₂e, the largest year) to ฿2,000 in 2022 (1,270 tCO₂e). There is no stable price band in these data.
 
-TGO maintains two distinct methodological frameworks that reflect evolving international market standards:
+### Standard and Premium T-VER, as registered
 
-| Dimension | Standard T-VER (T-VER-S) | Premium T-VER (T-VER-P) |
+| | Standard T-VER | Premium T-VER |
 |---|---|---|
-| **Core Methodologies** | T-VER-S-METH-13-01 v2 (Forestry), 13-02 v2 (P-REDD+), 13-03 v2 | T-VER-P-METH-13-01 (Forestry), 13-02 (Mangrove), 13-08 (Perennial) |
-| **Crediting Period** | 7 years renewable up to 3 times (21 years total), or 10 years fixed | 15 to 30 years continuous monitoring for forestry |
-| **Permanence Buffer** | No mandatory buffer pool deduction | Mandatory Non-Permanence Risk Assessment; 10%–20% buffer credit contribution |
-| **International Transfer** | Domestic voluntary offsets only; no Corresponding Adjustments | Aligned with Article 6 of the Paris Agreement, CORSIA, and ICVCM Core Carbon Principles |
-| **Current Portfolio** | 246 projects (95.7% of this extract) | 11 projects (4.3% of this extract) |
+| Forestry & agriculture methodologies in use (codes as printed) | S-METH-13-01 to 13-06 and their predecessors (METH-FOR-01…04, METH-AGR-01/02) | P-METH-13-01 (A/R), 13-02 (mangrove), 13-03 (REDD+), 13-05 (IFM), 13-08 (rice) |
+| Crediting periods registered in this snapshot | 10 yr (180 projects), 7 yr (35), 20 yr (25), others 9–23 yr (6) | 5 yr (3), 15 yr (5), 20 yr (2), 39 yr (1) |
+| Projects | 246 (95.7%) | 11 (4.3%) |
+| Earliest crediting start | September 2013 | July 2023 |
+| International use | Domestic voluntary use | Premium credits are listed as CORSIA-eligible for the 2024–2026 phase; use under Article 6 needs a letter of authorization and a corresponding adjustment, which is not automatic |
 
-### Cadastral opacity and double-counting screening
+The crediting periods are measured from each project's start and end dates in the registry, not taken from programme rules. Five Standard projects list a P-METH methodology code; the table keeps the codes as TGO prints them. TGO's Premium rules include a non-permanence buffer; its size is set by TGO's buffer tool and is not reproduced here. The small Premium count mostly reflects how new the programme is.
 
-A critical vulnerability in Thailand's voluntary carbon ecosystem is spatial opacity: TGO's public registry publishes project titles, developer names, and administrative tambon/amphoe text addresses, but **never publishes geospatial polygons or coordinate boundaries**.
+### Double-counting screen at the boundary
 
-Without public spatial records, developers and community groups cannot inspect surrounding land concessions to verify whether overlapping parcels have already been registered. Our workbench addresses this gap at the boundary-intake stage:
+TGO's listing and detail pages describe locations as text addresses. Where maps or coordinates exist, they sit inside each project's registration document (a PDF linked from the detail page), not in a machine-readable layer. Checking whether a new parcel overlaps a registered one therefore still needs those documents.
 
-- When a boundary GeoJSON is uploaded, the tool tests the geometry against official COD-AB provincial boundaries.
-- It identifies intersecting jurisdictions, tallies all existing T-VER registrations in those provinces, and displays the registered developers, methodology families, and active crediting terms.
-- It calculates the total registered expected sequestration and certified volumes in the host provinces, giving operators immediate additionality context and a direct prompt to verify cadastral independence before formal filing.
+This workbench narrows the search when a boundary is imported:
 
-### The statutory transition: Thailand's Draft Climate Change Act
+- It tests the boundary against the official COD-AB province boundaries.
+- It lists T-VER projects registered in those provinces, with developer, methodology family and crediting term.
+- It shows their combined expected and issued tonnes. A multi-province project's full tonnage appears in every province it names, so these screen totals are not additive.
 
-Thailand's voluntary market operates on the threshold of major regulatory restructuring. The Department of Climate Change and Environment (DCCE) is advancing Thailand's first **Draft Climate Change Act** (ร่าง พ.ร.บ. การเปลี่ยนแปลงสภาพภูมิอากาศ พ.ศ. ...):
+Sharing a province is not overlap, and it says nothing about additionality. It tells a developer which registration documents to open first.
 
-- **Mandatory Reporting**: Large industrial stationary sources exceeding statutory emission thresholds will face compulsory reporting.
-- **Emissions Trading Scheme (ETS) & Carbon Tax**: A domestic cap-and-trade framework and carbon tax will introduce compliance demand, shifting carbon purchasing from corporate goodwill to statutory obligation.
-- **Statutory National Registry**: TGO's voluntary registry will formally transition into Thailand's statutory National Carbon Registry, requiring rigorous avoidance of double counting between voluntary exports, NDC progress, and compliance surrendered units.
+### The Climate Change Bill (status as of September 2026)
+
+Cabinet approved a draft Climate Change Act in principle on 2 December 2025 and sent it to the Council of State ([JETRO](https://www.jetro.go.jp/newsletter/bangkok/2025/2Dec2025_CabinetApproval.pdf)). Parliament held a public consultation on a bill from 25 May to 24 June 2026, and press coverage in July 2026 still described it as a draft. The drafts include mandatory reporting for large emitters, an emissions trading system and a carbon tax. [ICAP](https://icapcarbonaction.com/en/ets/thailand) reports that DCCE would establish the trading system's registry and that TGO-certified credits could cover a limited share of compliance obligations. Final text, timing and the registry arrangement remain open until enactment.
 
 ### A reproducible fetch pipeline
 
-`scripts/ingest/tgo.py` fetches the project catalogue, individual detail pages, and historical OTC transactions through a fully auditable pipeline:
+`scripts/ingest/tgo.py` fetches the project list, each forestry project's detail page and the reported OTC trades:
 
-1. Uses `research/raw/tgo/` as an immutable local cache—avoiding redundant web requests.
-2. Computes and records the SHA-256 hash of every raw HTML page.
-3. Assigns provincial attribution **strictly when address strings contain official administrative markers (จ. or จังหวัด)**, preventing false-positive matches on ambiguous Thai words (เช่น เลย, แพร่, ตาก).
-4. Maintains explicit human review logs for 12 edge cases in `scripts/ingest/tgo_province_overrides.json`.
-5. Halts build execution if single-province + multi-province + unlocated project counts fail exact arithmetic reconciliation with national sums.
+1. It uses `research/raw/tgo/` as a local cache, so repeated runs do not re-download.
+2. It records a SHA-256 fingerprint of the cached raw files in the output.
+3. It assigns a province automatically **only when the address text contains จ. or จังหวัด**, which avoids false matches on ordinary words that are also province names (เลย, แพร่, ตาก).
+4. Twelve other cases were reviewed by hand; each decision and its reason is in `scripts/ingest/tgo_province_overrides.json`.
+5. It stops if single-province, multi-province and unlocated totals do not add up to the national totals, or if any project's issuance records do not add up to its listed total.
 
-The generated artifact `public/data/tgo/tver-forestry.json` (~390 KB) indexes 257 projects across 9 methodology families (AR · forest & plantations, AR large scale, REDD+, plantation, mangrove, IFM, agricultural land, perennials, peatland) alongside 31 verified issuance histories.
+The output, `public/data/tgo/tver-forestry.json` (about 390 KB), carries 257 projects tagged with 8 methodology families in use (A/R, large-scale A/R, REDD+, plantation, mangrove, IFM, agricultural land, perennial crops; the peat tag has no projects) and 31 issuance histories.
 
 ### Why registry figures are context, never project carbon inputs
 
-The T-VER data rendered on the map and evidence tables represent institutional **context**: historical regional activity, market pricing, and existing registrations. Satellite biomass stock (CCI Biomass v7.0, JAXA FNF v2.1.0) and forest flux (GFW v1.4.3) are never conflated or added to registry tallies. They sit side by side with explicit attribution, preserving clear boundaries between empirical earth observation and administrative accounting.
+The registry data on the map describe institutions: where projects are registered, what they expect and what has been issued. Satellite stock (CCI Biomass v7.0, JAXA FNF v2.1.0) and forest flux (GFW v1.4.3) are never added to, subtracted from or divided by registry figures. They sit side by side, each with its source.
 
 ## 12 · What the registry says about itself — slices TGO does not aggregate for you
 
-Pulling all 257 records through this app turns TGO's flat listing into slices the public site doesn't aggregate. They live in the **T-VER ledger block on the national map view**, alongside the project list and the OTC market table. Every figure below is filled live from `data/tgo/tver-forestry.json`; the raw HTML pages sit in `research/raw/tgo/` with their SHA-256 in the same JSON.
+Pulling all 257 records turns TGO's flat listing into slices the public site does not aggregate. They appear in the **T-VER block of the national map view**, beside the project list and the OTC table. The figures below were computed from the snapshot `data/tgo/tver-forestry.json` (28 September 2026); the app computes the same slices from that file.
 
 | Slice | What it says |
 |---|---|
-| **Pipeline rate** | **31 of 257 projects (12.1%) have received credits.** The other 226 still carry an ex-ante expectation of 1,982,918 tCO₂e/yr. That expectation is not a removal and not a credit. OTC forestry volume in this extract is 379,304 tCO₂e across the published years, not a steady 256,000 tCO₂e per year. |
-| **Methodology coverage** | Family tags, not a partition: project reg. 001 carries both AR and REDD+, and 23 projects have no methodology text. Tags: AR 110, REDD+ 69, perennial 30, agricultural land 10, plantation 8, AR large 4, mangrove 3, IFM 1, peat 0. Mangrove, plantation and IFM have no credits issued (3, 8 and 1). The largest unissued count is AR, 102 of 110. |
-| **Project-size split (TGO classification)** | Micro 144, Small 89, Large 24. Of the micro projects, 45 include ป่าชุมชน in the name. Size is TGO's label, not a land-use class. |
-| **Program / Form** | Standard T-VER 246, Premium T-VER 11 · single project 243, PoA 14. Premium carries mandatory buffer-pool and Article 6 alignment; the volume gap reflects the higher cost of permanence. |
-| **Developers** | By project count: Royal Forest Department 35, Department of Marine and Coastal Resources 27, BAAC 12, Rubber Authority of Thailand 10, Department of National Parks 9. By expected tCO₂e/yr the Rubber Authority leads (653,175), then the Royal Forest Department (458,576) and DMCR (210,920). Names are stored as printed, so two spellings of one foundation stay separate. |
-| **Geographic concentration** | Ranked by **single-province** expected tonnes: Nan, Chiang Rai, Surat Thani, Rayong and Chiang Mai hold **33.3% of national expected volume**. Multi-province projects (52; 1,075,734 tCO₂e/yr) are not assigned to a province, so they are outside this ranking. Single-province 199, multi-province 52, no province named 6. |
-| **Issuance timeline (tCO₂e)** | 2016 1.5k, 2017 16 t, 2018 0.8k, 2022 5.6k, 2023 130k, **2024 424k (peak)**, 2025 57k, 2026 115k year-to-date. Of the 2024 total, 419,513 tCO₂e (98.9%) is one REDD+ issuance: Doi Tung Development Project, Chiang Rai (reg. 077). It is not a plantation issuance. |
-| **OTC market (FOR&AGR)** | Yearly average price runs from ฿279 (2023) to ฿2,000 (2022). Annual volume runs from 16 tCO₂e (2021) to 308,030 tCO₂e (2023). The volume-weighted average across these years is ฿416/tCO₂e. 2026 is year-to-date. |
+| **Issuance by age** | **31 of 257 projects (12.1%) have received credits**: 56% of projects registered by 2021, 40% of 2022–23, 2% of 2024–26. The 226 without issuance carry an ex-ante expectation of 1,982,918 tCO₂e/yr. That expectation is not a removal and not a credit. |
+| **Methodology coverage** | Family tags, not a partition: reg. 001 carries both A/R and REDD+, and 23 projects have no methodology text. Tags: A/R 110, REDD+ 69, perennial 30, agricultural land 10, plantation 8, A/R large 4, mangrove 3, IFM 1. Mangrove, plantation and IFM have no credits issued. The largest unissued group is A/R, 102 of 110. |
+| **Project size (TGO's label)** | Micro 144, small 89, large 24. Of the micro projects, 45 include ป่าชุมชน in the name (31%). Of the large projects, 13 are perennial-crop projects, 10 of them by the Rubber Authority of Thailand. |
+| **Programme and form** | Standard 246, Premium 11 · single or bundled 243, programme of activities 14. |
+| **Developers** | By project count: Royal Forest Department 35, Department of Marine and Coastal Resources 27, BAAC 12, Rubber Authority of Thailand 10, Department of National Parks 9. By expected tCO₂e/yr: Rubber Authority 653,175, Royal Forest Department 458,576, DMCR 210,920. Names are kept as printed, so two spellings of one foundation stay separate. |
+| **Where** | Ranked by expected tonnes of **single-province** projects: Nan, Chiang Rai, Surat Thani, Rayong and Chiang Mai hold 33.3% of national expected volume. Multi-province projects (52; 1,075,734 tCO₂e/yr) are outside this ranking. Single-province 199, multi-province 52, no province named 6. |
+| **Issuance timeline (tCO₂e)** | 2016 1.5k, 2017 16, 2018 0.8k, 2022 5.6k, 2023 130k, **2024 424k**, 2025 57k, 2026 115k to date. Of 2024, 419,513 tCO₂e (98.9%) is one REDD+ issuance: Doi Tung Development Project, Chiang Rai (reg. 077). |
+| **OTC trades (FOR&AGR)** | Yearly average ฿279 (2023) to ฿2,000 (2022); yearly volume 16 tCO₂e (2021) to 308,030 tCO₂e (2023); volume-weighted average ฿416/tCO₂e. 2026 is year-to-date. |
 
-### Why this is one browser away from being useful to TGO
+### Why this is useful to TGO without being an integration
 
-The slices above are derived in this app from one static JSON snapshot of TGO's public listing. They are not a registry integration, not a verification, and not an audit. They are **the same data, sliced**:
+The slices come from one static snapshot of TGO's public listing. They are not a registry connection, not a verification and not an audit. They are the same data, sliced:
 
-- No paid API. No login. The browser reads `data/tgo/tver-forestry.json` once.
-- No server processing. Every aggregate runs in JavaScript from the parsed JSON.
-- No silent drift. `tests/tgo.test.mjs` asserts the totals reconcile: 31 issued projects, 199 single-province + 52 multi-province + 6 unlocated = 257 national, and every issuance record sums to its project total.
-- Reproducible. `scripts/ingest/tgo.py` rebuilds the snapshot from `research/raw/tgo/` (cache + SHA-256), so any analyst can re-run the pipeline and get a bit-for-bit equivalent.
+- No login and no API key. The browser reads `data/tgo/tver-forestry.json` once.
+- No server processing. Every aggregate runs in the browser.
+- No silent drift. `tests/tgo.test.mjs` checks that single-province, multi-province and unlocated projects reconcile with the national totals, that 31 projects have issuance, and that every issuance history sums to its project total.
+- Reproducible. `scripts/ingest/tgo.py` rebuilds the snapshot from the cached raw pages.
 
-The same approach scales to the next thing TGO wants to see — project-level credit retirements, vintage reporting, Article 6 corresponding-adjustment status, regional VVB accreditation patterns. Each is just another aggregate on the same snapshot. The point is that the snapshot, the test, and the rendering layer already exist; adding a new view is a small, contained change instead of an integration.
+Further views TGO may want — retirements by project, vintages, corresponding-adjustment status — would need data the public listing does not carry. Views of what it does carry are small additions to the same snapshot.
 
 
 ## 13 · Why the name is คาบอนนะ
@@ -459,13 +461,13 @@ The product is called **คาบอนนะ** (Kabonna, カボンナ). The nam
 
 ### The name is a hedge you can hear
 
-คาร์บอน is the Thai word for carbon. Said carefully it has a consonant cluster and a long vowel. คาบอนนะ breaks that into three open beats, คา-บอน-นะ, and ends on นะ. Thai นะ softens what was just said: it asks to be heard, it does not slam the point shut. Japanese な does the same job at the end of a sentence, and it is also how a lot of given names end. カーボン (carbon) plus な is カボンナ, which can be read as a small name rather than an institution. The field this tool sits next to is full of acronyms: TGO, T-VER, CCI, GFW, ODIAC. A distinctive item in a list of similar items is the one people remember (von Restorff, 1933). The cute name is that item. It is memorable because it does not look like a registry.
+คาร์บอน is the Thai word for carbon. It is written with a silent ร under the การันต์ mark and spoken in two syllables, คา-บอน. คาบอนนะ spells it the way it sounds and adds a third syllable, นะ. Thai นะ softens what was just said: it asks to be heard rather than closing the point. In katakana the name is written カボンナ, a transliteration of the Thai name rather than a Japanese word. The field this tool sits next to is full of acronyms: TGO, T-VER, CCI, GFW, ODIAC. An item that differs from the rest of a list is more likely to be remembered (von Restorff, 1933). The cute name is that item. It is memorable because it does not look like a registry.
 
 The softness is also the claim the product is willing to make. An estimate is not a credit. A name that already sounds like it is checking with you — “carbon, yeah?” — is harder to mistake for a stamp.
 
 ### Why a round face, in a square interface
 
-People look longer at faces with a large head, large eyes and a small body. Lorenz called that pattern the baby schema; Glocker and colleagues measured it and found it raises both the feeling of cuteness and the wish to look after ([Glocker et al., 2009](https://doi.org/10.1111/j.1439-0310.2008.01603.x)). That is the visibility mechanism: a round face in a browser tab is easier to find again than another navy square. Nittono and colleagues found that looking at cute images can make the next small task more careful, and can narrow attention ([Nittono et al., 2012](https://doi.org/10.1371/journal.pone.0046362)). That is a reason to hope someone looks closely. It is not a reason to believe the arithmetic got better. A face cannot check a tonne. The carefulness still has to be in the sources, the factors and the tests.
+Faces with a large head, large eyes and a small body are what Lorenz called the baby schema. Glocker and colleagues manipulated those features in infant photographs and found that they raised both rated cuteness and the reported wish to look after the infant ([Glocker et al., 2009](https://doi.org/10.1111/j.1439-0310.2008.01603.x)). Applying that to a drawn mascot is an extrapolation, not a result of the study. The hope is that a round face in a browser tab is easier to find again than another navy square. Nittono and colleagues found that looking at cute images can make the next small task more careful, and can narrow attention ([Nittono et al., 2012](https://doi.org/10.1371/journal.pone.0046362)). That is a reason to hope someone looks closely. It is not a reason to believe the arithmetic got better. A face cannot check a tonne. The carefulness still has to be in the sources, the factors and the tests.
 
 So the mascot is allowed to be round, and almost nothing else is. The map, the rules, the tables and the three props the character holds — the viewing square, the plot flag, the stop palm — stay square, in the same paper, navy and yellow as the rest of the screen. One leaf is forest green, from the stock map. The other is yellow, the only accent. Curves are the exception that makes the face work. They stop at the face.
 
