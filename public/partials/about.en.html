@@ -108,14 +108,8 @@
 <h2><span>08</span> Honest about uncertainty</h2>
 <p>Every 100 m square has an error estimate. How those errors add up across a province depends on whether neighbouring squares tend to be wrong in the same direction, and nobody knows that exactly. So the map shows two ranges and lets you see the gap between them.</p>
 <figure class="il">
-<svg viewBox="0 0 640 170" role="img" aria-labelledby="f8t"><title id="f8t">A narrow range for independent errors and a wide range for errors that all go the same way</title>
-<line class="il-axis" x1="40" y1="110" x2="600" y2="110"/>
-<rect class="il-range-wide" x="60" y="92" width="520" height="12"/><rect class="il-range-narrow" x="316" y="72" width="8" height="12"/><circle class="il-dot" cx="320" cy="110" r="6"/>
-<text class="il-small" x="320" y="62" text-anchor="middle">if errors cancel out: ±<tspan data-fig="bandInd"></tspan>%</text>
-<text class="il-small" x="60" y="136">if every square errs the same way: ±<tspan data-fig="bandCorr"></tspan>%</text>
-<text class="il-label" x="320" y="160" text-anchor="middle">National forest carbon stock</text>
-</svg>
-<figcaption>The truth is expected between the two. Neither range includes bias in the map itself. Global biomass maps tend to overestimate thin forest and underestimate dense forest. Only field plots can correct that.</figcaption>
+<svg viewBox="0 0 640 190" role="img" aria-labelledby="f8t"><title id="f8t">A narrow floor, a calibrated central range and a wide ceiling for the national forest carbon stock</title><line class="il-axis" x1="320" y1="18" x2="320" y2="158"/><text class="il-small" x="40" y="30">floor · if every square errs independently: ±<tspan data-fig="bandInd"></tspan>%</text><rect class="il-band il-range-narrow" data-band="bandInd" x="320" y="38" width="2" height="12"/><text class="il-small" x="40" y="74">central · errors shared within 5.6 km blocks, calibrated to ESA: ±<tspan data-fig="bandBlock"></tspan>%</text><rect class="il-band il-range-mid" data-band="bandBlock" x="320" y="82" width="2" height="12"/><text class="il-small" x="40" y="118">ceiling · if every square errs the same way: ±<tspan data-fig="bandCorr"></tspan>%</text><rect class="il-band il-range-wide" data-band="bandCorr" x="320" y="126" width="2" height="12"/><circle class="il-dot" cx="320" cy="170" r="6"/><text class="il-label" x="320" y="188" text-anchor="middle">National forest carbon stock, 95% ranges (bar length to scale)</text></svg>
+<figcaption>The central range comes from checking the block model against the errors ESA itself publishes for its 10 km and 25 km maps, which include error correlation measured with airborne LiDAR; ours errs on the wide side. None of the three includes bias in the map itself. Global biomass maps tend to overestimate thin forest and underestimate dense forest. Only field data can check that, which is why the Research notebook compares the map with Thailand's national forest inventory.</figcaption>
 </figure>
 </section>
 

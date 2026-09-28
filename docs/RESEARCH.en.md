@@ -182,12 +182,17 @@ FNF forest is not the Royal Forest Department's forest. FNF maps **44.7%** of Th
 
 ### Uncertainty, stated as a range rather than a decimal
 
-ESA CCI publishes a standard deviation for every pixel. How those errors add up over a province depends on something the map does not know: how much neighbouring pixels err together. The carbon map therefore gives two 95% ranges:
+ESA CCI publishes a standard deviation for every 100 m pixel. How those errors add up over a province depends on how much neighbouring pixels err together, which a single map cannot tell. The carbon map shows three 95% ranges for the random part of the map error:
 
-- **Independent errors**, where errors cancel as pixels are added. For Thailand this gives ±0.03%.
-- **Fully correlated errors**, where every pixel errs in the same direction. For Thailand this gives ±110%, and the lower end stops at zero.
+| Range | Assumption | Thailand | Chiang Mai | Samut Songkhram |
+|---|---|---:|---:|---:|
+| Floor | every pixel errs independently | ±0.03% | ±0.10% | ±1.5% |
+| **Central** | errors fully correlated within 5.6 km blocks, independent between blocks | **±1.4%** | **±4.7%** | **±43%** |
+| Ceiling | every pixel errs in the same direction | ±110% | ±116% | ±121% |
 
-Fully correlated error is the hard ceiling; the truth is expected between the two ranges. A study of biomass estimates for New York State parcels found that spatially correlated residual error dominated ([Johnson et al.](https://arxiv.org/abs/2412.16403)), which suggests the narrow range is too optimistic for large areas. Neither range includes systematic map bias. Global biomass maps tend to overestimate low biomass and underestimate high biomass ([Araza et al. 2022](https://doi.org/10.1016/j.rse.2022.112917)). The CCI Biomass fact sheet (written for v5; the map uses v7.0) advises checking regional totals against a national forest inventory or field plots, and says estimates for individual full-resolution pixels should not be used on their own ([CCI Biomass v5 fact sheet](https://climate.esa.int/documents/2791/CCI_Biomass_product_fact_sheet_V5.0_20240319.pdf)). GFW's province summaries carry only partial variance components, not a complete flux uncertainty, and the map does not use them. Its global estimate of removals for 2001–2023 is −14.5 ± 7.7 GtCO₂ per year (Gibbs et al. 2025). GFED and ODIAC publish no pixel uncertainty. The ODIAC spatial pattern is itself a model: national totals spread by night lights and point sources.
+The central range is not a guess. ESA's product guide states that its aggregated maps (1, 10, 25 and 50 km) carry a standard error with a variance term and a covariance term, the spatial correlation of errors having been estimated from airborne LiDAR ([CCI Biomass Product User Guide v6, §5](https://climate.esa.int/media/documents/D4.3_CCI_PUG_V6.0_20250606.pdf)). The pipeline recomputes, for every fully mapped 10 km and 25 km cell in the processing window, the error that the block model gives from the 100 m pixel errors and compares it with the error ESA published for that cell in 2020. With 5.6 km blocks, the model's error is 1.47 times ESA's at 10 km (median of 2,068 cells) and 1.23 times at 25 km (197 cells). The central range is therefore somewhat wider than ESA's own LiDAR-based estimate — deliberately on the cautious side, because 5.6 km is the smallest block that lines up with the grid the browser uses for drawn boxes. The ratios are recomputed on every build and stored in the ledger manifest.
+
+All three ranges describe random error only. They exclude systematic map bias, which is usually the larger problem: global biomass maps tend to overestimate low biomass and underestimate high biomass ([Araza et al. 2022](https://doi.org/10.1016/j.rse.2022.112917)), and a study of New York State parcels found that spatially correlated residual error dominated ([Johnson et al.](https://arxiv.org/abs/2412.16403)). The CCI Biomass fact sheet (written for v5; the map uses v7.0) advises checking regional totals against a national forest inventory or field plots, and says estimates for individual full-resolution pixels should not be used on their own ([CCI Biomass v5 fact sheet](https://climate.esa.int/documents/2791/CCI_Biomass_product_fact_sheet_V5.0_20240319.pdf)). That check is done below, in "Checked against Thailand's forest inventory". GFW's province summaries carry only partial variance components, not a complete flux uncertainty, and the map does not use them. Its global estimate of removals for 2001–2023 is −14.5 ± 7.7 GtCO₂ per year (Gibbs et al. 2025). GFED and ODIAC publish no pixel uncertainty. The ODIAC spatial pattern is itself a model: national totals spread by night lights and point sources.
 
 ### Why these figures are never added together
 
@@ -488,5 +493,61 @@ Greet is the only pose in the header and the tab icon, so the public face is an 
 
 [Global data sources, cadence and fallback rules / แหล่งข้อมูลโลกและรอบการอัปเดต](https://github.com/Nonarkara/carbon/blob/main/docs/WORLD_DATA.md).
 
+
+## 14 · Other systems, and whose methods this one uses
+
+Forest-carbon estimation from space is a crowded field. The systems below were reviewed on 29 September 2026 from their own public pages. Where a system publishes no accuracy figure, the table says so rather than guessing one.
+
+| System | Method, as published | Resolution | Open? | Accuracy it reports |
+|---|---|---|---|---|
+| [GISTDA Carbon Atlas](https://www.spaceclimateobservatory.org/carbonatlas-tha) | ALOS-2, Sentinel-1/2, Landsat-8, GEDI forest height and SRTM terrain with AI/ML; over 1,000 field plots measured by terrestrial laser scanning | Not stated | Free viewer; model not published | "Verified accuracy", no figure given |
+| [THAICOM CarbonWatch](https://carbonwatch.earthinsights.net/en/technology) | High-resolution imagery and AI | Not stated | Commercial | Not published on its technology page |
+| [SCGC CERT+](https://www.scgchemicals.vn/en/articles/stories/ai-powered-forest-carbon-credits) | Imagery to tree height and crown width, then biomass | Not stated | Commercial | Not published |
+| Varuna Smart Forest ([TGO announcement](https://ghgreduction.tgo.or.th/th/news/news-all/item/6114-tgo-ai-2.html)) | Satellite, drone and ground data with AI, as described by the company | Not stated | Commercial | Not published |
+| [CTrees AGB](https://registry.opendata.aws/ctrees-agb-100m-global/) | Yearly aboveground biomass density with an uncertainty layer, 2000–2025 | 100 m | Open (CC BY 4.0) | Not stated on the dataset page |
+| [Kanop](https://www.kanop.io/blog/introducing-kanops-new-biomass-model) | Machine-learning biomass model from satellite imagery, checked against LiDAR-derived maps | 30 m | Commercial | Site level: RMSE 41.7 t DM/ha (27%), R² 0.73 over 110 sites; 30 m pixel level: RMSE 94.9 t DM/ha (vendor) |
+| [Sylvera](https://www.sylvera.com/blog/sylvera-biomass-atlas-forest-carbon-data) | Ground, drone and airborne LiDAR chained to satellite models | 30 m | Commercial | "<9% error at project scale" (vendor claim) |
+| [Chloris Geospatial](https://www.chloris.earth/) | Yearly biomass stocks with per-pixel uncertainty | Not stated | Commercial | Says it is validated against NEON field plots, airborne LiDAR and GEDI; figures not on the page |
+| [Planet Forest Carbon Diligence](https://docs.planet.com/data/planetary-variables/forest-carbon-diligence/) | Canopy height and cover from airborne LiDAR, carbon from GEDI L4A footprints | 30 m | Commercial | Validation report exists; figures not extracted |
+| [Global Forest Watch flux](https://essd.copernicus.org/articles/17/1217/2025/) | Activity data × emission and removal factors | ~30 m | Open | Global net −5.5 ± 8.1 GtCO₂e/yr (Gibbs et al. 2025) |
+
+The four Thai platforms are the ones TGO recognised for T-VER forestry work in June 2025 (section 11). None publishes an accuracy figure that can be checked. The global vendors publish validation reports, mostly for their own models against LiDAR.
+
+### What คาบอนนะ does differently
+
+It is the only system in this list that publishes all of the following together for Thailand:
+
+- **Its whole method and code**, including the offline pipeline, the fetch log with file hashes, and the tests.
+- **A conservation rule**: provinces, drawn boxes and the national total are sums of the same 100 m pixels and are tested to agree.
+- **An uncertainty range calibrated to the data producer**: the central 95% range reproduces ESA's LiDAR-based aggregated errors on the cautious side (section 06).
+- **A check against Thailand's own forest inventory**, by forest type, with both confidence intervals (section 06).
+- **Registry context kept apart from estimates**: TGO's registered and issued tonnes sit beside the satellite figures and are never added to them (sections 11–12).
+
+It is also free and needs no account. It does not claim higher accuracy than the commercial systems, and it is not a replacement for a verified project method.
+
+### What the others do that this one does not yet
+
+- **Higher resolution and LiDAR-trained models** (Sylvera, Kanop, Planet). The 100 m ESA map cannot see individual trees, and drawn boxes work at about 2.8 km.
+- **Annual time series** (CTrees, Chloris). This map uses one stock year. CCI v7 has yearly maps and a change product with its own quality flag, which would allow change estimates without subtracting two maps naively.
+- **Field-calibrated models for Thai forest types** (GISTDA). Here, Thai field data enter only as a national check, not as a calibration.
+- **More than one biomass map.** Map-to-map disagreement is often larger than any single map's stated error ([Araza et al. 2023](https://www.sciencedirect.com/science/article/pii/S1569843223000961)). Adding CTrees AGB (CC BY 4.0, yearly, with uncertainty) as a second map would show that spread by province.
+- **Sample-based province estimates from GEDI lidar footprints** combined with the map through small-area estimation ([Ståhl et al. 2016](https://forestecosyst.springeropen.com/articles/10.1186/s40663-016-0064-9)). This needs an Earthdata account.
+
+These are the next improvements, in roughly that order of value for the effort.
+
+### Methods used here, and whom they come from
+
+| Step | Method | Credit |
+|---|---|---|
+| Biomass per 100 m pixel, with error | ESA CCI Biomass v7.0 | Santoro and Cartus, ESA Climate Change Initiative ([DOI 10.5285/6429d1aafe1e43b9b414e4a5a7f8b903](https://catalogue.ceda.ac.uk/uuid/6429d1aafe1e43b9b414e4a5a7f8b903)) |
+| Forest fraction of each pixel | JAXA ALOS-2 PALSAR-2 forest/non-forest map | JAXA EORC |
+| Biomass to CO₂e | AGB × (1 + R) × CF × 44/12 | IPCC 2006 Vol. 4; TGO T-VER-S-TOOL-01-01 v2 factors |
+| Error aggregation with spatial correlation | Variance plus covariance, correlation from airborne LiDAR; reproduced here with a calibrated block model | ESA CCI Biomass PUG v6 §5; propagation along the tree–plot–pixel chain after [Réjou-Méchain et al. 2019](https://doi.org/10.1007/s10712-019-09532-0); spatial aggregation of map uncertainty after [Wadoux and Heuvelink 2023](https://doi.org/10.1111/2041-210X.14106) |
+| Map versus inventory by stratum, not plot versus pixel | Stratum means with both confidence intervals | [Réjou-Méchain et al. 2019](https://doi.org/10.1007/s10712-019-09532-0); [Araza et al. 2022](https://doi.org/10.1016/j.rse.2022.112917); Thailand FREL/FRL 2021 |
+| Forest types for the inventory check | Copernicus Global Land Service LC100 v3.0.1 forest-type layer, 2017 | Buchhorn et al., Copernicus Global Land Service (CC BY 4.0) |
+| Forest carbon flux | Gain–loss model with 30 m activity data | [Harris et al. 2021](https://doi.org/10.1038/s41558-020-00976-6); [Gibbs et al. 2025](https://essd.copernicus.org/articles/17/1217/2025/) |
+| Fire emissions | GFED5.1 | van der Werf, Chen and colleagues |
+| Fossil CO₂ | ODIAC2025 | Oda and Maksyutov, NIES |
+| Double-counting screen | Province match from TGO addresses | TGO public T-VER database |
 
 <section class="standards-note" id="standards"><h2>Standards, scope &amp; accountability</h2><p><strong>Research and assessment pilot · not certified credits.</strong> The features below support selected practices relevant to ISO standards. This is a design mapping, not a clause-by-clause conformity assessment, ISO certification or assurance opinion.</p><dl><dt><a href="https://www.iso.org/standard/66454.html">ISO 14064-2:2019</a> · Project accounting</dt><dd>Project boundaries, baseline and monitoring dates, named factors and reproducible exports support transparent quantification. Complete project eligibility, baseline justification and monitoring plans remain project-specific work.</dd><dt><a href="https://www.iso.org/standard/66455.html">ISO 14064-3:2019</a> · Validation and verification</dt><dd>Sources, versions, assumptions and calculation records support independent review. No independent validation or verification has been performed by this software.</dd><dt><a href="https://www.iso.org/standard/74257.html">ISO 14065:2020</a> · Verification bodies</dt><dd>Relevant when appointing an environmental-information validation or verification body. It applies to those bodies; this application is not an accredited verifier.</dd></dl><p>T-VER programme rules and the applicable approved methodology govern eligibility and issuance. Satellite stock is not a monitoring-period credit. Aerosol imagery is context, not a carbon-credit measurement.</p><p class="fine-print">User project files are processed in browser memory; exports are your record. Map providers receive tile requests. The server retrieves public global feeds. Source licences and dates apply. Organisation marks identify the project context; they do not establish endorsement, ISO certification or TGO approval. Standards references checked 26 September 2026.</p></section>

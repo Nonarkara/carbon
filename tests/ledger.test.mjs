@@ -115,3 +115,21 @@ test('coarse and empty selections withhold numeric rows and uncertainty in expor
     }
   }
 });
+test('central uncertainty: a box over Thailand reproduces the pipeline block variance',()=>{
+  assert.equal(manifest.grid.block,2);
+  const {totals}=sumSelection(grid,{box:THAILAND});
+  close(totals.forest_blockvar_mg2,national.forest_blockvar_mg2,1e-4);
+});
+test('central uncertainty sits between the independent floor and the fully correlated ceiling',()=>{
+  for(const p of [national,...provinces]){
+    assert.ok(p.forest_var_mg2<=p.forest_blockvar_mg2*(1+1e-9),p.pcode);
+    assert.ok(p.forest_blockvar_mg2<=p.forest_sd_mg**2*(1+1e-9),p.pcode);
+  }
+  const b=stockBand(national.forest_agb_mg,national.forest_sd_mg,national.forest_var_mg2,national.forest_blockvar_mg2);
+  assert.ok(b.optimistic[1]<=b.central[1]&&b.central[1]<=b.conservative[1]);
+  assert.equal(stockBand(1,1,1).central,null);
+});
+test('block model is calibrated against ESA aggregates and errs on the wide side',()=>{
+  const c=manifest.uncertainty.calibration.results;
+  for(const k of ['0.1deg','0.25deg']){assert.ok(c[k].cells>100,k);assert.ok(c[k].model_over_esa_median>=1&&c[k].model_over_esa_median<2,k);}
+});

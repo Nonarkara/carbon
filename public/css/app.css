@@ -112,3 +112,5 @@ body[data-about] .stage{display:block!important;min-height:0}
 @media(max-width:480px){.ab-row{grid-template-columns:1fr 3.5em}.ab-row span{grid-column:1/-1}.il{padding:12px 8px}}
 @media(max-width:600px){.il{overflow-x:auto}.il svg{min-width:560px}}
 body[data-about]{grid-template-columns:minmax(0,1fr)}body[data-about] .stage,.about,.about-inner,.about section,.il{min-width:0}
+
+.il-range-mid{fill:var(--brand);stroke:var(--ink);stroke-width:1}

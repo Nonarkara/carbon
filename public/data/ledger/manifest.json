@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
  "pipeline": "scripts/ingest/build_ledger.py",
- "pipelineSha256": "45dadae286ae16246f379ac6d3d552b4f4c16015fe02c930cee2b52499650c33",
+ "pipelineSha256": "961fa52f723c536ba3b7d82b3f57646bc16434be211c08b517e6cdb9e90b66cf",
  "conservation": {
   "rule": "each CCI 100 m pixel centre → ≤1 province and 1 grid cell; sum(provinces) == national == sum(grid) for every layer",
   "area_km2": 515415.5,
@@ -12,12 +12,40 @@
   "odiac_thai_tc_pixel_allocation": 79094982.5,
   "odiac_thai_tc_cell_centre": 78851659.6
  },
+ "uncertainty": {
+  "bounds": {
+   "independent": "pixel errors independent (floor)",
+   "block": "errors fully correlated within 2x2 grid cells (0.05°), independent between blocks (central)",
+   "correlated": "all pixel errors fully correlated (ceiling)"
+  },
+  "block_deg": 0.05,
+  "calibration": {
+   "method": "Block model vs ESA CCI v7.0 published 2020 aggregate AGB SD (variance + LiDAR-estimated covariance, PUG v6 §5) over fully valid cells in the processing window",
+   "results": {
+    "0.1deg": {
+     "cells": 2068,
+     "model_over_esa_median": 1.467,
+     "model_over_esa_p25": 1.338,
+     "model_over_esa_p75": 1.613
+    },
+    "0.25deg": {
+     "cells": 197,
+     "model_over_esa_median": 1.233,
+     "model_over_esa_p25": 1.136,
+     "model_over_esa_p75": 1.461
+    }
+   },
+   "note": "Ratio > 1 means the block model is wider (more conservative) than ESA. A 4.5 km block reproduces ESA best but does not align with the 0.025° grid."
+  },
+  "excludes": "systematic map bias; root:shoot and carbon-fraction choice"
+ },
  "grid": {
   "west": 97.0,
   "north": 20.8,
   "step": 0.025,
   "cols": 360,
   "rows": 624,
+  "block": 2,
   "count": 71810,
   "layers": [
    "forest_agb_mg",

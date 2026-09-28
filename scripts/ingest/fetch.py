@@ -28,6 +28,18 @@ def targets():
         for var in ['AGB', 'AGB_SD']:
             name = f'{tile}_ESACCI-BIOMASS-L4-AGB{"_SD" if var == "AGB_SD" else ""}-MERGED-100m-2020-fv7.0.tif'
             t[f'cci/{name}'] = CCI + name
+    # 2017 AGB/SD: the median year of Thailand's NFI cycle 3 (FREL 2021), for the forest-type benchmark.
+    for tile in ['N10E090', 'N10E100', 'N20E090', 'N20E100', 'N30E090', 'N30E100']:
+        for var in ['AGB', 'AGB_SD']:
+            name = f'{tile}_ESACCI-BIOMASS-L4-AGB{"_SD" if var == "AGB_SD" else ""}-MERGED-100m-2017-fv7.0.tif'
+            t[f'cci2017/{name}'] = CCI.replace('/2020/', '/2017/') + name
+    # Copernicus Global Land Service LC100 v3.0.1, 2017 forest-type layer (evergreen / deciduous), CC BY 4.0
+    t['cgls/PROBAV_LC100_global_v3.0.1_2017-conso_Forest-Type-layer_EPSG-4326.tif'] = ('https://zenodo.org/records/3518036/files/'
+        'PROBAV_LC100_global_v3.0.1_2017-conso_Forest-Type-layer_EPSG-4326.tif?download=1')
+    # ESA's own aggregated AGB maps (all years in one file); used to calibrate the error-correlation model.
+    for res in ('10000', '25000'):
+        name = f'ESACCI-BIOMASS-L4-AGB-MERGED-{res}m-fv7.0.nc'
+        t[f'cci_agg/{name}'] = 'https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/netcdf/' + name
     for lon in range(97, 106):
         for lat in range(5, 21):
             name = f'E{lon:03d}.00-N{lat:02d}.00-E{lon+1:03d}.00-N{lat+1:02d}.00-FNF.tiff'

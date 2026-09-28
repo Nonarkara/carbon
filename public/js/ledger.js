@@ -52,17 +52,22 @@ export function polygonFraction(cell,polys,n=4){
 }
 // Sum every layer over the selection. All layers are additive per-cell totals, so each scales linearly with the
 // covered fraction (for the variance layer this assumes pixel errors are independent within a cell).
+// Central uncertainty (block model): SD sums are accumulated per meta.block × meta.block cells, then squared —
+// errors fully correlated within a block, independent between blocks, as in the pipeline's province figures.
 export function sumSelection(grid,selection){
   const {meta,index}=grid,names=Object.keys(grid.layers),totals=Object.fromEntries(names.map(n=>[n,0]));
   const box=selection.box||bboxOf(selection.polygons);
+  const k=meta.block,sd=grid.layers.forest_sd_mg,blocks=k&&sd?new Map():null;
   let cells=0;
-  for(let k=0;k<index.length;k++){
-    const c=cellBounds(meta,index[k]);
+  for(let i=0;i<index.length;i++){
+    const c=cellBounds(meta,index[i]);
     if(c.east<=box.west||c.west>=box.east||c.north<=box.south||c.south>=box.north)continue;
     const f=selection.box?rectFraction(c,box):polygonFraction(c,selection.polygons);
     if(!f)continue;cells++;
-    for(const n of names)totals[n]+=f*grid.layers[n][k];
+    for(const n of names)totals[n]+=f*grid.layers[n][i];
+    if(blocks){const row=Math.floor(index[i]/meta.cols),col=index[i]%meta.cols,key=Math.floor(row/k)*meta.cols+Math.floor(col/k);blocks.set(key,(blocks.get(key)||0)+f*sd[i]);}
   }
+  if(blocks){let v=0;for(const s of blocks.values())v+=s*s;totals.forest_blockvar_mg2=v;}
   return {totals,cells};
 }
 export function bboxOf(polys){const b={west:180,east:-180,south:90,north:-90};for(const p of polys)for(const [x,y] of p[0]){b.west=Math.min(b.west,x);b.east=Math.max(b.east,x);b.south=Math.min(b.south,y);b.north=Math.max(b.north,y);}return b;}
@@ -72,18 +77,20 @@ export const GRID_KM=2.8;
 export function boxSideKm(box){const mid=(box.north+box.south)/2*RAD;return Math.min((box.east-box.west)*RAD*6371.0088*Math.cos(mid),(box.north-box.south)*RAD*6371.0088);}
 export function boxAreaHa(box){return 6371008.8**2*(box.east-box.west)*RAD*Math.abs(Math.sin(box.north*RAD)-Math.sin(box.south*RAD))/1e4;}
 
-// Stock with two 95% bounds: fully correlated pixel errors (conservative) and independent errors (optimistic).
-// Neither includes systematic map bias or the choice of root:shoot ratio.
-export function stockBand(agbMg,sdSumMg,varSumMg2){
+// Stock with three 95% ranges for random map error: independent pixel errors (floor, optimistic), errors correlated
+// within ~5.6 km blocks (central; calibrated against ESA's LiDAR-based aggregate errors, see manifest.uncertainty),
+// and fully correlated errors (ceiling, conservative). None includes systematic map bias or the root:shoot choice.
+export function stockBand(agbMg,sdSumMg,varSumMg2,blockVarMg2){
   const t=agbMg*AGB_TO_CO2E,corr=Z95*sdSumMg*AGB_TO_CO2E,ind=Z95*Math.sqrt(Math.max(varSumMg2,0))*AGB_TO_CO2E;
-  return {value:t,conservative:[Math.max(0,t-corr),t+corr],optimistic:[Math.max(0,t-ind),t+ind]};
+  const blk=blockVarMg2==null?null:Z95*Math.sqrt(Math.max(blockVarMg2,0))*AGB_TO_CO2E;
+  return {value:t,conservative:[Math.max(0,t-corr),t+corr],optimistic:[Math.max(0,t-ind),t+ind],central:blk==null?null:[Math.max(0,t-blk),t+blk]};
 }
 function row(id,value,unit,dataset,extra={}){return {id,value,unit,dataset,...extra};}
 // Assemble ledger rows from a province record or a grid sum. Missing inputs stay null, never zero.
 // minSideKm: shortest side of the selection. A dataset is greyed out when its cell is wider than that side.
 export function ledgerRows(src,datasets,{minSideKm}={}){
   const rows=[],d=datasets,coarse=km=>minSideKm!=null&&minSideKm<Math.max(GRID_KM,km);
-  if(src.forest_agb_mg!=null)rows.push(row('stock_forest',null,'tCO2e',d.cci,{...stockBand(src.forest_agb_mg,src.forest_sd_mg,src.forest_var_mg2),side:'stock',tooCoarse:coarse(GRID_KM)}));
+  if(src.forest_agb_mg!=null)rows.push(row('stock_forest',null,'tCO2e',d.cci,{...stockBand(src.forest_agb_mg,src.forest_sd_mg,src.forest_var_mg2,src.forest_blockvar_mg2),side:'stock',tooCoarse:coarse(GRID_KM)}));
   if(src.agb_mg!=null)rows.push(row('stock_all',src.agb_mg*AGB_TO_CO2E,'tCO2e',d.cci,{side:'stock',tooCoarse:coarse(GRID_KM)}));
   const years=d.gfw.years;
   if(src.gfw_removals_mg_co2!=null){
@@ -93,5 +100,5 @@ export function ledgerRows(src,datasets,{minSideKm}={}){
   }else rows.push(row('forest_flux',null,'tCO2e/yr',d.gfw,{side:'net',unavailable:'gridNotIngested'}));
   if(src.fire_co2_t!=null)rows.push(row('fire',src.fire_co2_t,'tCO2/yr',d.gfed,{side:'emit',byCategory:src.fire_c_t_groups||null,monthly:src.fire_c_t_monthly||null,tooCoarse:coarse(d.gfed.cellKm)}));
   if(src.fossil_c_t!=null)rows.push(row('fossil',src.fossil_c_t*C_TO_CO2,'tCO2/yr',d.odiac,{side:'emit',tooCoarse:coarse(d.odiac.cellKm)}));
-  return rows.map(r=>r.tooCoarse||src.area_ha===0?{...r,value:null,conservative:null,optimistic:null,byCategory:null,monthly:null,...(src.area_ha===0?{unavailable:'emptySelection'}:{})}:r);
+  return rows.map(r=>r.tooCoarse||src.area_ha===0?{...r,value:null,conservative:null,optimistic:null,central:null,byCategory:null,monthly:null,...(src.area_ha===0?{unavailable:'emptySelection'}:{})}:r);
 }

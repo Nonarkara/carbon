@@ -6,7 +6,7 @@ Conservation law: every 100 m ESA CCI pixel centre belongs to at most one Thai p
 0.025° grid cell. All per-pixel quantities are summed with the same assignment, so for every layer
 sum(provinces) == national == sum(grid cells). The script asserts this and the national land area.
 """
-import csv, hashlib, io, json, math, re, zipfile
+import csv, datetime, hashlib, io, json, math, re, zipfile
 from pathlib import Path
 
 import h5py
@@ -30,6 +30,7 @@ WEST, NORTH, EAST, SOUTH = 97.0, 20.8, 106.0, 5.2   # aligned to PX, STEP and 1/
 STEP = 0.025                        # browser grid; 10 cells per GFED 0.25° cell, 3 ODIAC 1 km cells
 W, H = round((EAST - WEST) / PX), round((NORTH - SOUTH) / PX)
 COLS, ROWS = round((EAST - WEST) / STEP), round((NORTH - SOUTH) / STEP)
+BLOCK = 2                           # error-correlation block = BLOCK x BLOCK grid cells (0.05°, ~5.6 km); see calibrate_blocks()
 TRANSFORM = from_origin(WEST, NORTH, PX, PX)
 OFFICIAL_AREA_KM2 = 513120          # Royal Thai Survey Department / NSO land area
 GFW_YEARS = 25                      # GFW flux v1.4.3 totals cover 2001–2025
@@ -240,6 +241,42 @@ def fnf_classes(fnf):
     img.putpalette(pal + [0] * (768 - len(pal)))
     img.save(OUT / 'overlay-fnf.png', optimize=True, transparency=0)
 
+def calibrate_blocks(sd_area, area, valid, gidx):
+    """Check the block-correlation error model against ESA's own aggregated standard errors.
+
+    ESA CCI aggregates pixel SD with a variance and a covariance term, the correlation of errors estimated from
+    airborne LiDAR (CCI Biomass PUG v6, section 5). If pixel errors are fully correlated within BLOCK x BLOCK grid
+    cells and independent between blocks, the SD of a coarse cell's mean is sqrt(sum_blocks (sum SD*a)^2) / sum a.
+    Report that model / ESA's published SD for every fully valid 0.1° and 0.25° cell over the processing window.
+    """
+    out = {}
+    cell_sd = np.bincount(gidx.ravel(), weights=sd_area.ravel(), minlength=COLS * ROWS).reshape(ROWS, COLS)
+    cell_a = np.bincount(gidx.ravel(), weights=area.ravel(), minlength=COLS * ROWS).reshape(ROWS, COLS)
+    cell_v = np.bincount(gidx.ravel(), weights=valid.ravel().astype(np.float64), minlength=COLS * ROWS).reshape(ROWS, COLS)
+    cell_n = np.bincount(gidx.ravel(), minlength=COLS * ROWS).reshape(ROWS, COLS)
+    for res, fn in ((0.1, '10000'), (0.25, '25000')):
+        with h5py.File(RAW / f'cci_agg/ESACCI-BIOMASS-L4-AGB-MERGED-{fn}m-fv7.0.nc') as f:
+            years = [(datetime.date(1990, 1, 1) + datetime.timedelta(days=float(t))).year for t in f['time'][:]]
+            lat, lon, pub = f['lat'][:], f['lon'][:], f['agb_sd'][years.index(2020)].astype(np.float64)
+        k = round(res / STEP)
+        ratios = []
+        for r0 in range(round((NORTH - (math.floor(NORTH / res) * res)) / STEP), ROWS - k + 1, k):
+            for c0 in range(round((math.ceil(WEST / res) * res - WEST) / STEP), COLS - k + 1, k):
+                if cell_v[r0:r0 + k, c0:c0 + k].sum() < 0.99 * cell_n[r0:r0 + k, c0:c0 + k].sum():
+                    continue
+                clat, clon = NORTH - (r0 + k / 2) * STEP, WEST + (c0 + k / 2) * STEP
+                i, j = np.argmin(abs(lat - clat)), np.argmin(abs(lon - clon))
+                if abs(lat[i] - clat) > 1e-6 or abs(lon[j] - clon) > 1e-6 or pub[i, j] <= 0:
+                    continue
+                sub = cell_sd[r0:r0 + k, c0:c0 + k]
+                blocks = sub.reshape(k // BLOCK, BLOCK, k // BLOCK, BLOCK).sum(axis=(1, 3))
+                model = math.sqrt((blocks ** 2).sum()) / cell_a[r0:r0 + k, c0:c0 + k].sum()
+                ratios.append(model / pub[i, j])
+        r = np.array(ratios)
+        out[f'{res}deg'] = {'cells': int(r.size), 'model_over_esa_median': round(float(np.median(r)), 3),
+                            'model_over_esa_p25': round(float(np.percentile(r, 25)), 3), 'model_over_esa_p75': round(float(np.percentile(r, 75)), 3)}
+    return out
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     zname, feats = provinces()
@@ -267,6 +304,7 @@ def main():
         'forest_var_mg2': (sd_ha * area * forest_frac) ** 2,
     }
     density = np.where(thai, agb_ha * forest_frac * AGB_TO_CO2E, np.nan)
+    sd_all, agb_valid = sd_ha * area, agb_ha > 0   # all land, for calibrate_blocks (ESA aggregates are per pixel area)
     del sd_ha
     land_w = area * land_frac
     log('ODIAC')
@@ -277,12 +315,23 @@ def main():
     ctr = pid[centre(odiac_raw.shape[0])[:, None], centre(odiac_raw.shape[1])[None, :]] > 0
     odiac_centre_thai = float(odiac_raw[ctr].sum())
     thai_pid, thai_g = pid[thai], gidx[thai]
+    log('error-correlation calibration against ESA aggregates')
+    calibration = calibrate_blocks(sd_all, area, agb_valid, gidx)
+    del sd_all, agb_valid
+    log(calibration)
     prov, grid, nat = {}, {}, {}
     for k, v in fields.items():
         vals = v[thai]
         prov[k] = np.bincount(thai_pid, weights=vals, minlength=78)[1:]
         grid[k] = np.bincount(thai_g, weights=vals, minlength=COLS * ROWS)
         nat[k] = float(vals.sum())
+    # Stock uncertainty, central model: errors fully correlated within BLOCK x BLOCK grid cells, independent between.
+    blk = (thai_g // COLS // BLOCK) * (COLS // BLOCK) + (thai_g % COLS) // BLOCK
+    nb = (COLS // BLOCK) * (ROWS // BLOCK)
+    sdv = fields['forest_sd_mg'][thai]
+    pb = np.bincount(blk * 78 + thai_pid, weights=sdv, minlength=nb * 78).reshape(nb, 78)[:, 1:]
+    prov['forest_blockvar_mg2'] = (pb ** 2).sum(0)
+    nat['forest_blockvar_mg2'] = float((np.bincount(blk, weights=sdv, minlength=nb) ** 2).sum())
     del fields
 
     log('GFED')
@@ -366,7 +415,7 @@ def main():
     keep = np.nonzero(grid['area_ha'] > 0)[0].astype(np.uint32)
     buf = keep.astype('<u4').tobytes() + b''.join(grid[k][keep].astype('<f4').tobytes() for k in order)
     (OUT / 'grid.bin').write_bytes(buf)
-    grid_meta = {'west': WEST, 'north': NORTH, 'step': STEP, 'cols': COLS, 'rows': ROWS, 'count': int(keep.size), 'layers': order,
+    grid_meta = {'west': WEST, 'north': NORTH, 'step': STEP, 'cols': COLS, 'rows': ROWS, 'block': BLOCK, 'count': int(keep.size), 'layers': order,
                  'layout': 'Uint32 cell index (row*cols+col), then Float32 per layer; little-endian; additive totals per cell'}
 
     # ---- province geometry for display (simplified; ledger uses full-resolution rasterisation) ----
@@ -392,6 +441,15 @@ def main():
                          'area_km2': round(area_km2, 1), 'official_area_km2': OFFICIAL_AREA_KM2, 'codab_area_km2': round(codab_km2, 1),
                          'gfw_gadm_area_worst_deviation': round(worst, 4), 'odiac_tc_unallocated_in_window': round(float(odiac_lost), 1),
                          'odiac_thai_tc_pixel_allocation': round(nat['fossil_c_t'], 1), 'odiac_thai_tc_cell_centre': round(odiac_centre_thai, 1)},
+        'uncertainty': {
+            'bounds': {'independent': 'pixel errors independent (floor)', 'block': f'errors fully correlated within {BLOCK}x{BLOCK} grid cells ({BLOCK * STEP:g}°), independent between blocks (central)',
+                       'correlated': 'all pixel errors fully correlated (ceiling)'},
+            'block_deg': BLOCK * STEP,
+            'calibration': {'method': "Block model vs ESA CCI v7.0 published 2020 aggregate AGB SD (variance + LiDAR-estimated covariance, PUG v6 §5) over fully valid cells in the processing window",
+                            'results': calibration,
+                            'note': 'Ratio > 1 means the block model is wider (more conservative) than ESA. A 4.5 km block reproduces ESA best but does not align with the 0.025° grid.'},
+            'excludes': 'systematic map bias; root:shoot and carbon-fraction choice',
+        },
         'grid': grid_meta, 'overlayBounds': bounds,
         'conversion': {'agb_to_co2e': AGB_TO_CO2E, 'root_shoot': 0.27, 'carbon_fraction': 0.47, 'c_to_co2': 44 / 12,
                        'basis': 'TGO T-VER-S-TOOL-01-01 v2 general-tree convention'},

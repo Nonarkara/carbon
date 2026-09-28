@@ -54,7 +54,7 @@ assert.equal(await page.locator('#ledger .tver-portfolio').count(),5);assert.mat
 await page.locator('#pickArea').click();const mb=await page.locator('#map').boundingBox();
 await page.mouse.move(mb.x+mb.width*.35,mb.y+mb.height*.3);await page.mouse.down();await page.mouse.move(mb.x+mb.width*.6,mb.y+mb.height*.6,{steps:8});await page.mouse.up();
 await page.waitForFunction(()=>document.querySelector('#carbonVerdict').textContent.startsWith('Drawn box'));
-assert.equal(await page.locator('#place').inputValue(),'box');assert.match(await page.locator('#kStock').innerText(),/\d/);assert.equal(await page.locator('#kRemove').innerText(),'—');
+assert.equal(await page.locator('#place').inputValue(),'box');assert.match(await page.locator('#kStock').innerText(),/\d/);assert.match(await page.locator('#kStockHint').innerText(),/±[\d.]+% · floor–ceiling/);assert.equal(await page.locator('#kRemove').innerText(),'—');
 assert.match(await page.locator('#ledger').innerText(),/not ingested[\s\S]*Not shown as zero/);
 await page.locator('#moreLayers').click();for(const v of ['stock','fnf']){await page.locator(`input[name=overlay][value=${v}]`).check();await page.waitForFunction(()=>{const i=document.querySelector('img.leaflet-image-layer');return i&&i.complete&&i.naturalWidth>0;});}
 await page.locator('input[name=overlay][value=flux]').check();assert.ok(await page.locator('#overlayLegend').isVisible());
@@ -111,7 +111,7 @@ for(const width of [1280,768,375]){
   await research.waitForLoadState();
   assert.equal(await research.locator('html').getAttribute('lang'),lang);
   assert.equal(await research.locator('.research-diagram').count(),7);
-  assert.equal(await research.locator('.research-toc a').count(),14);
+  assert.equal(await research.locator('.research-toc a').count(),15);
   assert.equal(await research.locator('.kabonna-poses img').count(),6);
   assert.equal(await research.locator('.sysmap').count(),1);
   await research.locator('.research-toc a[href="#section-9"]').click();

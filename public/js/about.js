@@ -29,7 +29,7 @@ export function initAbout({getLang,fmt}){
     const peakYear=Object.entries(tl).sort((a,b)=>b[1]-a[1])[0];
     const famLabel=th?{ar:'AR · ป่าและพื้นที่ปลูก',redd:'REDD+',ar_large:'AR ขนาดใหญ่',plantation:'สวนป่า',mangrove:'ป่าชายเลน',ifm:'IFM',agri_land:'พื้นที่เกษตร',perennial:'ไม้ยืนต้น',peat:'พีท',unknown:'ไม่ระบุ'}:{ar:'AR · forest & plantations',redd:'REDD+',ar_large:'AR large scale',plantation:'Plantation',mangrove:'Mangrove',ifm:'IFM',agri_land:'Agricultural land',perennial:'Perennials',peat:'Peatland',unknown:'Unstated'};
     const fig={forestPct:fmt(100*n.forest_area_ha/n.area_ha,1)+'%',areaKm2:fmt(n.area_ha/100,0)+(th?' ตร.กม.':' km²'),febApr:m,
-      bandInd:fmt(100*Z95*Math.sqrt(n.forest_var_mg2)/n.forest_agb_mg,2),bandCorr:fmt(100*Z95*n.forest_sd_mg/n.forest_agb_mg,0),
+      bandInd:fmt(100*Z95*Math.sqrt(n.forest_var_mg2)/n.forest_agb_mg,2),bandBlock:fmt(100*Z95*Math.sqrt(n.forest_blockvar_mg2)/n.forest_agb_mg,1),bandCorr:fmt(100*Z95*n.forest_sd_mg/n.forest_agb_mg,0),
       tverCount:fmt(tgo.national.projects,0),tverExpected:fmt(tgo.national.expected_tco2e_yr/1e6,2)+' M tCO₂e/yr',
       tverIssued:fmt(tgo.national.issued_tco2e,0)+' tCO₂e',tverWithIssue:fmt(tgo.national.projects_with_issuance,0)+' / '+fmt(tgo.national.projects,0),
       tverTop:topName+' ('+fmt(topPCode?topPCode[1].projects:0,0)+(th?' โครงการ)':' projects)'),
@@ -39,6 +39,9 @@ export function initAbout({getLang,fmt}){
       tverTopDev:(topDev?topDev[0]:'—')+' · '+fmt(topDev?topDev[1].exp:0,0)+' tCO₂e/'+(th?'ปี':'yr'),
       tverPeakYear:peakYear?`${peakYear[0]} · ${fmt(peakYear[1]/1e3,1)}k tCO₂e`:'—'};
     body.querySelectorAll('[data-fig]').forEach(e=>e.textContent=fig[e.dataset.fig]??'—');
+    // Bars to one linear scale: the ceiling spans the figure, so the floor and the central range are drawn at their true size.
+    const half={bandInd:Math.sqrt(n.forest_var_mg2),bandBlock:Math.sqrt(n.forest_blockvar_mg2),bandCorr:n.forest_sd_mg},scale=270/half.bandCorr;
+    body.querySelectorAll('[data-band]').forEach(e=>{const w=Math.max(2,half[e.dataset.band]*scale);e.setAttribute('x',320-w);e.setAttribute('width',2*w);});
     const mt=v=>v/1e6,rows=[
       ['absorb',th?'ป่าดูดซับ (GFW)':'Forests absorb (GFW)',mt(n.gfw_removals_mg_co2/s.gfwYears)],
       ['emit',th?'ป่าปล่อยจากการสูญเสียป่า (GFW)':'Forests release through loss (GFW)',mt(n.gfw_emissions_mg_co2e/s.gfwYears)],

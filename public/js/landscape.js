@@ -81,7 +81,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#kAreaHint').textContent=s.cells!=null?t('boxHint').replace('{c}',fmt(s.cells)):t('forestShare').replace('{f}',fmt(100*s.forest_area_ha/s.area_ha,1));
     $('#kStock').textContent=stock?.tooCoarse?'—':big(stock?.value);
     const pct=b=>fmt(100*(b[1]-stock.value)/stock.value,b[1]-stock.value<.01*stock.value?2:0);
-    $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?.value!=null&&stock.value>0?`${t('band')}: ±${pct(stock.optimistic)}% – ±${pct(stock.conservative)}% · CCI ${S.manifest.datasets.cci.version}`:'—';
+    $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?.value!=null&&stock.value>0?(stock.central?`${t('band')}: ±${pct(stock.central)}% · ${t('bandSpan')} ±${pct(stock.optimistic)}–${pct(stock.conservative)}%`:`${t('band')}: ±${pct(stock.optimistic)}% – ±${pct(stock.conservative)}%`)+` · CCI ${S.manifest.datasets.cci.version}`:'—';
     $('#kRemove').textContent=big(rem?.value);$('#kEmit').textContent=big(em?.value);
     $('#kRemoveHint').textContent=$('#kEmitHint').textContent=rem?`GFW ${S.manifest.datasets.gfw.version.split(' ')[0]} · ${S.manifest.datasets.gfw.period}`:t('gridNotIngested').split('.')[0];
     $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):!s.area_ha?t('emptySelection'):stock?.tooCoarse?t('tooCoarseGrid'):t('verdictBox').replace('{s}',big(stock?.value));
@@ -106,7 +106,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     h.push(`<h3 class="lside">${esc(t('absorbSide'))}</h3>`);
     if(sf&&sf.tooCoarse)h.push(line(t('rStockForest'),'—','tCO₂e',dsMeta(ds.cci),t('tooCoarseGrid'),'unavailable'));
     else if(sf&&sf.value!=null)h.push(line(t('rStockForest'),big(sf.value),'tCO₂e',dsMeta(ds.cci)+' · '+dsMeta(ds.fnf),'',`verdict-row`)+
-      `<p class="band">${esc(t('band'))}: ${big(sf.optimistic[0])}–${big(sf.optimistic[1])} <small>${esc(t('bandOpt'))}</small><br>${big(sf.conservative[0])}–${big(sf.conservative[1])} <small>${esc(t('bandCons'))}</small></p><p class="hint">${esc(t('bandNote'))}</p>`);
+      `<p class="band">${esc(t('band'))}: ${sf.central?`<b>${big(sf.central[0])}–${big(sf.central[1])}</b> <small>${esc(t('bandBlock'))}</small><br>`:''}${big(sf.optimistic[0])}–${big(sf.optimistic[1])} <small>${esc(t('bandOpt'))}</small><br>${big(sf.conservative[0])}–${big(sf.conservative[1])} <small>${esc(t('bandCons'))}</small></p><p class="hint">${esc(t('bandNote'))}</p>`);
     if(sa&&!sa.tooCoarse)h.push(line(t('rStockAll'),big(sa.value),'tCO₂e',dsMeta(ds.cci)));
     const rem=r('forest_removals'),em=r('forest_emissions'),net=r('forest_net'),fl=r('forest_flux');
     if(rem)h.push(line(t('rRemovals'),big(rem.value),'tCO₂e/yr',dsMeta(ds.gfw),t('gfwNote')));
@@ -243,8 +243,8 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       conversion:S.manifest.conversion,conservation:S.manifest.conservation,datasets:S.manifest.datasets};
   }
   $('#ledgerJSON').onclick=()=>S.src&&download('carbon-ledger.json',JSON.stringify(payload(),null,2),'application/json');
-  $('#ledgerCSV').onclick=()=>{if(!S.src)return;const head=['row','value','unit','dataset','version','period','low95_correlated','high95_correlated','low95_independent','high95_independent','note'];
-    const body=S.rows.map(r=>[r.id,r.value??'',r.unit,r.dataset.name,r.dataset.version||'',r.dataset.year||r.dataset.period||'',r.conservative?.[0]??'',r.conservative?.[1]??'',r.optimistic?.[0]??'',r.optimistic?.[1]??'',r.unavailable||(r.tooCoarse?'below-dataset-resolution':'')]);
+  $('#ledgerCSV').onclick=()=>{if(!S.src)return;const head=['row','value','unit','dataset','version','period','low95_block','high95_block','low95_correlated','high95_correlated','low95_independent','high95_independent','note'];
+    const body=S.rows.map(r=>[r.id,r.value??'',r.unit,r.dataset.name,r.dataset.version||'',r.dataset.year||r.dataset.period||'',r.central?.[0]??'',r.central?.[1]??'',r.conservative?.[0]??'',r.conservative?.[1]??'',r.optimistic?.[0]??'',r.optimistic?.[1]??'',r.unavailable||(r.tooCoarse?'below-dataset-resolution':'')]);
     download('carbon-ledger.csv','﻿'+[head,...body].map(x=>x.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n'),'text/csv;charset=utf-8');};
 
   return {ready,render:()=>{if(S.data){fillPlaces();render();if(S.overlayKind)setOverlay(S.overlayKind);}if(S.atmos)$('#atmosNote').textContent=t(ATMOS[$('#atmos').value].note);},invalidate:()=>{}};
