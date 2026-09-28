@@ -17,6 +17,11 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const S={data:null,manifest:null,grid:null,gridPromise:null,sel:null,src:null,rows:[],layer:null,shape:null,overlay:null,atmos:null,drawing:false};
   const byCode=new Map();let suppressMapClickUntil=0;let selectionRevision=0;
+  const applyMetricLabels=()=>{const ds=S.manifest?.datasets;if(!ds)return;
+    const o=$('#provinceMetric').options;
+    o[0].textContent=`${t('metricFossil')} · ${ds.odiac.year}`;
+    o[1].textContent=`${t('metricStock')} · ${ds.cci.year}`;
+    o[2].textContent=getLang()==='th'?`${t('metricNet')} · เฉลี่ย ${ds.gfw.period}`:`${t('metricNet')} · ${ds.gfw.period} mean`;};
 
   const ready=Promise.all(['manifest.json','provinces.json','provinces.geojson'].map(f=>fetch('data/ledger/'+f).then(r=>{if(!r.ok)throw Error('ledger:'+f);return r.json();})))
     .then(([manifest,data,geo])=>{
@@ -24,7 +29,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       data.provinces.forEach(p=>byCode.set(p.pcode,p));byCode.set('TH',data.national);
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
         onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
-      fillPlaces();select({kind:'national',code:'TH'},false);setOverlay('stock');
+      fillPlaces();select({kind:'national',code:'TH'},false);setOverlay('stock');applyMetricLabels();
     });
 
   function fillPlaces(){
@@ -160,7 +165,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#provinceRanking').querySelectorAll('button').forEach(b=>b.onclick=()=>select({kind:'province',code:b.dataset.province}));
   }
   $('#exploreProvinces').onclick=()=>ready.then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=false;document.body.dataset.provinces='open';document.body.dataset.view='rail';renderProvinces();document.querySelector('input[name=overlay][value=flux]').checked=true;setOverlay('flux');$('#tabBody').scrollTop=0;});
-  $('#provinceMetric').onchange=renderProvinces;
+  $('#provinceMetric').onchange=renderProvinces;document.addEventListener('langchange',applyMetricLabels);
   $('#closeProvinces').onclick=()=>{$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;};
   $('#nationalView').onclick=()=>select({kind:'national',code:'TH'});
   $('#useBoundary').onclick=()=>{const b=getBoundary();if(!b){message(t('noBoundaryYet'));return;}const polygons=polygonsOf(b.geojson);select({kind:'boundary',polygons,geojson:b.geojson,box:null}).then(()=>map.fitBounds(S.shape.getBounds(),{padding:[30,30]})).catch(err=>message(String(err.message||err)));};

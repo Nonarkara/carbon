@@ -14,6 +14,6 @@ export function renderCalculations({src,rows,datasets,t,fmt,esc,getLang}){
   let substituted='';
   if(r.value!=null){const n=x=>fmt(x,2);substituted=r.id==='stock'?`${n(r.inputs[0])} t AGB × 1.27 × 0.47 × 44 / 12`:r.id==='fossil'?`${n(r.inputs[0])} t C × 44 / 12`:`(${n(r.inputs[0])} − ${n(r.inputs[1])}) / ${r.inputs[2]}`;}
   const note=r.coarse?t('coarseFormula'):r.value==null?t('gridNotIngested'):r.id==='stock'?t('bandNote'):r.id==='net'?(getLang()==='th'?'ค่าติดลบ = ดูดซับสุทธิ · ค่าเฉลี่ยของช่วงเวลา':'Negative = net sink · period average'):'';
-  return `<section class="calc-block ${r.id==='stock'?'primary-calc':''}" data-calculation="${r.id}"><h3>${esc(t(r.title))}</h3><code>${esc(r.expression)}</code>${substituted?`<code class="substitution">${esc(substituted)}</code>`:''}<div class="calc-answer">${r.value==null?'—':fmt(r.value,0)} <small>${esc(r.unit)}</small></div><p>${esc(r.source)} · ${esc(t('globalRef'))}</p>${note?`<p>${esc(note)}</p>`:''}</section>`;
+  return `<section class="calc-block ${r.id==='stock'?'primary-calc':''}" data-calculation="${r.id}"><h3>${esc(t(r.title))}</h3><div class="calc-answer">${r.value==null?'—':fmt(r.value,0)} <small>${esc(r.unit)}</small></div><code>${esc(r.expression)}</code>${substituted?`<code class="substitution">${esc(substituted)}</code>`:''}<p>${esc(r.source)} · ${esc(t('globalRef'))}</p>${note?`<p>${esc(note)}</p>`:''}</section>`;
  }).join('')+`<p class="hint">${esc(t('calcCredit'))}</p>`;
 }

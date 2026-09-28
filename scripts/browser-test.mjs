@@ -17,6 +17,11 @@ assert.equal(await page.locator('#kRemove').innerText(),mt(ledger.national.gfw_r
 // Source labels on KPI hints travel from the manifest, not hardcoded strings.
 assert.equal(await page.locator('#kRemoveHint').textContent(),`GFW ${mf.datasets.gfw.version.split(' ')[0]} · ${mf.datasets.gfw.period}`);
 assert.ok((await page.locator('#kStockHint').textContent()).endsWith(`CCI ${mf.datasets.cci.version}`));
+// The answer leads its section; the formula trace follows. Metric option labels travel from the manifest.
+assert.equal(await page.locator('[data-calculation=stock]').evaluate(e=>e.children[1].className),'calc-answer');
+assert.ok((await page.locator('#provinceMetric option[value=fossil]').textContent()).includes(` · ${mf.datasets.odiac.year}`));
+assert.ok((await page.locator('#provinceMetric option[value=stock]').textContent()).includes(` · ${mf.datasets.cci.year}`));
+assert.ok((await page.locator('#provinceMetric option[value=net]').textContent()).includes(mf.datasets.gfw.period));
 await page.locator('#exploreProvinces').click();await page.locator('.province-row').first().waitFor();assert.equal(await page.locator('.province-row').count(),77);
 const rankSource=()=>page.locator('.province-row small').first().textContent();
 assert.ok((await rankSource()).includes(`${mf.datasets.odiac.version} · ${mf.datasets.odiac.year}`));
@@ -43,7 +48,7 @@ await page.locator('#example').click();await page.locator('#boundaryInfo').waitF
 await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator('.lenses [data-tab=calculate]').click();await page.locator('[type=submit]').click();
 assert.match(await page.locator('#result').innerText(),/218\.86/);
 const downloaded=page.waitForEvent('download');await page.locator('#exportJSON').click();const dl=await downloaded;await dl.saveAs('test-results/export.json');const report=JSON.parse(await readFile('test-results/export.json','utf8'));assert.equal(report.status,'illustrative-unverified-estimate');assert.ok(Math.abs(report.result.net-218.8633333)<.00001);assert.equal(report.issuedCredits,null);
-await page.locator('[data-lang=th]').click();assert.equal(await page.locator('html').getAttribute('lang'),'th');assert.match(await page.locator('#result').innerText(),/218\.86/);assert.match(await page.locator('#provinceRows tr').first().innerText(),/^สระบุรี2561/);
+await page.locator('[data-lang=th]').click();assert.equal(await page.locator('html').getAttribute('lang'),'th');assert.match(await page.locator('#result').innerText(),/218\.86/);assert.match(await page.locator('#provinceRows tr').first().innerText(),/^สระบุรี2561/);assert.ok((await page.locator('#provinceMetric option[value=net]').textContent()).includes(mf.datasets.gfw.period),'th metric options re-derive after langchange');
 await page.screenshot({path:'test-results/desktop-th.png',fullPage:true});
 await page.locator('[data-lang=en]').click();
 await page.locator('#current').fill('900');assert.equal(await page.locator('#result').innerText(),'');await page.locator('[type=submit]').click();assert.match(await page.locator('#result').innerText(),/Carbon loss/);
@@ -96,4 +101,4 @@ for(const width of [1280,768,375]){
   await research.close();assert.equal(await page.locator('#projectName').inputValue(),'Research preserves my project');
  }
 }
-assert.deepEqual(errors,[]);await writeFile('test-results/browser-summary.json',JSON.stringify({base,checkedAt:new Date().toISOString(),viewports:[1440,1280,768,390,375],checks:['about tab TH/EN with ledger-driven illustrations','carbon map national figures','manifest-derived KPI and source labels','province selection matches ledger','drawn box','overlays','ledger export','example arithmetic','JSON export and provenance','language state','loss','unknown fire','unit switch','plot import','factor edit','boundary replacement','malformed geometry','reset','mobile navigation','guide diagrams','research navigation and language','research diagrams and portrait','research preserves input'],pageErrors:errors},null,2));await browser.close();console.log('PASS: browser flows, export, unit/provenance regressions, 5 viewports, 2 guides, bilingual research with portrait and preserved inputs; '+base);
+assert.deepEqual(errors,[]);await writeFile('test-results/browser-summary.json',JSON.stringify({base,checkedAt:new Date().toISOString(),viewports:[1440,1280,768,390,375],checks:['about tab TH/EN with ledger-driven illustrations','carbon map national figures','manifest-derived KPI and source labels','answers-first calculation trace','manifest-travel metric options','province selection matches ledger','drawn box','overlays','ledger export','example arithmetic','JSON export and provenance','language state','loss','unknown fire','unit switch','plot import','factor edit','boundary replacement','malformed geometry','reset','mobile navigation','guide diagrams','research navigation and language','research diagrams and portrait','research preserves input'],pageErrors:errors},null,2));await browser.close();console.log('PASS: browser flows, export, unit/provenance regressions, 5 viewports, 2 guides, bilingual research with portrait and preserved inputs; '+base);
