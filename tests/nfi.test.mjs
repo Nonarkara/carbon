@@ -21,6 +21,10 @@ test('the bound: an unbiased map would need implausibly dense extra tree cover',
   // densest forest type. If new data break this, the research text must change.
   assert.ok(x.implied_agb_t_ha_of_extra_tree_cover_if_map_unbiased_on_nfi_forest>AGB.evergreen);
   assert.ok(Object.values(x.map_over_nfi_on_nfi_forest_if_extra_holds).every(r=>r>1));
+  // Still true after correcting the inventory for its own allometric underestimate (FREL Table 10)
+  const a=x.allometry_corrected;assert.ok(a.implied_agb_t_ha_of_extra_tree_cover>a.evergreen_agb_t_ha);
+  assert.ok(Object.values(a.map_over_nfi_on_nfi_forest_if_extra_holds).every(r=>r>1));
+  close(a.evergreen_agb_t_ha,136.327/(1-.136),1e-3);
 });
 test('rejected stratification stays rejected and unused',()=>{
   const g=c.cgls_forest_type_check;assert.equal(g.used,false);assert.ok(g.evergreen_share>.9&&g.frel_evergreen_share<.4);

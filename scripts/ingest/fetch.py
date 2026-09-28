@@ -42,7 +42,7 @@ def targets():
     t['cgls/PROBAV_LC100_global_v3.0.1_2017-conso_Forest-Type-layer_EPSG-4326.tif'] = ('https://zenodo.org/records/3518036/files/'
         'PROBAV_LC100_global_v3.0.1_2017-conso_Forest-Type-layer_EPSG-4326.tif?download=1')
     # ESA's own aggregated AGB maps (all years in one file); used to calibrate the error-correlation model.
-    for res in ('10000', '25000'):
+    for res in ('10000', '25000', '50000'):
         name = f'ESACCI-BIOMASS-L4-AGB-MERGED-{res}m-fv7.0.nc'
         t[f'cci_agg/{name}'] = 'https://dap.ceda.ac.uk/neodc/esacci/biomass/data/agb/maps/v7.0/netcdf/' + name
     for lon in range(97, 106):

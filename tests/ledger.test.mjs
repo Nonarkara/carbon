@@ -133,3 +133,14 @@ test('block model is calibrated against ESA aggregates and errs on the wide side
   const c=manifest.uncertainty.calibration.results;
   for(const k of ['0.1deg','0.25deg']){assert.ok(c[k].cells>100,k);assert.ok(c[k].model_over_esa_median>=1&&c[k].model_over_esa_median<2,k);}
 });
+test('partial cells: province polygons through the browser path reproduce the pipeline province records',()=>{
+  const geo=JSON.parse(readFileSync(dir+'provinces.geojson','utf8'));
+  const stock=[],sd=[];
+  for(const f of geo.features){
+    const p=provinces.find(x=>x.pcode===f.properties.pcode),{totals}=sumSelection(grid,{polygons:polygonsOf(f)});
+    stock.push(totals.forest_agb_mg/p.forest_agb_mg);sd.push(Math.sqrt(totals.forest_blockvar_mg2/p.forest_blockvar_mg2));
+  }
+  const med=a=>[...a].sort((x,y)=>x-y)[a.length>>1];
+  // 4×4 sub-samples on 2.8 km cells over simplified outlines: an approximation, bounded here.
+  for(const a of [stock,sd]){assert.ok(Math.min(...a)>.85&&Math.max(...a)<1.1,String([Math.min(...a),Math.max(...a)]));assert.ok(Math.abs(med(a)-1)<.02);}
+});

@@ -241,7 +241,7 @@ def fnf_classes(fnf):
     img.putpalette(pal + [0] * (768 - len(pal)))
     img.save(OUT / 'overlay-fnf.png', optimize=True, transparency=0)
 
-def calibrate_blocks(sd_area, area, valid, gidx):
+def calibrate_blocks(sd_area, agb_area, area, valid, gidx):
     """Check the block-correlation error model against ESA's own aggregated standard errors.
 
     ESA CCI aggregates pixel SD with a variance and a covariance term, the correlation of errors estimated from
@@ -252,14 +252,16 @@ def calibrate_blocks(sd_area, area, valid, gidx):
     out = {}
     cell_sd = np.bincount(gidx.ravel(), weights=sd_area.ravel(), minlength=COLS * ROWS).reshape(ROWS, COLS)
     cell_a = np.bincount(gidx.ravel(), weights=area.ravel(), minlength=COLS * ROWS).reshape(ROWS, COLS)
+    cell_agb = np.bincount(gidx.ravel(), weights=agb_area.ravel(), minlength=COLS * ROWS).reshape(ROWS, COLS)
     cell_v = np.bincount(gidx.ravel(), weights=valid.ravel().astype(np.float64), minlength=COLS * ROWS).reshape(ROWS, COLS)
     cell_n = np.bincount(gidx.ravel(), minlength=COLS * ROWS).reshape(ROWS, COLS)
-    for res, fn in ((0.1, '10000'), (0.25, '25000')):
+    for res, fn in ((0.1, '10000'), (0.25, '25000'), (0.5, '50000')):
         with h5py.File(RAW / f'cci_agg/ESACCI-BIOMASS-L4-AGB-MERGED-{fn}m-fv7.0.nc') as f:
             years = [(datetime.date(1990, 1, 1) + datetime.timedelta(days=float(t))).year for t in f['time'][:]]
             lat, lon, pub = f['lat'][:], f['lon'][:], f['agb_sd'][years.index(2020)].astype(np.float64)
+            pub_mean = f['agb'][years.index(2020)].astype(np.float64)
         k = round(res / STEP)
-        ratios = []
+        ratios, mean_ratios = [], []
         for r0 in range(round((NORTH - (math.floor(NORTH / res) * res)) / STEP), ROWS - k + 1, k):
             for c0 in range(round((math.ceil(WEST / res) * res - WEST) / STEP), COLS - k + 1, k):
                 if cell_v[r0:r0 + k, c0:c0 + k].sum() < 0.99 * cell_n[r0:r0 + k, c0:c0 + k].sum():
@@ -272,9 +274,12 @@ def calibrate_blocks(sd_area, area, valid, gidx):
                 blocks = sub.reshape(k // BLOCK, BLOCK, k // BLOCK, BLOCK).sum(axis=(1, 3))
                 model = math.sqrt((blocks ** 2).sum()) / cell_a[r0:r0 + k, c0:c0 + k].sum()
                 ratios.append(model / pub[i, j])
+                mean_ratios.append(pub_mean[i, j] / (cell_agb[r0:r0 + k, c0:c0 + k].sum() / cell_a[r0:r0 + k, c0:c0 + k].sum()))
         r = np.array(ratios)
         out[f'{res}deg'] = {'cells': int(r.size), 'model_over_esa_median': round(float(np.median(r)), 3),
-                            'model_over_esa_p25': round(float(np.percentile(r, 25)), 3), 'model_over_esa_p75': round(float(np.percentile(r, 75)), 3)}
+                            'model_over_esa_p25': round(float(np.percentile(r, 25)), 3), 'model_over_esa_p75': round(float(np.percentile(r, 75)), 3),
+                            # ESA's aggregate mean ÷ mean recomputed from the 100 m tiles; not 1 because the aggregates come from another processing run
+                            'esa_mean_over_recomputed_median': round(float(np.median(mean_ratios)), 3)}
     return out
 
 def main():
@@ -304,7 +309,7 @@ def main():
         'forest_var_mg2': (sd_ha * area * forest_frac) ** 2,
     }
     density = np.where(thai, agb_ha * forest_frac * AGB_TO_CO2E, np.nan)
-    sd_all, agb_valid = sd_ha * area, agb_ha > 0   # all land, for calibrate_blocks (ESA aggregates are per pixel area)
+    sd_all, agb_all, agb_valid = sd_ha * area, agb_ha * area, agb_ha > 0   # all land, for calibrate_blocks (ESA aggregates are per pixel area)
     del sd_ha
     land_w = area * land_frac
     log('ODIAC')
@@ -316,8 +321,8 @@ def main():
     odiac_centre_thai = float(odiac_raw[ctr].sum())
     thai_pid, thai_g = pid[thai], gidx[thai]
     log('error-correlation calibration against ESA aggregates')
-    calibration = calibrate_blocks(sd_all, area, agb_valid, gidx)
-    del sd_all, agb_valid
+    calibration = calibrate_blocks(sd_all, agb_all, area, agb_valid, gidx)
+    del sd_all, agb_all, agb_valid
     log(calibration)
     prov, grid, nat = {}, {}, {}
     for k, v in fields.items():
@@ -445,9 +450,9 @@ def main():
             'bounds': {'independent': 'pixel errors independent (floor)', 'block': f'errors fully correlated within {BLOCK}x{BLOCK} grid cells ({BLOCK * STEP:g}°), independent between blocks (central)',
                        'correlated': 'all pixel errors fully correlated (ceiling)'},
             'block_deg': BLOCK * STEP,
-            'calibration': {'method': "Block model vs ESA CCI v7.0 published 2020 aggregate AGB SD (variance + LiDAR-estimated covariance, PUG v6 §5) over fully valid cells in the processing window",
+            'calibration': {'method': "Block model vs ESA CCI v7.0 published 2020 aggregate AGB SD (variance + LiDAR-estimated covariance, PUG v6 §5) over fully valid cells in the processing window. Calibration uses all-land pixel SD (ESA aggregates are per pixel area); province and box ranges use forest-weighted SD with the same block assumption.",
                             'results': calibration,
-                            'note': 'Ratio > 1 means the block model is wider (more conservative) than ESA. A 4.5 km block reproduces ESA best but does not align with the 0.025° grid.'},
+                            'note': 'Ratio > 1 means the block model is wider than ESA. ESA aggregates were produced by a different processing run (BIOMASAR v202509) from the 100 m tiles (v202510), so this is consistency, not exact reproduction. Scales above 50 km (provinces, nation) are extrapolated: errors are assumed independent beyond one block, and correlated retrieval or allometric bias is not covered.'},
             'excludes': 'systematic map bias; root:shoot and carbon-fraction choice',
         },
         'grid': grid_meta, 'overlayBounds': bounds,

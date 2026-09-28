@@ -2,7 +2,13 @@
  "nfi": {
   "source": "Thailand FREL/FRL submission to the UNFCCC (modified July 2021): Table 13 (NFI cycle 3), Tables 6–7 (2016 area)",
   "url": "https://redd.unfccc.int/media/modified_thailand_rl_july2021.pdf",
-  "median_year": 2017,
+  "reference_year": 2017,
+  "plot_years": "2013–2018",
+  "allometric_bias_pct": {
+   "evergreen": -13.6,
+   "deciduous": -25.2,
+   "mangrove": 0.0
+  },
   "national": {
    "carbon_stock_tco2e": 3475167169.8,
    "carbon_stock_ci95_tco2e": 252095794.5,
@@ -11,7 +17,7 @@
    "agb_total_t": 1559427979.0,
    "agb_total_ci95_t": 110868811.5,
    "agb_mean_t_ha": 90.5,
-   "agb_mean_ci95_t_ha": 7.5,
+   "agb_mean_ci95_t_ha": 5.0,
    "by_type": {
     "evergreen": {
      "area_ha": 5901616,
@@ -26,6 +32,16 @@
      "agb_t_ha": 120.779
     }
    }
+  },
+  "national_allometry_corrected": {
+   "carbon_stock_tco2e": 4279783329.1,
+   "carbon_stock_ci95_tco2e": 303941760.5,
+   "forest_area_ha": 17228723.0,
+   "forest_area_ci95_ha": 733610.8,
+   "agb_total_t": 1930567296.5,
+   "agb_total_ci95_t": 134834970.4,
+   "agb_mean_t_ha": 112.1,
+   "agb_mean_ci95_t_ha": 6.0
   }
  },
  "map": {
@@ -47,7 +63,18 @@
    "100": 2.1,
    "136": 1.95,
    "200": 1.67
-  }
+  },
+  "allometry_corrected": {
+   "implied_agb_t_ha_of_extra_tree_cover": 303.0,
+   "evergreen_agb_t_ha": 157.8,
+   "map_over_nfi_on_nfi_forest_if_extra_holds": {
+    "0": 2.04,
+    "100": 1.7,
+    "136": 1.57,
+    "200": 1.35
+   }
+  },
+  "assumes": "Inventory forest is fully inside FNF forest. Radar misses some sparse dry dipterocarp; inventory forest outside FNF would lower these ratios."
  },
  "cgls_forest_type_check": {
   "layer": "Copernicus Global Land Service LC100 v3.0.1, 2017, forest-type layer (CC BY 4.0)",
@@ -60,7 +87,9 @@
  },
  "caveats": [
   "Different forest definitions: NFI forest excludes plantations other than teak; FNF counts any tree canopy ≥10% over ≥0.5 ha.",
-  "Different years: NFI cycle 3 plots span 2012–2018 (median 2017); the map is 2017 and the FREL areas are 2016.",
+  "Different years: NFI cycle 3 plots span 2013–2018 (reference year 2017); the map is 2017 and the FREL areas are 2016.",
+  "Inventory AGB counts trees in the 0.1 ha plot; the FREL notes its Thai equations underestimate tree biomass (Table 10, 60 trees), shown here as a sensitivity.",
+  "Carbon stock here is biomass only (above- and below-ground), without dead wood, litter or soil.",
   "The NFI totals propagate the published half 95% CIs as independent terms; map uncertainty is the ledger block model (random error only).",
   "National scale only. Not a correction for any province, box or parcel."
  ]

@@ -1,7 +1,7 @@
 {
  "schemaVersion": 1,
  "pipeline": "scripts/ingest/build_ledger.py",
- "pipelineSha256": "961fa52f723c536ba3b7d82b3f57646bc16434be211c08b517e6cdb9e90b66cf",
+ "pipelineSha256": "7ced5437a62fd7145bc065068c0288fd08a94b0be4ea1749537abbd166976c0a",
  "conservation": {
   "rule": "each CCI 100 m pixel centre → ≤1 province and 1 grid cell; sum(provinces) == national == sum(grid) for every layer",
   "area_km2": 515415.5,
@@ -20,22 +20,31 @@
   },
   "block_deg": 0.05,
   "calibration": {
-   "method": "Block model vs ESA CCI v7.0 published 2020 aggregate AGB SD (variance + LiDAR-estimated covariance, PUG v6 §5) over fully valid cells in the processing window",
+   "method": "Block model vs ESA CCI v7.0 published 2020 aggregate AGB SD (variance + LiDAR-estimated covariance, PUG v6 §5) over fully valid cells in the processing window. Calibration uses all-land pixel SD (ESA aggregates are per pixel area); province and box ranges use forest-weighted SD with the same block assumption.",
    "results": {
     "0.1deg": {
      "cells": 2068,
      "model_over_esa_median": 1.467,
      "model_over_esa_p25": 1.338,
-     "model_over_esa_p75": 1.613
+     "model_over_esa_p75": 1.613,
+     "esa_mean_over_recomputed_median": 0.955
     },
     "0.25deg": {
      "cells": 197,
      "model_over_esa_median": 1.233,
      "model_over_esa_p25": 1.136,
-     "model_over_esa_p75": 1.461
+     "model_over_esa_p75": 1.461,
+     "esa_mean_over_recomputed_median": 0.897
+    },
+    "0.5deg": {
+     "cells": 18,
+     "model_over_esa_median": 1.316,
+     "model_over_esa_p25": 1.116,
+     "model_over_esa_p75": 1.529,
+     "esa_mean_over_recomputed_median": 0.842
     }
    },
-   "note": "Ratio > 1 means the block model is wider (more conservative) than ESA. A 4.5 km block reproduces ESA best but does not align with the 0.025° grid."
+   "note": "Ratio > 1 means the block model is wider than ESA. ESA aggregates were produced by a different processing run (BIOMASAR v202509) from the 100 m tiles (v202510), so this is consistency, not exact reproduction. Scales above 50 km (provinces, nation) are extrapolated: errors are assumed independent beyond one block, and correlated retrieval or allometric bias is not covered."
   },
   "excludes": "systematic map bias; root:shoot and carbon-fraction choice"
  },

@@ -31,7 +31,9 @@ import build_ledger as b
 FREL = {
     'source': 'Thailand FREL/FRL submission to the UNFCCC (modified July 2021): Table 13 (NFI cycle 3), Tables 6–7 (2016 area)',
     'url': 'https://redd.unfccc.int/media/modified_thailand_rl_july2021.pdf',
-    'median_year': 2017,
+    'reference_year': 2017, 'plot_years': '2013–2018',
+    # Table 10: bias of the Thai allometric equations against 60 felled trees (3 national parks); negative = underestimate
+    'allometric_bias_pct': {'evergreen': -13.6, 'deciduous': -25.2, 'mangrove': 0.0},
     # mean AGB (t/ha) and half 95% CI (%) — Table 13, cycle 3
     'agb': {'evergreen': (136.327, 8), 'deciduous': (65.465, 7), 'mangrove': (120.779, 18)},
     # 2016 area (ha): stable from 2006 + gain from non-forest, with half 95% CI (%) — Tables 6 and 7
@@ -41,10 +43,14 @@ FREL = {
 }
 CGLS = b.RAW / 'cgls/PROBAV_LC100_global_v3.0.1_2017-conso_Forest-Type-layer_EPSG-4326.tif'
 
-def nfi_national():
-    """Area-weighted NFI mean and total, with first-order error propagation (independent terms)."""
+def nfi_national(correct_allometry=False):
+    """Area-weighted NFI mean and total. Delta-method errors: the mean's CI accounts for the total being built from the areas.
+    correct_allometry divides each type's mean by (1 + bias) from FREL Table 10 (a 60-tree study: a sensitivity, not a correction)."""
     total, var, area, avar, per = 0.0, 0.0, 0.0, 0.0, {}
+    items = []
     for t, (m, cm) in FREL['agb'].items():
+        if correct_allometry:
+            m = m / (1 + FREL['allometric_bias_pct'][t] / 100)
         a_t = sum(a for a, _ in FREL['area'][t])
         va_t = sum((a * c / 100 / 1.96) ** 2 for a, c in FREL['area'][t])
         sm = m * cm / 100 / 1.96
@@ -53,12 +59,15 @@ def nfi_national():
         area += a_t
         avar += va_t
         per[t] = {'area_ha': a_t, 'agb_t_ha': m}
+        items.append((a_t, va_t, m, sm))
     se_total, se_area = math.sqrt(var), math.sqrt(avar)
     mean = total / area
-    se_mean = mean * math.sqrt((se_total / total) ** 2 + (se_area / area) ** 2)
-    stock = sum(sum(a for a, _ in FREL['area'][t]) * FREL['stock_tco2_ha'][t] for t in FREL['agb'])
-    stock_var = sum((sum(a for a, _ in FREL['area'][t]) * FREL['stock_tco2_ha'][t] * FREL['agb'][t][1] / 100 / 1.96) ** 2
-                    + sum((a * c / 100 / 1.96) ** 2 for a, c in FREL['area'][t]) * FREL['stock_tco2_ha'][t] ** 2 for t in FREL['agb'])
+    # d(mean)/d(m_t) = a_t / A ; d(mean)/d(a_t) = (m_t - mean) / A
+    se_mean = math.sqrt(sum((a / area * sm) ** 2 + ((m - mean) / area) ** 2 * va for a, va, m, sm in items))
+    sh = lambda t: FREL['stock_tco2_ha'][t] / ((1 + FREL['allometric_bias_pct'][t] / 100) if correct_allometry else 1)
+    stock = sum(sum(a for a, _ in FREL['area'][t]) * sh(t) for t in FREL['agb'])
+    stock_var = sum((sum(a for a, _ in FREL['area'][t]) * sh(t) * FREL['agb'][t][1] / 100 / 1.96) ** 2
+                    + sum((a * c / 100 / 1.96) ** 2 for a, c in FREL['area'][t]) * sh(t) ** 2 for t in FREL['agb'])
     return {'carbon_stock_tco2e': stock, 'carbon_stock_ci95_tco2e': 1.96 * math.sqrt(stock_var), 'forest_area_ha': area, 'forest_area_ci95_ha': 1.96 * se_area, 'agb_total_t': total, 'agb_total_ci95_t': 1.96 * se_total,
             'agb_mean_t_ha': mean, 'agb_mean_ci95_t_ha': 1.96 * se_mean, 'by_type': per}
 
@@ -108,10 +117,13 @@ def main():
     blocks = np.bincount(blk[thai], weights=sd[thai] * w)
     se_t = math.sqrt(float((blocks ** 2).sum()))
     nfi = nfi_national()
+    nfi_adj = nfi_national(correct_allometry=True)
     remainder_area = fa - nfi['forest_area_ha']
     implied = (ft - nfi['agb_total_t']) / remainder_area
+    implied_adj = (ft - nfi_adj['agb_total_t']) / remainder_area
     out = {
-        'nfi': {k: FREL[k] for k in ('source', 'url', 'median_year')} | {'national': {k: (round(v, 1) if isinstance(v, float) else v) for k, v in nfi.items()}},
+        'nfi': {k: FREL[k] for k in ('source', 'url', 'reference_year', 'plot_years', 'allometric_bias_pct')} | {'national': {k: (round(v, 1) if isinstance(v, float) else v) for k, v in nfi.items()},
+                'national_allometry_corrected': {k: (round(v, 1) if isinstance(v, float) else v) for k, v in nfi_adj.items() if k != 'by_type'}},
         'map': {'agb': 'ESA CCI Biomass v7.0, 2017, 100 m', 'forest': 'JAXA ALOS-2 PALSAR-2 FNF v2.1.0, 2017, forest fraction (classes 1–2)',
                 'forest_area_ha': round(fa, 1), 'agb_total_t': round(ft, 1), 'agb_total_ci95_t_block_model': round(1.96 * se_t, 1),
                 'agb_mean_t_ha': round(ft / fa, 2)},
@@ -123,11 +135,18 @@ def main():
             'reading': 'If the map were unbiased on NFI forest, the extra FNF tree cover would have to average the implied density above.',
             # map mean on NFI forest ÷ NFI mean, for assumed densities of the extra tree cover
             'map_over_nfi_on_nfi_forest_if_extra_holds': {str(d): round((ft - remainder_area * d) / nfi['forest_area_ha'] / nfi['agb_mean_t_ha'], 2) for d in (0, 100, 136, 200)},
+            # same, after correcting the inventory for the allometric underestimate in FREL Table 10
+            'allometry_corrected': {'implied_agb_t_ha_of_extra_tree_cover': round(implied_adj, 1),
+                                    'evergreen_agb_t_ha': round(nfi_adj['by_type']['evergreen']['agb_t_ha'], 1),
+                                    'map_over_nfi_on_nfi_forest_if_extra_holds': {str(d): round((ft - remainder_area * d) / nfi_adj['agb_total_t'], 2) for d in (0, 100, 136, 200)}},
+            'assumes': 'Inventory forest is fully inside FNF forest. Radar misses some sparse dry dipterocarp; inventory forest outside FNF would lower these ratios.',
         },
         'cgls_forest_type_check': cgls_sanity(thai, area),
         'caveats': [
             'Different forest definitions: NFI forest excludes plantations other than teak; FNF counts any tree canopy ≥10% over ≥0.5 ha.',
-            'Different years: NFI cycle 3 plots span 2012–2018 (median 2017); the map is 2017 and the FREL areas are 2016.',
+            'Different years: NFI cycle 3 plots span 2013–2018 (reference year 2017); the map is 2017 and the FREL areas are 2016.',
+            'Inventory AGB counts trees in the 0.1 ha plot; the FREL notes its Thai equations underestimate tree biomass (Table 10, 60 trees), shown here as a sensitivity.',
+            'Carbon stock here is biomass only (above- and below-ground), without dead wood, litter or soil.',
             'The NFI totals propagate the published half 95% CIs as independent terms; map uncertainty is the ledger block model (random error only).',
             'National scale only. Not a correction for any province, box or parcel.',
         ],
