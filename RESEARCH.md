@@ -94,6 +94,19 @@ Implemented as the app's default carbon map. Full method, checks and limits: `do
 - BTR1 2022 (Table 2-184): forest land remaining forest −29.3 Mt net; cropland remaining cropland −91.5 Mt; LULUCF −107.9 Mt. JAXA offers no carbon stock product; aerosol and XCO₂ are concentrations, not emissions.
 - Rule: every pixel counted once; provinces, grid and nation reconcile exactly (tested). No figure is a credit or a T-VER input.
 
+## TGO T-VER registry integration & institutional findings — added 28–29 September 2026
+
+Full method, checks and limits: `docs/RESEARCH.en.md` / `.th.md` section 11. Summary:
+
+- **Pipeline**: `scripts/ingest/tgo.py` fetches the public T-VER project list, individual detail pages for all Forestry & Agriculture (FOR&AGR) projects, and OTC annual market trade data without login or credentials. Raw responses are cached in `research/raw/tgo/` with SHA-256 digests. Generates `public/data/tgo/tver-forestry.json` (~390 KB).
+- **Snapshot (28 Sep 2026)**: 257 registered FOR&AGR projects; 2,194,333 tCO₂e/yr aggregate ex-ante expectation; 31 projects ever certified (733,914 tCO₂e total issued); 75 community forest projects; 34 coastal mangrove projects (DMCR partnership).
+- **Conservation & Integrity**: Single-province projects + multi-province projects + unlocated projects strictly sum to national totals (asserted by pipeline and `tests/tgo.test.mjs`). Province attribution is automatic only when following explicit address markers `จ.`/`จังหวัด`; 12 edge cases reviewed and documented in `scripts/ingest/tgo_province_overrides.json`; 6 projects honestly recorded as unlocated.
+- **The 12.1% Issuance Cliff**: Over 87% of registered forestry projects have never reached verification. The root cause is the mismatch between VVB audit fees (฿150,000–฿300,000 per monitoring audit) and domestic OTC carbon credit prices (฿280–฿400/tCO₂e). For a 150-rai community forest yielding ~200 tCO₂e/yr (~฿60,000/yr gross), audit costs consume 3–5 years of gross proceeds, stranding projects without continuous external subsidy. Digital MRV with satellite stratification is essential to cut field audit hours by 40%–60%.
+- **Standard vs. Premium Architecture**: 247 projects follow Standard T-VER (T-VER-S, 7-year renewable, domestic CSR), while 10 projects have registered under Premium T-VER (T-VER-P, 15–30 year permanence, mandatory 10%–20% non-permanence risk buffer account, Article 6.2/6.4 alignment).
+- **Spatial Opacity & Double-Counting Screening**: TGO publishes text addresses rather than geospatial shapefiles or GPS coordinates. Our boundary import tool tests polygons against official COD-AB provincial boundaries, listing existing projects and crediting terms to alert operators of double-counting risks before submission.
+- **Statutory Horizon**: Thailand's Draft Climate Change Act (promoted by DCCE) will introduce mandatory reporting, an Emissions Trading Scheme (ETS), and a Carbon Tax, elevating T-VER to the statutory National Carbon Registry and driving compliance demand.
+- **Discipline**: Registry data is purely contextual. It sits below the landscape ledger, is never added to satellite biomass/flux figures, and never claims automated credit issuance.
+
 ## What to discuss with Khun Aphisit
 
 Suggested framing: “ระบบช่วยประเมินและติดตามคาร์บอนภาคป่าไม้ โดยเชื่อมข้อมูลดาวเทียมกับข้อมูลสำรวจภาคสนาม แสดงที่มาและความไม่แน่นอนของผลประเมิน และจัดเตรียมหลักฐานสำหรับการทวนสอบตาม T-VER”

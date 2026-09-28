@@ -234,9 +234,12 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
 
   // ---- export ----
   function payload(){
+    const pcode=S.src?.pcode;const td=registry.data();
+    const tverInfo=pcode&&td?.provinces?.[pcode]?{scope:'province',pcode,projects:td.provinces[pcode].projects,expected_tco2e_yr:td.provinces[pcode].expected_tco2e_yr,issued_tco2e:td.provinces[pcode].issued_tco2e,multi_province_projects:td.provinces[pcode].multi_province_projects,snapshotDate:td.snapshot}:(S.sel.kind==='national'&&td?{scope:'national',projects:td.national.projects,expected_tco2e_yr:td.national.expected_tco2e_yr,issued_tco2e:td.national.issued_tco2e,projects_with_issuance:td.national.projects_with_issuance,snapshotDate:td.snapshot}:null);
     return {schemaVersion:1,exportedAt:new Date().toISOString(),language:getLang(),kind:'landscape-screening-estimate',notCredits:true,
       selection:S.sel.kind==='box'?{kind:'box',bbox:S.sel.box}:S.sel.kind==='boundary'?{kind:'project-boundary',geojson:S.sel.geojson}:{kind:S.sel.kind,pcode:S.src.pcode,name_en:S.src.name_en,name_th:S.src.name_th},
       rows:S.rows,crossChecks:{climatetrace_2024:S.src.climatetrace_2024||null,btr1_2022:S.src.btr1_2022||null},
+      tverRegistry:tverInfo,
       conversion:S.manifest.conversion,conservation:S.manifest.conservation,datasets:S.manifest.datasets};
   }
   $('#ledgerJSON').onclick=()=>S.src&&download('carbon-ledger.json',JSON.stringify(payload(),null,2),'application/json');

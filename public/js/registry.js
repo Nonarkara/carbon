@@ -18,8 +18,10 @@ export function initRegistry({t,fmt,getLang}){
 
   function projectRow(p){
     const multi=p.provinces.length>1?` · ${esc(t('tverMulti').replace('{n}',p.provinces.length))}`:'';
-    const iss=p.issuances.length?p.issuances.map(i=>`${n0(i.tco2e)} (${esc(date(i.certified))})`).join(', '):esc(t('tverNoIssue'));
-    return `<li class="tver-item"><a href="${esc(p.url)}" target="_blank" rel="noopener"><b>${esc(t('tverReg'))} ${esc(p.reg)}</b> ${esc(name(p))} ↗</a>
+    const hasIss=p.issuances.length>0;
+    const iss=hasIss?p.issuances.map(i=>`${n0(i.tco2e)} (${esc(date(i.certified))})`).join(', '):esc(t('tverNoIssue'));
+    const badge=hasIss?`<span class="tver-badge-issued">✓ ${esc(t('tverIssuedBadge'))}: ${n0(p.issued_tco2e)} tCO₂e</span>`:'';
+    return `<li class="tver-item ${hasIss?'with-issuance':''}"><div class="tver-item-head"><a href="${esc(p.url)}" target="_blank" rel="noopener"><b>${esc(t('tverReg'))} ${esc(p.reg)}</b> ${esc(name(p))} ↗</a>${badge}</div>
 <small>${esc(p.developer)} · ${esc(family(p))} · ${esc(p.methodology||t('fam_unknown'))} · ${esc(th()?p.status:(p.status_en||p.status))}${multi}</small>
 <dl><dt>${esc(t('tverExpected'))}</dt><dd>${n0(p.expected_tco2e_yr)} tCO₂e/${esc(t('yr'))}</dd><dt>${esc(t('tverIssued'))}</dt><dd>${iss}</dd><dt>${esc(t('tverCrediting'))}</dt><dd>${esc(date(p.credit_start))} → ${esc(date(p.credit_end))}</dd></dl>${p.province_basis==='reviewed'?`<p class="hint">${esc(t('tverReviewed'))}</p>`:''}</li>`;
   }
@@ -59,8 +61,12 @@ ${nat?`<p class="hint">${esc(t('tverNationNote').replace('{m}',D.multi.projects)
     if(!provs.length)return `<div class="notice"><p>${esc(t('tverOverlapNone'))}</p></div>`;
     const list=[...new Map(provs.flatMap(p=>projectsIn(p.pcode)).map(p=>[p.key,p])).values()];
     const names=provs.map(p=>th()?p.name_th:p.name_en).join(', ');
-    return `<div class="tver-check"><h3>${esc(t('tverCheckTitle'))}</h3><p>${esc(t('tverCheckText').replace('{p}',names).replace('{n}',list.length))}</p>${source()}${list.length?listHTML(list,4):''}<p class="hint">${esc(t('tverCheckLimit'))}</p></div>`;
+    const totExp=list.reduce((a,p)=>a+(p.expected_tco2e_yr||0),0);
+    const totIss=list.reduce((a,p)=>a+(p.issued_tco2e||0),0);
+    const withIssCount=list.filter(p=>p.issued_tco2e>0).length;
+    const stats=list.length?`<p class="tver-overlap-stats">${esc(t('tverOverlapStats').replace('{p}',names).replace('{exp}',n0(totExp)).replace('{iss}',n0(totIss)).replace('{issN}',n0(withIssCount)))}</p>`:'';
+    return `<div class="tver-check"><h3>${esc(t('tverCheckTitle'))}</h3><p>${esc(t('tverCheckText').replace('{p}',names).replace('{n}',list.length))}</p>${stats}${source()}${list.length?listHTML(list,4):''}<p class="hint tver-rule">${esc(t('tverRuleNotice'))}</p><p class="hint">${esc(t('tverCheckLimit'))}</p></div>`;
   }
   const byProvince=pc=>D?D.provinces[pc]:null;
-  return {ready,section,overlapHTML,byProvince,data:()=>D};
+  return {ready,section,overlapHTML,byProvince,data:()=>D,provincesOf};
 }

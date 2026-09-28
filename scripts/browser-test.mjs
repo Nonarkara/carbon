@@ -104,7 +104,7 @@ for(const width of [1280,768,375]){
   await research.waitForLoadState();
   assert.equal(await research.locator('html').getAttribute('lang'),lang);
   assert.equal(await research.locator('.research-diagram').count(),7);
-  assert.equal(await research.locator('.research-toc a').count(),11);
+  assert.equal(await research.locator('.research-toc a').count(),12);
   assert.equal(await research.locator('.sysmap').count(),1);
   await research.locator('.research-toc a[href="#section-9"]').click();
   const portrait=research.locator('.author-profile img');await portrait.scrollIntoViewIfNeeded();

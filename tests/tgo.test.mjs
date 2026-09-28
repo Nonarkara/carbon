@@ -91,3 +91,28 @@ test('TGO source is cited in both research notebooks (T-VER section)',()=>{
     assert.ok(/tver\.tgo\.or\.th|T-VER|ทะเบียน T-VER/i.test(doc),`TGO registry not cited in ${lang} notebook`);
   }
 });
+
+test('portfolio program breakdown: Standard vs Premium T-VER projects are recognized',()=>{
+  const std=d.projects.filter(p=>p.program==='standard');
+  const prem=d.projects.filter(p=>p.program==='premium');
+  assert.equal(std.length+prem.length,d.projects.length);
+  assert.ok(prem.length>=10,'Premium T-VER has at least 10 projects');
+  assert.ok(std.length>=240,'Standard T-VER forms the majority of historical registrations');
+});
+
+test('all project methodology families map to valid known family keys',()=>{
+  const validFamilies=new Set(['ar','redd','ar_large','plantation','mangrove','ifm','agri_land','perennial','peat']);
+  for(const p of d.projects){
+    for(const f of p.families){
+      assert.ok(validFamilies.has(f),`invalid family ${f} in project ${p.key}`);
+    }
+  }
+});
+
+test('issuance rate matches the documented 12% issuance cliff (31 of 257)',()=>{
+  const issuedProjects=d.projects.filter(p=>p.issued_tco2e>0);
+  assert.equal(issuedProjects.length,31);
+  assert.equal(d.projects.length,257);
+  const rate=issuedProjects.length/d.projects.length;
+  assert.ok(rate>0.11&&rate<0.13,'issuance rate is approximately 12.1%');
+});

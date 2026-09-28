@@ -28,13 +28,18 @@ body{display:grid;padding-bottom:0}
 /* TGO T-VER registry: ledger block, project list, market table, boundary overlap check. Square edges, no shadows. */
 .tver-summary dl.cross{margin-top:6px}.tver-summary .lmeta a{text-decoration:underline}
 .tver-list{list-style:none;counter-reset:t;padding:0;margin:8px 0 0;border-top:1px solid var(--rule)}.tver-list li.tver-item{counter-increment:t;padding:10px 0;border-bottom:1px solid var(--rule);font-size:12px;line-height:1.65}.tver-list li.tver-item::before{content:counter(t,decimal-leading-zero);font:600 11px var(--num);color:var(--accent);margin-right:8px}
-.tver-item a{font-size:13px;font-weight:600;text-decoration:underline;display:inline-block;margin-bottom:2px}
+.tver-item.with-issuance{border-left:3px solid var(--accent);padding-left:8px}
+.tver-item-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:2px}
+.tver-badge-issued{padding:1px 6px;background:#fff8d6;border:1px solid var(--accent);color:var(--ink);font:600 10px/1.4 var(--num);text-transform:uppercase;letter-spacing:.3px;display:inline-block}
+.tver-item a{font-size:13px;font-weight:600;text-decoration:underline;display:inline-block}
 .tver-item small{display:block;color:var(--ink-mid);margin:0 0 6px}.tver-item dl{display:grid;grid-template-columns:minmax(0,11em) 1fr;gap:2px 10px;font-size:11px;margin:4px 0 0}.tver-item dt{color:var(--ink-mid)}.tver-item dd{margin:0;font-family:var(--num)}
 .tver-item p.hint{font-size:11px;color:var(--ink-low);margin:6px 0 0}
 .tver-more{margin-top:6px;font-size:11px}.tver-more summary{cursor:pointer;padding:6px 0;border-top:1px solid var(--rule);color:var(--ink-mid)}
 .tver-market{width:100%;font-size:11px;border-collapse:collapse;margin-top:6px}.tver-market th,.tver-market td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--rule)}.tver-market th{font-weight:600;color:var(--ink-mid);text-align:right}.tver-market th:first-child,.tver-market td:first-child{text-align:left;font-family:var(--num)}.tver-market td:first-child b{font-family:var(--num);color:var(--accent);margin-left:4px}
 .tver-check{border-top:5px solid var(--brand);padding:14px 0;margin-top:16px}.tver-check h3{font:600 14px/1.4 var(--display);margin:0 0 6px}.tver-check>p{font-size:12px;line-height:1.7;margin:0 0 8px}html[lang=th] .tver-check h3{font-family:var(--font)}
 .tver-check .notice{padding:8px 12px;background:var(--well-2);border-left:3px solid var(--brand);font-size:12px}
+.tver-overlap-stats{font-size:11px;font-family:var(--num);color:var(--ink-mid);background:var(--well-2);padding:6px 8px;border-left:2px solid var(--accent);margin:6px 0 10px}
+.tver-rule{margin-top:8px;padding:6px 8px;background:var(--well-2);border-left:2px solid var(--brand);font-size:11px;color:var(--ink-mid)}
 .registry-overlap{margin-top:10px;padding-top:8px;border-top:1px solid var(--rule-strong)}
 .season-key{border-bottom:3px solid var(--accent)}
 .bars{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;height:72px;align-items:end;border-bottom:1px solid var(--rule-strong)}
