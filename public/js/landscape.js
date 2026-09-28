@@ -35,7 +35,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       data.provinces.forEach(p=>byCode.set(p.pcode,p));byCode.set('TH',data.national);
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
         onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
-      fillPlaces();select({kind:'national',code:'TH'},false);setOverlay('stock');applyMetricLabels();
+      fillPlaces();select({kind:'national',code:'TH'},false,false);setOverlay('stock');applyMetricLabels();
       return registry.ready;
     });
 
@@ -53,8 +53,9 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     return S.gridPromise;
   }
 
-  async function select(sel,fit=true){
-    const revision=++selectionRevision;onSelect();S.sel=sel;$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;if(S.shape){map.removeLayer(S.shape);S.shape=null;}
+  // user=false for the default selection made when data arrive: it must not pull the reader off another tab.
+  async function select(sel,fit=true,user=true){
+    const revision=++selectionRevision;if(user)onSelect();S.sel=sel;$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;if(S.shape){map.removeLayer(S.shape);S.shape=null;}
     styleProvinces();
     if(sel.kind==='province'||sel.kind==='national'){
       S.src=byCode.get(sel.code);$('#place').value=sel.code;
