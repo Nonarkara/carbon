@@ -28,11 +28,22 @@ assert.ok((await rankSource()).includes(`${mf.datasets.odiac.version} · ${mf.da
 await page.locator('#provinceMetric').selectOption('net');assert.ok((await rankSource()).includes(`GFW · ${mf.datasets.gfw.period}`));
 await page.locator('#provinceMetric').selectOption('stock');assert.ok((await rankSource()).includes(`CCI + JAXA · ${mf.datasets.cci.year}`));
 await page.locator('#provinceMetric').selectOption('fossil');
+// T-VER registry metric option: source label travels from the snapshot; integer counts; top province matches the registry.
+await page.locator('#provinceMetric').selectOption('tver');
+const tver=JSON.parse(await readFile('public/data/tgo/tver-forestry.json','utf8'));
+const topTver=Object.entries(tver.provinces).sort((a,b)=>b[1].projects-a[1].projects)[0];
+assert.ok((await rankSource()).includes('TGO T-VER'),'tver source label');
+const tverCount=Number((await page.locator('.province-row').first().locator('b').textContent()).replace(/[^0-9]/g,''));
+assert.equal(tverCount,topTver[1].projects,'top province project count matches the snapshot');
+await page.locator('#provinceMetric').selectOption('fossil');
 await page.locator('.province-row').first().click();
 const cm=ledger.provinces.find(p=>p.pcode==='TH50');
 await page.locator('#place').selectOption('TH50');await page.waitForFunction(()=>document.querySelector('#carbonVerdict').textContent.startsWith('Chiang Mai'));
 assert.equal(await page.locator('#kStock').innerText(),mt(cm.forest_agb_mg*F));assert.equal(await page.locator('#kEmit').innerText(),mt(cm.gfw_emissions_mg_co2e/25));
 await page.locator('#ledgerDetails').evaluate(e=>e.open=true);assert.match(await page.locator('#ledger').innerText(),/Climate TRACE 2024[\s\S]*Forest fires/);assert.equal(await page.locator('.fire-chart .bar').count(),12);
+// T-VER registry ledger block: appears below the landscape ledger with a side heading, snapshot line, and project list.
+assert.match(await page.locator('#ledger .tver-summary').first().innerText(),/T-VER|ทะเบียน/);assert.ok(await page.locator('#ledger .tver-item').count()>=1);assert.match(await page.locator('#ledger').innerText(),/tver\.tgo\.or\.th/);
+await page.locator('#nationalView').click();assert.match(await page.locator('#ledger .tver-summary').first().innerText(),/multi-province projects and \d+ with no province named/);assert.ok((await page.locator('#ledger .tver-market').count())>=1);
 await page.locator('#pickArea').click();const mb=await page.locator('#map').boundingBox();
 await page.mouse.move(mb.x+mb.width*.35,mb.y+mb.height*.3);await page.mouse.down();await page.mouse.move(mb.x+mb.width*.6,mb.y+mb.height*.6,{steps:8});await page.mouse.up();
 await page.waitForFunction(()=>document.querySelector('#carbonVerdict').textContent.startsWith('Drawn box'));
@@ -45,6 +56,8 @@ const ledgerDl=page.waitForEvent('download');await page.locator('#ledgerJSON').c
 const lj=JSON.parse(await readFile('test-results/ledger.json','utf8'));assert.equal(lj.notCredits,true);assert.equal(lj.selection.kind,'box');assert.ok(lj.rows.every(r=>r.dataset&&r.unit));
 await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator('.lenses [data-tab=project]').click();
 await page.locator('#example').click();await page.locator('#boundaryInfo').waitFor({state:'visible'});
+// T-VER registry overlap check: appears below the boundary info with province name and project list.
+await page.locator('#registryCheck').waitFor({state:'visible'});assert.match(await page.locator('#registryCheck .tver-check').first().innerText(),/Chiang Mai|Bangkok|Saraburi|Kanchanaburi|Phuket|เชียงใหม่|กรุงเทพ|สระบุรี|กาญจนบุรี|ภูเก็ต/);
 await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator('.lenses [data-tab=calculate]').click();await page.locator('[type=submit]').click();
 assert.match(await page.locator('#result').innerText(),/218\.86/);
 const downloaded=page.waitForEvent('download');await page.locator('#exportJSON').click();const dl=await downloaded;await dl.saveAs('test-results/export.json');const report=JSON.parse(await readFile('test-results/export.json','utf8'));assert.equal(report.status,'illustrative-unverified-estimate');assert.ok(Math.abs(report.result.net-218.8633333)<.00001);assert.equal(report.issuedCredits,null);

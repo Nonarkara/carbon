@@ -2,6 +2,8 @@
 import {readGrid,sumSelection,ledgerRows,polygonsOf,boxSideKm,bboxOf} from './ledger.js';
 
 import {renderCalculations} from './selection-view.js';
+import {initRegistry} from './registry.js';
+const TVER_CLASSES=[[0,'#f3efe0'],[1,'#d9c98f'],[2,'#b89b3c'],[5,'#7a6200'],[10,'#3d3100']];
 
 const GIBS='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/';
 const ATMOS={
@@ -21,8 +23,10 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const o=$('#provinceMetric').options;
     o[0].textContent=`${t('metricFossil')} · ${ds.odiac.year}`;
     o[1].textContent=`${t('metricStock')} · ${ds.cci.year}`;
-    o[2].textContent=getLang()==='th'?`${t('metricNet')} · เฉลี่ย ${ds.gfw.period}`:`${t('metricNet')} · ${ds.gfw.period} mean`;};
+    o[2].textContent=getLang()==='th'?`${t('metricNet')} · เฉลี่ย ${ds.gfw.period}`:`${t('metricNet')} · ${ds.gfw.period} mean`;
+    o[3].textContent=`${t('tverMetric')} · ${registry?.data()?.snapshot?.slice(0,4)||''}`.trim();};
 
+  const registry=initRegistry({t,fmt,getLang});
   const ready=Promise.all(['manifest.json','provinces.json','provinces.geojson'].map(f=>fetch('data/ledger/'+f).then(r=>{if(!r.ok)throw Error('ledger:'+f);return r.json();})))
     .then(([manifest,data,geo])=>{
       S.manifest=manifest;S.data=data;
@@ -30,6 +34,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
         onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
       fillPlaces();select({kind:'national',code:'TH'},false);setOverlay('stock');applyMetricLabels();
+      return registry.ready;
     });
 
   function fillPlaces(){
@@ -81,6 +86,9 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#kRemoveHint').textContent=$('#kEmitHint').textContent=rem?`GFW ${S.manifest.datasets.gfw.version.split(' ')[0]} · ${S.manifest.datasets.gfw.period}`:t('gridNotIngested').split('.')[0];
     $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):!s.area_ha?t('emptySelection'):stock?.tooCoarse?t('tooCoarseGrid'):t('verdictBox').replace('{s}',big(stock?.value));
     $('#ledger').innerHTML=ledgerHTML(s);
+    const pcode=s.pcode||(S.sel.kind==='national'?'TH':null);
+    const tverHTML=registry.section(pcode);
+    if(tverHTML)$('#ledger').insertAdjacentHTML('beforeend',tverHTML);
     $('#selectionName').textContent=S.sel.kind==='province'||S.sel.kind==='national'?placeName(s):getLang()==='th'?'พื้นที่ที่เลือก':'Selected area';
     $('#mapLabel').textContent=$('#selectionName').textContent;
     $('#calculationTrace').innerHTML=renderCalculations({src:s,rows:S.rows,datasets:S.manifest.datasets,t,fmt,esc,getLang});
@@ -158,10 +166,18 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   $('#showAerosol').onclick=()=>{showMap();document.body.dataset.layers='open';$('#layerMore').open=true;$('#atmos').value=$('#atmos').value==='aod'?'':'aod';$('#atmosDate').value='';setAtmos();};
   function renderProvinces(){
     const metric=$('#provinceMetric').value,ds=S.manifest.datasets;
-    const value=p=>metric==='stock'?p.forest_agb_mg*S.manifest.conversion.agb_to_co2e:metric==='net'?p.gfw_net_mg_co2e/ds.gfw.years:p.fossil_c_t*44/12;
-    const unit=metric==='stock'?'tCO₂e':metric==='net'?'tCO₂e / yr':'tCO₂ / yr';
-    const source=metric==='stock'?`CCI + JAXA · ${ds.cci.year}`:metric==='net'?`GFW · ${ds.gfw.period}`:`${ds.odiac.version} · ${ds.odiac.year}`;
-    $('#provinceRanking').innerHTML=[...S.data.provinces].sort((a,b)=>value(b)-value(a)).map(p=>`<button class="province-row" data-province="${p.pcode}"><span>${esc(placeName(p))}</span><b>${fmt(value(p)/1e6,2)} M</b><small>${unit} · ${source} · ${esc(t('globalRef'))}</small></button>`).join('');
+    const isTver=metric==='tver';
+    const value=isTver?(p)=>registry.data()?.provinces?.[p.pcode]?.projects||0
+      :metric==='stock'?p=>p.forest_agb_mg*S.manifest.conversion.agb_to_co2e
+      :metric==='net'?p=>p.gfw_net_mg_co2e/ds.gfw.years
+      :p=>p.fossil_c_t*44/12;
+    const unit=isTver?'projects':metric==='stock'?'tCO₂e':metric==='net'?'tCO₂e / yr':'tCO₂ / yr';
+    const source=isTver?`TGO T-VER · FOR&AGR · ${registry.data()?.snapshot?.slice(0,10)||''}`
+      :metric==='stock'?`CCI + JAXA · ${ds.cci.year}`
+      :metric==='net'?`GFW · ${ds.gfw.period}`
+      :`${ds.odiac.version} · ${ds.odiac.year}`;
+    const fmtVal=isTver?v=>fmt(v,0):v=>fmt(v/1e6,2)+' M';
+    $('#provinceRanking').innerHTML=[...S.data.provinces].sort((a,b)=>value(b)-value(a)).map(p=>`<button class="province-row" data-province="${p.pcode}"><span>${esc(placeName(p))}</span><b>${fmtVal(value(p))}</b><small>${unit} · ${source} · ${esc(t('globalRef'))}</small></button>`).join('');
     $('#provinceRanking').querySelectorAll('button').forEach(b=>b.onclick=()=>select({kind:'province',code:b.dataset.province}));
   }
   $('#exploreProvinces').onclick=()=>ready.then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=false;document.body.dataset.provinces='open';document.body.dataset.view='rail';renderProvinces();document.querySelector('input[name=overlay][value=flux]').checked=true;setOverlay('flux');$('#tabBody').scrollTop=0;});
@@ -176,11 +192,14 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   // One place decides province styling: selection outline plus, when chosen, the flux choropleth.
   function styleProvinces(){
     if(!S.layer)return;
-    const flux=S.overlayKind==='flux',years=S.manifest.datasets.gfw.years;
+    const flux=S.overlayKind==='flux',tver=S.overlayKind==='tver',years=S.manifest.datasets.gfw.years;
     S.layer.setStyle(f=>{
-      const sel=f.properties.pcode===S.sel?.code,p=byCode.get(f.properties.pcode),v=p.gfw_net_mg_co2e/p.area_ha/years;
-      return {color:sel?'#ffcc00':flux?'#1b2140':'#f6f4ec',weight:sel?3:.6,opacity:sel?1:flux?.6:.45,
-        fillOpacity:flux?.75:0,fillColor:flux?[...FLUX_CLASSES].reverse().find(([lo])=>v>=lo)[1]:undefined};
+      const sel=f.properties.pcode===S.sel?.code,p=byCode.get(f.properties.pcode);
+      const vflux=p.gfw_net_mg_co2e/p.area_ha/years;
+      const vTver=(registry.data()?.provinces?.[f.properties.pcode]?.projects)||0;
+      const fillColor=tver?[...TVER_CLASSES].reverse().find(([lo])=>vTver>=lo)[1]:flux?[...FLUX_CLASSES].reverse().find(([lo])=>vflux>=lo)[1]:undefined;
+      return {color:sel?'#ffcc00':(flux||tver)?'#1b2140':'#f6f4ec',weight:sel?3:.6,opacity:sel?1:(flux||tver)?.6:.45,
+        fillOpacity:(flux||tver)?.75:0,fillColor};
     });
   }
   function setOverlay(kind){
@@ -192,6 +211,8 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     else if(kind==='fnf'){S.overlay=L.imageOverlay('data/ledger/overlay-fnf.png',b,{opacity:.8,interactive:false}).addTo(map);legend(swatches([['#00b200','≥90%'],['#83ef62','10–90%']],t('legendFnf')));}
     else if(kind==='flux'){
       legend(swatches([['#1f5f4a','< −1'],['#5e9480','−1…−0.25'],['#d9d6cc','±0.25'],['#d39a6a','0.25…1'],['#9c4a1a','> 1']],t('legendFlux')));
+    }else if(kind==='tver'){
+      legend(swatches([['#f3efe0','0'],['#d9c98f','1'],['#b89b3c','2'],['#7a6200','5'],['#3d3100','10+']],t('legendTver')));
     }else legend('');
   }
   const swatches=(items,title)=>`<b>${esc(title)}</b>`+items.map(([c,l])=>`<span><i style="background:${c}"></i>${esc(l)}</span>`).join('');

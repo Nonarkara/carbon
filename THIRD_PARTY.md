@@ -32,6 +32,17 @@ Public research snapshots are sanitized: upstream token patterns and API-key val
 
 Derived aggregates in `public/data/ledger/` are computed from the sources below by `scripts/ingest/build_ledger.py`. Versions, DOIs, URLs, retrieval dates and SHA-256 of every source file are in `public/data/ledger/manifest.json`. Aggregation does not change any provider's terms.
 
+## TGO T-VER registry snapshot
+
+`public/data/tgo/tver-forestry.json` is a dated, attributed extract of the public T-VER database at [tver.tgo.or.th](https://tver.tgo.or.th/database/public/projects/1/1) (Thailand Greenhouse Gas Management Organization, TGO) and the OTC trading report at [carbonmarket.tgo.or.th](https://carbonmarket.tgo.or.th/). TGO publishes the listing without login and links every record back to its own page; this snapshot does not republish TGO credentials. Reuse terms are not stated on the T-VER database; the snapshot carries attribution, a snapshot date and SHA-256 of every raw page. The carbon map's T-VER block and the project boundary check use this file as context only — they are not an integration with TGO, not a verification, and not an issuance.
+
+| Source | Terms | Use |
+|---|---|---|
+| TGO T-VER project list and detail pages (`tver.tgo.or.th/database/public/...`) | Public registry listing; no reuse licence stated. Dated, attributed extract with raw-page SHA-256 in `data/tgo/tver-forestry.json` | 257 FOR&AGR projects, expected reductions, issuances, provinces, methodology |
+| TGO OTC credit trading JSON (`carbonmarket.tgo.or.th/modules/home/ajax_pbi_data_event.php`) | Public report endpoint, no reuse licence stated | Forestry credit price and volume by calendar year |
+
+Province assignment uses only the `จ.` / `จังหวัด` markers in TGO's own address text. Twelve cases that lacked a marker were reviewed by hand with reasons recorded in `scripts/ingest/tgo_province_overrides.json`; six projects name no site in TGO's text and are honestly labelled "no province named" rather than guessed.
+
 | Source | Licence / terms | Attribution |
 |---|---|---|
 | ESA CCI Biomass v7.0 (2020), DOI 10.5285/6429d1aafe1e43b9b414e4a5a7f8b903 | ESA CCI data policy: free use with acknowledgement and DOI citation | Santoro, M.; Cartus, O. — ESA Climate Change Initiative (Biomass_cci) |

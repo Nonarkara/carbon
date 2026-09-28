@@ -327,6 +327,41 @@ The [Thai guide](guide-th.html) and [English guide](guide-en.html) cover actual 
 
 Open the workbench, try the clearly labelled synthetic example, and follow a number back to its inputs. Then ask what evidence would be needed to replace that example with a real forest. That is where this work becomes useful.
 
+## 11 · TGO's T-VER registry — context, not an input
+
+[Thailand Greenhouse Gas Management Organization (TGO)](https://tver.tgo.or.th/) is a public organisation under the natural resources ministry, set up by royal decree in 2007. It runs the country's voluntary carbon market: it registers T-VER projects, certifies carbon labels, accredits the independent verifiers, and acts as the national greenhouse-gas information hub. A Climate Change Act was still a draft as of July 2026.
+
+In June 2025, TGO recognised four remote-sensing tools for forest carbon: GISTDA Carbon Atlas, THAICOM CarbonWatch, SCGC CERT+ and Varuna Smart Forest. Each platform's own approval does not transfer to this application.
+
+The [TGO T-VER database](https://tver.tgo.or.th/database/public/projects/1/1) publishes, without login, its full list of registered projects. Snapshot 28 September 2026:
+
+- **257 projects** in forestry and agriculture (FOR&AGR), expecting **2.19 Mt CO₂e a year**
+- **31 projects** have ever received credits, **733,914 tCO₂e** issued
+- **75 projects** are community forests, many of them small
+- **31 projects** are mangrove projects, none with credits yet
+
+So few reaching issuance suggests **monitoring and verification cost is the bottleneck**. That is where a landscape screening tool helps TGO and the developers it serves — not by replacing field checks, but by pointing out where to look first.
+
+The [TGO carbon market portal](https://carbonmarket.tgo.or.th/) also publishes forestry credit trading each year, through a public JSON endpoint, without login. Average price **฿280–฿2,000 per tonne** by year, with formula and period in the app's `tverMarket` table.
+
+### A reproducible fetch
+
+`scripts/ingest/tgo.py` fetches the project list, the detail page of every FOR&AGR project, and the market data, by:
+
+1. using `research/raw/tgo/` as a cache — existing files are not re-downloaded
+2. recording SHA-256 of every raw HTML page
+3. assigning province **automatically only when the address text contains จ. or จังหวัด** — avoiding false matches on common Thai words (เลย, แพร่, ตาก)
+4. reviewing the 12 cases that needed human judgement, with reasons in `scripts/ingest/tgo_province_overrides.json`
+5. halting the build if province + multi-province + unlocated totals do not reconcile with national figures
+
+Output: `public/data/tgo/tver-forestry.json` (~390 KB), 257 projects, covering 9 methodology families (AR · forest & plantations, AR large scale, REDD+, plantation, mangrove, IFM, agricultural land, perennials, peatland) and 31 issued credits.
+
+### Why the registry number is not your credit
+
+The T-VER block on the map is not a number for the user's project. It is **context**: who else is registered in the same province, how much they expected to issue, what the market price has been. The satellite stock and flux numbers are not added to the registry numbers. The two sit side by side, clearly labelled.
+
+A limit the app states out loud: TGO publishes project names and provinces, not coordinates. So an imported boundary can only match against the registry at the province level. The boundary check in the Project tab uses the polygon's vertices and centre point to find the province(s) it touches, then lists the projects registered in those provinces — so a developer can spot double counting before submitting a new project. It is not a polygon overlay.
+
 
 [Global data sources, cadence and fallback rules / แหล่งข้อมูลโลกและรอบการอัปเดต](https://github.com/Nonarkara/carbon/blob/main/docs/WORLD_DATA.md).
 

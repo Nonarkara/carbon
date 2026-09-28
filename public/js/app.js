@@ -5,6 +5,7 @@ import {t,fmt,setLang,getLang} from './i18n.js';
 import {initLandscape} from './landscape.js';
 import {initWorld} from './world.js';
 import {initAbout} from './about.js';
+import {initRegistry} from './registry.js';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const PROVINCE_EN={'สระบุรี':'Saraburi','กาญจนบุรี':'Kanchanaburi'};
  const provName=r=>getLang()==='th'?r.province_th:PROVINCE_EN[r.province_th]||r.province_th;
@@ -31,6 +32,14 @@ function summary(){
  $('#boundaryInfo').hidden=!state.boundary;
  if(state.boundary){$('#boundaryInfo').textContent=`${t('boundaryReady')} · ${fmt(state.boundary.hectares)} ${t('ha')} / ${fmt(state.boundary.rai)} ${t('rai')} · ${state.boundary.featureCount} ${t('features')} · ${state.boundaryFile?.name||t('sampleBadge')}`;}
  $('#mapLabel').textContent=state.boundary?`${state.sample?t('sampleBadge'):t('imported')} · ${fmt(state.boundary.rai)} ${t('rai')}`:t('thailand');
+ renderRegistry();
+}
+function renderRegistry(){
+ const el=$('#registryCheck');
+ if(!state.boundary||!el){if(el){el.hidden=true;el.replaceChildren();}return;}
+ const html=registry.overlapHTML(state.boundary.geojson);
+ if(!html){el.hidden=true;el.replaceChildren();return;}
+ el.innerHTML=html;el.hidden=false;
 }
 function formState(){const group=$('#group').value;return {start:$('#start').value,end:$('#end').value,unit:$('#unit').value,previous:$('#previous').value,current:$('#current').value,group,...FACTORS[group],burnedPercent:$('#burnedPercent').value,canopyDeath:$('#canopyDeath').value,fireEmissions:$('#fireEmissions').value,source:$('#inputSource').value.trim(),fireSource:$('#fireSource').value.trim()};}
 function fields(){const f=FACTORS[$('#group').value];$('#factorValue').textContent=`${f.r} / ${f.cf}`;$('#factorFields').hidden=$('#unit').value==='co2';$('#fireInput').hidden=!(Number($('#burnedPercent').value)>5&&$('#canopyDeath').value==='yes');}
@@ -69,6 +78,7 @@ $('#equationConfirmed').onchange=()=>{if(!$('#equationConfirmed').checked){clear
 $('#usePlots').onclick=()=>{if(!state.plots)return;const changedUnit=$('#unit').value!=='agb'||$('#group').value!=='general';if(changedUnit)$('#previous').value='';$('#unit').value='agb';$('#group').value='general';$('#current').value=state.plots.agbTonnes;$('#inputSource').value=`${state.plotFile.name} · Ogawa (1965), TGO v2`;state.plotUsed=true;invalidate();fields();tab('calculate');if(changedUnit)message(getLang()==='th'?'ผลแปลงเป็น AGB กรุณากรอกค่าฐานในหน่วยตัน AGB ใหม่':'Plot estimate is AGB. Enter the baseline again in tonnes AGB.');};
 const world=initWorld({t,fmt,getLang});
 const about=initAbout({getLang,fmt});
+const registry=initRegistry({t,fmt,getLang});
 function showAbout(){document.querySelectorAll('.lenses [data-tab],.bottom-nav button').forEach(e=>e.setAttribute('aria-pressed','false'));document.body.dataset.about='true';$('#about').hidden=false;$('#aboutTab').setAttribute('aria-pressed','true');$('#about').scrollTop=0;about.show().catch(err=>error(err));}
 const landscape=initLandscape({map,t,fmt,getLang,getBoundary:()=>state.boundary,download,message,onSelect:()=>{if(state.tab!=='carbon'||document.body.dataset.about)tab('carbon');}});
 landscape.ready.catch(err=>error(err));
