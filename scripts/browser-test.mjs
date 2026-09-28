@@ -19,6 +19,7 @@ assert.equal(await page.locator('#kRemoveHint').textContent(),`GFW ${mf.datasets
 assert.ok((await page.locator('#kStockHint').textContent()).endsWith(`CCI ${mf.datasets.cci.version}`));
 // The answer leads its section; the formula trace follows. Metric option labels travel from the manifest.
 assert.equal(await page.locator('[data-calculation=stock]').evaluate(e=>e.children[1].className),'calc-answer');
+assert.match(await page.locator('[data-calculation=stock] code').first().innerText(),new RegExp(`\\(1 \\+ ${mf.conversion.root_shoot}\\) × ${mf.conversion.carbon_fraction} × 44 / 12`));
 assert.ok((await page.locator('#provinceMetric option[value=fossil]').textContent()).includes(` · ${mf.datasets.odiac.year}`));
 assert.ok((await page.locator('#provinceMetric option[value=stock]').textContent()).includes(` · ${mf.datasets.cci.year}`));
 assert.ok((await page.locator('#provinceMetric option[value=net]').textContent()).includes(mf.datasets.gfw.period));
@@ -106,7 +107,7 @@ for(const width of [1280,768,375]){
   await research.waitForLoadState();
   assert.equal(await research.locator('html').getAttribute('lang'),lang);
   assert.equal(await research.locator('.research-diagram').count(),7);
-  assert.equal(await research.locator('.research-toc a').count(),12);
+  assert.equal(await research.locator('.research-toc a').count(),13);
   assert.equal(await research.locator('.sysmap').count(),1);
   await research.locator('.research-toc a[href="#section-9"]').click();
   const portrait=research.locator('.author-profile img');await portrait.scrollIntoViewIfNeeded();

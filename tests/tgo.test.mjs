@@ -4,6 +4,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {issuedProjectCount} from '../public/js/registry.js';
 
 const d=JSON.parse(readFileSync('public/data/tgo/tver-forestry.json','utf8'));
 const close=(a,b,rel=1e-5)=>assert.ok(Math.abs(a-b)<=rel*Math.max(Math.abs(a),Math.abs(b),1),`${a} vs ${b}`);
@@ -82,6 +83,16 @@ test('projects with issuances are a subset of the project list and their issuanc
       if(p.credit_start&&i.certified)assert.ok(i.certified>=p.credit_start,`${p.key} issuance ${i.certified} before crediting start ${p.credit_start}`);
       if(p.credit_end&&i.certified)assert.ok(i.certified<=p.credit_end,`${p.key} issuance ${i.certified} after crediting end ${p.credit_end}`);
     }
+  }
+});
+
+test('a multi-province project with issuance counts in each province it names',()=>{
+  const multi=d.projects.filter(p=>p.provinces.length>1&&p.issued_tco2e>0);
+  assert.equal(multi.length,1);
+  for(const pc of multi[0].provinces){
+    const list=d.projects.filter(p=>p.provinces.includes(pc));
+    const singleOnly=list.filter(p=>p.provinces.length===1&&p.issued_tco2e>0).length;
+    assert.ok(issuedProjectCount(list)>singleOnly,pc);
   }
 });
 

@@ -91,7 +91,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     if(tverHTML)$('#ledger').insertAdjacentHTML('beforeend',tverHTML);
     $('#selectionName').textContent=S.sel.kind==='province'||S.sel.kind==='national'?placeName(s):getLang()==='th'?'พื้นที่ที่เลือก':'Selected area';
     $('#mapLabel').textContent=$('#selectionName').textContent;
-    $('#calculationTrace').innerHTML=renderCalculations({src:s,rows:S.rows,datasets:S.manifest.datasets,t,fmt,esc,getLang});
+    $('#calculationTrace').innerHTML=renderCalculations({src:s,rows:S.rows,datasets:S.manifest.datasets,conv:S.manifest.conversion,t,fmt,esc,getLang});
     if(!$('#provinceBrowser').hidden)renderProvinces();
   }
 

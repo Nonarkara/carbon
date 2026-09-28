@@ -1,6 +1,10 @@
 // TGO T-VER registry snapshot (forestry & agriculture). Registry facts sit beside satellite estimates, never mixed:
 // expected = developer's ex-ante estimate at registration; issued = credits TGO has certified. Province-level only.
-import {polygonsOf,polygonContains} from './ledger.js';
+import {polygonsOf,polygonContains,probePoints} from './ledger.js';
+
+export function issuedProjectCount(projects){
+  return projects.filter(p=>(p.issued_tco2e||0)>0).length;
+}
 
 export const TVER_CLASSES=[[0,'#f3efe0'],[1,'#d9c98f'],[2,'#b89b3c'],[5,'#7a6200'],[10,'#3d3100']];
 
@@ -42,7 +46,7 @@ export function initRegistry({t,fmt,getLang}){
     const h=[`<h3 class="lside">${esc(t('tverSide'))}</h3>`];
     if(!pcode){h.push(`<div class="lrow unavailable"><p class="hint">${esc(t('tverBoxNote'))}</p></div>`);return h.join('');}
     const nat=pcode==='TH',agg=nat?D.national:D.provinces[pcode],list=nat?D.projects:projectsIn(pcode);
-    h.push(`<div class="lrow tver-summary">${source()}<dl class="cross"><dt>${esc(t('tverCount'))}</dt><dd>${n0(agg.projects)}</dd><dt>${esc(t('tverExpectedSum'))}</dt><dd>${n0(agg.expected_tco2e_yr)}</dd><dt>${esc(t('tverIssuedSum'))}</dt><dd>${n0(agg.issued_tco2e)}</dd><dt>${esc(t('tverWithIssue'))}</dt><dd>${n0(nat?D.national.projects_with_issuance:list.filter(p=>p.provinces.length===1&&p.issued_tco2e>0).length)}</dd></dl>
+    h.push(`<div class="lrow tver-summary">${source()}<dl class="cross"><dt>${esc(t('tverCount'))}</dt><dd>${n0(agg.projects)}</dd><dt>${esc(t('tverExpectedSum'))}</dt><dd>${n0(agg.expected_tco2e_yr)}</dd><dt>${esc(t('tverIssuedSum'))}</dt><dd>${n0(agg.issued_tco2e)}</dd><dt>${esc(t('tverWithIssue'))}</dt><dd>${n0(nat?D.national.projects_with_issuance:issuedProjectCount(list))}</dd></dl>
 ${nat?`<p class="hint">${esc(t('tverNationNote').replace('{m}',D.multi.projects).replace('{u}',D.unlocated.projects))}</p>`:(agg.multi_province_projects?`<p class="hint">${esc(t('tverMultiNote').replace('{n}',agg.multi_province_projects))}</p>`:'')}
 <p class="hint">${esc(t('tverDefs'))}</p></div>`);
     if(list.length)h.push(listHTML(list));else h.push(`<p class="hint">${esc(t('tverNone'))}</p>`);
@@ -82,10 +86,8 @@ ${nat?`<p class="hint">${esc(t('tverNationNote').replace('{m}',D.multi.projects)
     const tl=tlEntries.length?`<div class="lrow tver-portfolio"><p class="lmeta">${esc(t('tverPortfolioTimeline'))}</p>${years}</div>`:'';
     return [pipeline,family,sizes,devs,tl].join('');
   }
-  // Provinces touched by an imported boundary (vertices and centre), for the double-counting check.
   function provincesOf(geojson){
-    const polys=polygonsOf(geojson),pts=polys.flatMap(p=>p[0]);
-    const c=pts.reduce((a,[x,y])=>[a[0]+x/pts.length,a[1]+y/pts.length],[0,0]);pts.push(c);
+    const pts=probePoints(geojson);
     return geo.features.filter(f=>{const fp=polygonsOf(f);return pts.some(([x,y])=>polygonContains(fp,x,y));}).map(f=>f.properties);
   }
   function overlapHTML(geojson){

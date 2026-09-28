@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {AGB_TO_CO2E,rectFraction,readGrid,sumSelection,stockBand,ledgerRows,polygonFraction,polygonsOf,boxSideKm} from '../public/js/ledger.js';
+import {AGB_TO_CO2E,rectFraction,readGrid,sumSelection,stockBand,ledgerRows,polygonFraction,polygonsOf,boxSideKm,probePoints,polygonContains} from '../public/js/ledger.js';
 import {stock} from '../public/js/carbon.js';
 
 const dir='public/data/ledger/';
@@ -93,6 +93,19 @@ test('every manifest dataset version is cited in both research notebooks',()=>{
     const doc=readFileSync(`docs/RESEARCH.${lang}.md`,'utf8');
     for(const [k,d] of Object.entries(manifest.datasets))if(d.version)assert.ok(doc.includes(d.version.split(' ')[0]),`${lang}: ${k} ${d.version}`);
   }
+});
+test('a centroid in a hole is not a province probe; a centroid in filled area is',()=>{
+  const hole={type:'Polygon',coordinates:[[[0,0],[4,0],[4,4],[0,4],[0,0]],[[1,1],[3,1],[3,3],[1,3],[1,1]]]};
+  const solid={type:'Polygon',coordinates:[[[0,0],[4,0],[4,4],[0,4],[0,0]]]};
+  const holePts=probePoints(hole),solidPts=probePoints(solid);
+  const mean=pts=>pts.reduce((a,[x,y])=>[a[0]+x/pts.length,a[1]+y/pts.length],[0,0]);
+  const hc=mean(holePts);
+  assert.equal(polygonContains(polygonsOf(hole),hc[0],hc[1]),false);
+  assert.equal(holePts.length,5);
+  const verts=solidPts.slice(0,5),sc=mean(verts);
+  assert.equal(polygonContains(polygonsOf(solid),sc[0],sc[1]),true);
+  assert.equal(solidPts.length,6);
+  assert.ok(solidPts.some(([x,y])=>x===sc[0]&&y===sc[1]));
 });
 test('coarse and empty selections withhold numeric rows and uncertainty in exports',()=>{
   for(const [src,minSideKm] of [[national,1.5],[{...national,area_ha:0},100]]){

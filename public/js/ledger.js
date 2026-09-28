@@ -34,6 +34,16 @@ function polygonsOf(geojson){
   return g.flatMap(x=>x.type==='Polygon'?[x.coordinates]:x.type==='MultiPolygon'?x.coordinates:[]);
 }
 export function polygonContains(polys,x,y){return polys.some(p=>ringContains(p[0],x,y)&&!p.slice(1).some(h=>ringContains(h,x,y)));}
+// Outer-ring vertices, plus their average only when that point sits in filled area.
+// A centroid in a hole, or outside a concave ring, is not a province probe.
+export function probePoints(geojson){
+  const polys=polygonsOf(geojson);
+  const pts=polys.flatMap(p=>[...p[0]]);
+  if(!pts.length)return pts;
+  const n=pts.length,c=pts.reduce((a,[x,y])=>[a[0]+x/n,a[1]+y/n],[0,0]);
+  if(polygonContains(polys,c[0],c[1]))pts.push(c);
+  return pts;
+}
 // ponytail: 4×4 sub-samples per cell, equal-weighted; exact rectangle overlap is used for drawn boxes.
 export function polygonFraction(cell,polys,n=4){
   let hit=0;const dx=(cell.east-cell.west)/n,dy=(cell.north-cell.south)/n;
