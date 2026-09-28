@@ -90,9 +90,10 @@ for(const width of [1280,768,375]){
   const popupEvent=page.waitForEvent('popup');await page.locator('#researchLink').click();const research=await popupEvent;
   await research.waitForLoadState();
   assert.equal(await research.locator('html').getAttribute('lang'),lang);
-  assert.equal(await research.locator('.research-diagram').count(),5);
-  assert.equal(await research.locator('.research-toc a').count(),10);
-  await research.locator('.research-toc a[href="#section-8"]').click();
+  assert.equal(await research.locator('.research-diagram').count(),7);
+  assert.equal(await research.locator('.research-toc a').count(),11);
+  assert.equal(await research.locator('.sysmap').count(),1);
+  await research.locator('.research-toc a[href="#section-9"]').click();
   const portrait=research.locator('.author-profile img');await portrait.scrollIntoViewIfNeeded();
   await portrait.evaluate(img=>img.decode());assert.ok(await portrait.evaluate(img=>img.naturalWidth>=400));
   assert.ok(await research.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`research overflow ${lang} ${width}`);
@@ -101,4 +102,4 @@ for(const width of [1280,768,375]){
   await research.close();assert.equal(await page.locator('#projectName').inputValue(),'Research preserves my project');
  }
 }
-assert.deepEqual(errors,[]);await writeFile('test-results/browser-summary.json',JSON.stringify({base,checkedAt:new Date().toISOString(),viewports:[1440,1280,768,390,375],checks:['about tab TH/EN with ledger-driven illustrations','carbon map national figures','manifest-derived KPI and source labels','answers-first calculation trace','manifest-travel metric options','province selection matches ledger','drawn box','overlays','ledger export','example arithmetic','JSON export and provenance','language state','loss','unknown fire','unit switch','plot import','factor edit','boundary replacement','malformed geometry','reset','mobile navigation','guide diagrams','research navigation and language','research diagrams and portrait','research preserves input'],pageErrors:errors},null,2));await browser.close();console.log('PASS: browser flows, export, unit/provenance regressions, 5 viewports, 2 guides, bilingual research with portrait and preserved inputs; '+base);
+assert.deepEqual(errors,[]);await writeFile('test-results/browser-summary.json',JSON.stringify({base,checkedAt:new Date().toISOString(),viewports:[1440,1280,768,390,375],checks:['about tab TH/EN with ledger-driven illustrations','carbon map national figures','manifest-derived KPI and source labels','answers-first calculation trace','manifest-travel metric options','province selection matches ledger','drawn box','overlays','ledger export','example arithmetic','JSON export and provenance','language state','loss','unknown fire','unit switch','plot import','factor edit','boundary replacement','malformed geometry','reset','mobile navigation','guide diagrams','research navigation and language','research diagrams and portrait','research open-data credits section','research preserves input'],pageErrors:errors},null,2));await browser.close();console.log('PASS: browser flows, export, unit/provenance regressions, 5 viewports, 2 guides, bilingual research with portrait and preserved inputs; '+base);

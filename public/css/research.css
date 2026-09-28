@@ -2,3 +2,16 @@ body.guide.research{max-width:1200px;padding:0 32px}.research-intro{max-width:82
 .standards-note{border-top:3px solid var(--ink);padding-top:20px;scroll-margin-top:80px}.standards-note dt{font-weight:600;margin-top:18px}.standards-note dd{margin:6px 0 18px;line-height:1.8}.standards-note .fine-print{font-size:12px;line-height:1.8;border-top:1px solid var(--rule-strong);padding-top:16px}
 /* Compact editorial rhythm without reducing the evidence or illustrations. */
 .research-intro{margin:12px 0 28px;max-width:100%;padding-bottom:16px}.research h1{font-size:38px;max-width:100%;margin-bottom:12px}.research .research-deck{font-size:20px;margin:12px 0 16px}.research-layout{gap:28px}.research p,.research li{font-size:15px;line-height:1.75}.research h2{margin-top:28px;padding-top:12px}.research-toc a{padding:8px 0}.research-diagram{margin:18px 0;padding:14px}.research-diagram li{padding-block:10px}.research .research-kicker{margin:8px 0 12px}@media(max-width:700px){.research h1{font-size:28px}.research .research-deck{font-size:18px}.research-intro{margin-bottom:20px}}
+/* System map: three lanes and gates. Square corners, hairlines, brand-yellow gates. */
+.sysmap{margin:18px 0;border-top:4px solid var(--brand);border-bottom:1px solid var(--rule-strong);background:var(--well);padding:14px}
+.sysmap figcaption{font-size:12px;font-weight:600;margin-bottom:12px}
+.sys-lane{border:1px solid var(--rule-strong);background:var(--paper);padding:10px 12px}
+.sys-lane[data-lane=field]{border-top:4px solid var(--brand)}
+.sys-lane[data-lane=registry]{border-style:dashed}
+.sys-lane-title{font-size:14px;font-weight:600;margin:0 0 6px}
+.sys-lane ul{list-style:none;margin:0;padding:0}
+.sys-lane li{font-size:13px;line-height:1.7;padding:5px 0;border-top:1px solid var(--rule)}
+.sys-lane-note{font-size:12px;color:var(--ink-mid);margin:8px 0 0}
+.sys-gate{display:flex;align-items:center;gap:10px;background:var(--brand);color:var(--ink);font-size:13px;font-weight:600;padding:8px 12px;margin:10px 0}
+.sys-gate .sys-n{font-family:var(--num)}
+@media(max-width:700px){.sysmap{padding:10px 8px}.sys-lane-title{font-size:13px}.sys-lane li{font-size:12px}.sys-gate{font-size:12px}}

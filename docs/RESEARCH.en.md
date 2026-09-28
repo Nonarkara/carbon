@@ -209,7 +209,94 @@ Run on 26 September 2026:
 - **Current conditions.** Stock is for 2020, forest flux is a 2001–2025 average, fire is 2013–2022 and fossil CO₂ is 2024.
 - **Flux inside a drawn box.** GFW's 30 m grids require an API key and are not yet ingested. The map says so instead of showing zero.
 
-## 07 · The first pilot should earn the next one
+## 07 · Can open data become a carbon credit?
+
+Short answer: no. Open and public data can screen a candidate, supply dated context, and flag what still needs measuring — but no satellite, catalogue or model output in this system is a credit, and none becomes one by arithmetic. A credit is minted outside this system, by people and a registry, after three gates that open data cannot pass on its own.
+
+The three quantities from section 01 still govern everything below: carbon stock, monitoring-period change, and issued credits stay separate. Open data speaks fluently about the first, approximately about the second at landscape scale, and not at all about the third.
+
+### Three gates no satellite passes
+
+A credit needs three things that are not pixels. First, **rights and eligibility**: who holds the land, whether the activity is additional to the baseline, and whether the same carbon has been claimed elsewhere. A polygon proves none of this. Second, **an approved method with a baseline**: T-VER-S-METH-13-01 v2 (or the method that fits the activity) names the pools, the equation `CSEQ = CTT(t) − CTT(i) − PE − GHG_LEAK`, the fire conditions (burned area above 5% with canopy fire causing tree death), and the small-project screen of 16,000 tCO₂e per year. An unapproved model — however accurate — is not a method. Third, **independent validation and a registry**: a second qualified party reproduces the result, the programme approves, and units are recorded. This pilot connects to no registry and runs no approved model; it says so on every screen.
+
+<figure class="sysmap" aria-label="How the system would work">
+<figcaption>How the system would work — three lanes, three gates</figcaption>
+<div class="sys-lane" data-lane="open">
+<p class="sys-lane-title">Lane 1 · Open data — screening and context</p>
+<ul>
+<li><b>ESA CCI Biomass v7.0 (2020, 100 m)</b> → stock context for a candidate area</li>
+<li><b>JAXA FNF v2.1.0 (2020, 25 m)</b> → forest mask and visible change screening</li>
+<li><b>GFW flux v1.4.3 (2001–2025 average, province)</b> → removals and emissions context, net only</li>
+<li><b>GFED5.1 (2013–2022, 0.25°)</b> → dated fire evidence by month and land type</li>
+<li><b>ODIAC2025 (2024, 1 km)</b> → fossil context, shown beside — never netted</li>
+<li><b>COD-AB v01 (valid 2022-01-22)</b> → province boundaries for orientation</li>
+<li><b>Climate TRACE API v7 (2024)</b> and <b>BTR1 (2022)</b> → independent cross-checks</li>
+</ul>
+<p class="sys-lane-note">This lane never mints a credit. Its job is to say where to look and what to verify.</p>
+</div>
+<div class="sys-gate"><span class="sys-n">A</span> Gate A · Rights, eligibility and baseline — decided by people and documents</div>
+<div class="sys-lane" data-lane="field">
+<p class="sys-lane-title">Lane 2 · Field and approved method — the only path to a credit number</p>
+<ul>
+<li><b>Versioned boundary plus land rights</b> → the calculation area becomes a project</li>
+<li><b>Measured plots at two comparable dates</b> → dry biomass both sides of the period</li>
+<li><b>T-VER-S-METH-13-01 v2 arithmetic</b> → CSEQ minus prescribed fire emissions</li>
+<li><b>Stated uncertainty and exclusions</b> → the result travels with its limits</li>
+</ul>
+<p class="sys-lane-note">The workbench lives here: user-supplied measurements in, reproducible arithmetic out.</p>
+</div>
+<div class="sys-gate"><span class="sys-n">B</span> Gate B · Independent validation — a second qualified party reproduces the result</div>
+<div class="sys-lane" data-lane="registry">
+<p class="sys-lane-title">Lane 3 · Registry — external to this system</p>
+<ul>
+<li><b>Programme approval</b> → eligibility, baseline and monitoring plan accepted</li>
+<li><b>Issuance</b> → units recorded; open data never appears in this lane</li>
+</ul>
+<p class="sys-lane-note">Dashed because it happens elsewhere. No integration is claimed.</p>
+</div>
+</figure>
+
+### The pipeline, with open data in its place
+
+```mermaid
+flowchart TD
+  A["Open data screens candidates: FNF mask, CCI v7.0 stock context, GFW v1.4.3 flux context"] --> B["Gate A: rights, eligibility and baseline decided by people and documents"]
+  B --> C["Field plots at two comparable dates under T-VER-S-METH-13-01 v2"]
+  C --> D["CSEQ minus prescribed fire emissions; uncertainty travels with the result"]
+  D --> E["Gate B: independent validation reproduces the calculation"]
+  E --> F["Registry issuance is external; open data never appears there"]
+```
+
+### What each open dataset can and cannot prove
+
+| Credit ingredient | Open-data support (version, period) | What open data can never supply |
+|---|---|---|
+| Project boundary and rights | [COD-AB v01](https://data.humdata.org/dataset/cod-ab-tha) boundaries (valid 2022-01-22) for orientation; data.go.th community-forest rows as partner leads | Tenure, consent, additionality, proof against double claiming |
+| Stock context | [ESA CCI Biomass v7.0](https://catalogue.ceda.ac.uk/uuid/6429d1aafe1e43b9b414e4a5a7f8b903) (2020, 100 m) masked by [JAXA FNF v2.1.0](https://www.eorc.jaxa.jp/ALOS/en/dataset/fnf_e.htm) (2020, 25 m) | Parcel stock at credit dates; approved-method status |
+| Flux context | [GFW flux v1.4.3](https://essd.copernicus.org/articles/17/1217/2025/) (2001–2025 average, province) | Baseline, leakage, permanence buffer, verification |
+| Fire deduction evidence | [GFED5.1](https://zenodo.org/records/16794692) (2013–2022, 0.25°) by month and group | Whether canopy fire killed trees on the parcel — that needs the field |
+| Fossil context, never netted | [ODIAC2025](https://db.cger.nies.go.jp/dataset/ODIAC/) (2024, 1 km) | Anything about the forest credit |
+| Independent cross-checks | [Climate TRACE API v7](https://api.climatetrace.org/v7/docs) (2024, province); BTR1 Table 2-184 (2022, nation) | A second opinion is not validation |
+
+### A walk-through with teaching numbers
+
+Reuse the section 02 teaching case — dry aboveground biomass rising from 1,000 to 1,100 tonnes — and watch each number change hands:
+
+```mermaid
+flowchart TD
+  A["Screening: FNF v2.1.0 mask plus CCI v7.0 stock context for the candidate area"] --> B["Field evidence: dry aboveground biomass 1,000 to 1,100 tonnes (teaching numbers, not a measured forest)"]
+  B --> C["CSEQ arithmetic: 100 × 1.27 × 0.47 × 44/12 = 218.8633 tCO₂ before deductions"]
+  C --> D["Deductions and screens: fire over 5% with canopy death, 16,000 tCO₂e per year limit, stated uncertainty"]
+  D --> E["Validation and registry decide; the screening estimate is never the claim"]
+```
+
+The screening numbers and the credit number meet only at Gate B, where a validator reproduces the field arithmetic — never by copying a satellite total into the claim. GFW's own net (−21.2 MtCO₂e per year for Thailand, 2001–2025) stays a landscape context beside the claim; GFED fire stays gross burning, not net loss; ODIAC fossil CO₂ stays beside the forest figures, never netted. The workbench enforces the same separation: its numbers come only from user-supplied measurements, and landscape figures never feed it.
+
+### What would have to change — and what this pilot already does
+
+For an open-data pipeline to end in a real credit, three external things must exist: a remote-sensing model with TGO approval for the activity (the four approved platforms announced 13 June 2025 hold their own approvals, which do not transfer to this application); parcel-scale flux access without a key barrier (GFW's 30 m grids need an API key this pilot does not hold); and a registry integration with independent verification (this pilot has neither and claims neither). Until then, the honest system is the one drawn above: open data screens and contextualises, fieldwork plus an approved method produces the number, people and the registry decide. This pilot already runs the middle of that drawing — reproducible arithmetic with all inputs, dates, versions and limits attached — so that when the gates open, the evidence is ready to walk through them.
+
+## 08 · The first pilot should earn the next one
 
 Start with one project whose boundary, rights, methodology and field records can be checked. Agree on the decision first: screening a candidate, estimating stock, or preparing monitoring evidence. Each requires a different level of proof.
 
@@ -225,7 +312,7 @@ A useful pilot pack includes a versioned boundary, the project's registration de
 
 The pilot succeeds when another qualified person can reproduce the result, explain its limits and identify the measurements that would change the conclusion. That is a harder target than making the map look convincing. It is also a target worth building for.
 
-## 08 · The person behind the work
+## 09 · The person behind the work
 
 <div class="author-profile">
 <img src="images/dr-non.jpg" width="800" height="800" alt="Dr Non Arkaraprasertkul speaking with a microphone" loading="lazy">
@@ -234,7 +321,7 @@ The pilot succeeds when another qualified person can reproduce the result, expla
 
 Portrait source: [RMIT Vietnam's profile](https://www.rmit.edu.vn/research/hubs/rmit-vietnam-smart-and-sustainable-cities-hub/people/dr-non-arkaraprasertkul). Biography checked against that page and the [personal website](https://www.nonarkara.org/) on 25 September 2026. Institutional affiliations provide background; this independent pilot does not claim institutional endorsement. No personal quotation or fieldwork story has been invented for this page.
 
-## 09 · Keep the evidence within reach
+## 10 · Keep the evidence within reach
 
 The [Thai guide](guide-th.html) and [English guide](guide-en.html) cover actual use, formulas, file formats and deployment. The [source catalogue](data/source-catalog.json) records the supplied references. [Code and tests](https://github.com/Nonarkara/carbon) are public, together with the original research audit. Official documents linked above govern their own methods; this page is an explanation, not a replacement.
 
