@@ -1,0 +1,36 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+
+const poses=['pose-greet','pose-look','pose-both','pose-measure','pose-wonder','pose-stop'];
+
+test('the public name is คาบอนนะ in both languages and in the header mark',()=>{
+  const i18n=readFileSync('public/js/i18n.js','utf8');
+  assert.equal(i18n.match(/title:'คาบอนนะ'/g).length,2);
+  assert.doesNotMatch(i18n,/title:'Forest Carbon'|title:'คาร์บอนป่าไม้'/);
+  const html=readFileSync('public/index.html','utf8');
+  assert.match(html,/class="kabonna-mark" src="images\/kabonna\/mark.svg"/);
+  assert.match(html,/<title>คาบอนนะ/);
+});
+
+test('six poses and the mark are svg drawings of the same character',()=>{
+  const mark=readFileSync('public/images/kabonna/mark.svg','utf8');
+  assert.match(mark,/viewBox="0 0 64 64"/);
+  assert.equal(readFileSync('public/favicon.svg','utf8'),mark);
+  for(const name of poses){
+    const svg=readFileSync(`public/images/kabonna/${name}.svg`,'utf8');
+    assert.match(svg,/viewBox="0 0 200 240"/,name);
+    assert.match(svg,/fill="#ffcc00"/,name);
+    assert.match(svg,/fill="#5f9e48"/,name);
+  }
+});
+
+test('both research notebooks explain the name and show every pose',()=>{
+  for(const lang of ['en','th']){
+    const doc=readFileSync(`docs/RESEARCH.${lang}.md`,'utf8');
+    assert.match(doc,/^## 13 · /m);
+    assert.match(doc,/Glocker et al\., 2009/);
+    assert.match(doc,/Nittono et al\., 2012/);
+    for(const name of poses)assert.match(doc,new RegExp(`images/kabonna/${name}\\.svg`));
+  }
+});

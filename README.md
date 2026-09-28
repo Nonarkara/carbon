@@ -1,4 +1,6 @@
-# Forest Carbon Thailand
+# คาบอนนะ · Forest Carbon Thailand
+
+**The study / การศึกษา:** [Building a system to calculate a forest carbon footprint from public and open data](docs/RESEARCH.en.md) · [สร้างระบบคำนวณรอยเท้าคาร์บอนของป่าจากข้อมูลสาธารณะและข้อมูลเปิด](docs/RESEARCH.th.md). An independent short thesis, not a degree and not a TGO assessment. Open data can weigh a landscape. It cannot mint a credit.
 
 **Live / เว็บไซต์:** [forest-carbon-thailand.pages.dev](https://forest-carbon-thailand.pages.dev)
 

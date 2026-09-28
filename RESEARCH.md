@@ -1,6 +1,8 @@
 # Forest Carbon Thailand — research and data findings
 
-Research date: 25 September 2026. Status: research complete for pilot scoping; no model trained, credits calculated for a real project, or application deployed.
+The full argument is the short thesis in [docs/RESEARCH.en.md](docs/RESEARCH.en.md) and [docs/RESEARCH.th.md](docs/RESEARCH.th.md): *Building a system to calculate a forest carbon footprint from public and open data.* It is an independent study, not a university submission and not a degree. Stock, period flux, fire, fossil CO₂ and issued credits stay separate. No model is trained here, and no credit is issued.
+
+Research opened 25 September 2026. The working system is คาบอนนะ.
 
 ## Recommendation
 

@@ -15,3 +15,14 @@ body.guide.research{max-width:1200px;padding:0 32px}.research-intro{max-width:82
 .sys-gate{display:flex;align-items:center;gap:10px;background:var(--brand);color:var(--ink);font-size:13px;font-weight:600;padding:8px 12px;margin:10px 0}
 .sys-gate .sys-n{font-family:var(--num)}
 @media(max-width:700px){.sysmap{padding:10px 8px}.sys-lane-title{font-size:13px}.sys-lane li{font-size:12px}.sys-gate{font-size:12px}}
+.thesis{margin:18px 0;border-top:4px solid var(--brand);background:var(--well);padding:12px 14px}.thesis dt{font-weight:600;margin-top:12px}.thesis dt:first-child{margin-top:0}.thesis dd{margin:4px 0 0}
+.kabonna-lockup{display:flex;align-items:center;gap:16px;margin:18px 0;border-top:4px solid var(--brand);background:var(--well);padding:14px}
+.kabonna-lockup img{width:72px;height:72px;flex:none}
+.kabonna-lockup b{display:block;font:600 28px/1.2 var(--font)}
+.kabonna-lockup span{display:block;font-size:12px;color:var(--ink-mid);margin-top:4px}
+.kabonna-poses{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;list-style:none;margin:18px 0;padding:0}
+.kabonna-poses li{min-width:0;background:var(--well);border-top:4px solid var(--brand);padding:10px}
+.kabonna-poses img{width:100%;height:auto;display:block}
+.kabonna-poses b{display:block;margin-top:8px;font-size:14px}
+.kabonna-poses span{display:block;font-size:12px;line-height:1.55;color:var(--ink-mid)}
+@media(max-width:700px){.kabonna-lockup b{font-size:22px}.kabonna-poses{grid-template-columns:1fr 1fr}}

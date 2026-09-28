@@ -46,7 +46,7 @@ export function initRegistry({t,fmt,getLang}){
     const h=[`<h3 class="lside">${esc(t('tverSide'))}</h3>`];
     if(!pcode){h.push(`<div class="lrow unavailable"><p class="hint">${esc(t('tverBoxNote'))}</p></div>`);return h.join('');}
     const nat=pcode==='TH',agg=nat?D.national:D.provinces[pcode],list=nat?D.projects:projectsIn(pcode);
-    h.push(`<div class="lrow tver-summary">${source()}<dl class="cross"><dt>${esc(t('tverCount'))}</dt><dd>${n0(agg.projects)}</dd><dt>${esc(t('tverExpectedSum'))}</dt><dd>${n0(agg.expected_tco2e_yr)}</dd><dt>${esc(t('tverIssuedSum'))}</dt><dd>${n0(agg.issued_tco2e)}</dd><dt>${esc(t('tverWithIssue'))}</dt><dd>${n0(nat?D.national.projects_with_issuance:issuedProjectCount(list))}</dd></dl>
+    h.push(`<div class="lrow tver-summary">${source()}<dl class="cross"><dt>${esc(t('tverCount'))}</dt><dd>${n0(agg.projects)}</dd><dt>${esc(t('tverExpectedSum'))}</dt><dd>${n0(agg.expected_tco2e_yr)}</dd><dt>${esc(t('tverIssuedSum'))}</dt><dd>${n0(agg.issued_tco2e)}</dd><dt>${esc(t('tverWithIssue'))}</dt><dd>${n0(nat?D.national.projects_with_issuance:issuedProjectCount(list.filter(p=>p.provinces.length===1)))}</dd></dl>
 ${nat?`<p class="hint">${esc(t('tverNationNote').replace('{m}',D.multi.projects).replace('{u}',D.unlocated.projects))}</p>`:(agg.multi_province_projects?`<p class="hint">${esc(t('tverMultiNote').replace('{n}',agg.multi_province_projects))}</p>`:'')}
 <p class="hint">${esc(t('tverDefs'))}</p></div>`);
     if(list.length)h.push(listHTML(list));else h.push(`<p class="hint">${esc(t('tverNone'))}</p>`);

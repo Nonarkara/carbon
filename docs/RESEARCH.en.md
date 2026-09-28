@@ -1,14 +1,41 @@
-<p class="research-kicker">Research notebook · Thailand · 25 September 2026</p>
+<p class="research-kicker">Independent study, written as a short thesis · คาบอนนะ · Thailand · September 2026</p>
 
-# A forest worth caring for. Evidence worth trusting.
+# Building a system to calculate a forest carbon footprint from public and open data
 
-<p class="research-deck">A practical case for using AI, satellites and field measurements to make forest carbon understandable—and every estimate open to scrutiny.</p>
+<p class="research-deck">Open and public data can weigh a landscape. They cannot mint a credit. This study builds the system that keeps those two sentences apart, and shows every number that results.</p>
+
+This is an independent study in the form of a short thesis. It is not a university submission, not a degree, and not an official TGO assessment. The working system is called คาบอนนะ. The chapters below are the thesis: question, method, evidence, limits, and the design of the public face.
+
+<dl class="thesis">
+<dt>Question</dt>
+<dd>Can a public system calculate a forest carbon footprint for Thailand from open and public data, at the scale of a province, a drawn box, or a project boundary, without pretending the result is an issued credit?</dd>
+<dt>Answer</dt>
+<dd>Yes for a landscape account, and only for that. Satellite biomass, a forest mask, forest loss and gain, fire, and fossil CO₂ can be summed inside one boundary and kept in their own units. No, for a single footprint number, and no, for a credit. Stock is not a period flux. A flux is not a fire emission. A fire emission is not fossil CO₂. None of them is a credit TGO has certified.</dd>
+<dt>What was built</dt>
+<dd>An offline ingest that turns public rasters and tables into a ledger where every 100 m pixel belongs to at most one province and exactly one grid cell, so province totals, the national total, and the grid total match. A browser then answers a province, a box, or an imported boundary at once. A separate workbench applies T-VER-S-METH-13-01 v2 only to numbers the user supplies from the field. TGO’s public T-VER list sits beside the map as context, never as an input.</dd>
+<dt>What this does not claim</dt>
+<dd>No trained model, no TGO approval, no validation opinion, no issuance. Atmospheric pictures (aerosol, fire detections, carbon monoxide, column CO₂) are concentrations and detections, not an inventory. Verification fees are not in the registry extract, so they are not priced here.</dd>
+</dl>
+
+| Thesis part | Where it is argued |
+|---|---|
+| The question, and why one number is the wrong answer | 01 |
+| The calculation, from a measured tree to tCO₂e | 02 |
+| What a satellite can see, and what still has to be measured | 03, 06 |
+| Where a model is allowed to work | 04 |
+| Opening each open dataset before trusting its label | 05 |
+| Why open data does not become a credit | 07 |
+| What a first pilot has to earn | 08 |
+| Who did the work | 09 |
+| Where the evidence is kept | 10 |
+| TGO’s registry as context, not an input | 11, 12 |
+| Why the public name is คาบอนนะ | 13 |
 
 A person can spend years protecting a forest and still struggle to prove what that work has achieved. The trees are there. The effort is real. The evidence is scattered across survey sheets, maps, government tables and satellite archives. Turning those pieces into a defensible carbon estimate takes work that a beautiful dashboard cannot wish away.
 
 That is the reason for this project. Make the evidence easier to assemble. Make the calculation easier to question. Give the person in the field and the person reviewing the result a shared view of what is known, what was assumed, and what still needs measuring. Technology earns its place when it makes that conversation more honest.
 
-This independent pilot grew from an enquiry about AI-assisted forest-carbon assessment from Thailand's greenhouse-gas management community. It is a working research instrument, with public code and traceable calculations. No TGO endorsement, approved AI model or credit issuance is claimed.
+The study grew from an enquiry about AI-assisted forest-carbon assessment from Thailand’s greenhouse-gas management community. The code is public and the calculations are traceable. No TGO endorsement, approved AI model, or credit issuance is claimed.
 
 ## 01 · Start with the question that matters
 
@@ -337,9 +364,9 @@ The [TGO T-VER database](https://tver.tgo.or.th/database/public/projects/1/1) pu
 
 - **257 registered projects** in forestry and agriculture (FOR&AGR), with an aggregate ex-ante expectation of **2,194,333 tCO₂e per year**
 - **31 projects** have ever reached credit certification and issuance, totaling **733,914 tCO₂e**
-- **75 projects** are registered community forests under the Community Forest Act B.E. 2562 (2019)
-- **34 projects** involve coastal mangrove restoration, partnering with the Department of Marine and Coastal Resources (DMCR)
-- **247 projects** follow Standard T-VER (T-VER-S), while **10 projects** are pioneering Premium T-VER (T-VER-P)
+- **75 projects** include ป่าชุมชน in the registered name. The extract does not record the legal instrument.
+- **32 projects** mention mangrove (ชายเลน) in the name or methodology. The mangrove family tag is on 3 of them; the rest use a general forestry method. The Department of Marine and Coastal Resources is the developer on 30 of the 32.
+- **246 projects** are Standard T-VER and **11** are Premium T-VER
 
 ### The 12.1% issuance cliff: the unit economics of verification
 
@@ -347,9 +374,9 @@ Only 31 of 257 forestry projects (12.1%) have ever converted registered potentia
 
 Understanding this bottleneck requires examining project unit economics:
 
-1. **Transaction costs vs. credit yield**: In the [TGO OTC carbon market](https://carbonmarket.tgo.or.th/), forestry credits trade at a volume-weighted average of **฿280–฿400 per tCO₂e** (historical boutique trades reached ฿2,000). A typical community forest of 150 rai generates approximately 150–300 tCO₂e/year—equivalent to gross annual credit revenue of ฿45,000–฿120,000.
-2. **The VVB audit barrier**: Engaging an accredited external Validation and Verification Body (VVB) for on-site plot audits and documentation reviews typically costs **฿150,000 to ฿300,000 per monitoring event**. The verification fee alone consumes two to three full years of gross credit proceeds.
-3. **The digital MRV opportunity**: When initial CSR sponsorship or government seed funding ends, smallholders cannot justify verification expenses. This is where landscape screening and digital MRV provide systemic relief—by stratifying forest plots from open satellite indices, clustering sample points, and automating evidence packaging, reducing field audit hours by 40% to 60%.
+1. **What the OTC tape shows.** Across the forestry and agriculture years in this snapshot, traded volume is 379,304 tCO₂e and the volume-weighted average price is **฿416/tCO₂e**. Yearly averages run from ฿279 in 2023 (308,030 tCO₂e, the largest year) to ฿2,000 in 2022 (1,270 tCO₂e). This extract does not contain a steady ฿280–400 band.
+2. **What this extract does not price.** Validation and verification fees are not published per project here, so this page does not estimate them and does not claim a cut in field hours.
+3. **What the map is for.** The province list and the boundary check name registered projects in the same province. That is a double-counting screen. It is not a verifier and it is not a credit.
 
 ### Standard T-VER versus Premium T-VER architecture
 
@@ -361,7 +388,7 @@ TGO maintains two distinct methodological frameworks that reflect evolving inter
 | **Crediting Period** | 7 years renewable up to 3 times (21 years total), or 10 years fixed | 15 to 30 years continuous monitoring for forestry |
 | **Permanence Buffer** | No mandatory buffer pool deduction | Mandatory Non-Permanence Risk Assessment; 10%–20% buffer credit contribution |
 | **International Transfer** | Domestic voluntary offsets only; no Corresponding Adjustments | Aligned with Article 6 of the Paris Agreement, CORSIA, and ICVCM Core Carbon Principles |
-| **Current Portfolio** | 247 projects (96.1% of portfolio) | 10 projects (3.9% of portfolio) |
+| **Current Portfolio** | 246 projects (95.7% of this extract) | 11 projects (4.3% of this extract) |
 
 ### Cadastral opacity and double-counting screening
 
@@ -403,14 +430,14 @@ Pulling all 257 records through this app turns TGO's flat listing into slices th
 
 | Slice | What it says |
 |---|---|
-| **Pipeline rate** | **31 of 257 projects (12.1%) have ever received credits.** A registration pipeline, not a credit pipeline — T-VER holds ~256,000 tCO₂e/yr of active trade against a portfolio expectation of 2.19 Mt/yr. |
-| **Methodology coverage** | AR (forest & plantations) 110, REDD+ 69, perennial 30, agricultural land 10, plantation 8, AR large 4, mangrove 3, IFM 1, peat 0. **31 mangrove projects have zero credits issued** — the largest gap between registered and verified. |
-| **Project-size split (TGO classification)** | Micro 144, Small 89, Large 24. Micro projects are mostly community forests; large projects are mostly concession-style plantation schemes. |
+| **Pipeline rate** | **31 of 257 projects (12.1%) have received credits.** The other 226 still carry an ex-ante expectation of 1,982,918 tCO₂e/yr. That expectation is not a removal and not a credit. OTC forestry volume in this extract is 379,304 tCO₂e across the published years, not a steady 256,000 tCO₂e per year. |
+| **Methodology coverage** | Family tags, not a partition: project reg. 001 carries both AR and REDD+, and 23 projects have no methodology text. Tags: AR 110, REDD+ 69, perennial 30, agricultural land 10, plantation 8, AR large 4, mangrove 3, IFM 1, peat 0. Mangrove, plantation and IFM have no credits issued (3, 8 and 1). The largest unissued count is AR, 102 of 110. |
+| **Project-size split (TGO classification)** | Micro 144, Small 89, Large 24. Of the micro projects, 45 include ป่าชุมชน in the name. Size is TGO's label, not a land-use class. |
 | **Program / Form** | Standard T-VER 246, Premium T-VER 11 · single project 243, PoA 14. Premium carries mandatory buffer-pool and Article 6 alignment; the volume gap reflects the higher cost of permanence. |
-| **Top 5 developers (by expected tCO₂e/yr)** | Royal Forest Department 35 projects, Department of Marine and Coastal Resources 27, BAAC 12, Rubber Authority of Thailand 10, Department of National Parks 9. State agencies hold most of the portfolio. |
-| **Geographic concentration** | Top 5 provinces hold **33.3% of the expected volume** (Chumphon, Chiang Rai, Surat Thani, Rayong, Chiang Mai). Single-province 199, multi-province 52, no province named 6. |
-| **Issuance timeline (tCO₂e)** | 2016 1.5k, 2018 0.8k, 2022 5.6k, 2023 130k, **2024 424k (peak)**, 2025 57k, 2026 115k YTD. The 2024 spike traces to one large plantation issuance; otherwise volumes track the pipeline, not the press. |
-| **OTC market (FOR&AGR)** | Avg price ฿280–2,000/tCO₂e by year, with annual volume between 5k–256k tCO₂e. The current year is year-to-date; earlier years are settled. |
+| **Developers** | By project count: Royal Forest Department 35, Department of Marine and Coastal Resources 27, BAAC 12, Rubber Authority of Thailand 10, Department of National Parks 9. By expected tCO₂e/yr the Rubber Authority leads (653,175), then the Royal Forest Department (458,576) and DMCR (210,920). Names are stored as printed, so two spellings of one foundation stay separate. |
+| **Geographic concentration** | Ranked by **single-province** expected tonnes: Nan, Chiang Rai, Surat Thani, Rayong and Chiang Mai hold **33.3% of national expected volume**. Multi-province projects (52; 1,075,734 tCO₂e/yr) are not assigned to a province, so they are outside this ranking. Single-province 199, multi-province 52, no province named 6. |
+| **Issuance timeline (tCO₂e)** | 2016 1.5k, 2017 16 t, 2018 0.8k, 2022 5.6k, 2023 130k, **2024 424k (peak)**, 2025 57k, 2026 115k year-to-date. Of the 2024 total, 419,513 tCO₂e (98.9%) is one REDD+ issuance: Doi Tung Development Project, Chiang Rai (reg. 077). It is not a plantation issuance. |
+| **OTC market (FOR&AGR)** | Yearly average price runs from ฿279 (2023) to ฿2,000 (2022). Annual volume runs from 16 tCO₂e (2021) to 308,030 tCO₂e (2023). The volume-weighted average across these years is ฿416/tCO₂e. 2026 is year-to-date. |
 
 ### Why this is one browser away from being useful to TGO
 
@@ -423,6 +450,39 @@ The slices above are derived in this app from one static JSON snapshot of TGO's 
 
 The same approach scales to the next thing TGO wants to see — project-level credit retirements, vintage reporting, Article 6 corresponding-adjustment status, regional VVB accreditation patterns. Each is just another aggregate on the same snapshot. The point is that the snapshot, the test, and the rendering layer already exist; adding a new view is a small, contained change instead of an integration.
 
+
+## 13 · Why the name is คาบอนนะ
+
+The product is called **คาบอนนะ** (Kabonna, カボンナ). The name, the mark and the six poses are soft on purpose. Softness is how a person who is not a carbon accountant finds the tab, says the name, and stays. It is not how a tonne is calculated. The ledger, the sources and the uncertainty stay in the square record. The face never sits on a number.
+
+<figure class="kabonna-lockup"><img src="images/kabonna/mark.svg" alt=""><figcaption><b>คาบอนนะ</b><span>Kabonna · カボンナ</span></figcaption></figure>
+
+### The name is a hedge you can hear
+
+คาร์บอน is the Thai word for carbon. Said carefully it has a consonant cluster and a long vowel. คาบอนนะ breaks that into three open beats, คา-บอน-นะ, and ends on นะ. Thai นะ softens what was just said: it asks to be heard, it does not slam the point shut. Japanese な does the same job at the end of a sentence, and it is also how a lot of given names end. カーボン (carbon) plus な is カボンナ, which can be read as a small name rather than an institution. The field this tool sits next to is full of acronyms: TGO, T-VER, CCI, GFW, ODIAC. A distinctive item in a list of similar items is the one people remember (von Restorff, 1933). The cute name is that item. It is memorable because it does not look like a registry.
+
+The softness is also the claim the product is willing to make. An estimate is not a credit. A name that already sounds like it is checking with you — “carbon, yeah?” — is harder to mistake for a stamp.
+
+### Why a round face, in a square interface
+
+People look longer at faces with a large head, large eyes and a small body. Lorenz called that pattern the baby schema; Glocker and colleagues measured it and found it raises both the feeling of cuteness and the wish to look after ([Glocker et al., 2009](https://doi.org/10.1111/j.1439-0310.2008.01603.x)). That is the visibility mechanism: a round face in a browser tab is easier to find again than another navy square. Nittono and colleagues found that looking at cute images can make the next small task more careful, and can narrow attention ([Nittono et al., 2012](https://doi.org/10.1371/journal.pone.0046362)). That is a reason to hope someone looks closely. It is not a reason to believe the arithmetic got better. A face cannot check a tonne. The carefulness still has to be in the sources, the factors and the tests.
+
+So the mascot is allowed to be round, and almost nothing else is. The map, the rules, the tables and the three props the character holds — the viewing square, the plot flag, the stop palm — stay square, in the same paper, navy and yellow as the rest of the screen. One leaf is forest green, from the stock map. The other is yellow, the only accent. Curves are the exception that makes the face work. They stop at the face.
+
+### Six poses, six jobs
+
+The same character, so the face stays one memory. The pose changes, so the face can carry a job without being pasted onto a result.
+
+<ul class="kabonna-poses">
+<li><img src="images/kabonna/pose-greet.svg" alt="คาบอนนะ waving"><b>Greet</b><span>The mark. Open hands, come closer. This is the logo.</span></li>
+<li><img src="images/kabonna/pose-look.svg" alt="คาบอนนะ looking through a square"><b>Look</b><span>A square, the drawn box and the satellite cell. Looking is not a verdict.</span></li>
+<li><img src="images/kabonna/pose-both.svg" alt="คาบอนนะ holding a leaf and a plume apart"><b>Both</b><span>A leaf in one hand, a plume in the other, with a gap. Absorption and emission are shown together and never added.</span></li>
+<li><img src="images/kabonna/pose-measure.svg" alt="คาบอนนะ planting a small flag"><b>Measure</b><span>A flag in a small square plot. Field evidence, not a guess from the portrait.</span></li>
+<li><img src="images/kabonna/pose-wonder.svg" alt="คาบอนนะ with a hand to the cheek"><b>Wonder</b><span>Eyes up, mouth open. The uncertain part stays visible. Not knowing is a pose, not a hole to be filled with a zero.</span></li>
+<li><img src="images/kabonna/pose-stop.svg" alt="คาบอนนะ holding up a yellow square palm"><b>Stop</b><span>Palm forward. The cute layer ends before a credit. Issued units are not this character's job.</span></li>
+</ul>
+
+Greet is the only pose in the header and the tab icon, so the public face is an invitation. Look, Both, Measure and Wonder are the work: see the area, keep the two sides apart, ask for a plot, and leave the uncertainty on the screen. Stop is the limit of the whole idea. Cuteness that crosses into the credit line would spend the trust the baby schema borrowed. The character can wave. It cannot certify.
 
 [Global data sources, cadence and fallback rules / แหล่งข้อมูลโลกและรอบการอัปเดต](https://github.com/Nonarkara/carbon/blob/main/docs/WORLD_DATA.md).
 

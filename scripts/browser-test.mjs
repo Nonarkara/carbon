@@ -7,6 +7,7 @@ const browser=await chromium.launch({headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:1000}});const errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 await page.goto(base+'/?lang=en');await page.locator('#provinceRows tr').first().waitFor({state:'attached'});
+assert.match(await page.locator('.brand h1').innerText(),/^คาบอนนะ/);assert.ok(await page.locator('.kabonna-mark').isVisible());
 assert.match(await page.locator('#provinceRows tr').first().innerText(),/^Saraburi2561/);
 // Carbon map is the default lens: national figures, province selection, drawn box, overlays, export.
 const ledger=JSON.parse(await readFile('public/data/ledger/provinces.json','utf8')),mf=JSON.parse(await readFile('public/data/ledger/manifest.json','utf8')),F=1.27*.47*44/12;
@@ -107,7 +108,8 @@ for(const width of [1280,768,375]){
   await research.waitForLoadState();
   assert.equal(await research.locator('html').getAttribute('lang'),lang);
   assert.equal(await research.locator('.research-diagram').count(),7);
-  assert.equal(await research.locator('.research-toc a').count(),13);
+  assert.equal(await research.locator('.research-toc a').count(),14);
+  assert.equal(await research.locator('.kabonna-poses img').count(),6);
   assert.equal(await research.locator('.sysmap').count(),1);
   await research.locator('.research-toc a[href="#section-9"]').click();
   const portrait=research.locator('.author-profile img');await portrait.scrollIntoViewIfNeeded();
