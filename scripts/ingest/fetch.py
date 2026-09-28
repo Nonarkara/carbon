@@ -33,6 +33,11 @@ def targets():
         for var in ['AGB', 'AGB_SD']:
             name = f'{tile}_ESACCI-BIOMASS-L4-AGB{"_SD" if var == "AGB_SD" else ""}-MERGED-100m-2017-fv7.0.tif'
             t[f'cci2017/{name}'] = CCI.replace('/2020/', '/2017/') + name
+    # JAXA FNF 2017, paired with CCI 2017 for the national forest-inventory check (scripts/ingest/nfi_check.py)
+    for lon in range(97, 106):
+        for lat in range(5, 21):
+            name = f'E{lon:03d}.00-N{lat:02d}.00-E{lon+1:03d}.00-N{lat+1:02d}.00-FNF.tiff'
+            t[f'fnf2017/{name}'] = f'{FNF.replace("/2020/", "/2017/")}E{lon:03d}.00-E{lon+1:03d}.00/{name}'
     # Copernicus Global Land Service LC100 v3.0.1, 2017 forest-type layer (evergreen / deciduous), CC BY 4.0
     t['cgls/PROBAV_LC100_global_v3.0.1_2017-conso_Forest-Type-layer_EPSG-4326.tif'] = ('https://zenodo.org/records/3518036/files/'
         'PROBAV_LC100_global_v3.0.1_2017-conso_Forest-Type-layer_EPSG-4326.tif?download=1')
@@ -111,7 +116,7 @@ def main():
             log[rel] = entry
             print(status, rel, flush=True)
     LOG.write_text(json.dumps(dict(sorted(log.items())), indent=1) + '\n')
-    missing = [k for k, v in log.items() if 'sha256' not in v and not k.startswith('fnf/')]
+    missing = [k for k, v in log.items() if 'sha256' not in v and not k.startswith(('fnf/', 'fnf2017/'))]
     if missing:
         sys.exit(f'missing required files: {missing}')
 

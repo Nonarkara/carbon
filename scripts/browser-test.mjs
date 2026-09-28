@@ -18,6 +18,7 @@ const mt=v=>new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(v/1e
 await page.waitForFunction(()=>document.querySelector('#kStock').textContent.includes('M'));
 assert.equal(await page.locator('#kStock').innerText(),mt(ledger.national.forest_agb_mg*F));
 assert.equal(await page.locator('#kRemove').innerText(),mt(ledger.national.gfw_removals_mg_co2/25));
+await page.waitForFunction(()=>document.querySelector('#calculationTrace').textContent.includes('national forest inventory'));assert.match(await page.locator('#ledger').textContent(),/National forest inventory \(FREL 2021[\s\S]*359 t\/ha/);
 // Source labels on KPI hints travel from the manifest, not hardcoded strings.
 assert.equal(await page.locator('#kRemoveHint').textContent(),`GFW ${mf.datasets.gfw.version.split(' ')[0]} · ${mf.datasets.gfw.period}`);
 assert.ok((await page.locator('#kStockHint').textContent()).endsWith(`CCI ${mf.datasets.cci.version}`));

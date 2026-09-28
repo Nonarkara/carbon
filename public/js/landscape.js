@@ -30,6 +30,8 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   const ready=Promise.all(['manifest.json','provinces.json','provinces.geojson'].map(f=>fetch('data/ledger/'+f).then(r=>{if(!r.ok)throw Error('ledger:'+f);return r.json();})))
     .then(([manifest,data,geo])=>{
       S.manifest=manifest;S.data=data;
+      // National forest-inventory check (optional file): shown beside the map figure, never applied to it.
+      fetch('data/ledger/nfi-check.json').then(r=>r.ok?r.json():null).then(n=>{S.nfi=n;if(S.src)render();}).catch(()=>{});
       data.provinces.forEach(p=>byCode.set(p.pcode,p));byCode.set('TH',data.national);
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
         onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
@@ -91,7 +93,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     if(tverHTML)$('#ledger').insertAdjacentHTML('beforeend',tverHTML);
     $('#selectionName').textContent=S.sel.kind==='province'||S.sel.kind==='national'?placeName(s):getLang()==='th'?'พื้นที่ที่เลือก':'Selected area';
     $('#mapLabel').textContent=$('#selectionName').textContent;
-    $('#calculationTrace').innerHTML=renderCalculations({src:s,rows:S.rows,datasets:S.manifest.datasets,conv:S.manifest.conversion,t,fmt,esc,getLang});
+    $('#calculationTrace').innerHTML=renderCalculations({src:s,rows:S.rows,datasets:S.manifest.datasets,conv:S.manifest.conversion,t,fmt,esc,getLang,nfi:S.nfi});
     if(!$('#provinceBrowser').hidden)renderProvinces();
   }
 
@@ -106,6 +108,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     h.push(`<h3 class="lside">${esc(t('absorbSide'))}</h3>`);
     if(sf&&sf.tooCoarse)h.push(line(t('rStockForest'),'—','tCO₂e',dsMeta(ds.cci),t('tooCoarseGrid'),'unavailable'));
     else if(sf&&sf.value!=null)h.push(line(t('rStockForest'),big(sf.value),'tCO₂e',dsMeta(ds.cci)+' · '+dsMeta(ds.fnf),'',`verdict-row`)+
+(S.nfi?`<p class="hint nfi-note">${esc(t('nfiNote').replace('{r}',fmt(S.nfi.comparison.mean_ratio_map_over_nfi,1)))}</p>`:'')+
       `<p class="band">${esc(t('band'))}: ${sf.central?`<b>${big(sf.central[0])}–${big(sf.central[1])}</b> <small>${esc(t('bandBlock'))}</small><br>`:''}${big(sf.optimistic[0])}–${big(sf.optimistic[1])} <small>${esc(t('bandOpt'))}</small><br>${big(sf.conservative[0])}–${big(sf.conservative[1])} <small>${esc(t('bandCons'))}</small></p><p class="hint">${esc(t('bandNote'))}</p>`);
     if(sa&&!sa.tooCoarse)h.push(line(t('rStockAll'),big(sa.value),'tCO₂e',dsMeta(ds.cci)));
     const rem=r('forest_removals'),em=r('forest_emissions'),net=r('forest_net'),fl=r('forest_flux');
@@ -118,9 +121,11 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     if(fire)h.push(line(t('rFire'),fire.tooCoarse?'—':big(fire.value),'tCO₂/yr',dsMeta(ds.gfed),fire.tooCoarse?t('tooCoarse'):t('fireNote'),fire.tooCoarse?'unavailable':'')+(fire.tooCoarse||fire.value==null?'':fireCharts(s)));
     const fos=r('fossil');
     if(fos)h.push(line(t('rFossil'),fos.tooCoarse?'—':big(fos.value),'tCO₂/yr',dsMeta(ds.odiac),fos.tooCoarse?t('tooCoarse'):t('fossilNote'),fos.tooCoarse?'unavailable':''));
-    if(s.climatetrace_2024||s.btr1_2022)h.push(`<h3 class="lside">${esc(t('crossSide'))}</h3>`);
+    if(s.climatetrace_2024||s.btr1_2022||(S.nfi&&s.pcode==='TH'))h.push(`<h3 class="lside">${esc(t('crossSide'))}</h3>`);
     const ct=s.climatetrace_2024;
     if(ct)h.push(`<div class="lrow"><p class="lmeta">${esc(t('ctTitle'))}</p><dl class="cross"><dt>${esc(t('ctFires'))}</dt><dd>${big(ct['forest-land-fires'])}</dd><dt>${esc(t('ctClearing'))}</dt><dd>${big(ct['forest-land-clearing'])}</dd><dt>${esc(t('ctNet'))}</dt><dd>${big(ct['net-forest-land'])}</dd></dl></div>`);
+    const nfi=S.nfi&&s.pcode==='TH'?S.nfi:null;
+    if(nfi)h.push(`<div class="lrow"><p class="lmeta">${esc(t('nfiTitle'))}</p><dl class="cross"><dt>${esc(t('nfiStock'))}</dt><dd>${big(nfi.nfi.national.carbon_stock_tco2e)} ± ${big(nfi.nfi.national.carbon_stock_ci95_tco2e)}</dd><dt>${esc(t('nfiArea'))}</dt><dd>${big(nfi.nfi.national.forest_area_ha)} / ${big(nfi.map.forest_area_ha)}</dd><dt>${esc(t('nfiMean'))}</dt><dd>${fmt(nfi.nfi.national.agb_mean_t_ha,1)} / ${fmt(nfi.map.agb_mean_t_ha,1)}</dd></dl><p class="hint">${esc(t('nfiExplain').replace('{d}',fmt(nfi.comparison.implied_agb_t_ha_of_extra_tree_cover_if_map_unbiased_on_nfi_forest,0)))}</p></div>`);
     const b=s.btr1_2022;
     if(b)h.push(`<div class="lrow"><p class="lmeta">${esc(t('btrTitle'))}</p><dl class="cross"><dt>${esc(t('btrForest'))}</dt><dd>${big(b.forest_remaining_emissions*1e3)} / ${big(b.forest_remaining_removals*1e3)} / ${big(b.forest_remaining_net*1e3)}</dd><dt>${esc(t('btrConv'))}</dt><dd>${big(b.land_to_cropland*1e3)}</dd><dt>${esc(t('btrCrop'))}</dt><dd>${big(b.cropland_remaining_net*1e3)}</dd><dt>${esc(t('btrTotal'))}</dt><dd>${big(b.lulucf_net*1e3)}</dd></dl><p class="hint">${esc(t('btrNote'))}</p></div>`);
     return h.join('');

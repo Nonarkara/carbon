@@ -16,13 +16,13 @@ export function selectionCalculations(src,rows,datasets,conv){
  const net=find('forest_net');out.push({id:'net',title:'formulaFlux',value:net?.value??null,unit:'tCO₂e / yr',inputs:[src.gfw_emissions_mg_co2e,src.gfw_removals_mg_co2,datasets.gfw.years],expression:'(Emissions − removals) / years',source:`GFW ${datasets.gfw.version} · ${datasets.gfw.period}`});
  return out;
 }
-export function renderCalculations({src,rows,datasets,conv,t,fmt,esc,getLang}){
+export function renderCalculations({src,rows,datasets,conv,t,fmt,esc,getLang,nfi=null}){
  if(!src.area_ha)return `<p class="calc-alert">${esc(t('emptySelection'))}</p>`;
  const {R,CF}=stockChain(conv);
  return selectionCalculations(src,rows,datasets,conv).map(r=>{
   let substituted='';
   if(r.value!=null){const n=x=>fmt(x,2);substituted=r.id==='stock'?`${n(r.inputs[0])} t AGB × ${clean(1+R)} × ${clean(CF)} × 44 / 12`:r.id==='fossil'?`${n(r.inputs[0])} t C × 44 / 12`:`(${n(r.inputs[0])} − ${n(r.inputs[1])}) / ${r.inputs[2]}`;}
-  const note=r.coarse?t('coarseFormula'):r.value==null?t('gridNotIngested'):r.id==='stock'?t('bandNote'):r.id==='net'?(getLang()==='th'?'ค่าติดลบ = ดูดซับสุทธิ · ค่าเฉลี่ยของช่วงเวลา':'Negative = net sink · period average'):'';
+  const note=r.coarse?t('coarseFormula'):r.value==null?t('gridNotIngested'):r.id==='stock'?(nfi?t('nfiNote').replace('{r}',fmt(nfi.comparison.mean_ratio_map_over_nfi,1))+' ':'')+t('bandNote'):r.id==='net'?(getLang()==='th'?'ค่าติดลบ = ดูดซับสุทธิ · ค่าเฉลี่ยของช่วงเวลา':'Negative = net sink · period average'):'';
   return `<section class="calc-block ${r.id==='stock'?'primary-calc':''}" data-calculation="${r.id}"><h3>${esc(t(r.title))}</h3><div class="calc-answer">${r.value==null?'—':fmt(r.value,0)} <small>${esc(r.unit)}</small></div><code>${esc(r.expression)}</code>${substituted?`<code class="substitution">${esc(substituted)}</code>`:''}<p>${esc(r.source)} · ${esc(t('globalRef'))}</p>${note?`<p>${esc(note)}</p>`:''}</section>`;
  }).join('')+`<p class="hint">${esc(t('calcCredit'))}</p>`;
 }

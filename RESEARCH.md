@@ -96,6 +96,14 @@ Implemented as the app's default carbon map. Full method, checks and limits: `do
 - BTR1 2022 (Table 2-184): forest land remaining forest −29.3 Mt net; cropland remaining cropland −91.5 Mt; LULUCF −107.9 Mt. JAXA offers no carbon stock product; aerosol and XCO₂ are concentrations, not emissions.
 - Rule: every pixel counted once; provinces, grid and nation reconcile exactly (tested). No figure is a credit or a T-VER input.
 
+## Estimation rigour — added 29 September 2026
+
+Full text: `docs/RESEARCH.{en,th}.md` sections 06 and 14.
+
+- **Central uncertainty range, calibrated to the producer.** ESA aggregates pixel SD with a covariance term estimated from airborne LiDAR (CCI Biomass PUG v6 §5). The pipeline models errors as fully correlated within 0.05° blocks and independent between them, and checks that against ESA's published 2020 standard errors for 10 km (2,068 cells) and 25 km (197 cells) maps on every build: the model is 1.47× and 1.23× ESA's, i.e. on the cautious side. Thailand ±1.4%, Chiang Mai ±4.7%, Samut Songkhram ±43% (95%, random error only). Floor and ceiling ranges stay visible.
+- **National forest inventory check.** FREL/FRL 2021 Tables 6 and 13 give 17.2 ± 0.7 Mha of forest (2016) at 90.5 ± 7.5 t/ha AGB (NFI cycle 3, 2012–2018, median 2017): 1.56 ± 0.11 Gt AGB, 3.48 ± 0.25 Gt CO₂e with the FREL's root:shoot by type. ESA CCI 2017 over JAXA FNF 2017 forest: 23.8 Mha at 165.0 t/ha, 3.94 Gt AGB. Bound: for the map to be unbiased on inventory forest, the 6.6 Mha of extra radar tree cover would need 359 t/ha. For 0–200 t/ha on that extra cover, the map reads 1.7–2.5× the inventory. The map reads high on Thai forest; the app shows this beside every stock figure and does not rescale provinces or boxes. A Copernicus LC100 forest-type stratification was rejected (97% evergreen vs ~35% in the inventory).
+- **Competitors reviewed** (GISTDA Carbon Atlas, THAICOM CarbonWatch, SCGC CERT+, Varuna, CTrees, Kanop, Sylvera, Chloris, Planet, GFW): none of the Thai platforms publishes an accuracy figure. Next improvements, in order: a second AGB map (CTrees, CC BY 4.0) for map-to-map spread, CCI yearly series with the change quality flag, GEDI-based small-area estimation.
+
 ## TGO T-VER registry integration & institutional findings — added 28–29 September 2026
 
 Full method, checks and limits: `docs/RESEARCH.en.md` / `.th.md` section 11. Summary:

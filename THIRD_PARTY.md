@@ -51,6 +51,9 @@ Province assignment uses only the `จ.` / `จังหวัด` markers in TG
 | GFED5.1, DOI 10.5281/zenodo.16794692 | CC BY 4.0 | van der Werf, Chen et al., Global Fire Emissions Database |
 | ODIAC2025, DOI 10.17595/20170411.001 | CC BY 4.0 | Oda, T. and Maksyutov, S., NIES |
 | Thailand subnational boundaries (COD-AB v01) | CC BY-IGO | Royal Thai Survey Department, via OCHA / HDX |
+| Thailand FREL/FRL submission to the UNFCCC (modified July 2021) | Government publication, cited not redistributed | Royal Thai Government / RFD — national forest inventory figures used for the national check |
+| Copernicus Global Land Service LC100 v3.0.1, 2017 forest-type layer | CC BY 4.0 | Buchhorn et al., Copernicus Global Land Service — downloaded for a stratification test that was rejected; no published figure depends on it |
+| ESA CCI Biomass v7.0 aggregated 10 km and 25 km AGB and SD | ESA CCI data policy | Used only to calibrate the uncertainty model |
 | Climate TRACE API v7 (2024) | CC BY 4.0 | Climate TRACE coalition |
 | Thailand First Biennial Transparency Report (2024) | Government publication, cited not redistributed | Department of Climate Change and Environment |
 | NASA GIBS imagery (atmosphere layers, requested live) | NASA open data | NASA EOSDIS Global Imagery Browse Services; VIIRS, AIRS, OCO-2 science teams |

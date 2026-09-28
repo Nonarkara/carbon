@@ -1,0 +1,67 @@
+{
+ "nfi": {
+  "source": "Thailand FREL/FRL submission to the UNFCCC (modified July 2021): Table 13 (NFI cycle 3), Tables 6–7 (2016 area)",
+  "url": "https://redd.unfccc.int/media/modified_thailand_rl_july2021.pdf",
+  "median_year": 2017,
+  "national": {
+   "carbon_stock_tco2e": 3475167169.8,
+   "carbon_stock_ci95_tco2e": 252095794.5,
+   "forest_area_ha": 17228723.0,
+   "forest_area_ci95_ha": 733610.8,
+   "agb_total_t": 1559427979.0,
+   "agb_total_ci95_t": 110868811.5,
+   "agb_mean_t_ha": 90.5,
+   "agb_mean_ci95_t_ha": 7.5,
+   "by_type": {
+    "evergreen": {
+     "area_ha": 5901616,
+     "agb_t_ha": 136.327
+    },
+    "deciduous": {
+     "area_ha": 11085770,
+     "agb_t_ha": 65.465
+    },
+    "mangrove": {
+     "area_ha": 241337,
+     "agb_t_ha": 120.779
+    }
+   }
+  }
+ },
+ "map": {
+  "agb": "ESA CCI Biomass v7.0, 2017, 100 m",
+  "forest": "JAXA ALOS-2 PALSAR-2 FNF v2.1.0, 2017, forest fraction (classes 1–2)",
+  "forest_area_ha": 23844913.9,
+  "agb_total_t": 3935089897.5,
+  "agb_total_ci95_t_block_model": 52947577.0,
+  "agb_mean_t_ha": 165.03
+ },
+ "comparison": {
+  "mean_ratio_map_over_nfi": 1.823,
+  "total_ratio_map_over_nfi": 2.523,
+  "extra_fnf_forest_ha": 6616190.9,
+  "implied_agb_t_ha_of_extra_tree_cover_if_map_unbiased_on_nfi_forest": 359.1,
+  "reading": "If the map were unbiased on NFI forest, the extra FNF tree cover would have to average the implied density above.",
+  "map_over_nfi_on_nfi_forest_if_extra_holds": {
+   "0": 2.52,
+   "100": 2.1,
+   "136": 1.95,
+   "200": 1.67
+  }
+ },
+ "cgls_forest_type_check": {
+  "layer": "Copernicus Global Land Service LC100 v3.0.1, 2017, forest-type layer (CC BY 4.0)",
+  "evergreen_ha": 24083539,
+  "deciduous_ha": 751457,
+  "evergreen_share": 0.97,
+  "frel_evergreen_share": 0.347,
+  "used": false,
+  "reason": "Leaf-phenology labels put almost all Thai forest in the evergreen class, unlike the NFI forest types; strata would not match."
+ },
+ "caveats": [
+  "Different forest definitions: NFI forest excludes plantations other than teak; FNF counts any tree canopy ≥10% over ≥0.5 ha.",
+  "Different years: NFI cycle 3 plots span 2012–2018 (median 2017); the map is 2017 and the FREL areas are 2016.",
+  "The NFI totals propagate the published half 95% CIs as independent terms; map uncertainty is the ledger block model (random error only).",
+  "National scale only. Not a correction for any province, box or parcel."
+ ]
+}
