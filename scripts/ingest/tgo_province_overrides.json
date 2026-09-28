@@ -1,0 +1,14 @@
+{
+  "1/1/730": {"provinces": ["อุดรธานี", "บึงกาฬ", "สกลนคร", "หนองคาย", "หนองบัวลำภู"], "reason": "Location lists these five provinces by name without the จ. marker. Reviewed 2026-09-28."},
+  "1/1/663": {"provinces": ["กระบี่"], "reason": "Project title names the Krabi Agricultural Research and Development Center (ศูนย์วิจัยและพัฒนาการเกษตรกระบี่). Reviewed 2026-09-28."},
+  "1/1/661": {"provinces": ["ระยอง"], "reason": "No location given; the developer is the Rayong Provincial Administrative Organization (องค์การบริหารส่วนจังหวัดระยอง). Inference from developer, not a stated site. Reviewed 2026-09-28."},
+  "1/1/548": {"provinces": ["สระบุรี"], "reason": "Location gives อ.วังม่วง สระบุรี without the จ. marker. Reviewed 2026-09-28."},
+  "1/1/354": {"provinces": ["สมุทรปราการ"], "reason": "Location gives ตำบลบางแก้ว อำเภอบางพลี สมุทรปราการ without the จ. marker (the Bang Na–Trat road name must not match Trat). Reviewed 2026-09-28."},
+  "2/1/718": {"provinces": ["ลำปาง"], "reason": "Plantations at อ.แม่เมาะ and ต.บ้านแลง อ.เมือง, both in Lampang; province not written. Reviewed 2026-09-28."},
+  "1/1/776": {"provinces": [], "reason": "Only the Forest Industry Organization's Nakhon Ratchasima regional office is named; plantation sites across the northeast are not stated. Left unlocated. Reviewed 2026-09-28."},
+  "1/1/652": {"provinces": [], "reason": "No location in the public record. Left unlocated. Reviewed 2026-09-28."},
+  "1/1/651": {"provinces": [], "reason": "No location in the public record. Left unlocated. Reviewed 2026-09-28."},
+  "1/1/648": {"provinces": [], "reason": "No location in the public record; the partner company's base is not evidence of the planting site. Left unlocated. Reviewed 2026-09-28."},
+  "1/1/647": {"provinces": [], "reason": "No location in the public record. Left unlocated. Reviewed 2026-09-28."},
+  "2/1/634": {"provinces": [], "reason": "No location in the public record. Left unlocated. Reviewed 2026-09-28."}
+}
