@@ -2,7 +2,7 @@
 
 # Building a system to calculate a forest carbon footprint from public and open data
 
-<p class="research-deck">Open and public data can weigh a landscape. They cannot mint a credit. This study builds the system that keeps those two sentences apart, and shows every number that results.</p>
+<p class="research-deck">Open and public data can weigh a landscape — and, checked against Thailand's own forest inventory, the open satellite map weighs it heavy. They cannot mint a credit. This study builds the system that keeps those sentences apart, and shows every number that results.</p>
 
 This is an independent study in the form of a short thesis. It is not a university submission, not a degree, and not an official TGO assessment. The working system is called คาบอนนะ. The chapters below are the thesis: question, method, evidence, limits, and the design of the public face.
 
@@ -10,7 +10,7 @@ This is an independent study in the form of a short thesis. It is not a universi
 <dt>Question</dt>
 <dd>Can a public system calculate a forest carbon footprint for Thailand from open and public data, at the scale of a province, a drawn box, or a project boundary, without pretending the result is an issued credit?</dd>
 <dt>Answer</dt>
-<dd>Yes for a landscape account, and only for that. Satellite biomass, a forest mask, forest loss and gain, fire, and fossil CO₂ can be summed inside one boundary and kept in their own units. No, for a single footprint number, and no, for a credit. Stock is not a period flux. A flux is not a fire emission. A fire emission is not fossil CO₂. None of them is a credit TGO has certified.</dd>
+<dd>Yes for a landscape account, and only for that. Satellite biomass, a forest mask, forest loss and gain, fire, and fossil CO₂ can be summed inside one boundary and kept in their own units. No, for a single footprint number, and no, for a credit. Stock is not a period flux. A flux is not a fire emission. A fire emission is not fossil CO₂. None of them is a credit TGO has certified. And the landscape account carries a measured bias: against Thailand's national forest inventory, the open ESA biomass map reads about 1.35 to 2 times high on Thai forest (section 06), so its stock is shown beside the inventory's, never alone.</dd>
 <dt>What was built</dt>
 <dd>An offline ingest that turns public rasters and tables into a ledger where every 100 m pixel belongs to at most one province and exactly one grid cell, so province totals, the national total, and the grid total match. A browser then answers a province, a box, or an imported boundary at once. A separate workbench applies T-VER-S-METH-13-01 v2 only to numbers the user supplies from the field. TGO’s public T-VER list sits beside the map as context, never as an input.</dd>
 <dt>What this does not claim</dt>
@@ -29,7 +29,9 @@ This is an independent study in the form of a short thesis. It is not a universi
 | Who did the work | 09 |
 | Where the evidence is kept | 10 |
 | TGO’s registry as context, not an input | 11, 12 |
+| How far the map can be trusted: uncertainty and the national forest inventory check | 06 |
 | Why the public name is คาบอนนะ | 13 |
+| Other systems, and whose methods this one uses | 14 |
 
 A person can spend years protecting a forest and still struggle to prove what that work has achieved. The trees are there. The effort is real. The evidence is scattered across survey sheets, maps, government tables and satellite archives. Turning those pieces into a defensible carbon estimate takes work that a beautiful dashboard cannot wish away.
 
