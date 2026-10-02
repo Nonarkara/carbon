@@ -38,7 +38,7 @@ export function initRegistry({t,fmt,getLang}){
     const rows=D.market.for_agr;if(!rows.length)return '';
     return `<div class="lrow"><p class="lmeta">${esc(t('tverMarket'))}</p><div class="table-scroll"><table class="tver-market"><thead><tr><th>${esc(t('year'))}</th><th>${esc(t('tverVolume'))}</th><th>${esc(t('tverAvg'))}</th><th>${esc(t('tverRange'))}</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.year}${r.year===Number(D.snapshot.slice(0,4))?'*':''}</td><td>${n0(r.volume_tco2e)}</td><td>${fmt(r.avg_thb,0)}</td><td>${fmt(r.min_thb,0)}–${fmt(r.max_thb,0)}</td></tr>`).join('')}</tbody></table></div><p class="hint">${esc(t('tverMarketNote'))}</p></div>`;
   }
-  const source=()=>`<p class="lmeta">TGO · T-VER FOR&amp;AGR · ${esc(t('tverSnapshot'))} ${esc(date(D.snapshot))} · <a href="${esc(D.source.registry)}" target="_blank" rel="noopener">tver.tgo.or.th ↗</a></p>`;
+  const source=()=>`<p class="lmeta">TGO · T-VER FOR&amp;AGR · ${esc(t('tverSnapshot'))} ${esc(date(D.snapshot))} · <a href="${esc(D.source.registry)}" target="_blank" rel="noopener">tver.tgo.or.th ↗</a> · <a href="bible.html?lang=${getLang()}#registry" target="_blank" rel="noopener">${th()?'อ่านทะเบียนอย่างไร ↗':'Registry numbers explained ↗'}</a></p>`;
 
   // Ledger block for a province ('TH' = nation). Boxes get a pointer to provinces: the registry has no coordinates.
   function section(pcode){

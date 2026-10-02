@@ -42,3 +42,15 @@ Source: the owner's “ChatGPT Image Oct 2, 2026, 04_12_14 PM-4.png” sheet (2 
 No CSS inversion, tint, forced fill, backdrop, border radius or shadow is applied to these PNGs. Green/charcoal variants belong on light grounds; the dark blue proof is a transparency diagnostic, not their intended placement.
 
 The availability link is for a browser web app. Installation instructions cite Apple Support and Google Chrome Help; manifest standalone mode and Apple touch-icon metadata support home-screen launch. Internet and session-only input limits remain explicit. No offline cache is introduced. Chromium tests validate manifest, icon dimensions, transparent pixels and phone layouts; installation on physical iOS/Android devices is not claimed.
+
+## Native carbon Bible · 2 October 2026
+
+Human task: find the explanation behind an app number, understand its calculation and return to the workbench without losing inputs. Conserved: map, province/area selection, world feeds, registry, calculation flows, exports, Research, manual, current CT branding and flat Bauhaus palette.
+
+Compositions considered: a single long reference page, versus a searchable chapter index + central reader + source shelf. Chosen: the reader; the long page makes source tracing and phone navigation harder. On phone the bounded chapter list precedes the article; sources follow it. TH/EN switches preserve chapter, query and category. Separate-tab app entry preserves browser-local workbench state.
+
+Sources → adaptation: CFO Lite's public organization/history/offset workflow informs the teaching path. Authenticated calculation screens were not reviewed. GHG Protocol and ISO scope distinctions inform the reference; standards are cited without pretending certification. Every ledger dataset is generated into the source shelf from the deployed manifest. National examples import the app's pure calculation modules. Workflow diagrams carry actual steps; no decorative geometric filler or button shadows.
+
+Roles: yellow header marks the tool family; blue identifies evidence/navigation; red marks chapter category; black rules separate index, article and source shelf. White remains the reading surface. Native inputs, anchors, print and clipboard keep interactions predictable.
+
+Verification: bilingual search, AND terms, Unicode normalization, category isolation, source/related-link integrity, full manifest dataset coverage and derived stock example are automated. Browser checks include search, language preservation, no-result recovery, deep links, TH/EN and phone/desktop layout. Authored quality was visually reviewed; no independent user usability session has occurred. Remaining human review: have a first-time SME reader follow the CFO teaching path, and a qualified carbon reviewer assess method applicability to an actual project.

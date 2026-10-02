@@ -1,5 +1,9 @@
 # Forest Carbon Thailand
 
+## Search the Carbon Bible
+
+Open **Research → Carbon Bible**, or **Explain this number + diagram** beside a map equation. Search in Thai or English, choose a category, then open a chapter. The diagram shows the path; the worked example shows the arithmetic; the source shelf gives versions and dates. TH/EN preserves the chapter and search. **Clear** restores all chapters. **Copy chapter link** shares the view; **Print this chapter** prints its explanation and sources. The reader opens separately to preserve workbench inputs. [Open the Bible](bible.html?lang=en).
+
 ## What this release does
 
 An independent Thai/English workbench for assessing forest carbon from supplied measurements. Use it to explore a boundary, trace assumptions and prepare a reproducible calculation for review. It does **not** issue credits, establish land rights, train an AI model, or certify compliance with TGO.

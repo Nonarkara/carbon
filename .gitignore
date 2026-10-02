@@ -16,3 +16,6 @@ public/research-th.html
 research/raw/landscape/
 .claude/
 research/raw/tgo/
+
+public/bible.html
+public/data/bible.json
