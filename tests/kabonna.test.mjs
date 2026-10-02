@@ -9,11 +9,11 @@ test('the public name is คาบอนนะ in both languages and in the head
   assert.equal(i18n.match(/title:'คาบอนนะ'/g).length,2);
   assert.doesNotMatch(i18n,/title:'Forest Carbon'|title:'คาร์บอนป่าไม้'/);
   const html=readFileSync('public/index.html','utf8');
-  assert.match(html,/class="kabonna-mark" src="images\/kabonna\/mark.svg" width="40" height="40"/);
+  assert.match(html,/class="kabonna-mark" src="images\/brand\/ct-mark.png" width="40" height="40"/);
   assert.match(html,/<title>คาบอนนะ/);
 });
 
-test('six poses and the mark are svg drawings of the same character',()=>{
+test('the historical six poses and original mark remain available',()=>{
   const mark=readFileSync('public/images/kabonna/mark.svg','utf8');
   assert.match(mark,/viewBox="0 0 64 64"/);
   assert.equal(readFileSync('public/favicon.svg','utf8'),mark);

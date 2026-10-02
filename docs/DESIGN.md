@@ -29,3 +29,16 @@ At the start of this change the working tree was clean. Local HEAD, GitHub main 
 ## Current: Bauhaus brutalism — owner correction, 2 October 2026
 
 The owner rejected the olive/cream scheme as too close to Malaysia and explicitly rejected button shadows. This supersedes plate 342 above. White ground and black structure now dominate. Red #bd251b identifies the province action, yellow #ffdf00 the area-selection tool, and blue #1643c5 the world instruments and Research. Main type is sans serif, rules are solid black, corners square. All decorative shadows are removed, including inherited Leaflet controls; keyboard focus uses an outline. Data legends and institutional marks retain their own colours. No calculations or content change.
+
+## Owner-supplied CT identity and mobile web app
+
+Source: the owner's “ChatGPT Image Oct 2, 2026, 04_12_14 PM-4.png” sheet (2 October 2026). It is flattened RGB, so transparent PNG variants were prepared using imagegen and inspected in a browser on white and coloured grounds. White cutouts are alpha, not white paint. Logo colours are intrinsic brand assets, independent of the Bauhaus chrome.
+
+- ct-mark.png: compact header identity; 32 px browser favicon.
+- ct-colour.png: full Research lockup on white.
+- ct-monochrome.png: manual index on white.
+- ct-app.png: green tile with transparent letter cutouts, installation illustration; 180/192/512 px icons derived with aspect-preserving resizing.
+
+No CSS inversion, tint, forced fill, backdrop, border radius or shadow is applied to these PNGs. Green/charcoal variants belong on light grounds; the dark blue proof is a transparency diagnostic, not their intended placement.
+
+The availability link is for a browser web app. Installation instructions cite Apple Support and Google Chrome Help; manifest standalone mode and Apple touch-icon metadata support home-screen launch. Internet and session-only input limits remain explicit. No offline cache is introduced. Chromium tests validate manifest, icon dimensions, transparent pixels and phone layouts; installation on physical iOS/Android devices is not claimed.

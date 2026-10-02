@@ -481,6 +481,8 @@ Further views TGO may want — retirements by project, vintages, corresponding-a
 
 ## 13 · Why the name is คาบอนนะ
 
+Brand update · 2 October 2026: the owner supplied the CT leaf identity now used in the header, browser icon and mobile web app. The following mascot discussion records the earlier identity exploration; its six teaching poses remain available. The interface now follows the owner’s Bauhaus direction.
+
 The product is called **คาบอนนะ** (Kabonna, カボンナ). The name, the mark and the six poses are soft on purpose. Softness is how a person who is not a carbon accountant finds the tab, says the name, and stays. It is not how a tonne is calculated. The ledger, the sources and the uncertainty stay in the square record. The face never sits on a number.
 
 <figure class="kabonna-lockup"><img src="images/kabonna/mark.svg" alt=""><figcaption><b>คาบอนนะ</b><span>Kabonna · カボンナ</span></figcaption></figure>
@@ -502,7 +504,7 @@ So the mascot is allowed to be round, and almost nothing else is. The map, the r
 The same character, so the face stays one memory. The pose changes, so the face can carry a job without being pasted onto a result.
 
 <ul class="kabonna-poses">
-<li><img src="images/kabonna/pose-greet.svg" alt="คาบอนนะ waving"><b>Greet</b><span>The mark. Open hands, come closer. This is the logo.</span></li>
+<li><img src="images/kabonna/pose-greet.svg" alt="คาบอนนะ waving"><b>Greet</b><span>The mark. Open hands, come closer. The earlier logo exploration.</span></li>
 <li><img src="images/kabonna/pose-look.svg" alt="คาบอนนะ looking through a square"><b>Look</b><span>A square, the drawn box and the satellite cell. Looking is not a verdict.</span></li>
 <li><img src="images/kabonna/pose-both.svg" alt="คาบอนนะ holding a leaf and a plume apart"><b>Both</b><span>A leaf in one hand, a plume in the other, with a gap. Absorption and emission are shown together and never added.</span></li>
 <li><img src="images/kabonna/pose-measure.svg" alt="คาบอนนะ planting a small flag"><b>Measure</b><span>A flag in a small square plot. Field evidence, not a guess from the portrait.</span></li>

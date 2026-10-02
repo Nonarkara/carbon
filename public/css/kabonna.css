@@ -162,3 +162,11 @@ body.dashboard button:active,body.dashboard .btn:active {transform:none}
  .dashboard .calc-answer {font-size:27px}
  .dashboard .world-item {padding:14px 0}
 }
+/* Transparent brand PNGs: intrinsic proportions, no CSS recolouring or tile. */
+.dashboard .kabonna-mark {object-fit:contain;background:transparent;padding:0;filter:none}
+.research-brand {display:block;width:140px;height:auto;max-width:100%;margin:0 0 14px;object-fit:contain;background:transparent;filter:none}
+.manual-brand {display:block;width:140px;height:auto;max-width:100%;margin:0 0 14px;object-fit:contain;background:transparent;filter:none;grid-column:1/-1}
+.app-availability {font-size:10px;font-weight:600;line-height:1.6;text-underline-offset:2px}
+@media(max-width:700px){.research-brand{width:100px;margin-bottom:10px}.manual-brand{width:110px;margin-bottom:8px}.app-availability{font-size:9px}}
+.install-mark {float:right;width:72px;height:72px;object-fit:contain;background:transparent;margin:10px 0 10px 16px;filter:none}
+#install {display:flow-root}

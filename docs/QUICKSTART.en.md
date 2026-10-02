@@ -61,6 +61,21 @@ To use measured trees, open **Evidence**, download the CSV template, confirm the
 **Before closing the tab, export.** Inputs are held in browser memory. Refreshing or closing the original tab loses them. The system produces an estimate for review, not issued credits.
 
 </section>
+<section id="install">
+<img class="install-mark" src="images/brand/ct-app.png" alt="Kabonna web app">
+
+## Available on Android and iPhone · add the web app
+
+Use the system in your browser now, or add Kabonna to your Home Screen for the next visit.
+
+- **Android / Chrome:** open [carbon.nonarkara.org](https://carbon.nonarkara.org/?lang=en) → **⋮** menu → **Add to Home screen** or **Install app** → confirm.
+- **iPhone / Safari:** open the website → **Share** (under More in some layouts) → **Add to Home Screen** → enable **Open as Web App** if offered → **Add**.
+
+**You are done when:** the Kabonna icon appears on your Home Screen. Tap it to open the map. An internet connection is required. Export your project before closing the app; entered data stays in session memory.
+
+Instructions: [Apple Support](https://support.apple.com/guide/iphone/open-as-web-app-iphea86e5236/ios) · [Google Chrome Help](https://support.google.com/chrome/answer/9658361?co=GENIE.Platform%3DAndroid&hl=en)
+
+</section>
 <section id="layers">
 
 ## Use layers and world data

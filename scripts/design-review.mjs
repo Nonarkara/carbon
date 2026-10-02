@@ -12,6 +12,10 @@ for(const lang of ['th','en']) for(const width of [375,768,1440]){
  await p.goto(`${base}/?lang=${lang}`);
  await p.locator('#kStock').filter({hasText:'M'}).waitFor();
  await p.evaluate(()=>document.fonts.ready);
+ const branding=await p.locator('.kabonna-mark').evaluate(async img=>{await img.decode();return {fit:getComputedStyle(img).objectFit,background:getComputedStyle(img).backgroundColor,loaded:img.naturalWidth>0}});
+ assert.deepEqual(branding,{fit:'contain',background:'rgba(0, 0, 0, 0)',loaded:true});
+ assert.equal(await p.locator('#installLink').getAttribute('href'),`guide-${lang}.html#install`);
+ assert.match(await p.locator('#installLink').textContent(),/Android.*iPhone/);
  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'page overflows');
  const shadows=await p.locator('button,.btn,.leaflet-control,.layer-panel,.overlay-legend').evaluateAll(es=>es.filter(e=>getComputedStyle(e).boxShadow!=='none').map(e=>e.id||e.className));
  assert.deepEqual(shadows,[],'Controls must remain flat, without inherited shadows');
@@ -34,10 +38,20 @@ for(const lang of ['th','en']) for(const width of [375,768,1440]){
  await p.screenshot({path:`test-results/design-research-${lang}-${width}.png`});
  await p.goto(`${base}/guide-${lang}.html`);await p.locator('.manual-routes').waitFor();
  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'manual overflow');
+ assert.match(await p.locator('#install').innerText(),/Android[\s\S]*iPhone/);
+ assert.ok(await p.locator('.manual-brand').evaluate(img=>img.complete&&img.naturalWidth>0));
  await p.screenshot({path:`test-results/design-manual-${lang}-${width}.png`});
 }
 await p.setViewportSize({width:1280,height:900});
 await p.goto(`${base}/?lang=en`);await p.locator('#kStock').filter({hasText:'M'}).waitFor();
+const manifest=await p.request.get(`${base}/manifest.json`).then(r=>r.json());
+assert.equal(manifest.display,'standalone');
+for(const file of ['ct-mark.png','ct-app.png','ct-colour.png','ct-monochrome.png','icon-180.png','icon-192.png','icon-512.png']){
+ const alpha=await p.evaluate(async file=>{const img=new Image();img.src=`images/brand/${file}`;await img.decode();const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);const d=ctx.getImageData(0,0,c.width,c.height).data;let clear=0,solid=0;for(let i=3;i<d.length;i+=4){if(d[i]===0)clear++;if(d[i]>240)solid++;}return {width:c.width,height:c.height,corner:d[3],clear:clear/(d.length/4),solid:solid/(d.length/4)}},file);
+ assert.equal(alpha.corner,0,`${file} background is not transparent`);
+ assert.ok(alpha.clear>.2&&alpha.solid>.05,`${file} lost transparency or visible strokes`);
+ if(file.startsWith('icon-')){const size=Number(file.match(/\d+/)[0]);assert.equal(alpha.width,size);assert.equal(alpha.height,size);}
+}
 const cdp=await p.context().newCDPSession(p);
 for(const mode of ['deuteranopia','achromatopsia']) {
  await cdp.send('Emulation.setEmulatedVisionDeficiency',{type:mode});
