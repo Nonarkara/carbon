@@ -1,0 +1,157 @@
+/* Kabonna working palette. Wada plate 342, digital reconstruction from
+   Nonarkara/palette @ 6f389dfe. Named colours and role rationale: docs/DESIGN.md.
+   This is the authoritative presentation layer; calculation/map colours stay data-bound. */
+:root {
+  --forest:#253122; --cream:#fdbf68; --pink:#f8b6ba; --ochre:#986f2d;
+  --paper:#faf8f1; --well:#eeeee3; --well-2:#ffffff;
+  --ink:#253122; --ink-mid:#465341; --ink-low:#596451;
+  --rule:#d6dacc; --rule-strong:#89927e;
+  --brand:var(--cream); --accent:#73521d; --accent-ink:#fff;
+  --accent-dim:#fbe4bf; --wash-info:#eee5e8;
+}
+/* Two bands: identity/navigation, then tasks. Every field has a job. */
+.dashboard .top {
+  background:var(--forest); color:var(--paper); padding:10px 16px 0;
+  gap:10px 16px; border-bottom:0;
+  grid-template-columns:minmax(210px,1fr) minmax(200px,330px) auto;
+}
+.dashboard .brand h1 {color:var(--paper);font-size:27px;letter-spacing:-.5px}
+.dashboard .country {color:var(--cream);font:500 10px var(--num);letter-spacing:.07em;text-transform:uppercase}
+.dashboard .kabonna-mark {background:var(--paper);border-radius:50%;padding:2px}
+.dashboard .top-right {gap:6px}
+.dashboard .toplink {border:1px solid #7b8776;color:var(--paper);background:transparent;min-height:40px;padding:8px 12px;font-size:12px}
+.dashboard #aboutTab {background:var(--pink);color:var(--forest);border-color:var(--pink)}
+.dashboard #aboutTab[aria-pressed=true] {box-shadow:inset 0 -4px var(--forest)}
+.dashboard .langs {border-color:#7b8776}
+.dashboard .langs button {color:var(--paper);background:transparent;min-height:40px}
+.dashboard .langs button[aria-pressed=true] {background:var(--cream);color:var(--forest)}
+.dashboard .search select {height:40px;background:var(--paper);border-color:var(--paper);color:var(--forest);font-size:13px}
+.dashboard .quick-tools {margin:0 -16px;padding:9px 205px 9px 16px;background:var(--well);gap:8px;border-bottom:1px solid var(--rule-strong)}
+.dashboard .quick-tools .btn {min-height:42px;padding:8px 13px;font-size:12px;font-weight:600;border:1px solid var(--rule-strong);color:var(--ink)}
+.dashboard #exploreProvinces {background:var(--cream);border-color:var(--forest);box-shadow:2px 2px 0 var(--forest)}
+.dashboard #pickArea {background:var(--forest);color:var(--paper);border-color:var(--forest)}
+.dashboard #showVegetation,.dashboard #showAerosol,.dashboard #moreLayers {background:transparent;border-color:transparent;border-bottom:2px solid var(--rule-strong)}
+.dashboard #showVegetation:hover,.dashboard #showAerosol:hover,.dashboard #moreLayers:hover {background:var(--paper);border-bottom-color:var(--forest)}
+.dashboard #pickArea[aria-pressed=true] {background:var(--pink);color:var(--forest)}
+.dashboard #startMap {font-size:11px;color:var(--ink-mid);max-width:185px;margin-left:4px}
+.dashboard .advanced-tools {bottom:10px;color:var(--ink);font-size:11px}
+.dashboard .advanced-tools>summary {min-height:42px;padding:8px 10px;background:var(--paper);border-color:var(--rule-strong)}
+.dashboard .advanced-tools[open]>summary {background:var(--forest);color:var(--paper)}
+.dashboard .advanced-tools .lenses {background:var(--paper);border:2px solid var(--forest);padding:6px;box-shadow:4px 4px 0 #25312230}
+.dashboard .advanced-tools .lenses button {color:var(--ink);min-height:44px;padding:10px}
+.dashboard .advanced-tools .lenses button[aria-pressed=true] {background:var(--cream);color:var(--ink)}
+/* The selected area and three quantities remain distinct, with dates attached. */
+.dashboard .kpis {background:#fff;border-bottom:1px solid var(--rule-strong)}
+.dashboard .kpis dl {padding:8px 16px;border-right:1px solid var(--rule)}
+.dashboard .kpis dl:first-child {background:var(--well)}
+.dashboard .kpis dd {font-size:22px;letter-spacing:-.5px;line-height:1.4}
+.dashboard .kpis dt {font-size:11px;color:var(--ink-mid)}
+.dashboard .kpis small {font-size:10px;color:var(--ink-low);line-height:1.5}
+.dashboard .stage {grid-template-columns:250px minmax(280px,1fr) 366px}
+/* World observations occupy one dark instrument rail, not a stack of cards. */
+.dashboard .world-rail {--ink:var(--paper);--ink-mid:#e0e4d8;--ink-low:#bac5b4;--rule:#506049;--rule-strong:#7b8776;--accent:var(--cream);background:var(--forest);color:var(--paper);padding:0 16px 16px;border:0}
+.dashboard .world-heading {background:var(--forest);border-bottom:1px solid var(--rule-strong);padding:12px 0;gap:5px}
+.dashboard .world-heading h2 {color:var(--cream);font:600 16px/1.5 var(--font)}
+.dashboard .world-heading .btn {background:transparent;color:var(--paper);border-color:var(--rule-strong);min-height:36px;font-size:10px;padding:4px 6px}
+.dashboard .world-item {padding:12px 0;border-color:var(--rule)}
+.dashboard .world-item h3 {font-size:12px;color:var(--paper)}
+.dashboard .world-value {color:var(--cream);font-size:27px;letter-spacing:-.8px}
+.dashboard .world-value small {color:var(--paper);letter-spacing:0;font-size:11px}
+.dashboard .world-item p,.dashboard .world-item a {font-size:11px;line-height:1.65}
+.dashboard .world-item>small,.dashboard .feed-tier {font-size:10px;color:var(--ink-low)}
+.dashboard .world-item a {color:var(--cream);text-underline-offset:3px}
+.dashboard .world-item svg {color:var(--pink)}
+.dashboard .world-rail .hint {color:var(--ink-low)}
+/* Results: a quiet white sheet, explicit equations, strong section hierarchy. */
+.dashboard .rail {background:var(--paper);border-left:1px solid var(--rule-strong)}
+.dashboard .tabs {background:var(--cream);color:var(--forest);border-bottom:1px solid var(--forest);padding:9px 16px;font-size:12px}
+.dashboard .tab-body {padding:14px 16px}
+.dashboard .selection-name {font-size:26px!important;letter-spacing:-.4px}
+.dashboard .calc-block {padding:12px 0;margin-top:8px;border-top:1px solid var(--rule-strong)}
+.dashboard .calc-block.primary-calc {border-top:4px solid var(--forest)}
+.dashboard .calc-block h3 {font-size:13px;margin-bottom:5px}
+.dashboard .calc-answer {font-size:26px;color:var(--forest);letter-spacing:-.7px;margin:4px 0}
+.dashboard .calc-answer small {letter-spacing:0}
+.dashboard .calc-block code {font-size:11px;line-height:1.75;color:var(--ink-mid);background:var(--well);padding:3px 7px;border-left:2px solid var(--rule-strong)}
+.dashboard .calc-block p {font-size:11px;line-height:1.7;color:var(--ink-mid);margin-top:6px}
+.dashboard .calc-alert {background:#fbe4bf;color:var(--ink);border-left-color:var(--ochre)}
+.dashboard .select-actions .btn {min-height:40px;font-size:11px;padding:7px 10px}
+.dashboard .province-row {padding:12px 8px;border-bottom-color:var(--rule);font-size:13px}
+.dashboard .province-row:nth-child(even) {background:var(--well)}
+.dashboard .province-row:hover,.dashboard .province-row:focus-visible {background:var(--cream)}
+.dashboard .province-row b {font-size:13px}
+.dashboard .province-row small {font-size:10px;color:var(--ink-low)}
+.dashboard .layer-panel,.dashboard .overlay-legend {background:var(--paper);border:1px solid var(--forest);box-shadow:3px 3px 0 #0003}
+.dashboard .map-caption {border-left-color:var(--cream)}
+.dashboard .btn.primary {background:var(--cream);color:var(--forest);border-color:var(--forest)}
+.dashboard .btn:hover {filter:brightness(.96)}
+.dashboard button:focus-visible,.dashboard a:focus-visible,.dashboard summary:focus-visible,.dashboard select:focus-visible,.dashboard input:focus-visible {outline:3px solid var(--ochre);outline-offset:3px;box-shadow:0 0 0 5px var(--paper)}
+.dashboard .foot {border-top:1px solid var(--rule-strong);padding-block:5px}
+.dashboard .foot a {color:var(--accent)}
+/* Research and manual use the same vocabulary while keeping long-form reading calm. */
+.dashboard .about {background:var(--paper)}
+.dashboard .about-links {padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.dashboard .research-person {border-bottom-color:var(--forest)}
+.dashboard .about .research-person {background:var(--pink);padding:16px!important}
+.dashboard .about h2 {border-top-color:var(--forest)}
+.dashboard .research-person a,.dashboard .research-person .person-role {color:var(--forest)}
+.guide>nav {background:var(--forest);color:var(--paper);padding:14px 20px}
+.guide>nav a {color:var(--paper)}
+.guide>nav a:first-child {color:var(--cream)}
+.manual-routes a {background:var(--cream);color:var(--forest);border-color:var(--forest)}
+.manual-routes a:last-child {background:var(--pink)}
+.manual-index a:hover,.research-toc a:hover {background:var(--cream);color:var(--forest)}
+.screen-top,.screen-columns span:first-child {background:var(--forest);color:var(--paper)}
+.screen-columns span:last-child {background:var(--cream);color:var(--forest)}
+.research-intro {border-top-color:var(--pink)}
+@media(min-width:1600px) {.dashboard .stage {grid-template-columns:280px minmax(500px,1fr) 400px}}
+@media(min-width:701px) and (max-width:1200px) {
+ .dashboard .stage {grid-template-columns:205px minmax(210px,1fr) 310px}
+ .dashboard .top {grid-template-columns:1fr 220px auto}
+ .dashboard .quick-tools {padding-right:185px;gap:6px}
+ .dashboard .quick-tools .btn {padding:8px;font-size:11px}
+ .dashboard .advanced-tools {font-size:10px}
+ .dashboard .world-rail {padding-inline:12px}
+ .dashboard .tab-body {padding:12px}
+ .dashboard .calc-answer {font-size:23px}
+}
+@media(min-width:701px) and (max-width:950px) {
+ .dashboard .top {grid-template-columns:1fr 175px auto}
+ .dashboard .toplink {padding:6px;font-size:11px}
+ .dashboard .stage {grid-template-columns:175px minmax(200px,1fr) 285px}
+ .dashboard .world-heading {flex-wrap:wrap}
+ .dashboard .quick-tools .btn {font-size:10px;padding:7px}
+ .dashboard .quick-tools {gap:4px;padding-right:170px}
+ .dashboard .kpis dd {font-size:18px}
+}
+@media(max-width:700px) {
+ .dashboard .top {grid-template-columns:1fr auto;padding:8px 10px 0;gap:7px}
+ .dashboard .brand h1 {font-size:20px}
+ .dashboard .top-right {gap:3px}
+ .dashboard .toplink {min-height:36px;font-size:10px;padding:5px}
+ .dashboard .langs button {min-width:32px;min-height:36px}
+ .dashboard .quick-tools {margin:0 -10px;padding:8px 10px;display:grid;grid-template-columns:1fr 1fr;gap:7px}
+ .dashboard .quick-tools .btn {font-size:12px;min-height:40px;padding:7px}
+ .dashboard #showVegetation,.dashboard #showAerosol {min-height:32px;padding:3px;font-size:11px}
+ .dashboard .advanced-tools {margin:-7px -10px 0;padding:0 10px 6px;background:var(--well);order:1}
+ .dashboard .advanced-tools>summary {min-height:32px;width:100%;padding:4px 8px;font-size:11px;justify-content:space-between}
+ .dashboard .advanced-tools .lenses {left:10px;right:10px}
+ .dashboard .advanced-tools .lenses button {font-size:11px}
+ .dashboard .kpis dl {padding:5px 10px}
+ .dashboard .kpis dd {font-size:17px;line-height:1.3}
+ .dashboard .kpis dt {font-size:10px}
+ .dashboard .kpis small {font-size:9px}
+ .dashboard .stage {display:block}
+ .dashboard .bottom-nav {background:var(--forest);overflow-x:auto;min-height:50px;scrollbar-width:thin}
+ .dashboard .bottom-nav button {flex:1;min-width:0;min-height:48px;font-size:9px;color:var(--paper);border-top:3px solid transparent;padding:5px 2px}
+ .dashboard .bottom-nav button[aria-pressed=true] {background:var(--cream);color:var(--forest);border-top-color:var(--forest);font-weight:700}
+ .dashboard .foot {padding:3px 10px}
+ .dashboard .release-note {font-size:8px}
+ .dashboard .world-heading {padding-top:12px}
+ .dashboard .world-heading h2 {font-size:18px}
+ .dashboard[data-about] .top {padding-bottom:8px}
+ .dashboard .about .research-person {padding:12px!important}
+ .dashboard .tab-body {padding:12px 14px}
+ .dashboard .calc-answer {font-size:27px}
+ .dashboard .world-item {padding:14px 0}
+}
