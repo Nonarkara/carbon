@@ -26,3 +26,4 @@ body.guide.research{max-width:1200px;padding:0 32px}.research-intro{max-width:82
 .kabonna-poses b{display:block;margin-top:8px;font-size:14px}
 .kabonna-poses span{display:block;font-size:12px;line-height:1.55;color:var(--ink-mid)}
 @media(max-width:700px){.kabonna-lockup b{font-size:22px}.kabonna-poses{grid-template-columns:1fr 1fr}}
+.audit-diagram{border:2px solid #161616;margin:22px 0}.audit-diagram figcaption{background:#1643c5;color:#fff;padding:8px 12px;font-weight:600}.audit-diagram ol{display:grid;gap:10px;margin:0;padding:14px 14px 14px 36px}.audit-diagram li{border:1px solid #161616;padding:8px}.audit-diagram li:last-child{background:#ffdf00}.audit-results{border-top:4px solid #bd251b;margin-top:24px}.table-scroll{max-width:100%;overflow-x:auto}.audit-results table{table-layout:fixed;width:100%}.audit-results th,.audit-results td{overflow-wrap:anywhere}#section-15~h3{scroll-margin-top:20px}

@@ -1,0 +1,98 @@
+{
+  "reviewDate": "2026-10-02",
+  "question": "Which Kabonna estimands are identified by the deployed observations at their requested support and time?",
+  "reviewType": "targeted primary-source review; not exhaustive or PRISMA systematic review",
+  "searchTopics": [
+    "ESA CCI v7 uncertainty and change",
+    "GEDI quality and transferability",
+    "CEOS biomass validation",
+    "spatial cross-validation",
+    "forest credit counterfactuals and rebuttals"
+  ],
+  "selection": "Prefer official current product guides and original studies; retain contrary evidence and older conceptual foundations.",
+  "distinction": "Source statements are cited in the report. The evidence matrix, perturbation choices, diagnostics and proposed validation protocol are our synthesis, not upstream endorsements.",
+  "sources": [
+    {
+      "id": "cci-pug",
+      "url": "https://climate.esa.int/media/documents/Product_User_Guide_PUG_V7.0.pdf",
+      "published": "2026-03-19",
+      "section": "v7.0 §§3.3–3.4, 4–6",
+      "role": "Primary product documentation: validation, limitations and change/aggregation candidates",
+      "limitation": "Current documentation does not update the deployed 2020 observation. Producer-product agreement is not independent Thai field validation.",
+      "accessed": "2026-10-02"
+    },
+    {
+      "id": "gfoi",
+      "url": "https://www.reddcompass.org/mgd/resources/GFOI_BiomassMaps_Guidance-20251022.pdf",
+      "published": "2025-10-22",
+      "section": "v1.1 Chapter 2 p.2; Chapter 3 table p.8",
+      "role": "Observation versus model inference; state-of-practice distinction for change",
+      "limitation": "Practice guidance at its publication date, not a prohibition on research or a Thai credit methodology.",
+      "accessed": "2026-10-02"
+    },
+    {
+      "id": "ceos",
+      "url": "https://lpvs.gsfc.nasa.gov/PDF/CEOS_WGCV_LPV_Biomass_Protocol_2021_V1.0.pdf",
+      "published": "2021",
+      "section": "Good practices protocol v1.0; reference measurement and validation design",
+      "role": "Supports prospective independent-reference and spatial-support design",
+      "limitation": "A protocol is not evidence that the current app meets its validation requirements.",
+      "accessed": "2026-10-02"
+    },
+    {
+      "id": "gedi-v3",
+      "url": "https://daac.ornl.gov/GEDI/guides/GEDI_L4A_AGB_Density_V3.html",
+      "published": "Model revision 2026-06-05; guide revision 2026-09-02",
+      "section": "Quality Assessment; Dataset Revisions; data fields",
+      "role": "Candidate footprint reference/model data; version-specific screening",
+      "limitation": "Not ingested. Modelled biomass is not error-free truth; shared inputs can prevent independent confirmation. Acquisition gap March 2023–April 2024.",
+      "accessed": "2026-10-02"
+    },
+    {
+      "id": "roberts",
+      "url": "https://www.biom.uni-freiburg.de/mitarbeiter/dormann/roberts-et-al-2017-ecography.pdf/at_download/file",
+      "published": "2017",
+      "section": "Ecography 40:913–929, especially pp.913–916; doi:10.1111/ecog.02881",
+      "role": "Cross-validation under spatial/temporal/hierarchical dependence",
+      "limitation": "Block design must match interpolation versus transfer task; this app has not run an independent predictive holdout.",
+      "accessed": "2026-10-02"
+    },
+    {
+      "id": "nfi",
+      "url": "https://redd.unfccc.int/media/modified_thailand_rl_july2021.pdf",
+      "published": "2021-07",
+      "section": "Tables 6, 10, 13; plots 2013–2018, forest area 2016",
+      "role": "Contrary national evidence: different published means and totals",
+      "limitation": "Unmatched forest populations and dates. Small 60-tree allometric test does not establish a national correction; nesting is an assumption.",
+      "accessed": "2026-10-02"
+    },
+    {
+      "id": "holland",
+      "url": "https://ics.uci.edu/~sternh/courses/265/holland_jasa1986.pdf",
+      "published": "1986",
+      "section": "JASA 81(396):945–960, pp.945–950; doi:10.1080/01621459.1986.10478354",
+      "role": "Conceptual causal inference and unobserved counterfactual",
+      "limitation": "Conceptual framework, not T-VER eligibility or an implemented baseline equation.",
+      "accessed": "2026-10-02",
+      "accessNote": "Columbia mirror unavailable; UCI mirror of original paper accessed instead."
+    },
+    {
+      "id": "west",
+      "url": "https://research.vu.nl/ws/portalfiles/portal/290140632/Action_needed_to_make_carbon_offsets_from_forest_conservation_work_for_climate_change_mitigation.pdf",
+      "published": "2023; corrected 2024-01-31",
+      "section": "Science 381:873–877; doi:10.1126/science.ade3535",
+      "role": "Original empirical forest-conservation counterfactual study; challenges baseline attribution",
+      "limitation": "Contested comparator design; cannot generalize to Thai T-VER or use as a universal discount.",
+      "accessed": "2026-10-02"
+    },
+    {
+      "id": "west-rebuttal",
+      "url": "https://arxiv.org/abs/2312.06793",
+      "published": "2023-12",
+      "section": "Rebuttal preprint abstract and manuscript record",
+      "role": "Contrary interpretation of West et al.; retain methodological disagreement",
+      "limitation": "Preprint, not a peer-reviewed resolution. Criticisms are claims to investigate, not independently confirmed errors here.",
+      "accessed": "2026-10-02"
+    }
+  ]
+}

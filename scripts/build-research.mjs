@@ -1,10 +1,13 @@
 import {readFile,writeFile} from 'node:fs/promises';
+import {auditView} from './audit-view.mjs';
 import {marked} from 'marked';
 import {execFileSync} from 'node:child_process';
 const commit=execFileSync('git',['rev-parse','--short','HEAD'],{encoding:'utf8'}).trim();
 for(const lang of ['th','en']){
  const th=lang==='th';
- const source=await readFile(`docs/RESEARCH.${lang}.md`,'utf8');
+ const audit=JSON.parse(await readFile('public/data/scientific-audit.json','utf8'));
+ const report=await readFile(`docs/ACADEMIC_AUDIT.${lang}.md`,'utf8');
+ const source=(await readFile(`docs/RESEARCH.${lang}.md`,'utf8')).replace('<!-- academic-audit -->',report).replace('<!-- scientific-results -->',auditView(audit,lang));
  const diagrammed=source.replace(/```mermaid\n([\s\S]*?)```/g,(_,body)=>{
   const nodes=[...body.matchAll(/\w+\["([^"]+)"\]/g)].map(m=>m[1]);
   return `<figure class="research-diagram"><figcaption>${th?'เส้นทางของหลักฐาน':'Follow the evidence'}</figcaption><ol>`+nodes.map(n=>`<li>${n}</li>`).join('')+'</ol></figure>';
