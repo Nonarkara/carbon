@@ -1,6 +1,6 @@
 # Kabonna: colour as navigation
 
-## 2 October 2026 direction
+## Superseded: first 2 October 2026 direction
 
 The owner's request for a palette-led overhaul supersedes the earlier exact-Malaysia colour instruction. The map-led layout, bilingual type, data, exports and scientific caveats remain. This is a presentation change, not a new model.
 
@@ -25,3 +25,7 @@ At the start of this change the working tree was clean. Local HEAD, GitHub main 
 - `npm run test:design` checks both languages at 375, 768 and 1440 px: no page overflow, at least 280 px of map height, all 77 province choices, phone World access, main text contrast ≥4.5:1, and Research/manual rendering.
 - Screenshots reviewed in normal colour, simulated deuteranopia and grayscale. Primary actions remain distinguishable by light/dark value and labels. These checks are not a substitute for a human usability study.
 - Production asset check before editing confirmed dashboard.css was byte-identical to the local/GitHub version.
+
+## Current: Bauhaus brutalism — owner correction, 2 October 2026
+
+The owner rejected the olive/cream scheme as too close to Malaysia and explicitly rejected button shadows. This supersedes plate 342 above. White ground and black structure now dominate. Red #bd251b identifies the province action, yellow #ffdf00 the area-selection tool, and blue #1643c5 the world instruments and Research. Main type is sans serif, rules are solid black, corners square. All decorative shadows are removed, including inherited Leaflet controls; keyboard focus uses an outline. Data legends and institutional marks retain their own colours. No calculations or content change.

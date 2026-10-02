@@ -13,6 +13,8 @@ for(const lang of ['th','en']) for(const width of [375,768,1440]){
  await p.locator('#kStock').filter({hasText:'M'}).waitFor();
  await p.evaluate(()=>document.fonts.ready);
  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'page overflows');
+ const shadows=await p.locator('button,.btn,.leaflet-control,.layer-panel,.overlay-legend').evaluateAll(es=>es.filter(e=>getComputedStyle(e).boxShadow!=='none').map(e=>e.id||e.className));
+ assert.deepEqual(shadows,[],'Controls must remain flat, without inherited shadows');
  for(const selector of ['#exploreProvinces','#pickArea','#aboutTab','.world-value','.calc-answer','.calc-block code','.calc-block p']){
   const pair=await p.locator(selector).first().evaluate(e=>{const fg=getComputedStyle(e).color;let n=e,bg;while(n){bg=getComputedStyle(n).backgroundColor;if(bg!=='rgba(0, 0, 0, 0)')break;n=n.parentElement;}return [fg,bg]});
   const [a,c]=pair.map(luminance),ratio=(Math.max(a,c)+.05)/(Math.min(a,c)+.05);
