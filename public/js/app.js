@@ -6,6 +6,7 @@ import {initLandscape} from './landscape.js';
 import {initWorld} from './world.js';
 import {initAbout} from './about.js';
 import {initRegistry} from './registry.js';
+import {initDigest} from './digest.js';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const PROVINCE_EN={'สระบุรี':'Saraburi','กาญจนบุรี':'Kanchanaburi'};
  const provName=r=>getLang()==='th'?r.province_th:PROVINCE_EN[r.province_th]||r.province_th;
@@ -79,6 +80,12 @@ $('#usePlots').onclick=()=>{if(!state.plots)return;const changedUnit=$('#unit').
 const world=initWorld({t,fmt,getLang});
 const about=initAbout({getLang,fmt});
 const registry=initRegistry({t,fmt,getLang});
+const digest=initDigest({t,fmt,getLang});
+digest.ready.then(d=>{
+  world.setDigestPanel(()=>digest.panelHTML(d));
+  landscape.setDigestBars(()=>digest.marketBarsHTML(d));
+  landscape.render();
+}).catch(err=>error(err));
 registry.ready.then(()=>{if(state.boundary)renderRegistry();}).catch(err=>error(err));
 function showAbout(){document.querySelectorAll('.lenses [data-tab],.bottom-nav button').forEach(e=>e.setAttribute('aria-pressed','false'));document.body.dataset.about='true';$('#about').hidden=false;$('#aboutTab').setAttribute('aria-pressed','true');$('#about').scrollTop=0;about.show().catch(err=>error(err));}
 const landscape=initLandscape({map,t,fmt,getLang,getBoundary:()=>state.boundary,download,message,onSelect:()=>{if(state.tab!=='carbon'||document.body.dataset.about)tab('carbon');}});

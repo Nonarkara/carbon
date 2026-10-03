@@ -22,6 +22,10 @@ await page.waitForFunction(()=>document.querySelector('#calculationTrace').textC
 // Source labels on KPI hints travel from the manifest, not hardcoded strings.
 assert.equal(await page.locator('#kRemoveHint').textContent(),`GFW ${mf.datasets.gfw.version.split(' ')[0]} · ${mf.datasets.gfw.period}`);
 assert.ok((await page.locator('#kStockHint').textContent()).endsWith(`CCI ${mf.datasets.cci.version}`));
+// Non's Digest renders in the world rail with dated items and trends; the per-feed bible reading link stays.
+await page.waitForSelector('.digest-news .digest-item');
+assert.ok(await page.locator('.digest-trends .digest-trend').first().isVisible(),'digest trends render');
+assert.ok((await page.locator('#worldFeeds .world-item a[href*=bible]').count())>=1,'per-feed bible reading link');
 // The answer leads its section; the formula trace follows. Metric option labels travel from the manifest.
 assert.equal(await page.locator('[data-calculation=stock]').evaluate(e=>e.children[1].className),'calc-answer');
 assert.match(await page.locator('[data-calculation=stock] code').first().innerText(),new RegExp(`\\(1 \\+ ${mf.conversion.root_shoot}\\) × ${mf.conversion.carbon_fraction} × 44 / 12`));

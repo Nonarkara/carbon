@@ -17,6 +17,30 @@ body.dashboard{grid-template-rows:auto auto minmax(0,1fr) auto;min-height:640px}
 /* Identity strip: white ground preserves the supplied organisation marks. */
 .dashboard .foot{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;background:#fff;padding:4px 16px}.brand-strip{display:flex;align-items:center;gap:18px;background:#fff}.brand-strip>img{width:62px;height:44px;object-fit:contain}.axiom-lockup{display:flex;align-items:center;gap:5px;color:#1b2140}.axiom-lockup img{width:30px;height:30px;object-fit:contain}.axiom-lockup b{font:600 17px var(--font)}.release-note{font-size:10px;line-height:1.65}.release-note>a{display:block;text-decoration:underline}.research-person{display:grid;grid-template-columns:110px minmax(0,1fr);gap:22px;align-items:center;border-bottom:3px solid var(--ink);padding:0 0 20px!important;margin:0 0 24px!important}.research-person>img{width:110px;height:125px;object-fit:cover}.about .research-person h2{font:600 26px/1.35 var(--display);margin:0 0 8px}.about .research-person p{font-size:13px;line-height:1.6;margin:5px 0}.about .research-person .person-role{font-size:10px;color:var(--ink-low)}.research-person a,.standards-note a{text-decoration:underline}.standards-note{border-top:3px solid var(--ink);margin-top:32px;padding-top:20px}.standards-note dt{font-weight:600;margin-top:18px}.standards-note dd{margin:6px 0 18px;line-height:1.8}.standards-note .fine-print{font-size:12px;line-height:1.8;border-top:1px solid var(--rule-strong);padding-top:16px}.standards-note{scroll-margin-top:20px}
 @media(max-width:700px){.dashboard .foot{grid-template-columns:1fr auto;gap:2px 8px;padding:3px 10px}.brand-strip{gap:12px}.brand-strip>img{height:30px;width:44px}.axiom-lockup img{width:22px;height:22px}.axiom-lockup b{font-size:13px}.dashboard .foot>.release-note{grid-column:1/-1;grid-row:2;font-size:8px;line-height:1.5}.release-note>a{display:inline}.research-person{grid-template-columns:74px minmax(0,1fr);gap:12px}.research-person>img{width:74px;height:94px}.about .research-person h2{font-size:21px}.about .research-person p{font-size:12px}.about .research-person .person-role{font-size:9px}}
-/* Tighter working and reading rhythm; retain readable Thai leading and map area. */
+/* Non's Digest block in the world rail — square edges, paper background, square dividers. */
+.world-rail .digest-news,.world-rail .digest-trends{border-top:3px solid var(--ink);padding:14px 0 4px;margin-top:8px}
+.world-rail .digest-news h3,.world-rail .digest-trends h3{font:600 14px/1.4 var(--display);margin:0 0 10px;letter-spacing:.04em;text-transform:uppercase}
+html[lang=th] .world-rail .digest-news h3,html[lang=th] .world-rail .digest-trends h3{font-family:var(--font);font-size:13px}
+.world-rail .digest-item{padding:10px 0;border-bottom:1px solid var(--rule)}
+.world-rail .digest-item h4{font:600 12px/1.4 var(--font);margin:0 0 4px}
+.world-rail .digest-item h4 a{text-decoration:underline}
+.world-rail .digest-item p{font-size:11px;line-height:1.55;margin:0 0 4px;color:var(--ink-mid)}
+.world-rail .digest-item small{font:9px var(--num);color:var(--ink-low)}
+.world-rail .digest-more{margin-top:6px;font-size:11px}
+.world-rail .digest-more summary{cursor:pointer;padding:6px 0;border-top:1px solid var(--rule);color:var(--ink-mid)}
+.world-rail .digest-source{font-size:10px;color:var(--ink-low);margin-top:6px}
+.world-rail .digest-trends{display:grid;gap:10px}
+.world-rail .digest-trend{padding:10px 0;border-bottom:1px solid var(--rule)}
+.world-rail .digest-trend header{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.world-rail .digest-trend h4{font:600 12px/1.4 var(--font);margin:0}
+.world-rail .digest-trend .trend-tag{font:9px var(--num);color:var(--ink-mid);padding:2px 6px;background:var(--well-2);border:1px solid var(--rule-strong)}
+.world-rail .digest-trend svg{width:100%;height:46px;color:var(--ink-mid);margin-top:6px}
+.world-rail .digest-trend .trend-dl{display:grid;grid-template-columns:1fr auto;gap:2px 8px;margin:6px 0 0;font-size:11px}
+.world-rail .digest-trend .trend-dl dd{margin:0;font-family:var(--num);text-align:right}
+.world-rail .digest-trend .hint{font-size:10px;color:var(--ink-low);margin:6px 0 0}
+/* Digest block in the carbon map ledger */
+.digest-market .tver-pipeline-bar{height:6px;background:var(--well-2);border:1px solid var(--rule-strong);margin:4px 0 8px}
+.digest-market .tver-pipeline-bar i{display:block;height:100%;background:var(--accent);min-width:1px}
+.digest-market svg{width:100%;height:46px;color:var(--ink-mid);margin:4px 0}
 .dashboard .about-inner{max-width:1080px;padding:16px 24px 28px}.dashboard .about-links{margin-bottom:14px}.dashboard .about-links:last-child{margin-top:18px}.dashboard .about h1{font-size:28px;margin-bottom:10px;text-wrap:pretty}.dashboard .about-deck{padding-bottom:14px}.dashboard .about section{margin-top:24px}.dashboard .about p,.dashboard .about li{font-size:14px;line-height:1.75;max-width:85ch}.dashboard .about h2{padding-top:8px}.dashboard .il{margin:12px 0;padding:12px}.dashboard .il figcaption{margin-top:8px}.dashboard .research-person{padding-bottom:12px!important;margin-bottom:16px!important}.dashboard .world-item{padding:8px 0}.dashboard .calc-block{padding:6px 0;margin-top:6px}.dashboard .top{padding-block:6px}.dashboard .tab-body{padding:12px}.dashboard .selection-name{font-size:23px!important}
 @media(max-width:700px){.dashboard #guideLink{display:flex;align-items:center}.dashboard .about-inner{padding:12px 14px 20px}.dashboard .about h1{font-size:24px}.dashboard .about .research-person h2{font-size:20px}.dashboard .toplink{font-size:10px;padding:3px}.dashboard .brand h1{font-size:18px}.dashboard .about p,.dashboard .about li{font-size:14px}.dashboard .il{padding:10px 6px}}

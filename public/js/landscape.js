@@ -4,6 +4,8 @@ import {readGrid,sumSelection,ledgerRows,polygonsOf,boxSideKm,bboxOf} from './le
 import {renderCalculations} from './selection-view.js';
 import {initRegistry} from './registry.js';
 const TVER_CLASSES=[[0,'#f3efe0'],[1,'#d9c98f'],[2,'#b89b3c'],[5,'#7a6200'],[10,'#3d3100']];
+// Non's Digest surfaces a moving-bar block on the carbon map when the digest module is wired in.
+let digestBars=()=>'';
 
 const GIBS='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/';
 const ATMOS={
@@ -92,6 +94,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const pcode=s.pcode||(S.sel.kind==='national'?'TH':null);
     const tverHTML=registry.section(pcode);
     if(tverHTML)$('#ledger').insertAdjacentHTML('beforeend',tverHTML);
+    if(S.sel.kind==='national'){const bars=digestBars();if(bars)$('#ledger').insertAdjacentHTML('beforeend',bars);}
     $('#selectionName').textContent=S.sel.kind==='province'||S.sel.kind==='national'?placeName(s):getLang()==='th'?'พื้นที่ที่เลือก':'Selected area';
     $('#mapLabel').textContent=$('#selectionName').textContent;
     $('#calculationTrace').innerHTML=renderCalculations({src:s,rows:S.rows,datasets:S.manifest.datasets,conv:S.manifest.conversion,t,fmt,esc,getLang,nfi:S.nfi});
@@ -253,5 +256,5 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const body=S.rows.map(r=>[r.id,r.value??'',r.unit,r.dataset.name,r.dataset.version||'',r.dataset.year||r.dataset.period||'',r.central?.[0]??'',r.central?.[1]??'',r.conservative?.[0]??'',r.conservative?.[1]??'',r.optimistic?.[0]??'',r.optimistic?.[1]??'',r.unavailable||(r.tooCoarse?'below-dataset-resolution':'')]);
     download('carbon-ledger.csv','﻿'+[head,...body].map(x=>x.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n'),'text/csv;charset=utf-8');};
 
-  return {ready,render:()=>{if(S.data){fillPlaces();render();if(S.overlayKind)setOverlay(S.overlayKind);}if(S.atmos)$('#atmosNote').textContent=t(ATMOS[$('#atmos').value].note);},invalidate:()=>{}};
+  return {ready,render:()=>{if(S.data){fillPlaces();render();if(S.overlayKind)setOverlay(S.overlayKind);}if(S.atmos)$('#atmosNote').textContent=t(ATMOS[$('#atmos').value].note);},invalidate:()=>{},setDigestBars:fn=>{digestBars=fn;if(S.data)render();}};
 }

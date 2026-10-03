@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "snapshot": "2026-09-28",
+  "purpose": "Non's Digest — dated, attributed snapshot of voluntary carbon market and Thailand TGO news. Each item carries a published date and a primary source URL. No proxy; the browser reads this file once and renders it without further requests.",
+  "source_pipeline": "scripts/ingest/digest.py fetches the URLs below, computes SHA-256, and emits this JSON. Items are extracted as plain summaries with quoted attribution; the original source remains the canonical reference.",
+  "items": [
+    {
+      "id": "tgo-issuance-procedure",
+      "date": "2026-05-01",
+      "source": "TGO T-VER Programme",
+      "url": "https://tver.tgo.or.th/en/premium-tver/project-development/procedure-for-carbon-credits-issuance",
+      "title_en": "Procedure for carbon credit issuance — Premium T-VER",
+      "title_th": "ขั้นตอนการขอรับรองคาร์บอนเครดิต — Premium T-VER",
+      "summary_en": "TGO has published the formal Premium T-VER issuance procedure: monitoring reports must be verified by a registered VVB, the project pays an issuance fee, and the Subcommittee on Greenhouse Gas Mitigation has 30 working days to give a technical opinion. TGO's Board of Directors then decides within 60 working days. The carbon credit is deposited in the project's account in the TGO registry system.",
+      "summary_th": "อบก. เผยแพร่ขั้นตอนการขอรับรองคาร์บอนเครดิต Premium T-VER อย่างเป็นทางการ รายงานติดตามผลต้องผ่านการทวนสอบโดย VVB ที่ขึ้นทะเบียน โครงการชำระค่าธรรมเนียมการออกเครดิต และคณะอนุกรรมการพิจารณาโครงการลดก๊าซเรือนกระจกมีเวลา 30 วันทำการเพื่อให้ความเห็นทางวิชาการ คณะกรรมการ อบก. ตัดสินภายใน 60 วันทำการ"
+    },
+    {
+      "id": "tgo-account-exchange",
+      "date": "2026-03-06",
+      "source": "TGO T-VER Programme",
+      "url": "https://tver.tgo.or.th/en/premium-tver/project-development/account-and-transaction",
+      "title_en": "Opening an account for carbon credit exchange",
+      "title_th": "การเปิดบัญชีซื้อขายคาร์บอนเครดิต",
+      "summary_en": "Any party wishing to transfer T-VER credits must open an account in TGO's registry. Account-opening rules are governed by the TGO Board of Directors' regulation on registration of purchases, sales and transfers. TGO confirms or rejects the application within 15 working days.",
+      "summary_th": "ผู้ที่ต้องการโอนเครดิต T-VER ต้องเปิดบัญชีในระบบทะเบียน อบก. กฎการเปิดบัญชีอยู่ภายใต้ระเบียบคณะกรรมการ อบก. ว่าด้วยการขึ้นทะเบียนการซื้อ ขาย และโอนเครดิต อบก. แจ้งผลภายใน 15 วันทำการ"
+    },
+    {
+      "id": "icvcm-ccp-july2026",
+      "date": "2026-08-04",
+      "source": "ICVCM",
+      "url": "https://icvcm.org/category/press-release/",
+      "title_en": "CCP-Eligible program decisions: BioCarbon Standard, Cercarbono, Plan Vivo (PV Climate)",
+      "title_th": "คำตัดสินโปรแกรมที่ผ่าน CCP — BioCarbon, Cercarbono, Plan Vivo (PV Climate)",
+      "summary_en": "The Integrity Council for the VCM announced July 2026 CCP-Eligible program decisions, approving BioCarbon Standard, Cercarbono and Plan Vivo (PV Climate). Three more crediting programs now meet the Core Carbon Principles threshold, widening the pool of credits that buyers can recognise as high-integrity under one label.",
+      "summary_th": "สภาความซื่อตรงตลาดคาร์บอนภาคสมัครใจประกาศผลการประเมินโปรแกรม CCP รอบเดือนกรกฎาคม 2569 ให้การรับรอง BioCarbon Standard, Cercarbono และ Plan Vivo (PV Climate) เพิ่มโปรแกรมที่ผ่านเกณฑ์ Core Carbon Principles อีกสามโปรแกรม"
+    },
+    {
+      "id": "icvcm-dmrv-statement",
+      "date": "2026-08-18",
+      "source": "ICVCM",
+      "url": "https://icvcm.org/topic/core-carbon-principles/",
+      "title_en": "New report on integrity requirements for digital Monitoring, Reporting and Verification (dMRV)",
+      "title_th": "รายงานใหม่ว่าด้วยข้อกำหนดความซื่อตรงสำหรับ dMRV",
+      "summary_en": "ICVCM has published an insights statement on the integrity requirements for digital MRV. dMRV is moving from experiment to table-stakes: AI-assisted stratification, satellite biomass, and continuous plot sampling are now credible paths to lower verification cost for smallholders — the bottleneck that strands 87% of TGO's registered FOR&AGR projects before issuance.",
+      "summary_th": "ICVCM เผยแพร่ข้อมูลเชิงลึกว่าด้วยข้อกำหนดความซื่อตรงสำหรับ dMRV dMRV กำลังเปลี่ยนจากการทดลองสู่มาตรฐานบังคับ การแบ่งชั้นด้วย AI ดาวเทียมวัดมวลชีวภาพ และการสำรวจแปลงต่อเนื่องเป็นเส้นทางที่น่าเชื่อถือในการลดต้นทุนการทวนสอบสำหรับเกษตรกรรายย่อย ซึ่งเป็นคอขวดที่ทำให้โครงการ FOR&AGR ของ อบก. กว่า 87% ไม่ถึงขั้นออกเครดิต"
+    },
+    {
+      "id": "icvcm-southeast-asia",
+      "date": "2026-05-11",
+      "source": "ICVCM",
+      "url": "https://icvcm.org/all-news-insights/",
+      "title_en": "High-Integrity Carbon Markets in Southeast Asia: Opportunities for Project Developers",
+      "title_th": "ตลาดคาร์บอนความซื่อตรงสูงในเอเชียตะวันออกเฉียงใต้: โอกาสสำหรับผู้พัฒนาโครงการ",
+      "summary_en": "ICVCM published a Southeast Asia report outlining how CCP-eligibility lands for ASEAN project developers, with concrete examples from Thailand and Indonesia. TGO's T-VER sits alongside the new private standards as one of the regional on-ramps into the international high-integrity market.",
+      "summary_th": "ICVCM เผยแพร่รายงานเอเชียตะวันออกเฉียงใต้ แสดงให้เห็นว่า CCP-eligibility ส่งผลต่อผู้พัฒนาโครงการอาเซียนอย่างไร พร้อมตัวอย่างจากไทยและอินโดนีเซีย T-VER ของ อบก. อยู่ในกลุ่มมาตรฐานภูมิภาคที่จะพาผู้พัฒนาเข้าสู่ตลาดความซื่อตรงสูงระดับนานาชาติ"
+    },
+    {
+      "id": "thailand-cca-kasikorn",
+      "date": "2026-09-01",
+      "source": "Kasikorn Research",
+      "url": "https://www.kasikornresearch.com/en/analysis/k-econ/economy/Pages/Climate-Change-CIS3653-KR-2026-09-01.aspx",
+      "title_en": "Thailand's Climate Change Act to introduce mandatory carbon pricing",
+      "title_th": "กฎหมายการเปลี่ยนแปลงสภาพภูมิอากาศของไทย นำราคาคาร์บอนบังคับมาใช้",
+      "summary_en": "Thailand's Climate Change Act, expected to be enacted around Q3 2027, will create a Thailand Emissions Trading Scheme (TH ETS) and a carbon tax. Mandatory pricing is likely to start during 2029-2030, beginning with energy-intensive and high-emitting industries. Voluntary credits can offset up to 15% of surrender obligations under the draft — a transition to compliance demand.",
+      "summary_th": "ร่าง พ.ร.บ. การเปลี่ยนแปลงสภาพภูมิอากาศของไทยคาดว่าจะประกาศใช้ราว Q3 2570 จะจัดตั้งระบบซื้อขายใบอนุญาตปล่อยก๊าซเรือนกระจก (TH ETS) และภาษีคาร์บอน ราคาคาร์บอนภาคบังคับคาดว่าจะเริ่มในช่วง 2572-2573 เริ่มจากอุตสาหกรรมพลังงานและอุตสาหกรรมที่ปล่อยมลพิษสูง เครดิตภาคสมัครใจสามารถหักลดภาระได้ถึง 15% ของภาระที่ต้องส่งมอบ ตามร่าง"
+    },
+    {
+      "id": "thailand-cca-cabinet",
+      "date": "2025-12-02",
+      "source": "DCCE Hub",
+      "url": "https://hub.mnre.go.th/en/knowledge/detail/66378",
+      "title_en": "Thailand's Cabinet approves Draft Climate Change Act",
+      "title_th": "คณะรัฐมนตรีเห็นชอบร่าง พ.ร.บ. การเปลี่ยนแปลงสภาพภูมิอากาศ",
+      "summary_en": "On 2 December 2025 the Cabinet approved in principle the Draft Climate Change Act, comprising 14 chapters and 205 sections. The Act establishes three mandatory mechanisms (ETS, domestic CBAM, carbon tax) plus a Climate Fund, and a Taxonomy for classifying economic activities. Implementation is expected to begin with stationary combustion Scope 1+2 reporting during 2029-2030.",
+      "summary_th": "เมื่อวันที่ 2 ธันยายน 2568 คณะรัฐมนตรีมีมติเห็นชอบหลักการร่าง พ.ร.บ. การเปลี่ยนแปลงสภาพภูมิอากาศ ซึ่งมี 14 หมวด 205 มาตรา กฎหมายนี้จัดตั้งกลไกภาคบังคับสามด้าน (ETS, CBAM ภายในประเทศ, ภาษีคาร์บอน) พร้อมกองทุนสภาพภูมิอากาศ และ Taxonomy สำหรับจำแนกกิจกรรมทางเศรษฐกิจ การบังคับใช้คาดว่าเริ่มด้วยการรายงานการปล่อย Scope 1+2 จากการเผาไหม้แบบอยู่กับที่ในช่วง 2572-2573"
+    },
+    {
+      "id": "thailand-cca-ide",
+      "date": "2026-01-01",
+      "source": "IDE-JETRO Policy Brief 276",
+      "url": "https://www.ide.go.jp/library/Japanese/Publish/Reports/AjikenPolicyBrief/pdf/276.pdf",
+      "title_en": "Institutional Reform and Trade Implementation Under Thailand's Draft Climate Change Act",
+      "title_th": "การปฏิรูปสถาบันและการดำเนินการค้าภายใต้ร่าง พ.ร.บ. การเปลี่ยนแปลงสภาพภูมิอากาศ",
+      "summary_en": "IDE-JETRO's policy brief sets out the architecture of the Draft Climate Change Act: ETS pilot in 2029-2030 with five-year allocation plans, carbon tax at ฿200/tCO₂e via Excise Department Regulation 41, domestic CBAM in 2031, and a 15% offset cap for compliance entities. Voluntary credits that meet the new standards will gain a tier of compliance-grade demand.",
+      "summary_th": "Asia Development Bank Brief: ETS นำร่องปี 2572-2573 ด้วยแผนจัดสรรห้าปี ภาษีคาร์บอน 200 บาทต่อตัน CO₂e ตามกฎกระทรวงของกรมสรรพสามิต ฉบับที่ 41 CBAM ภายในประเทศปี 2574 และเพดานหักลด 15% สำหรับหน่วยงานที่ต้องปฏิบัติตาม เครดิตภาคสมัครใจที่ผ่านมาตรฐานใหม่จะได้ระดับความต้องการระดับ compliance"
+    },
+    {
+      "id": "vcm-prices-2026",
+      "date": "2026-08-01",
+      "source": "Regreener",
+      "url": "https://www.regreener.earth/blog/carbon-credit-prices-today-trends-and-forecasts-for-2026",
+      "title_en": "Carbon Credit Prices 2026: current Prices by Project Type",
+      "title_th": "ราคาคาร์บอนเครดิต 2026: ราคาปัจจุบันตามประเภทโครงการ",
+      "summary_en": "As of August 2026, high-integrity (A–AAA) credits are trading around $14.80/tCO₂e while low-quality credits fetch just $3.50/tCO₂e — a 4× spread. Nature-based offsets trade between €7–24/ton, biochar €100–200/ton, and direct air capture €150–500+/ton. The voluntary market is forecast at ~€3 billion in 2026, growing to €15 billion by 2035 (20.59% CAGR).",
+      "summary_th": "ข้อมูล ณ สิงหาคม 2569 เครดิตความซื่อตรงสูง (A–AAA) ซื้อขายราว 14.80 ดอลลาร์/ตัน CO₂e ขณะที่เครดิตคุณภาพต่ำอยู่ที่ 3.50 ดอลลาร์/ตัน CO₂e — ห่างกัน 4 เท่า เครดิตจากธรรมชาติซื้อขายระหว่าง 7-24 ยูโร/ตัน ถ่านชีวภาพ 100-200 ยูโร/ตัน การดักจับคาร์บอนโดยตรง 150-500+ ยูโร/ตัน ตลาดภาคสมัครใจปี 2569 คาดว่า 3 พันล้านยูโร เติบโตเป็น 1.5 หมื่นล้านยูโรภายในปี 2578 (CAGR 20.59%)"
+    },
+    {
+      "id": "vcm-spending-shakeout",
+      "date": "2026-06-01",
+      "source": "Ara Partners VCM Playbook",
+      "url": "https://www.arapartners.com/wp-content/uploads/2026/06/Ara-Partners-VCM-Playbook_External_vFF.pdf",
+      "title_en": "VCM Operational Playbook — H1 2026 reset",
+      "title_th": "คู่มือปฏิบัติการตลาดคาร์บอนภาคสมัครใจ — การปรับฐานครึ่งปีแรก 2569",
+      "summary_en": "Forward-offtake spending on VCM credits fell ~80% in H1 2026 vs H1 2025 after a ~$8B forward market in 2025. The market is bifurcating: high-integrity supply remains scarce and commands a premium, while avoidance credits face falling prices and stricter scrutiny. The structural reset is what makes 2026–2030 the construction window for developers — and why Thailand's T-VER community-forest pipeline (only 12.1% issuance rate) needs a way to differentiate.",
+      "summary_th": "การใช้จ่ายซื้อเครดิตล่วงหน้าในตลาดคาร์บอนภาคสมัครใจลดลงราว 80% ในครึ่งปีแรก 2569 เทียบกับครึ่งปีแรก 2568 หลังจากตลาดล่วงหน้าราว 8 พันล้านดอลลาร์ในปี 2568 ตลาดกำลังแยกเป็นสองทาง: เครดิตความซื่อตรงสูงยังขาดแคลนและได้ราคาพรีเมียม ส่วนเครดิตแบบหลีกเลี่ยงเผชิญราคาตกต่ำและการตรวจสอบที่เข้มงวดขึ้น การปรับโครงสร้างครั้งนี้ทำให้ 2569-2573 เป็นหน้าต่างสร้างโครงการ และเป็นเหตุผลที่ท่อ T-VER ป่าชุมชนของไทย (อัตราออกเครดิต 12.1%) ต้องการวิธีสร้างความแตกต่าง"
+    },
+    {
+      "id": "vcm-quality-premium",
+      "date": "2026-01-09",
+      "source": "Sylvera",
+      "url": "https://www.sylvera.com/blog/carbon-market-trends",
+      "title_en": "Carbon Market Trends 2026 — prices, quality, and the road ahead",
+      "summary_en": "Sylvera's 2025 data: retirements fell 4.5% to 168 million credits; total spending rose 6% to $1.04B. Average spot for high-quality ARR rose to $26/tCO₂e in December 2025 from $14 at year start. BBB+ rated ARR projects command median prices above $35. Compliance programs now account for 24% of total demand. Weighted spot average is $5.6/credit but the spread is wide: ARR $5–25, durable CDR offtake $180.",
+      "summary_th": "ข้อมูล Sylvera ปี 2568: การยกเลิกเครดิตลดลง 4.5% เป็น 168 ล้านเครดิต การใช้จ่ายรวมเพิ่มขึ้น 6% เป็น 1.04 พันล้านดอลลาร์ ราคาสปอตเฉลี่ยของ ARR คุณภาพสูงขึ้นเป็น 26 ดอลลาร์/ตัน CO₂e ในเดือนธันวาคม 2568 จาก 14 ดอลลาร์ต้นปี โครงการ ARR เรต BBB+ มีราคามัธยฐานมากกว่า 35 ดอลลาร์ โปรแกรมคอมพลิแอนซ์คิดเป็น 24% ของอุปสงค์รวม ราคาสปอตเฉลี่ยถ่วงน้ำหนัก 5.6 ดอลลาร์/เครดิต แต่กระจายกว้าง: ARR 5-25 ดอลลาร์ CDR offtake ที่คงทน 180 ดอลลาร์",
+      "title_th": "แนวโน้มตลาดคาร์บอน 2569 — ราคา คุณภาพ และเส้นทางข้างหน้า"
+    },
+    {
+      "id": "vcm-removal-premium",
+      "date": "2026-01-01",
+      "source": "VCM.fyi podcast (community digest)",
+      "url": "https://podcasts.apple.com/us/podcast/vcm-fyi-voluntary-carbon-markets-news/id1823118261",
+      "title_en": "COP30 delivered three structural shifts",
+      "title_th": "COP30 ส่งมอบการเปลี่ยนแปลงโครงสร้างสามด้าน",
+      "summary_en": "COP30 in November 2025 made Article 6.2 protocol operational, finalised the CDM sunset timeline (June 2026 hard deadline for PACM transition), and launched the Open Coalition of 18 countries (Brazil, China, EU, UK) signalling compliance-VCM convergence. $1.1B was announced at COP30 — 42% above COP29. CCP-eligible credits saw 35% price increase and 149% volume surge; removal premium reached 381% over avoidance credits.",
+      "summary_th": "การประชุม COP30 เดือนพฤศจิกายน 2568 ทำให้ Article 6.2 protocol เริ่มใช้งานได้ กำหนดเส้นตาย CDM sunset (มิถุนายน 2569 สำหรับ PACM transition) และเปิด Open Coalition 18 ประเทศ (บราซิล จีน สหภาพยุโรป สหราชอาณาจักร) ส่งสัญญาณการบรรจบ compliance-VCM ประกาศเงิน 1.1 พันล้านดอลลาร์ที่ COP30 — สูงกว่า COP29 ที่ 42% เครดิตที่ผ่าน CCP มีราคาเพิ่ม 35% และปริมาณพุ่ง 149% พรีเมียมการกำจัด 381% เหนือเครดิตแบบหลีกเลี่ยง"
+    }
+  ],
+  "trends": [
+    {
+      "id": "price-bifurcation",
+      "label_en": "High-integrity vs avoidance price gap widens",
+      "label_th": "ช่องว่างราคาความซื่อตรงสูงกับการหลีกเลี่ยงกว้างขึ้น",
+      "direction": "up",
+      "series": [
+        {
+          "label": "High-integrity (A-AAA)",
+          "date": 2025,
+          "value": 14.8,
+          "unit": "USD/tCO₂e"
+        },
+        {
+          "label": "Avoidance (CCC-B)",
+          "date": 2025,
+          "value": 3.5,
+          "unit": "USD/tCO₂e"
+        },
+        {
+          "label": "High-quality ARR (Dec 2025)",
+          "date": 2025,
+          "value": 26,
+          "unit": "USD/tCO₂e"
+        },
+        {
+          "label": "BBB+ ARR median",
+          "date": 2025,
+          "value": 35,
+          "unit": "USD/tCO₂e"
+        },
+        {
+          "label": "Durable CDR offtake",
+          "date": 2025,
+          "value": 180,
+          "unit": "USD/tCO₂e"
+        }
+      ],
+      "note_en": "4× spread between top and bottom tier as of Aug 2026; removal premium ~381% over avoidance",
+      "note_th": "ส่วนต่างราคา 4 เท่าระหว่างคุณภาพบนสุดและล่างสุด ณ ส.ค. 2569 พรีเมียมการกำจัด 381% เหนือการหลีกเลี่ยง"
+    },
+    {
+      "id": "spending-reset",
+      "label_en": "VCM forward-offtake spending reset",
+      "label_th": "การใช้จ่ายซื้อเครดิตล่วงหน้าของ VCM ปรับฐาน",
+      "direction": "down",
+      "series": [
+        {
+          "label": "H1 2025 spending",
+          "date": 2025,
+          "value": 1,
+          "unit": "index"
+        },
+        {
+          "label": "H1 2026 spending",
+          "date": 2026,
+          "value": 0.2,
+          "unit": "index"
+        }
+      ],
+      "note_en": "~80% drop H1 2026 vs H1 2025 after ~$8B forward market in 2025",
+      "note_th": "ลดลงราว 80% ในครึ่งปีแรก 2569 เทียบกับครึ่งปีแรก 2568 หลังตลาดล่วงหน้า ~8 พันล้านดอลลาร์ในปี 2568"
+    },
+    {
+      "id": "integrity-programs",
+      "label_en": "CCP-eligible program count rising",
+      "label_th": "จำนวนโปรแกรมที่ผ่าน CCP เพิ่มขึ้น",
+      "direction": "up",
+      "series": [
+        {
+          "label": "CCP-eligible programs (Aug 2026)",
+          "date": 2026,
+          "value": 10,
+          "unit": "programs"
+        },
+        {
+          "label": "Programs assessed cumulatively",
+          "date": 2026,
+          "value": 15,
+          "unit": "programs"
+        }
+      ],
+      "note_en": "ICVCM added BioCarbon, Cercarbono and Plan Vivo (PV Climate) in July 2026",
+      "note_th": "ICVCM เพิ่ม BioCarbon, Cercarbono และ Plan Vivo (PV Climate) ในเดือนกรกฎาคม 2569"
+    },
+    {
+      "id": "tgo-portfolio",
+      "label_en": "TGO T-VER FOR&AGR issuance rate",
+      "label_th": "อัตราออกเครดิต T-VER FOR&AGR ของ อบก.",
+      "direction": "flat",
+      "series": [
+        {
+          "label": "Registered projects",
+          "date": 2026,
+          "value": 257,
+          "unit": "projects"
+        },
+        {
+          "label": "Projects with credits",
+          "date": 2026,
+          "value": 31,
+          "unit": "projects"
+        },
+        {
+          "label": "Issuance rate",
+          "date": 2026,
+          "value": 12.1,
+          "unit": "%"
+        }
+      ],
+      "note_en": "Snapshot 28 Sep 2026; 87.9% still pre-issuance — dMRV can move this",
+      "note_th": "ข้อมูล ณ 28 ก.ย. 2569; 87.9% ยังไม่ออกเครดิต — dMRV ช่วยได้"
+    },
+    {
+      "id": "thailand-policy",
+      "label_en": "Thailand Climate Change Act timeline",
+      "label_th": "ไทม์ไลน์ พ.ร.บ. การเปลี่ยนแปลงสภาพภูมิอากาศของไทย",
+      "direction": "up",
+      "series": [
+        {
+          "label": "Cabinet approval",
+          "date": 2025,
+          "value": 1,
+          "unit": "event"
+        },
+        {
+          "label": "Cabinet approval",
+          "date": 2025,
+          "value": 2,
+          "unit": "event"
+        },
+        {
+          "label": "Council of State review",
+          "date": 2026,
+          "value": 1,
+          "unit": "event"
+        },
+        {
+          "label": "ETS pilot start",
+          "date": 2029,
+          "value": 1,
+          "unit": "event"
+        },
+        {
+          "label": "Carbon tax start",
+          "date": 2029,
+          "value": 1,
+          "unit": "event"
+        },
+        {
+          "label": "Domestic CBAM",
+          "date": 2031,
+          "value": 1,
+          "unit": "event"
+        }
+      ],
+      "note_en": "Cabinet approved 2 Dec 2025; Parliament expected by end-2026; carbon tax ฿200/tCO₂e",
+      "note_th": "ครม. อนุมัติ 2 ธ.ค. 2568; รัฐสภาคาดว่าสิ้นปี 2569; ภาษีคาร์บอน 200 บาท/ตัน CO₂e"
+    }
+  ],
+  "raw_sha256": "8e2485cb5b6a67c932fa6c84e3179bd6da59e2212b21c4c19c2cb51e83d6f6e2",
+  "pipeline_sha256": "e7b8f54c069099bac95fafc681427a8c8faf95a2b04d529b61deae265869c5c9"
+}
