@@ -2,7 +2,7 @@
 
 **The study / การศึกษา:** [Building a system to calculate a forest carbon footprint from public and open data](docs/RESEARCH.en.md) · [สร้างระบบคำนวณรอยเท้าคาร์บอนของป่าจากข้อมูลสาธารณะและข้อมูลเปิด](docs/RESEARCH.th.md). An independent short thesis, not a degree and not a TGO assessment. Open data can weigh a landscape. It cannot mint a credit.
 
-**Live / เว็บไซต์:** [forest-carbon-thailand.pages.dev](https://forest-carbon-thailand.pages.dev)
+**Live / เว็บไซต์:** [carbon.nonarkara.org](https://carbon.nonarkara.org)
 
 **คู่มือภาษาไทย:** [การใช้งาน สูตรคำนวณ รูปแบบไฟล์ และการติดตั้ง](docs/GUIDE.th.md) · **English:** [Full user and developer guide](docs/GUIDE.en.md)
 
@@ -10,7 +10,7 @@
 
 เครื่องมือภาษาไทย/อังกฤษสำหรับประเมินคาร์บอนป่าไม้: นำเข้าขอบเขต GeoJSON และแปลงสำรวจ CSV คำนวณคาร์บอนคงเหลือกับผลต่างตามช่วงเวลา และส่งออก JSON/CSV ที่ตรวจสอบย้อนกลับได้ ข้อมูลผู้ใช้ประมวลผลในเบราว์เซอร์ ไม่ส่งไปเก็บบนเซิร์ฟเวอร์
 
-Opens on the **carbon map**: tap a province or draw a box and see forest carbon stock, forest removals and emissions, landscape fire and fossil CO₂ at once, each with its dataset, year and uncertainty. Then a Thai/English assessment workbench using the supplied Malaysia visual system. Import a boundary, review field evidence, calculate a monitoring-period estimate, and export its inputs and provenance. **An estimate is not an issued credit.** No trained AI model or registry is connected in this release.
+Opens on the **carbon map**: tap a province or draw a box and see forest carbon stock, forest removals and emissions, landscape fire and fossil CO₂ at once, each with its dataset, year and uncertainty. Then a Thai/English assessment workbench with the owner-requested Bauhaus interface; Malaysia supplied the original map-led layout. Import a boundary, review field evidence, calculate a monitoring-period estimate, and export its inputs and provenance. **An estimate is not an issued credit.** No locally trained AI inference or authenticated registry transaction service is connected. A dated public TGO registry snapshot is displayed for context and screening.
 
 ```mermaid
 flowchart LR
@@ -43,7 +43,7 @@ Open `http://127.0.0.1:8788`. Select **ลองข้อมูลตัวอ�
 | Field import / แปลงสำรวจ | Single-stratum mixed deciduous/dry dipterocarp tree CSV; named Ogawa equation |
 | Evidence / หลักฐาน | User-file hashes, report reference, dated source catalogue, full JSON and numeric CSV exports |
 | Context / ข้อมูลอ้างอิง | 11 historical province-year observations; full research catalogue kept separately |
-| Not implemented / ยังไม่รองรับ | GFW flux inside drawn boxes (needs a GFW API key), trained AI inference, project-level uncertainty estimates, land-rights verification, all forest methodologies, registry access, issuance |
+| Not implemented / ยังไม่รองรับ | GFW flux inside drawn boxes (needs a GFW API key), trained AI inference, project-level uncertainty estimates, land-rights verification, all forest methodologies, authenticated registry submissions/transactions, issuance |
 
 ## Publish / เผยแพร่
 
@@ -52,7 +52,8 @@ Cloudflare Pages project: `forest-carbon-thailand`, **Direct Upload** of `public
 ```bash
 npx wrangler login
 npm run deploy
-BASE_URL=https://forest-carbon-thailand.pages.dev npm run test:browser
+BASE_URL=https://carbon.nonarkara.org npm run test:browser
+node scripts/release-smoke.mjs
 ```
 
 Commit and push before deployment so the build's `/version.json` identifies its source. **GitHub pushes do not auto-deploy.** CI validates build/tests; deployment is an explicit authenticated command. No runtime secrets are needed. See [deployment details](docs/DEPLOYMENT.md).
@@ -82,7 +83,7 @@ Raw downloads are retained for provenance. A successful download does not establ
 
 ## Research / งานวิจัย
 
-Read the illustrated [Thai research notebook](https://forest-carbon-thailand.pages.dev/research-th) or [English research notebook](https://forest-carbon-thailand.pages.dev/research-en): purpose, worked calculation, satellite and AI workflow, Thai dataset audit, RFD observations, pilot design and Dr Non's profile. Source text lives in `docs/RESEARCH.th.md` and `docs/RESEARCH.en.md`; build renders accessible diagrams and navigation. The workbench Research link opens separately so current inputs remain available.
+Read the illustrated [Thai research notebook](https://carbon.nonarkara.org/research-th) or [English research notebook](https://carbon.nonarkara.org/research-en): purpose, worked calculation, satellite and AI workflow, Thai dataset audit, RFD observations, pilot design and Dr Non's profile. Source text lives in `docs/RESEARCH.th.md` and `docs/RESEARCH.en.md`; build renders accessible diagrams and navigation. The workbench Research link opens separately so current inputs remain available.
 
 
 ## Start on the map
@@ -101,3 +102,7 @@ The global column (World tab on phones) separates concentrations, emissions, all
 พืชพรรณแสดงพื้นที่ป่าจาก JAXA ละอองลอยแสดงอนุภาคในบรรยากาศ ไม่ใช่ CO2 สองชั้นข้อมูลนี้ไม่ได้ออกเครดิตโดยอัตโนมัติ ปุ่มงานวิจัยรวมคำอธิบาย ภาพประกอบ และประวัติผู้พัฒนา เครื่องมือโครงการ T-VER ยังใช้ข้อมูลภาคสนามได้
 
 คอลัมน์ข้อมูลโลกแสดงแหล่งข้อมูล วันที่ และสถานะข้อมูลสำรอง โทรศัพท์มีแท็บข้อมูลโลก ราคาประมูลรายไตรมาสและบัญชีรายปีไม่ใช่ข้อมูลเรียลไทม์
+
+## Release credibility / ความน่าเชื่อถือของรุ่น
+
+[Release audit](docs/RELEASE_AUDIT.md) records scope, evidence and remaining validation work. [Operating runbook](docs/OPERATIONS.md) covers pre-demo checks, failed feeds, recovery and rollback. [Scientific audit in Thai](https://carbon.nonarkara.org/bible.html?lang=th#scientific-audit) · [English](https://carbon.nonarkara.org/bible.html?lang=en#scientific-audit). The release is an independent assessment pilot, not a certified credit service.

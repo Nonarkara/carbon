@@ -7,7 +7,7 @@ const b=await chromium.launch(),p=await b.newPage();
 const errors=[];p.on('pageerror',e=>errors.push(e.message));
 for(const lang of ['th','en'])for(const width of [375,768,1440]){
  await p.setViewportSize({width,height:900});
- await p.goto(`${base}/bible.html?lang=${lang}#scientific-audit`);
+ await p.goto(`${base}/bible.html?lang=${lang}#scientific-audit`,{waitUntil:'domcontentloaded'});
  await p.locator('.audit-results').waitFor();
  assert.equal(await p.locator('.audit-diagram').count(),2);
  assert.equal(await p.locator('.audit-results table').count(),5);
@@ -15,7 +15,7 @@ for(const lang of ['th','en'])for(const width of [375,768,1440]){
  await p.locator('.audit-results').screenshot({path:`test-results/academic-results-${lang}-${width}.png`});
  await p.locator('#search').fill(lang==='th'?'covariance':'independent');
  assert.ok(await p.locator('#results a').count()>0);
- await p.goto(`${base}/research-${lang}.html#section-15`);
+ await p.goto(`${base}/research-${lang}.html#section-15`,{waitUntil:'domcontentloaded'});
  await p.locator('.audit-results').waitFor();
  assert.equal(await p.locator('.research-toc a').count(),16);
  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Research overflows');

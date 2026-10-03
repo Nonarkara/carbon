@@ -1,0 +1,17 @@
+import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
+const base=process.env.BASE_URL||'http://127.0.0.1:8788';
+const b=await chromium.launch(),p=await b.newPage();
+const requests=[],errors=[];p.on('request',r=>requests.push({url:r.url(),method:r.method(),body:r.postData()||''}));p.on('pageerror',e=>errors.push(e.message));
+const marker='synthetic-privacy-audit-marker';
+await p.goto(`${base}/?lang=en`,{waitUntil:'domcontentloaded'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
+await p.locator('.advanced-tools>summary').click();await p.locator('.lenses [data-tab=project]').click();
+await p.locator('#projectName').fill(marker);
+await p.locator('#boundaryFile').setInputFiles({name:marker+'.geojson',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({type:'Feature',properties:{name:marker},geometry:{type:'Polygon',coordinates:[[[100,14],[100.001,14],[100.001,14.001],[100,14.001],[100,14]]]}}))});
+await p.waitForFunction(marker=>document.querySelector('#boundaryInfo').textContent.includes(marker),marker);
+const dl=p.waitForEvent('download');await p.locator('#exportBoundary').click();assert.ok((await dl).suggestedFilename().endsWith('.geojson'));
+assert.ok(!requests.some(r=>(r.url+r.body).includes(marker)),'synthetic input transmitted');
+assert.ok(requests.every(r=>r.method==='GET'),'unexpected non-GET request');
+await p.reload({waitUntil:'domcontentloaded'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
+assert.equal(await p.locator('#projectName').inputValue(),'');assert.equal(await p.locator('#exportBoundary').isDisabled(),true);
+assert.deepEqual(errors,[]);await b.close();console.log('PASS synthetic import/export privacy: input marker absent from network; no POST; refresh clears inputs. Map viewport requests remain disclosed.');

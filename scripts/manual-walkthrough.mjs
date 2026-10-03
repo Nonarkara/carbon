@@ -3,7 +3,7 @@ const base=process.env.BASE_URL||'http://127.0.0.1:8788';await mkdir('test-resul
 for(const lang of ['th','en'])for(const width of [1280,390]){
  const context=await b.newContext({viewport:{width,height:900}}),page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>failed.push({url:r.url(),error:r.failure()?.errorText}));
  const cdp=await context.newCDPSession(page);await cdp.send('Network.enable');await cdp.send('Network.emulateNetworkConditions',{offline:false,latency:100,downloadThroughput:1500000,uploadThroughput:750000});
- await page.goto(`${base}/?lang=${lang}`);await page.locator('#kStock').filter({hasText:'M'}).waitFor();assert.ok(await page.locator('#guideLink').isVisible());
+ await page.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});await page.locator('#kStock').filter({hasText:'M'}).waitFor();assert.ok(await page.locator('#guideLink').isVisible());
  const popup=page.waitForEvent('popup');await page.locator('#guideLink').click();const guide=await popup;await guide.waitForLoadState();assert.equal(await guide.locator('html').getAttribute('lang'),lang);
  for(const id of ['province','area','project','layers','help','reference']){await guide.locator(`.manual-index a[href="#${id}"]`).click();assert.equal(await guide.locator(`#${id}`).count(),1);}
  assert.ok(await guide.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await guide.locator('.manual-index a[href="#province"]').click();await guide.screenshot({path:`test-results/manual-${lang}-${width}.png`});

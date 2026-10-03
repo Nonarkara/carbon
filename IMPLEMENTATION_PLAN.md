@@ -1,6 +1,6 @@
 # Forest Carbon Thailand — proposed pilot
 
-Status: reviewable proposal, application implementation has not started.
+Status: historical proposal from 25 September 2026. The user approved stages 1–2, now implemented and deployed. Stage 3 remains conditional on independent field/reference data and model approval. The current scope and release evidence are in README.md, context.md and docs/RELEASE_AUDIT.md. Original proposal wording below is retained as history.
 
 ## Outcome and critical decisions
 

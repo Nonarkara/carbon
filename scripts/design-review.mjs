@@ -9,7 +9,7 @@ const errors=[];p.on('pageerror',e=>errors.push(e.message));
 function luminance(rgb){const a=rgb.match(/[\d.]+/g).slice(0,3).map(Number).map(x=>{x/=255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4});return a[0]*.2126+a[1]*.7152+a[2]*.0722}
 for(const lang of ['th','en']) for(const width of [375,768,1440]){
  await p.setViewportSize({width,height:width===375?812:1000});
- await p.goto(`${base}/?lang=${lang}`);
+ await p.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});
  await p.locator('#kStock').filter({hasText:'M'}).waitFor();
  await p.evaluate(()=>document.fonts.ready);
  const branding=await p.locator('.kabonna-mark').evaluate(async img=>{await img.decode();return {fit:getComputedStyle(img).objectFit,background:getComputedStyle(img).backgroundColor,loaded:img.naturalWidth>0}});
@@ -36,14 +36,14 @@ for(const lang of ['th','en']) for(const width of [375,768,1440]){
  await p.locator('.province-row').first().click();
  await p.locator('#aboutTab').click();await p.locator('.research-person').waitFor();
  await p.screenshot({path:`test-results/design-research-${lang}-${width}.png`});
- await p.goto(`${base}/guide-${lang}.html`);await p.locator('.manual-routes').waitFor();
+ await p.goto(`${base}/guide-${lang}.html`,{waitUntil:'domcontentloaded'});await p.locator('.manual-routes').waitFor();
  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'manual overflow');
  assert.match(await p.locator('#install').innerText(),/Android[\s\S]*iPhone/);
  assert.ok(await p.locator('.manual-brand').evaluate(img=>img.complete&&img.naturalWidth>0));
  await p.screenshot({path:`test-results/design-manual-${lang}-${width}.png`});
 }
 await p.setViewportSize({width:1280,height:900});
-await p.goto(`${base}/?lang=en`);await p.locator('#kStock').filter({hasText:'M'}).waitFor();
+await p.goto(`${base}/?lang=en`,{waitUntil:'domcontentloaded'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
 const manifest=await p.request.get(`${base}/manifest.json`).then(r=>r.json());
 assert.equal(manifest.display,'standalone');
 for(const file of ['ct-mark.png','ct-app.png','ct-colour.png','ct-monochrome.png','icon-180.png','icon-192.png','icon-512.png']){

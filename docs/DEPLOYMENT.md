@@ -1,7 +1,8 @@
 # Deployment / การเผยแพร่
 
 Production project / โครงการ: `forest-carbon-thailand` on Cloudflare Pages.
-Public URL / เว็บไซต์: https://forest-carbon-thailand.pages.dev
+Primary URL / เว็บไซต์หลัก: https://carbon.nonarkara.org
+Cloudflare alias: https://forest-carbon-thailand.pages.dev
 Source / ซอร์ส: https://github.com/Nonarkara/carbon
 
 ## Release sequence / ขั้นตอนออกรุ่น
@@ -11,7 +12,7 @@ Source / ซอร์ส: https://github.com/Nonarkara/carbon
 3. Scan secrets with `gitleaks git --redact` and `gitleaks dir public --redact`; run `npm audit`.
 4. Commit source, tests and docs with an `Agent: codex` or appropriate attribution trailer; push to main.
 5. `npm run deploy` rebuilds using the committed Git SHA and uploads only `public/`.
-6. Inspect `/version.json`, security headers, TH/EN guides and `BASE_URL=https://forest-carbon-thailand.pages.dev npm run test:browser`.
+6. Inspect `/version.json`, security headers, TH/EN guides and `BASE_URL=https://carbon.nonarkara.org npm run test:browser`.
 
 การ build หลัง commit ทำให้ version ตรงกับซอร์สที่เผยแพร่ ต้องตรวจรุ่นบน URL หลัก ไม่ใช้เพียงข้อความสำเร็จจาก Wrangler เป็นหลักฐาน ส่วน GitHub Actions ตรวจ build/test แต่ไม่ได้ deploy อัตโนมัติ
 
@@ -31,4 +32,4 @@ This is a Direct Upload Pages project. It does not use Cloudflare's Git integrat
 
 Version, JS and CSS use revalidation through `_headers`. `404.html` avoids treating arbitrary paths as valid app routes. Guides are generated as `/guide-th.html` and `/guide-en.html`. A map tile outage affects the background, not locally computed boundaries or arithmetic. Do not introduce a service worker without testing stale-version behavior.
 
-Route checks / เส้นทางที่ต้องตรวจ: `/`, `/guide-th.html`, `/guide-en.html`, `/version.json`, `/data/source-catalog.json`, and a nonexistent path (must return 404).
+Route checks / เส้นทางที่ต้องตรวจ: `/`, `/guide-th.html`, `/guide-en.html`, `/version.json`, `/data/source-catalog.json`, `/bible.html`, `/research-th.html`, `/research-en.html`, `/data/scientific-audit.json`, `/api/global`, and a nonexistent path (must return 404). Run `node scripts/release-smoke.mjs` for version, exact asset bytes, headers, private-path exclusion and public-feed checks. See OPERATIONS.md for recovery procedures.
