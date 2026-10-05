@@ -35,8 +35,8 @@ body.dashboard button:active,body.dashboard .btn:active {transform:none}
 .dashboard .quick-tools .btn {min-height:42px;padding:8px 13px;font-size:12px;font-weight:600;border:1px solid var(--rule-strong);color:var(--ink)}
 .dashboard #exploreProvinces {background:var(--focus);color:#fff;border-color:var(--focus)}
 .dashboard #pickArea {background:var(--signal);color:var(--ink);border-color:var(--structure)}
-.dashboard #showVegetation,.dashboard #showAerosol,.dashboard #moreLayers {background:transparent;border-color:transparent;border-bottom:2px solid var(--rule-strong)}
-.dashboard #showVegetation:hover,.dashboard #showAerosol:hover,.dashboard #moreLayers:hover {background:var(--paper);border-bottom-color:var(--structure)}
+.dashboard #showVegetation,.dashboard #showAerosol,.dashboard #moreLayers {background:transparent;border:1px solid var(--rule-strong)}
+.dashboard #showVegetation:hover,.dashboard #showAerosol:hover,.dashboard #moreLayers:hover {background:var(--well);border-color:var(--structure)}
 .dashboard #pickArea[aria-pressed=true] {background:var(--structure);color:#fff}
 .dashboard #startMap {font-size:11px;color:var(--ink-mid);max-width:185px;margin-left:4px}
 .dashboard .advanced-tools {bottom:10px;color:var(--ink);font-size:11px}

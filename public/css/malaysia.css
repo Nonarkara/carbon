@@ -139,7 +139,7 @@ kbd { font: 10px var(--num); color: var(--ink-low); border: 1px solid var(--rule
 .stage { display: grid; grid-template-columns: 1fr var(--rail); min-height: 0; }
 .map-wrap { position: relative; min-height: 460px; }
 #map { position: absolute; inset: 0; background: #070a12; }
-body[data-basemap="none"] #map { background: radial-gradient(ellipse at 50% 40%, #0f1730, #05070d); }
+body[data-basemap="none"] #map { background: var(--well); }
 .rail { border-left: 1px solid var(--rule); background: var(--well); display: flex; flex-direction: column; min-height: 0; max-height: calc(100dvh - 190px); }
 .tabs { display: flex; border-bottom: 1px solid var(--rule); overflow-x: auto; flex: none; scrollbar-width: none; }
 .tabs button { flex: 1 0 auto; min-height: 42px; padding: 0 8px; border: 0; background: transparent; font-weight: 600; font-size: 12px; color: var(--ink-low); border-bottom: 2px solid transparent; white-space: nowrap; }

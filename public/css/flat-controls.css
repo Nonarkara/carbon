@@ -1,0 +1,10 @@
+/* Shared by every public page. State is conveyed by colour, border and focus, never depth. */
+*,*::before,*::after{box-shadow:none!important;text-shadow:none!important}
+button,.btn,input,select,textarea,summary{border-radius:0!important}
+button,.btn,input::file-selector-button{appearance:none;border-style:solid;transform:none!important;filter:none!important}
+summary{transform:none!important;filter:none!important}
+button::before,button::after,.btn::before,.btn::after,summary::before,summary::after{filter:none!important}
+input::file-selector-button{border:1px solid currentColor;border-radius:0;box-shadow:none;font:inherit;background:transparent;color:inherit;padding:8px;cursor:pointer}
+/* Native controls receive flat surfaces without removing their focus or disabled states. */
+button:disabled,[aria-disabled=true]{cursor:not-allowed}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip,.leaflet-tooltip{border-radius:0!important}
