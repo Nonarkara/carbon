@@ -28,6 +28,7 @@ for(const lang of ['th','en'])for(const width of [375,1440]){
  await page.goto(`${base}/bible.html?lang=${lang}#forest-watch`,{waitUntil:'domcontentloaded'});
  await page.locator('.illustration svg').waitFor();
  assert.match(await page.locator('body').innerText(),/v20261005/);
+ assert.match(await page.locator('#receipt').innerText(),/2026-10-05/);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Bible overflow');
  await page.screenshot({path:`test-results/forest-watch-bible-${lang}-${width}.png`});
 }
