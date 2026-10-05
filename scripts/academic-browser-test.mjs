@@ -17,7 +17,7 @@ for(const lang of ['th','en'])for(const width of [375,768,1440]){
  assert.ok(await p.locator('#results a').count()>0);
  await p.goto(`${base}/research-${lang}.html#section-15`,{waitUntil:'domcontentloaded'});
  await p.locator('.audit-results').waitFor();
- assert.equal(await p.locator('.research-toc a').count(),16);
+ assert.equal(await p.locator('.research-toc a').count(),17);
  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Research overflows');
 }
 assert.deepEqual(errors,[]);await b.close();console.log('Academic reader: TH/EN 375/768/1440, diagrams, tables, search, no overflow or page errors.');

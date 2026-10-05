@@ -190,3 +190,9 @@ Open [carbon.nonarkara.org](https://carbon.nonarkara.org). **Explore 77 province
 The global column (World tab on phones) separates concentrations, emissions, allowances and credits, with source dates and fetched/cache/fallback status. Quarterly auctions and annual inventories are not real-time quotes.
 
 Selection resolution: ODIAC's upstream fossil grid is approximately 1 km, but this deployment serves aggregated 2.8 km cells. All cell-derived quantities are withheld below the served selection floor; fire data retains its coarser 28 km limit. Boundary exports include the selected GeoJSON and withheld values remain null.
+
+## Forest Watch: decide where to investigate
+
+On **Carbon map**, select **All Thailand** or a province. Click **Forest Watch · GFW** at the top to open its results. Read the snapshot version and 30-day window before the number. The headline combines high and highest confidence alert area; the daily chart includes all confidence levels. Expand **Read the 30-day data table** for exact values. In the national view, click a province in the five-province list to inspect it.
+
+Success checkpoint: the province name changes and its own alert area appears. Open **How to read alerts + diagram** for interpretation. Use recent imagery and field checks to investigate the cause. A zero does not prove no disturbance. Alert hectares do not calculate tonnes or credits. Drawn boxes and imported project boundaries do not inherit province alerts. **Export JSON** includes this context; **Export CSV** remains the carbon ledger.

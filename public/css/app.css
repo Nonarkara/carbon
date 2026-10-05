@@ -114,3 +114,9 @@ body[data-about] .stage{display:block!important;min-height:0}
 body[data-about]{grid-template-columns:minmax(0,1fr)}body[data-about] .stage,.about,.about-inner,.about section,.il{min-width:0}
 
 .il-range-mid{fill:var(--brand);stroke:var(--ink);stroke-width:1}
+
+/* Forest Watch is evidence for investigation, never a carbon answer. */
+.forest-watch{border-top:3px solid var(--ink);margin-top:14px;padding-top:8px;min-width:0}
+.forest-watch h3{font-size:14px;margin:0 0 6px}.watch-answer{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:8px 0}.watch-answer b{font:600 28px var(--num)}.watch-answer span{font-size:12px}
+.watch-confidence{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:8px 0}.watch-confidence div{border:1px solid var(--rule-strong);padding:6px}.watch-confidence dt{font-size:11px}.watch-confidence dd{margin:2px 0 0;font:600 12px var(--num)}
+.forest-watch figure{margin:10px 0}.forest-watch figcaption,.forest-watch details{font-size:11px}.watch-bars{display:grid;grid-template-columns:repeat(30,minmax(0,1fr));align-items:end;gap:2px;height:65px;margin:6px 0;border-bottom:1px solid var(--ink)}.watch-bars i{display:block;background:var(--ink);min-width:0}.forest-watch table{width:100%;font:400 11px var(--num)}.forest-watch th{text-align:left}.watch-ranking{display:grid;gap:3px}.watch-ranking button{display:flex;justify-content:space-between;gap:8px;width:100%;font-size:12px;text-align:left;padding:6px 8px}.watch-links{font-size:11px;overflow-wrap:anywhere}

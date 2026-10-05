@@ -1,3 +1,4 @@
+import {renderForestWatch,watchRecord,validWatch} from './forest-watch.js';
 // Carbon map lens: province / drawn box / project boundary → landscape ledger. Rendering only; arithmetic lives in ledger.js.
 import {readGrid,sumSelection,ledgerRows,polygonsOf,boxSideKm,bboxOf} from './ledger.js';
 
@@ -20,7 +21,8 @@ const GROUP_ORDER=['forest','savanna_shrub_grass','cropland','deforestation','pe
 export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,onSelect=()=>{}}){
   const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const S={data:null,manifest:null,grid:null,gridPromise:null,sel:null,src:null,rows:[],layer:null,shape:null,overlay:null,atmos:null,drawing:false};
-  const byCode=new Map();let suppressMapClickUntil=0;let selectionRevision=0;
+  const byCode=new Map();let watchData=null,watchStatus='loading';
+  const watchReady=fetch('data/gfw/watch.json').then(r=>{if(!r.ok)throw Error('watch');return r.json();}).then(d=>{if(!validWatch(d))throw Error('watch:invalid');watchData=d;watchStatus='ready';if(S.src)render();}).catch(()=>{watchStatus='unavailable';if(S.src)render();});let suppressMapClickUntil=0;let selectionRevision=0;
   const applyMetricLabels=()=>{const ds=S.manifest?.datasets;if(!ds)return;
     const o=$('#provinceMetric').options;
     o[0].textContent=`${t('metricFossil')} · ${ds.odiac.year}`;
@@ -92,6 +94,9 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):!s.area_ha?t('emptySelection'):stock?.tooCoarse?t('tooCoarseGrid'):t('verdictBox').replace('{s}',big(stock?.value));
     $('#ledger').innerHTML=ledgerHTML(s);
     const pcode=s.pcode||(S.sel.kind==='national'?'TH':null);
+    if(pcode&&watchData){$('#ledger').insertAdjacentHTML('beforeend',renderForestWatch(watchData,pcode,{lang:getLang(),fmt,esc,provinces:S.data.provinces}));
+      $('#ledger').querySelectorAll('[data-watch-province]').forEach(b=>b.onclick=()=>select({kind:'province',code:b.dataset.watchProvince}));}
+    else $('#ledger').insertAdjacentHTML('beforeend',`<p class="hint watch-status">${getLang()==='th'?'เฝ้าดูป่า GFW: ':'GFW Forest Watch: '}${pcode?(watchStatus==='loading'?t('loading'):(getLang()==='th'?'ข้อมูลไม่พร้อมใช้งาน':'snapshot unavailable')):(getLang()==='th'?'มีเฉพาะระดับจังหวัดและประเทศ ไม่จัดสรรยอดจังหวัดให้แปลง':'province and national context only; no parcel allocation')}</p>`);
     const tverHTML=registry.section(pcode);
     if(tverHTML)$('#ledger').insertAdjacentHTML('beforeend',tverHTML);
     if(S.sel.kind==='national'){const bars=digestBars();if(bars)$('#ledger').insertAdjacentHTML('beforeend',bars);}
@@ -189,6 +194,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#provinceRanking').innerHTML=[...S.data.provinces].sort((a,b)=>value(b)-value(a)).map(p=>`<button class="province-row" data-province="${p.pcode}"><span>${esc(placeName(p))}</span><b>${fmtVal(value(p))}</b><small>${unit} · ${source} · ${esc(t('globalRef'))}</small></button>`).join('');
     $('#provinceRanking').querySelectorAll('button').forEach(b=>b.onclick=()=>select({kind:'province',code:b.dataset.province}));
   }
+  $('#openForestWatch').onclick=()=>Promise.all([ready,watchReady]).then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;document.body.dataset.view='rail';$('#ledgerDetails').open=true;($('#ledger .forest-watch')||$('#ledger .watch-status'))?.scrollIntoView({block:'start'});});
   $('#exploreProvinces').onclick=()=>ready.then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=false;document.body.dataset.provinces='open';document.body.dataset.view='rail';renderProvinces();document.querySelector('input[name=overlay][value=flux]').checked=true;setOverlay('flux');$('#tabBody').scrollTop=0;});
   $('#provinceMetric').onchange=renderProvinces;document.addEventListener('langchange',applyMetricLabels);
   $('#closeProvinces').onclick=()=>{$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;};
@@ -249,6 +255,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       selection:S.sel.kind==='box'?{kind:'box',bbox:S.sel.box}:S.sel.kind==='boundary'?{kind:'project-boundary',geojson:S.sel.geojson}:{kind:S.sel.kind,pcode:S.src.pcode,name_en:S.src.name_en,name_th:S.src.name_th},
       rows:S.rows,crossChecks:{climatetrace_2024:S.src.climatetrace_2024||null,btr1_2022:S.src.btr1_2022||null},
       tverRegistry:tverInfo,
+      forestWatch:pcode&&watchData?{dataset:watchData.dataset,version:watchData.version,window:watchData.window,mask:watchData.mask,unit:watchData.unit,lastAlertDate:watchData.lastAlertDate,attribution:watchData.attribution,source:watchData.source,rawSha256:watchData.rawSha256,countryCheck:watchData.countryCheck,retrievedAt:watchData.retrievedAt,licence:watchData.licence,limitations:watchData.limitations,dates:watchData.dates,record:watchRecord(watchData,pcode)}:null,
       conversion:S.manifest.conversion,conservation:S.manifest.conservation,datasets:S.manifest.datasets};
   }
   $('#ledgerJSON').onclick=()=>S.src&&download('carbon-ledger.json',JSON.stringify(payload(),null,2),'application/json');

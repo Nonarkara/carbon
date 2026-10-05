@@ -63,3 +63,7 @@ Province names used to match GFW and Climate TRACE records come from GADM identi
 ## Author portrait
 
 `public/images/dr-non.jpg`: Dr Non Arkaraprasertkul portrait from his [RMIT Vietnam profile](https://www.rmit.edu.vn/research/hubs/rmit-vietnam-smart-and-sustainable-cities-hub/people/dr-non-arkaraprasertkul), used at the subject's request on 25 September 2026. Source asset: https://www.rmit.edu.vn/content/dam/rmit/vn/en/assets-for-production/images/hubs/smart-sustainable-cities/people/non-arkarapra.jpg . No blanket open-image licence is claimed; portrait rights are separate from application code.
+
+### GFW Forest Watch / UMD/GLAD + WUR
+
+Integrated Deforestation Alerts, accessed through GFW / Global Nature Watch: [primary metadata](https://data-api.globalforestwatch.org/dataset/gfw_integrated_alerts), CC BY 4.0. Province summary `gadm__integrated_alerts__adm1_daily_alerts v20261005`, 5 September–4 October 2026, tree-cover 2022 mask; derived confidence totals and daily chart in `public/data/gfw/watch.json`. These are dated investigation signals, not verified deforestation, tonnes or credits. Legacy summary excludes the newer global DIST-ALERT layer. Exact queries, attribution and raw-file hashes are included in the public snapshot; private raw files stay outside public/.

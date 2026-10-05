@@ -106,3 +106,9 @@ The global column (World tab on phones) separates concentrations, emissions, all
 ## Release credibility / ความน่าเชื่อถือของรุ่น
 
 [Release audit](docs/RELEASE_AUDIT.md) records scope, evidence and remaining validation work. [Operating runbook](docs/OPERATIONS.md) covers pre-demo checks, failed feeds, recovery and rollback. [Scientific audit in Thai](https://carbon.nonarkara.org/bible.html?lang=th#scientific-audit) · [English](https://carbon.nonarkara.org/bible.html?lang=en#scientific-audit). The release is an independent assessment pilot, not a certified credit service.
+
+### GFW Forest Watch
+
+Use the **Forest Watch · GFW / เฝ้าดูป่า · GFW** button on the first screen for a dated 30-day province alert snapshot, confidence breakdown, daily table and province drill-down. This is an investigation signal, separate from carbon accounting. JSON export preserves its provenance. [TH/EN explanation](https://carbon.nonarkara.org/bible.html?lang=th#forest-watch).
+
+Refresh a known published version with `python3 scripts/ingest/gfw_watch.py --date 2026-10-05`, then build, test and deploy. Raw CSV and independent country-check data stay in ignored research/raw; the derived public file is public/data/gfw/watch.json. No key or project upload is used. Account membership does not configure a GFW API key; authenticated parcel raster ingestion is not connected.

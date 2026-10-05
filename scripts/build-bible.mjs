@@ -11,6 +11,8 @@ const audit=await read('public/data/scientific-audit.json');
 const reports={en:await readFile('docs/ACADEMIC_AUDIT.en.md','utf8'),th:await readFile('docs/ACADEMIC_AUDIT.th.md','utf8')};
 const chapterHtml=(c,lang)=>marked.parse(c.body[lang])+(c.id==='scientific-audit'?marked.parse(reports[lang].replace('<!-- scientific-results -->',auditView(audit,lang))):'');
 const sources={
+ 'gfw-watch':source('GFW integrated deforestation alerts · v20261005','data/gfw/watch.json','2026-09-05–2026-10-04 · hectares · tree-cover mask 2022 · raw SHA-256'),
+ 'gfw-alert-method':source('GFW / GNW alert metadata · UMD/GLAD + WUR','https://data-api.globalforestwatch.org/dataset/gfw_integrated_alerts','10 m integrated grid; GLAD-L resampled from 30 m · CC BY 4.0 · accessed 2026-10-05'),
  'audit-data':source('Executed scientific diagnostics · 2026-10-02','data/scientific-audit.json','Hypothetical sensitivities + deployed input SHA-256; not field accuracy'),
  'source-review':source('Targeted scientific source review','https://github.com/Nonarkara/carbon/blob/main/research/scientific-sources.json','Accessed 2026-10-02 · source age · contrary evidence · limitations'),
  gfoi:source('GFOI biomass-map guidance 2025 v1.1','https://www.reddcompass.org/mgd/resources/GFOI_BiomassMaps_Guidance-20251022.pdf','Chapter 2; Chapter 3 table · state of practice, not a ban on research'),

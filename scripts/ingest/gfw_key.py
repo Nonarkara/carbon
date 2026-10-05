@@ -17,7 +17,7 @@ def post(path, body, headers):
         with urllib.request.urlopen(req, timeout=60) as r:
             return json.load(r)
     except urllib.error.HTTPError as e:
-        sys.exit(f'{path}: HTTP {e.code} {e.read().decode(errors="replace")[:300]}')
+        sys.exit(f'{path}: HTTP {e.code}')
 
 
 # GFW issues keys only to email+password accounts; a Google/Facebook/Twitter login cannot get a token.
@@ -34,4 +34,4 @@ key = post('/auth/apikey', json.dumps({'alias': 'forest-carbon-thailand-ingest',
 lines = [l for l in (ENV.read_text().splitlines() if ENV.exists() else []) if not l.startswith('GFW_API_KEY=')]
 ENV.write_text('\n'.join(lines + [f'GFW_API_KEY={key["api_key"]}']) + '\n')
 os.chmod(ENV, 0o600)
-print(f'Saved GFW_API_KEY to {ENV} (…{key["api_key"][-4:]}), expires {key["expires_on"][:10]}.')
+print(f'Saved GFW_API_KEY to {ENV}, expires {key["expires_on"][:10]}.')
