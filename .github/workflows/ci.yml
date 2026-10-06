@@ -1,5 +1,8 @@
 name: build-and-test
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 permissions:
   contents: read
 jobs:
@@ -19,7 +22,14 @@ jobs:
       - name: Browser flows
         run: |
           npm run dev > /tmp/carbon-dev.log 2>&1 &
-          for i in 1 2 3 4 5; do curl -fsS http://127.0.0.1:8788/ > /dev/null && break || sleep 1; done
+          dev_pid=$!
+          trap 'status=$?; if [ "$status" -ne 0 ]; then echo "----- dev server log -----"; cat /tmp/carbon-dev.log || true; fi; kill "$dev_pid" >/dev/null 2>&1 || true' EXIT
+          ready=0
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8788/ > /dev/null; then ready=1; break; fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ]; then echo "dev server did not listen on 127.0.0.1:8788"; exit 1; fi
           npm run test:browser
           npm run test:client
           npm run test:manual
