@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "reviewed": "2026-10-07",
+  "artifacts": [
+    {
+      "id": "grinnell",
+      "source": "https://www.usgs.gov/media/images/grinnell-glacier-1938-2019-glacier-national-park",
+      "credit": "T. J. Hileman (GNP, 1938) / McKeon (USGS, 2019) · USGS publication",
+      "date": "1938 / 2019",
+      "title": {
+        "en": "Grinnell Glacier: repeat photography",
+        "th": "ธารน้ำแข็ง Grinnell: ภาพถ่ายซ้ำ"
+      },
+      "caption": {
+        "en": "Montana, USA. Historical comparison of 1938 and 2019; not a Thai observation or a carbon input.",
+        "th": "มอนแทนา สหรัฐฯ เปรียบเทียบ 1938 กับ 2019 ไม่ใช่ผลวัดไทยหรือปัจจัยคาร์บอน"
+      },
+      "alt": {
+        "en": "Paired photographs of Grinnell Glacier in 1938 and 2019 showing reduced ice extent.",
+        "th": "ภาพคู่ธารน้ำแข็ง Grinnell ปี 1938 และ 2019 แสดงน้ำแข็งที่ลดลง"
+      },
+      "path": "images/bible/grinnell.jpg",
+      "original": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/thumbnails/image/Grinnell_mtGould_1938_2019.jpg",
+      "sha256": "69250638a795638374facab040e9510fd332443886176001b9d4d09d893dcd06",
+      "bytes": 147773,
+      "rights": "Public domain",
+      "rightsUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "reviewed": "2026-10-07",
+      "modifications": "None; original downloaded bytes"
+    },
+    {
+      "id": "lake-mead",
+      "source": "https://www.usgs.gov/media/images/long-term-drought-lake-mead-colorado-river",
+      "credit": "USGS / NASA Landsat",
+      "date": "2000-08-07 / 2021-08-09",
+      "title": {
+        "en": "Lake Mead: a changing water balance",
+        "th": "Lake Mead: สมดุลน้ำที่เปลี่ยน"
+      },
+      "caption": {
+        "en": "Colorado River reservoir, USA. Water levels reflect drought, inflow and water use; not single-emitter attribution.",
+        "th": "อ่างแม่น้ำโคโลราโด สหรัฐฯ ระดับน้ำขึ้นกับภัยแล้ง น้ำเข้า และการใช้ ไม่ใช่สาเหตุจากผู้ปล่อยรายเดียว"
+      },
+      "alt": {
+        "en": "Satellite comparison of Lake Mead in 2000 and 2021 showing a smaller water surface.",
+        "th": "ภาพดาวเทียม Lake Mead ปี 2000 และ 2021 แสดงผิวน้ำที่เล็กลง"
+      },
+      "path": "images/bible/lake-mead.jpg",
+      "original": "https://eoimages.gsfc.nasa.gov/images/imagerecords/148000/148758/lakemeadzm_oli_2021221.jpg",
+      "sha256": "49af249f7d673ad4e5dd27505a034b5c56f7e0e212abb8d820803e9d419b2de8",
+      "bytes": 602240,
+      "rights": "Public domain",
+      "rightsUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "reviewed": "2026-10-07",
+      "modifications": "None; original downloaded bytes"
+    },
+    {
+      "id": "coral",
+      "source": "https://commons.wikimedia.org/wiki/File:Fire_Coral_Bleaching.jpg",
+      "credit": "USGS · via Wikimedia Commons",
+      "date": "2014-09-06",
+      "title": {
+        "en": "Coral bleaching: ecosystem stress",
+        "th": "ปะการังฟอกขาว: ความเครียดระบบนิเวศ"
+      },
+      "caption": {
+        "en": "Islamorada, Florida, USA. Historical bleaching photo; it does not establish death or attribution to one emitter.",
+        "th": "Islamorada ฟลอริดา สหรัฐฯ ภาพฟอกขาวในอดีต ไม่ยืนยันว่าตายหรือเกิดจากผู้ปล่อยรายเดียว"
+      },
+      "alt": {
+        "en": "Pale bleached blade fire coral on a reef near Islamorada, Florida.",
+        "th": "ปะการังไฟสีซีดฟอกขาวบนแนวปะการังใกล้ Islamorada ฟลอริดา"
+      },
+      "path": "images/bible/coral.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Fire_Coral_Bleaching.jpg",
+      "sha256": "ccce677d4b7cd47f351cd503392f38c52bd82ce1ef855b1e83582d638a8732f3",
+      "bytes": 4017519,
+      "rights": "Public domain",
+      "rightsUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "reviewed": "2026-10-07",
+      "modifications": "None; original downloaded bytes"
+    }
+  ]
+}

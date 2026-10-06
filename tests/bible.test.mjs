@@ -8,7 +8,7 @@ const read=async p=>JSON.parse(await readFile(p,'utf8'));
 test('Bible has equivalent bilingual chapters, resolvable references and complete dataset coverage',async()=>{
  const data=await read('public/data/bible.json'),manifest=await read('public/data/ledger/manifest.json');
  assert.equal(new Set(chapters.map(c=>c.id)).size,chapters.length);
- assert.equal(data.chapters.length,30);assert.equal(data.chapters.find(c=>c.id==='forest-watch').reviewed,'2026-10-05');
+ assert.equal(data.chapters.length,44);assert.equal(data.chapters.find(c=>c.id==='forest-watch').reviewed,'2026-10-05');
  for(const c of data.chapters){for(const lang of ['th','en']){assert.ok(c.title[lang]);assert.ok(c.summary[lang]);assert.ok(c.body[lang].length>300);assert.ok(c.html[lang].includes('<p>'));assert.ok(c.diagram[lang].length>=3);}assert.equal(c.diagram.en.length,c.diagram.th.length);for(const s of c.sources)assert.ok(data.sources[s],`${c.id}: ${s}`);for(const id of c.related)assert.ok(chapters.find(c=>c.id===id));}
  for(const [key,d] of Object.entries(manifest.datasets)){assert.ok(data.sources[key]);assert.ok(data.chapters.find(c=>c.id==='sources').sources.includes(key));if(d.version)assert.ok(data.sources[key].detail.includes(d.version));}
  for(const target of Object.values(data.coverage))assert.ok(chapters.find(c=>c.id===target));

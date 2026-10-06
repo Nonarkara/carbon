@@ -26,6 +26,7 @@ jobs:
           BASE_URL=http://127.0.0.1:8788 node scripts/privacy-browser-test.mjs
           node scripts/forest-watch-browser-test.mjs
           node scripts/flat-ui-browser-test.mjs
+          node scripts/bible-design-browser-test.mjs
           npm run test:design
           BASE_URL=http://127.0.0.1:8788 node scripts/academic-browser-test.mjs
   secrets:

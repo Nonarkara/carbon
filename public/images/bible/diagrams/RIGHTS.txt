@@ -1,0 +1,8 @@
+Newly authored design-chapter diagrams in this folder (14 topics × TH/EN):
+CC0 1.0 Universal Public Domain Dedication.
+https://creativecommons.org/publicdomain/zero/1.0/
+
+This dedication applies only to these original SVGs and their authored diagram source.
+It does not apply to logos, portraits, upstream imagery, datasets or standards text.
+For the photographs, consult /data/bible-artifacts.json and each individual source.
+No TGO, ISO, USGS or other agency endorsement is implied.

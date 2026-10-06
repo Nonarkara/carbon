@@ -19,6 +19,10 @@ flowchart LR
  C --> D["ตรวจสอบ / Review"]
 ```
 
+## Carbon Bible / คู่มือคาร์บอน
+
+[Thai / ภาษาไทย](https://carbon.nonarkara.org/bible.html?lang=th#assessment-brief) · [English](https://carbon.nonarkara.org/bible.html?lang=en#assessment-brief). 44 searchable bilingual chapters, assessment templates, a hypothetical SME inventory, 28 original CC0 diagram editions and three dated public-domain impact images with download/provenance records. Chapters cover organization, product, forest and credit accounting with their limits kept separate. New authored chapters: `docs/bible/design/`; image rights/hashes: `public/data/bible-artifacts.json`.
+
 ## Start / เริ่มใช้งาน
 
 ```bash

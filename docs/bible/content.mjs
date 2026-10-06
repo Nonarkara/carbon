@@ -1,3 +1,4 @@
+import {designChapters} from './design.mjs';
 import {academicChapters} from './academic.mjs';
 // Authored bilingual explanations. Worked values and source versions are injected by build-bible.
 export const chapters=[];
@@ -248,3 +249,5 @@ The pinned **v20261005** summary covers **5 September–4 October 2026**, filter
 
 **ทำอะไรต่อ:** ตรวจภาพล่าสุด ลงพื้นที่ บันทึกขอบเขตและสาเหตุ แล้วใช้วิธีติดตามที่โครงการกำหนด อย่านำเฮกตาร์แจ้งเตือนคูณค่าเฉลี่ยคาร์บอนจังหวัดเพื่ออ้างปริมาณปล่อยหรือเครดิตที่สูญเสีย พื้นที่ที่วาดไม่มีการคำนวณแจ้งเตือนในระบบนี้ ส่งออก JSON เพื่อเก็บรุ่นและระดับความเชื่อมั่น ส่วน CSV ยังคงเป็นบัญชีคาร์บอนแยกต่างหาก`,['gfw-watch','gfw-alert-method'],['Dated satellite detections','Confidence + province context','Imagery and field investigation','Method-specific monitoring evidence'],['การตรวจพบจากดาวเทียมพร้อมวันที่','ความเชื่อมั่น + บริบทจังหวัด','ตรวจภาพและลงพื้นที่','หลักฐานตามวิธีติดตามของโครงการ'],['number-passport']);
 chapters.find(c=>c.id==='forest-watch').reviewed='2026-10-05';
+
+chapters.push(...designChapters);
