@@ -34,6 +34,7 @@ jobs:
             -e HOME=/tmp \
             -e SEMGREP_SEND_METRICS=off \
             semgrep/semgrep@sha256:529ee8a277ec8adc5b534d7c74eea0a47e9de21d62852b6ba7ac6ba9566845c3 \
+            semgrep \
             scan \
             --metrics=off \
             --disable-version-check \
@@ -48,13 +49,23 @@ jobs:
             --output /src/semgrep.sarif \
             >/tmp/semgrep.stdout 2>/tmp/semgrep.stderr
           code=$?
-          rm -f /tmp/semgrep.stdout /tmp/semgrep.stderr
           if [ -f semgrep.sarif ]; then
             chown "$(id -u):$(id -g)" semgrep.sarif 2>/dev/null || sudo chown "$(id -u):$(id -g)" semgrep.sarif
             echo "Semgrep SARIF bytes: $(wc -c < semgrep.sarif) (exit ${code})"
           else
             echo "Semgrep did not write semgrep.sarif (exit ${code})."
+            python3 - <<'PY'
+from pathlib import Path
+err = Path("/tmp/semgrep.stderr")
+if not err.is_file():
+    print("No Semgrep stderr was captured.")
+else:
+    print("Semgrep startup error (trimmed):")
+    for line in err.read_text(errors="replace").splitlines()[:40]:
+        print(line if len(line) <= 240 else f"<line {len(line)} chars>")
+PY
           fi
+          rm -f /tmp/semgrep.stdout /tmp/semgrep.stderr
           # Findings and scanner failures stay report-only. Stdout is discarded
           # because Semgrep text output can contain matched secret values.
           exit 0
