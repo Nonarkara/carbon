@@ -1,0 +1,94 @@
+name: security
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    name: Report-only security scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Semgrep OSS
+        env:
+          SEMGREP_SEND_METRICS: "off"
+        run: |
+          set +e
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}:/src" \
+            -w /src \
+            -e HOME=/tmp \
+            -e SEMGREP_SEND_METRICS=off \
+            semgrep/semgrep@sha256:529ee8a277ec8adc5b534d7c74eea0a47e9de21d62852b6ba7ac6ba9566845c3 \
+            scan \
+            --metrics=off \
+            --disable-version-check \
+            --oss-only \
+            --no-error \
+            --config p/javascript \
+            --config p/nodejs \
+            --config p/python \
+            --config p/secrets \
+            --config p/github-actions \
+            --sarif \
+            --output /src/semgrep.sarif \
+            >/tmp/semgrep.stdout 2>/tmp/semgrep.stderr
+          code=$?
+          rm -f /tmp/semgrep.stdout /tmp/semgrep.stderr
+          if [ -f semgrep.sarif ]; then
+            chown "$(id -u):$(id -g)" semgrep.sarif 2>/dev/null || sudo chown "$(id -u):$(id -g)" semgrep.sarif
+            echo "Semgrep SARIF bytes: $(wc -c < semgrep.sarif) (exit ${code})"
+          else
+            echo "Semgrep did not write semgrep.sarif (exit ${code})."
+          fi
+          # Findings and scanner failures stay report-only. Stdout is discarded
+          # because Semgrep text output can contain matched secret values.
+          exit 0
+
+      - name: Trivy filesystem scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: "."
+          scanners: vuln,secret,misconfig
+          format: sarif
+          output: trivy.sarif
+          exit-code: "0"
+          cache: "false"
+          hide-progress: "true"
+          timeout: 15m
+
+      - name: Write job summary
+        id: summary
+        if: always()
+        run: |
+          python3 .github/scripts/security_summary.py --self-check
+          python3 .github/scripts/security_summary.py --semgrep semgrep.sarif --trivy trivy.sarif
+
+      - name: Upload Semgrep SARIF
+        if: always() && steps.summary.outcome == 'success' && hashFiles('semgrep.sarif') != '' && github.actor != 'dependabot[bot]' && !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true)
+        uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep-oss
+
+      - name: Upload Trivy SARIF
+        if: always() && steps.summary.outcome == 'success' && hashFiles('trivy.sarif') != '' && github.actor != 'dependabot[bot]' && !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true)
+        uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          sarif_file: trivy.sarif
+          category: trivy-fs
