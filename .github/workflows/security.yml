@@ -54,16 +54,13 @@ jobs:
             echo "Semgrep SARIF bytes: $(wc -c < semgrep.sarif) (exit ${code})"
           else
             echo "Semgrep did not write semgrep.sarif (exit ${code})."
-            python3 - <<'PY'
-from pathlib import Path
-err = Path("/tmp/semgrep.stderr")
-if not err.is_file():
-    print("No Semgrep stderr was captured.")
-else:
-    print("Semgrep startup error (trimmed):")
-    for line in err.read_text(errors="replace").splitlines()[:40]:
-        print(line if len(line) <= 240 else f"<line {len(line)} chars>")
-PY
+            python3 -c 'from pathlib import Path
+          err = Path("/tmp/semgrep.stderr")
+          print("No Semgrep stderr was captured." if not err.is_file() else "Semgrep startup error (trimmed):")
+          if err.is_file():
+              for line in err.read_text(errors="replace").splitlines()[:40]:
+                  print(line if len(line) <= 240 else "<line %d chars>" % len(line))
+          '
           fi
           rm -f /tmp/semgrep.stdout /tmp/semgrep.stderr
           # Findings and scanner failures stay report-only. Stdout is discarded
