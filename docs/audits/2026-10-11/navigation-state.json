@@ -1,0 +1,31 @@
+{
+  "view": "map",
+  "active": [
+    {
+      "text": "คาร์บอน",
+      "view": "rail",
+      "tab": "carbon"
+    }
+  ],
+  "mapVisible": true,
+  "layerPanel": {
+    "x": 10,
+    "y": 393.6875,
+    "width": 150,
+    "height": 281.625,
+    "top": 393.6875,
+    "right": 160,
+    "bottom": 675.3125,
+    "left": 10
+  },
+  "legend": {
+    "x": 202,
+    "y": 391.6875,
+    "width": 165,
+    "height": 92.46875,
+    "top": 391.6875,
+    "right": 367,
+    "bottom": 484.15625,
+    "left": 202
+  }
+}

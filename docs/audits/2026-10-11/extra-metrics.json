@@ -1,0 +1,114 @@
+[
+  {
+    "lang": "th",
+    "state": "entry-320",
+    "scrollWidth": 320,
+    "width": 320,
+    "mapHeight": 56.921875,
+    "mapTop": 383.6875
+  },
+  {
+    "lang": "th",
+    "state": "text-200-percent",
+    "scrollWidth": 375,
+    "width": 375,
+    "mapHeight": 0,
+    "mapTop": 537.25,
+    "bodyHeight": 812
+  },
+  {
+    "lang": "th",
+    "state": "bible",
+    "width": 375,
+    "scrollWidth": 375,
+    "articleTop": 745.609375,
+    "headerHeight": 56.390625,
+    "fontSizes": [
+      "16px",
+      "13px",
+      "14px",
+      "12px"
+    ]
+  },
+  {
+    "lang": "th",
+    "state": "guide",
+    "width": 375,
+    "scrollWidth": 375,
+    "headerHeight": 115,
+    "fontSizes": [
+      "13px",
+      "12px",
+      "14px"
+    ]
+  },
+  {
+    "lang": "th",
+    "state": "paper",
+    "width": 375,
+    "scrollWidth": 375,
+    "articleTop": 115,
+    "headerHeight": 115,
+    "fontSizes": [
+      "14px",
+      "13px",
+      "15px"
+    ]
+  },
+  {
+    "lang": "en",
+    "state": "entry-320",
+    "scrollWidth": 320,
+    "width": 320,
+    "mapHeight": 30.65625,
+    "mapTop": 407.5625
+  },
+  {
+    "lang": "en",
+    "state": "text-200-percent",
+    "scrollWidth": 375,
+    "width": 375,
+    "mapHeight": 0,
+    "mapTop": 560.84375,
+    "bodyHeight": 812
+  },
+  {
+    "lang": "en",
+    "state": "bible",
+    "width": 375,
+    "scrollWidth": 375,
+    "articleTop": 768.703125,
+    "headerHeight": 56.390625,
+    "fontSizes": [
+      "16px",
+      "13px",
+      "14px",
+      "12px"
+    ]
+  },
+  {
+    "lang": "en",
+    "state": "guide",
+    "width": 375,
+    "scrollWidth": 375,
+    "headerHeight": 115,
+    "fontSizes": [
+      "13px",
+      "12px",
+      "14px"
+    ]
+  },
+  {
+    "lang": "en",
+    "state": "paper",
+    "width": 375,
+    "scrollWidth": 375,
+    "articleTop": 115,
+    "headerHeight": 115,
+    "fontSizes": [
+      "14px",
+      "13px",
+      "15px"
+    ]
+  }
+]
