@@ -1,6 +1,12 @@
 // Newly authored teaching diagrams only: CC0 1.0. No dedication of upstream assets.
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const definitions={
+"sea-overview":["Three questions require separate evidence", "สามคำถาม ใช้หลักฐานแยกกัน", ["Country context", "Parcel measurement", "Project review", "Registry claim"], ["บริบทประเทศ", "วัดแปลง", "ตรวจโครงการ", "หลักฐานทะเบียน"]],
+"sea-data-methods":["Compare within the same dataset and period", "เทียบภายในชุดและช่วงเวลาเดียวกัน", ["Define quantity", "Align period", "Check all 11", "Keep sources"], ["กำหนดปริมาณ", "เทียบช่วงเวลา", "ตรวจครบ 11", "เก็บที่มา"]],
+"sea-ecosystems":["Trees alone do not describe every ecosystem", "ต้นไม้อย่างเดียวไม่อธิบายทุกระบบนิเวศ", ["Vegetation", "Soil & water", "Disturbance", "Pool evidence"], ["พืชพรรณ", "ดินและน้ำ", "การรบกวน", "หลักฐานรายแหล่ง"]],
+"sea-mrv":["Validation travels from field to held-out test", "ทวนสอบจากภาคสนามถึงข้อมูลทดสอบอิสระ", ["Target population", "Stratified plots", "Fit model", "Independent test"], ["ประชากรเป้าหมาย", "แปลงแยกชั้น", "ปรับแบบจำลอง", "ทดสอบอิสระ"]],
+"sea-footprints":["Trace each activity to its applicable factor", "ตามกิจกรรมถึงตัวคูณที่ใช้ได้จริง", ["Activity record", "Country & year", "Factor version", "Inventory scope"], ["บันทึกกิจกรรม", "ประเทศและปี", "รุ่นตัวคูณ", "ขอบเขตบัญชี"]],
+"sea-governance":["Evidence gates before a credit claim", "ด่านหลักฐานก่อนอ้างเครดิต", ["Rights & consent", "Eligible method", "Independent review", "Registry evidence"], ["สิทธิและยินยอม", "วิธีที่ใช้ได้", "ตรวจอิสระ", "หลักฐานทะเบียน"]],
  'assessment-brief':['Question → evidence → deliverable','คำถาม → หลักฐาน → งานส่งมอบ',['Purpose','Boundary','Evidence','Decision'],['วัตถุประสงค์','ขอบเขต','หลักฐาน','ตัดสินใจ']],
  'boundary-design':['An operation’s boundary determines its accounting','ขอบเขตกิจกรรมกำหนดวิธีลงบัญชี',['Value chain','Organization','Direct','Energy'],['ห่วงโซ่คุณค่า','องค์กร','ปล่อยตรง','พลังงาน']],
  'evidence-register':['A result can be traced back to its record','ผลคำนวณย้อนถึงบันทึกได้',['Document','Activity row','Factor version','Result'],['เอกสาร','แถวกิจกรรม','รุ่นตัวคูณ','ผลคำนวณ']],

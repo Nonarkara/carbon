@@ -592,3 +592,36 @@ The rail separates nominal, high and highest confidence. Its headline is high + 
 No alert is converted into tonnes, assigned to a drawn parcel, deducted from a project or treated as an issued-credit reversal. Province context remains separate from the workbench. JSON export includes the complete selected snapshot; carbon CSV retains only carbon rows. Public files include the exact query, raw SHA-256, mask, dates, attribution and CC BY 4.0 licence. The ingestion script rejects unknown provinces, unexpected confidence values, negative areas and out-of-window dates. Tests reconcile national, province and daily totals.
 
 **Reproduction:** `python3 scripts/ingest/gfw_watch.py --date 2026-10-05`. Future refreshes must select an available dataset version and rebuild/deploy; the snapshot does not silently refresh. No user boundary is sent to GFW. The public CSV download succeeded without authentication; absent CORS is handled by offline ingestion. An account subscription alone does not configure a Data API key: none is configured here. Authenticated raster ingestion remains a separate step, so drawn-area flux remains unavailable.
+
+
+## Southeast Asia · an auditable regional extension
+
+Open the [11-country map](sea.html?lang=en) or the [regional Bible](bible.html?lang=en&group=region#sea-overview). Brunei, Cambodia, Indonesia, Lao PDR, Malaysia, Myanmar, Philippines, Singapore, Thailand, Timor-Leste and Viet Nam are included. The original Thai project workflow remains separate. The 17 new bilingual chapters cover six methods and eleven country research profiles.
+
+### Comparability is a contract
+A regional comparison needs the same construct, unit, period and boundary within each column. The regional table deliberately keeps **FAO forest area**, **GFW forest flux** and **EDGAR/IEA non-LULUCF CO₂** in different columns. National forest definitions, a satellite model's extent and a territorial emissions boundary are different objects. A common country code does not make them one inventory.
+
+The ingestion script requests the exact eleven ISO3 codes and checks identity, uniqueness, finite values and period. Forest area and share use 2023, matching the displayed CO₂ year. WDI reports its own source update date separately from the observation year. The GFW source remains pinned to v20260327 for a comparable 25-year window. A refresh does not relabel those observations as 2026.
+
+### Show the arithmetic and the missingness
+**Forest hectares = published km² × 100.** This is a unit conversion, not a biomass estimate.
+
+**Mean annual GFW quantity = reported 2001–2025 period quantity ÷ 25.** Mg equals a metric tonne. Gross removals are positive quantities in their own column. Net is positive for a source and negative for a sink. The displayed net uses GFW's own reported net, with a check against emissions minus removals allowing small source rounding differences.
+
+**Regional total for metric j = Σ country j**, only when all eleven country records contain that metric. If one value is absent, the regional total is withheld rather than presenting a partial sum as the whole region. Do not average country percentages. A weighted regional share would require matching land-area denominators; that headline is not implemented here.
+
+### Why no regional carbon balance?
+Subtracting GFW forest removals from EDGAR CO₂ would mix a long-run forest-model mean with one year's territorial CO₂ outside LULUCF. It would omit gases and other land-use processes, and could misrepresent the model boundary. The system therefore provides context side by side and no synthesized national or regional net across sources. The only forest net is GFW's own.
+
+### What was checked, and what was not
+The pipeline checks complete country geometry coverage, valid numerical values, source-internal GFW net consistency, regional sums and reconciliation of Thailand's GFW emissions/removals against the existing ledger. An independent ADM0 summary endpoint returned 404. That unavailable cross-check is recorded, not counted as a passed test. No independent field accuracy or model interval coverage has been established for the regional extension.
+
+Each original response is hashed and cached outside the public site. The public snapshot contains its source URLs, units, dates, versions, licence and digest. The 137 kB country geometry is a rounded cartographic derivative; its areas are never substituted for FAO statistics. If a source changes definition or revises history, retain the prior snapshot and describe the revision before comparing releases.
+
+### Source versions / รุ่นข้อมูล
+
+- [FAO forest area / WDI AG.LND.FRST.K2](https://data.worldbank.org/indicator/AG.LND.FRST.K2) and [forest share AG.LND.FRST.ZS](https://data.worldbank.org/indicator/AG.LND.FRST.ZS): 2023 observations; WDI 2026-10-08; CC BY 4.0.
+- [EDGAR / IEA / WDI EN.GHG.CO2.MT.CE.AR5](https://data.worldbank.org/indicator/EN.GHG.CO2.MT.CE.AR5): 2023; CO₂ excluding LULUCF; WDI 2026-10-08; CC BY 4.0.
+- [GFW carbonflux_adm1_summary v20260327](https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327): forest carbon flux v1.4.3; 2001–2025; source threshold 30; CC BY 4.0.
+- [Natural Earth v5.1.2, 1:50m countries](https://github.com/nvkelso/natural-earth-vector/tree/v5.1.2): public-domain orientation geometry.
+- [Download exact results, source URLs, hashes and checks](data/sea/snapshot.json). [Rebuild script](https://github.com/Nonarkara/carbon/blob/main/scripts/ingest/southeast_asia.py).

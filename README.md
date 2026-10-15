@@ -116,3 +116,10 @@ The global column (World tab on phones) separates concentrations, emissions, all
 Use the **Forest Watch · GFW / เฝ้าดูป่า · GFW** button on the first screen for a dated 30-day province alert snapshot, confidence breakdown, daily table and province drill-down. This is an investigation signal, separate from carbon accounting. JSON export preserves its provenance. [TH/EN explanation](https://carbon.nonarkara.org/bible.html?lang=th#forest-watch).
 
 Refresh a known published version with `python3 scripts/ingest/gfw_watch.py --date 2026-10-05`, then build, test and deploy. Raw CSV and independent country-check data stay in ignored research/raw; the derived public file is public/data/gfw/watch.json. No key or project upload is used. Account membership does not configure a GFW API key; authenticated parcel raster ingestion is not connected.
+
+
+## Southeast Asia
+
+[11-country map](https://carbon.nonarkara.org/sea.html?lang=en) · [คู่มือภูมิภาค / Regional Bible](https://carbon.nonarkara.org/bible.html?lang=th&group=region#sea-overview). Includes all eleven geographic Southeast Asian countries. National screening is separate from the Thai parcel workflow and does not issue credits.
+
+Rebuild the source snapshot with `python3 scripts/ingest/southeast_asia.py --refresh`; cached responses are retained under ignored `research/raw/landscape/southeast-asia/`. The public snapshot stores source URLs, periods, versions, hashes, missing values and checks. WDI observations are 2023; GFW flux is the 2001–2025 mean. No subscriber key is needed.

@@ -1,3 +1,4 @@
+import {seaChapters} from './sea.mjs';
 import {designChapters} from './design.mjs';
 import {academicChapters} from './academic.mjs';
 // Authored bilingual explanations. Worked values and source versions are injected by build-bible.
@@ -251,3 +252,5 @@ The pinned **v20261005** summary covers **5 September–4 October 2026**, filter
 chapters.find(c=>c.id==='forest-watch').reviewed='2026-10-05';
 
 chapters.push(...designChapters);
+
+chapters.push(...seaChapters);

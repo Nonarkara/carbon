@@ -7,7 +7,7 @@ page.on('pageerror',e=>errors.push(e.message));await mkdir('test-results',{recur
 for(const lang of ['th','en'])for(const width of [375,1440]){
  await page.setViewportSize({width,height:1000});
  await page.goto(`${base}/bible.html?lang=${lang}#sme-worked`);await page.locator('.prose').waitFor();
- assert.match(await page.locator('#count').textContent(),/44/);
+ assert.match(await page.locator('#count').textContent(),/61/);
  assert.ok((await page.locator('.prose').textContent()).includes('41.42'));
  assert.equal(await page.locator('.design-illustration svg').count(),1);
  const hash=new URL(page.url()).hash;await page.locator('[data-section]').first().click();assert.equal(new URL(page.url()).hash,hash);

@@ -59,6 +59,29 @@ const sources={
  rfd:source('Royal Forest Department dashboard','https://fp.forest.go.th/rfd_app/rfd_dashboard_m/app/main.php','Historical province context; not parcel carbon input'),
  datagoth:source('data.go.th · forest catalogue','https://data.go.th/dataset/?q=ป่าไม้','Discovery catalogue; integration status must be checked')
 };
+const sea=await read('public/data/sea/snapshot.json');
+sources['sea-snapshot']=source('Southeast Asia · source receipts and checks','data/sea/snapshot.json',sea.retrievedAt);
+sources['sea-forest']=source("FAO / World Bank WDI","https://data.worldbank.org/indicator/AG.LND.FRST.K2","WDI 2026-10-08 \u00b7 2023 \u00b7 CC BY 4.0");
+sources['sea-cover']=source("FAO / World Bank WDI","https://data.worldbank.org/indicator/AG.LND.FRST.ZS","WDI 2026-10-08 \u00b7 2023 \u00b7 CC BY 4.0");
+sources['sea-co2']=source("EDGAR / IEA / World Bank WDI","https://data.worldbank.org/indicator/EN.GHG.CO2.MT.CE.AR5","WDI 2026-10-08 \u00b7 2023 \u00b7 CC BY 4.0");
+sources['sea-gfw']=source("GFW forest carbon flux","https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327","v1.4.3 \u00b7 v20260327 \u00b7 2001\u20132025 mean \u00b7 CC BY 4.0");
+sources['sea-geometry']=source("Natural Earth 1:50m Admin 0","https://www.naturalearthdata.com/downloads/50m-cultural-vectors/","v5.1.2 \u00b7 cartographic release; not observation year \u00b7 Public domain");
+sources["fra-platform"]=source("FAO \u00b7 FRA country reports 2025","https://www.fao.org/forest-resources-assessment/fra-2025-country-reports/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["asean-neutrality"]=source("ASEAN Strategy for Carbon Neutrality \u00b7 2023","https://asean.org/asean-charts-course-for-a-sustainable-future-with-ambitious-asean-strategy-for-carbon-neutrality/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["ipcc-wetlands"]=source("IPCC \u00b7 2013 Wetlands Supplement","https://www.ipcc-nggip.iges.or.jp/public/wetlands/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["redd-reference"]=source("UNFCCC \u00b7 forest reference levels","https://redd.unfccc.int/fact-sheets/forest-reference-emission-levels.html",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["article6"]=source("UNFCCC \u00b7 Article 6","https://unfccc.int/process-and-meetings/the-paris-agreement/article6",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-brn"]=source("FAO FRA 2025 \u00b7 Brunei Darussalam","https://fra-data.fao.org/assessments/fra/2025/BRN/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-khm"]=source("FAO FRA 2025 \u00b7 Cambodia","https://fra-data.fao.org/assessments/fra/2025/KHM/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-idn"]=source("FAO FRA 2025 \u00b7 Indonesia","https://fra-data.fao.org/assessments/fra/2025/IDN/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-lao"]=source("FAO FRA 2025 \u00b7 Lao PDR","https://fra-data.fao.org/assessments/fra/2025/LAO/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-mys"]=source("FAO FRA 2025 \u00b7 Malaysia","https://fra-data.fao.org/assessments/fra/2025/MYS/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-mmr"]=source("FAO FRA 2025 \u00b7 Myanmar","https://fra-data.fao.org/assessments/fra/2025/MMR/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-phl"]=source("FAO FRA 2025 \u00b7 Philippines","https://fra-data.fao.org/assessments/fra/2025/PHL/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-sgp"]=source("FAO FRA 2025 \u00b7 Singapore","https://fra-data.fao.org/assessments/fra/2025/SGP/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-tha"]=source("FAO FRA 2025 \u00b7 Thailand","https://fra-data.fao.org/assessments/fra/2025/THA/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-tls"]=source("FAO FRA 2025 \u00b7 Timor-Leste","https://fra-data.fao.org/assessments/fra/2025/TLS/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
+sources["fra-vnm"]=source("FAO FRA 2025 \u00b7 Viet Nam","https://fra-data.fao.org/assessments/fra/2025/VNM/home/",'Research route · reviewed 2026-10-15; no legal eligibility determination');
 for(const [key,d] of Object.entries(manifest.datasets)){
  const first=Object.values(d.files||{}).find(v=>v?.url);
  const url=d.url||(d.doi?`https://doi.org/${d.doi}`:first?.url)||'data/ledger/manifest.json';

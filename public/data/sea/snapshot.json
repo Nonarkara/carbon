@@ -1,0 +1,1398 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-15T14:14:57.032168+00:00",
+  "scope": "Eleven geographic Southeast Asian countries",
+  "observationYear": 2023,
+  "sources": {
+    "forest": {
+      "name": "FAO / World Bank WDI",
+      "version": "WDI 2026-10-08",
+      "indicator": "AG.LND.FRST.K2",
+      "period": "2023",
+      "unit": "km²",
+      "licence": "CC BY 4.0",
+      "url": "https://data.worldbank.org/indicator/AG.LND.FRST.K2",
+      "kind": "national statistical estimate"
+    },
+    "cover": {
+      "name": "FAO / World Bank WDI",
+      "version": "WDI 2026-10-08",
+      "indicator": "AG.LND.FRST.ZS",
+      "period": "2023",
+      "unit": "% of land area",
+      "licence": "CC BY 4.0",
+      "url": "https://data.worldbank.org/indicator/AG.LND.FRST.ZS",
+      "kind": "national statistical estimate"
+    },
+    "co2": {
+      "name": "EDGAR / IEA / World Bank WDI",
+      "version": "WDI 2026-10-08",
+      "indicator": "EN.GHG.CO2.MT.CE.AR5",
+      "period": "2023",
+      "unit": "Mt CO2e/year (CO2 only)",
+      "licence": "CC BY 4.0",
+      "url": "https://data.worldbank.org/indicator/EN.GHG.CO2.MT.CE.AR5",
+      "kind": "territorial CO2 estimate excluding LULUCF"
+    },
+    "gfw": {
+      "name": "GFW forest carbon flux",
+      "version": "v1.4.3 · v20260327",
+      "period": "2001–2025 mean",
+      "years": 25,
+      "treeCoverThreshold": 30,
+      "unit": "tCO2e/year; removals tCO2/year",
+      "licence": "CC BY 4.0",
+      "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327",
+      "kind": "landscape model estimate"
+    },
+    "geometry": {
+      "name": "Natural Earth 1:50m Admin 0",
+      "version": "v5.1.2",
+      "period": "cartographic release; not observation year",
+      "crs": "EPSG:4326",
+      "precisionDecimals": 3,
+      "simplification": "No further geometric simplification; coordinates rounded to 0.001 degrees",
+      "unit": "orientation only; never statistical area",
+      "licence": "Public domain",
+      "url": "https://www.naturalearthdata.com/downloads/50m-cultural-vectors/",
+      "sha256": "a48e20c2867d1b7b417f71a4cf27d4ca4d6cc9ab2313b98f0fb81dfa8eeeff4f"
+    }
+  },
+  "countries": [
+    {
+      "iso3": "BRN",
+      "name": {
+        "en": "Brunei Darussalam",
+        "th": "บรูไน"
+      },
+      "forest_km2": 3800,
+      "forest_pct": 72.1062618595825,
+      "co2_mt": 9.7036,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 3970
+        },
+        {
+          "year": 2001,
+          "km2": 3953
+        },
+        {
+          "year": 2002,
+          "km2": 3936
+        },
+        {
+          "year": 2003,
+          "km2": 3919
+        },
+        {
+          "year": 2004,
+          "km2": 3902
+        },
+        {
+          "year": 2005,
+          "km2": 3885
+        },
+        {
+          "year": 2006,
+          "km2": 3868
+        },
+        {
+          "year": 2007,
+          "km2": 3851
+        },
+        {
+          "year": 2008,
+          "km2": 3834
+        },
+        {
+          "year": 2009,
+          "km2": 3817
+        },
+        {
+          "year": 2010,
+          "km2": 3800
+        },
+        {
+          "year": 2011,
+          "km2": 3800
+        },
+        {
+          "year": 2012,
+          "km2": 3800
+        },
+        {
+          "year": 2013,
+          "km2": 3800
+        },
+        {
+          "year": 2014,
+          "km2": 3800
+        },
+        {
+          "year": 2015,
+          "km2": 3800
+        },
+        {
+          "year": 2016,
+          "km2": 3800
+        },
+        {
+          "year": 2017,
+          "km2": 3800
+        },
+        {
+          "year": 2018,
+          "km2": 3800
+        },
+        {
+          "year": 2019,
+          "km2": 3800
+        },
+        {
+          "year": 2020,
+          "km2": 3800
+        },
+        {
+          "year": 2021,
+          "km2": 3800
+        },
+        {
+          "year": 2022,
+          "km2": 3800
+        },
+        {
+          "year": 2023,
+          "km2": 3800
+        }
+      ],
+      "forest_emissions_t_yr": 875062.7736444174,
+      "forest_removals_t_yr": 1178105.4601297136,
+      "forest_net_t_yr": -303042.6871463915,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/BRN/home/",
+      "research_chapter": "sea-brn",
+      "project_method": "No country project methodology implemented",
+      "registry": "No regional registry transaction or issuance integration"
+    },
+    {
+      "iso3": "KHM",
+      "name": {
+        "en": "Cambodia",
+        "th": "กัมพูชา"
+      },
+      "forest_km2": 69506.4,
+      "forest_pct": 39.3759347382733,
+      "co2_mt": 18.9162,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 107810
+        },
+        {
+          "year": 2001,
+          "km2": 107618.2
+        },
+        {
+          "year": 2002,
+          "km2": 107426.5
+        },
+        {
+          "year": 2003,
+          "km2": 107234.7
+        },
+        {
+          "year": 2004,
+          "km2": 107042.9
+        },
+        {
+          "year": 2005,
+          "km2": 106851.2
+        },
+        {
+          "year": 2006,
+          "km2": 106659.4
+        },
+        {
+          "year": 2007,
+          "km2": 106467.6
+        },
+        {
+          "year": 2008,
+          "km2": 106275.8
+        },
+        {
+          "year": 2009,
+          "km2": 106084.1
+        },
+        {
+          "year": 2010,
+          "km2": 105892.3
+        },
+        {
+          "year": 2011,
+          "km2": 102407.5
+        },
+        {
+          "year": 2012,
+          "km2": 98922.7
+        },
+        {
+          "year": 2013,
+          "km2": 95437.8
+        },
+        {
+          "year": 2014,
+          "km2": 91953
+        },
+        {
+          "year": 2015,
+          "km2": 88468.2
+        },
+        {
+          "year": 2016,
+          "km2": 86528.2
+        },
+        {
+          "year": 2017,
+          "km2": 84588.3
+        },
+        {
+          "year": 2018,
+          "km2": 82648.3
+        },
+        {
+          "year": 2019,
+          "km2": 80708.4
+        },
+        {
+          "year": 2020,
+          "km2": 78768.4
+        },
+        {
+          "year": 2021,
+          "km2": 75681.1
+        },
+        {
+          "year": 2022,
+          "km2": 72593.7
+        },
+        {
+          "year": 2023,
+          "km2": 69506.4
+        }
+      ],
+      "forest_emissions_t_yr": 71499881.90528296,
+      "forest_removals_t_yr": 25920696.28527589,
+      "forest_net_t_yr": 45579185.6457868,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/KHM/home/",
+      "research_chapter": "sea-khm",
+      "project_method": "No country project methodology implemented",
+      "registry": "No regional registry transaction or issuance integration"
+    },
+    {
+      "iso3": "IDN",
+      "name": {
+        "en": "Indonesia",
+        "th": "อินโดนีเซีย"
+      },
+      "forest_km2": 958063.4,
+      "forest_pct": 50.6266271281612,
+      "co2_mt": 772.5618,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 919586
+        },
+        {
+          "year": 2001,
+          "km2": 923932.6
+        },
+        {
+          "year": 2002,
+          "km2": 928279.2
+        },
+        {
+          "year": 2003,
+          "km2": 932625.8
+        },
+        {
+          "year": 2004,
+          "km2": 936972.4
+        },
+        {
+          "year": 2005,
+          "km2": 941319
+        },
+        {
+          "year": 2006,
+          "km2": 945665.6
+        },
+        {
+          "year": 2007,
+          "km2": 950012.2
+        },
+        {
+          "year": 2008,
+          "km2": 954358.8
+        },
+        {
+          "year": 2009,
+          "km2": 958705.4
+        },
+        {
+          "year": 2010,
+          "km2": 963052
+        },
+        {
+          "year": 2011,
+          "km2": 960497.4
+        },
+        {
+          "year": 2012,
+          "km2": 957942.8
+        },
+        {
+          "year": 2013,
+          "km2": 955388.2
+        },
+        {
+          "year": 2014,
+          "km2": 952833.6
+        },
+        {
+          "year": 2015,
+          "km2": 950279
+        },
+        {
+          "year": 2016,
+          "km2": 951347
+        },
+        {
+          "year": 2017,
+          "km2": 952415
+        },
+        {
+          "year": 2018,
+          "km2": 953483
+        },
+        {
+          "year": 2019,
+          "km2": 954551
+        },
+        {
+          "year": 2020,
+          "km2": 955619
+        },
+        {
+          "year": 2021,
+          "km2": 956433.8
+        },
+        {
+          "year": 2022,
+          "km2": 957248.6
+        },
+        {
+          "year": 2023,
+          "km2": 958063.4
+        }
+      ],
+      "forest_emissions_t_yr": 969910919.6283708,
+      "forest_removals_t_yr": 605419215.7596729,
+      "forest_net_t_yr": 364491702.2821438,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/IDN/home/",
+      "research_chapter": "sea-idn",
+      "project_method": "No country project methodology implemented",
+      "registry": "No regional registry transaction or issuance integration"
+    },
+    {
+      "iso3": "LAO",
+      "name": {
+        "en": "Lao PDR",
+        "th": "ลาว"
+      },
+      "forest_km2": 131067.1,
+      "forest_pct": 56.788171577123,
+      "co2_mt": 25.7437,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 140500.4
+        },
+        {
+          "year": 2001,
+          "km2": 140111
+        },
+        {
+          "year": 2002,
+          "km2": 139721.5
+        },
+        {
+          "year": 2003,
+          "km2": 139332.1
+        },
+        {
+          "year": 2004,
+          "km2": 138942.6
+        },
+        {
+          "year": 2005,
+          "km2": 138553.2
+        },
+        {
+          "year": 2006,
+          "km2": 138163.7
+        },
+        {
+          "year": 2007,
+          "km2": 137774.3
+        },
+        {
+          "year": 2008,
+          "km2": 137384.8
+        },
+        {
+          "year": 2009,
+          "km2": 136995.4
+        },
+        {
+          "year": 2010,
+          "km2": 136605.9
+        },
+        {
+          "year": 2011,
+          "km2": 136023.5
+        },
+        {
+          "year": 2012,
+          "km2": 135441.1
+        },
+        {
+          "year": 2013,
+          "km2": 134858.8
+        },
+        {
+          "year": 2014,
+          "km2": 134276.4
+        },
+        {
+          "year": 2015,
+          "km2": 133694
+        },
+        {
+          "year": 2016,
+          "km2": 133380.6
+        },
+        {
+          "year": 2017,
+          "km2": 133067.2
+        },
+        {
+          "year": 2018,
+          "km2": 132753.9
+        },
+        {
+          "year": 2019,
+          "km2": 132440.5
+        },
+        {
+          "year": 2020,
+          "km2": 132127.1
+        },
+        {
+          "year": 2021,
+          "km2": 131773.8
+        },
+        {
+          "year": 2022,
+          "km2": 131420.4
+        },
+        {
+          "year": 2023,
+          "km2": 131067.1
+        }
+      ],
+      "forest_emissions_t_yr": 116244090.69141904,
+      "forest_removals_t_yr": 41749806.75380025,
+      "forest_net_t_yr": 74494283.88487852,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/LAO/home/",
+      "research_chapter": "sea-lao",
+      "project_method": "No country project methodology implemented",
+      "registry": "No regional registry transaction or issuance integration"
+    },
+    {
+      "iso3": "MYS",
+      "name": {
+        "en": "Malaysia",
+        "th": "มาเลเซีย"
+      },
+      "forest_km2": 190047.4,
+      "forest_pct": 57.8442854968802,
+      "co2_mt": 282.3786,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 196913.5
+        },
+        {
+          "year": 2001,
+          "km2": 196169.8
+        },
+        {
+          "year": 2002,
+          "km2": 195426.1
+        },
+        {
+          "year": 2003,
+          "km2": 194682.4
+        },
+        {
+          "year": 2004,
+          "km2": 193938.7
+        },
+        {
+          "year": 2005,
+          "km2": 193195
+        },
+        {
+          "year": 2006,
+          "km2": 192451.3
+        },
+        {
+          "year": 2007,
+          "km2": 191707.6
+        },
+        {
+          "year": 2008,
+          "km2": 190963.9
+        },
+        {
+          "year": 2009,
+          "km2": 190220.2
+        },
+        {
+          "year": 2010,
+          "km2": 189476.5
+        },
+        {
+          "year": 2011,
+          "km2": 190509.6
+        },
+        {
+          "year": 2012,
+          "km2": 191542.8
+        },
+        {
+          "year": 2013,
+          "km2": 192575.9
+        },
+        {
+          "year": 2014,
+          "km2": 193609.1
+        },
+        {
+          "year": 2015,
+          "km2": 194642.2
+        },
+        {
+          "year": 2016,
+          "km2": 194083.2
+        },
+        {
+          "year": 2017,
+          "km2": 193524.3
+        },
+        {
+          "year": 2018,
+          "km2": 192965.3
+        },
+        {
+          "year": 2019,
+          "km2": 192406.4
+        },
+        {
+          "year": 2020,
+          "km2": 191847.4
+        },
+        {
+          "year": 2021,
+          "km2": 191247.4
+        },
+        {
+          "year": 2022,
+          "km2": 190647.4
+        },
+        {
+          "year": 2023,
+          "km2": 190047.4
+        }
+      ],
+      "forest_emissions_t_yr": 227571881.8818869,
+      "forest_removals_t_yr": 102932821.31187424,
+      "forest_net_t_yr": 124639060.38675703,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/MYS/home/",
+      "research_chapter": "sea-mys",
+      "project_method": "No country project methodology implemented",
+      "registry": "No regional registry transaction or issuance integration"
+    },
+    {
+      "iso3": "MMR",
+      "name": {
+        "en": "Myanmar",
+        "th": "เมียนมา"
+      },
+      "forest_km2": 276747.4,
+      "forest_pct": 42.4023472811681,
+      "co2_mt": 31.241,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 348681.1
+        },
+        {
+          "year": 2001,
+          "km2": 345254
+        },
+        {
+          "year": 2002,
+          "km2": 341826.9
+        },
+        {
+          "year": 2003,
+          "km2": 338399.8
+        },
+        {
+          "year": 2004,
+          "km2": 334972.7
+        },
+        {
+          "year": 2005,
+          "km2": 331545.6
+        },
+        {
+          "year": 2006,
+          "km2": 328118.4
+        },
+        {
+          "year": 2007,
+          "km2": 324691.3
+        },
+        {
+          "year": 2008,
+          "km2": 321264.2
+        },
+        {
+          "year": 2009,
+          "km2": 317837.1
+        },
+        {
+          "year": 2010,
+          "km2": 314410
+        },
+        {
+          "year": 2011,
+          "km2": 311512.9
+        },
+        {
+          "year": 2012,
+          "km2": 308615.8
+        },
+        {
+          "year": 2013,
+          "km2": 305718.6
+        },
+        {
+          "year": 2014,
+          "km2": 302821.5
+        },
+        {
+          "year": 2015,
+          "km2": 299924.4
+        },
+        {
+          "year": 2016,
+          "km2": 297027.3
+        },
+        {
+          "year": 2017,
+          "km2": 294130.2
+        },
+        {
+          "year": 2018,
+          "km2": 291233
+        },
+        {
+          "year": 2019,
+          "km2": 288335.9
+        },
+        {
+          "year": 2020,
+          "km2": 285438.8
+        },
+        {
+          "year": 2021,
+          "km2": 282541.7
+        },
+        {
+          "year": 2022,
+          "km2": 279644.6
+        },
+        {
+          "year": 2023,
+          "km2": 276747.4
+        }
+      ],
+      "forest_emissions_t_yr": 122975515.25632845,
+      "forest_removals_t_yr": 121572362.69383559,
+      "forest_net_t_yr": 1403152.3289038357,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/MMR/home/",
+      "research_chapter": "sea-mmr",
+      "project_method": "No country project methodology implemented",
+      "registry": "No regional registry transaction or issuance integration"
+    },
+    {
+      "iso3": "PHL",
+      "name": {
+        "en": "Philippines",
+        "th": "ฟิลิปปินส์"
+      },
+      "forest_km2": 73537.4,
+      "forest_pct": 24.6629104202301,
+      "co2_mt": 162.4527,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 73092.6
+        },
+        {
+          "year": 2001,
+          "km2": 72623.1
+        },
+        {
+          "year": 2002,
+          "km2": 72153.5
+        },
+        {
+          "year": 2003,
+          "km2": 71684
+        },
+        {
+          "year": 2004,
+          "km2": 71214.4
+        },
+        {
+          "year": 2005,
+          "km2": 70744.9
+        },
+        {
+          "year": 2006,
+          "km2": 70275.4
+        },
+        {
+          "year": 2007,
+          "km2": 69805.8
+        },
+        {
+          "year": 2008,
+          "km2": 69336.3
+        },
+        {
+          "year": 2009,
+          "km2": 68866.7
+        },
+        {
+          "year": 2010,
+          "km2": 68397.2
+        },
+        {
+          "year": 2011,
+          "km2": 68746.1
+        },
+        {
+          "year": 2012,
+          "km2": 69094.9
+        },
+        {
+          "year": 2013,
+          "km2": 69443.8
+        },
+        {
+          "year": 2014,
+          "km2": 69792.6
+        },
+        {
+          "year": 2015,
+          "km2": 70141.5
+        },
+        {
+          "year": 2016,
+          "km2": 70566
+        },
+        {
+          "year": 2017,
+          "km2": 70990.5
+        },
+        {
+          "year": 2018,
+          "km2": 71414.9
+        },
+        {
+          "year": 2019,
+          "km2": 71839.4
+        },
+        {
+          "year": 2020,
+          "km2": 72263.9
+        },
+        {
+          "year": 2021,
+          "km2": 72688.4
+        },
+        {
+          "year": 2022,
+          "km2": 73112.9
+        },
+        {
+          "year": 2023,
+          "km2": 73537.4
+        }
+      ],
+      "forest_emissions_t_yr": 38312786.107527696,
+      "forest_removals_t_yr": 96410799.7426338,
+      "forest_net_t_yr": -58098013.55852317,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/PHL/home/",
+      "research_chapter": "sea-phl",
+      "project_method": "No country project methodology implemented",
+      "registry": "No regional registry transaction or issuance integration"
+    },
+    {
+      "iso3": "SGP",
+      "name": {
+        "en": "Singapore",
+        "th": "สิงคโปร์"
+      },
+      "forest_km2": 158,
+      "forest_pct": 21.8352681039248,
+      "co2_mt": 56.1013,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 170.1
+        },
+        {
+          "year": 2001,
+          "km2": 170.8
+        },
+        {
+          "year": 2002,
+          "km2": 171.6
+        },
+        {
+          "year": 2003,
+          "km2": 172.3
+        },
+        {
+          "year": 2004,
+          "km2": 173
+        },
+        {
+          "year": 2005,
+          "km2": 173.8
+        },
+        {
+          "year": 2006,
+          "km2": 174.5
+        },
+        {
+          "year": 2007,
+          "km2": 175.2
+        },
+        {
+          "year": 2008,
+          "km2": 175.9
+        },
+        {
+          "year": 2009,
+          "km2": 176.7
+        },
+        {
+          "year": 2010,
+          "km2": 177.4
+        },
+        {
+          "year": 2011,
+          "km2": 174.9
+        },
+        {
+          "year": 2012,
+          "km2": 172.3
+        },
+        {
+          "year": 2013,
+          "km2": 169.8
+        },
+        {
+          "year": 2014,
+          "km2": 167.2
+        },
+        {
+          "year": 2015,
+          "km2": 164.7
+        },
+        {
+          "year": 2016,
+          "km2": 163.4
+        },
+        {
+          "year": 2017,
+          "km2": 162
+        },
+        {
+          "year": 2018,
+          "km2": 160.7
+        },
+        {
+          "year": 2019,
+          "km2": 159.3
+        },
+        {
+          "year": 2020,
+          "km2": 158
+        },
+        {
+          "year": 2021,
+          "km2": 158
+        },
+        {
+          "year": 2022,
+          "km2": 158
+        },
+        {
+          "year": 2023,
+          "km2": 158
+        }
+      ],
+      "forest_emissions_t_yr": 54637.22995796504,
+      "forest_removals_t_yr": 120864.06339134864,
+      "forest_net_t_yr": -66226.83378037435,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/SGP/home/",
+      "research_chapter": "sea-sgp",
+      "project_method": "No country project methodology implemented",
+      "registry": "No regional registry transaction or issuance integration"
+    },
+    {
+      "iso3": "THA",
+      "name": {
+        "en": "Thailand",
+        "th": "ไทย"
+      },
+      "forest_km2": 199235.1,
+      "forest_pct": 38.9976511577835,
+      "co2_mt": 275.0344,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 201650
+        },
+        {
+          "year": 2001,
+          "km2": 201580
+        },
+        {
+          "year": 2002,
+          "km2": 201510
+        },
+        {
+          "year": 2003,
+          "km2": 201440
+        },
+        {
+          "year": 2004,
+          "km2": 201370
+        },
+        {
+          "year": 2005,
+          "km2": 201300
+        },
+        {
+          "year": 2006,
+          "km2": 201230
+        },
+        {
+          "year": 2007,
+          "km2": 201160
+        },
+        {
+          "year": 2008,
+          "km2": 201090
+        },
+        {
+          "year": 2009,
+          "km2": 201020
+        },
+        {
+          "year": 2010,
+          "km2": 200950
+        },
+        {
+          "year": 2011,
+          "km2": 200880
+        },
+        {
+          "year": 2012,
+          "km2": 200810
+        },
+        {
+          "year": 2013,
+          "km2": 200740
+        },
+        {
+          "year": 2014,
+          "km2": 200670
+        },
+        {
+          "year": 2015,
+          "km2": 200600
+        },
+        {
+          "year": 2016,
+          "km2": 201155.1
+        },
+        {
+          "year": 2017,
+          "km2": 201710.2
+        },
+        {
+          "year": 2018,
+          "km2": 202265.4
+        },
+        {
+          "year": 2019,
+          "km2": 202820.5
+        },
+        {
+          "year": 2020,
+          "km2": 203375.6
+        },
+        {
+          "year": 2021,
+          "km2": 201995.4
+        },
+        {
+          "year": 2022,
+          "km2": 200615.3
+        },
+        {
+          "year": 2023,
+          "km2": 199235.1
+        }
+      ],
+      "forest_emissions_t_yr": 71656977.07342361,
+      "forest_removals_t_yr": 92906556.31453237,
+      "forest_net_t_yr": -21249579.37836199,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/THA/home/",
+      "research_chapter": "sea-tha",
+      "project_method": "Thailand T-VER workbench only",
+      "registry": "No regional registry transaction or issuance integration"
+    },
+    {
+      "iso3": "TLS",
+      "name": {
+        "en": "Timor-Leste",
+        "th": "ติมอร์-เลสเต"
+      },
+      "forest_km2": 10560.3,
+      "forest_pct": 71.0174848688635,
+      "co2_mt": 0.6644,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 10865.7
+        },
+        {
+          "year": 2001,
+          "km2": 10851.7
+        },
+        {
+          "year": 2002,
+          "km2": 10837.7
+        },
+        {
+          "year": 2003,
+          "km2": 10823.7
+        },
+        {
+          "year": 2004,
+          "km2": 10809.7
+        },
+        {
+          "year": 2005,
+          "km2": 10795.7
+        },
+        {
+          "year": 2006,
+          "km2": 10781.7
+        },
+        {
+          "year": 2007,
+          "km2": 10767.7
+        },
+        {
+          "year": 2008,
+          "km2": 10753.7
+        },
+        {
+          "year": 2009,
+          "km2": 10739.7
+        },
+        {
+          "year": 2010,
+          "km2": 10725.7
+        },
+        {
+          "year": 2011,
+          "km2": 10711.7
+        },
+        {
+          "year": 2012,
+          "km2": 10697.7
+        },
+        {
+          "year": 2013,
+          "km2": 10683.7
+        },
+        {
+          "year": 2014,
+          "km2": 10669.7
+        },
+        {
+          "year": 2015,
+          "km2": 10655.7
+        },
+        {
+          "year": 2016,
+          "km2": 10641.7
+        },
+        {
+          "year": 2017,
+          "km2": 10627.7
+        },
+        {
+          "year": 2018,
+          "km2": 10613.7
+        },
+        {
+          "year": 2019,
+          "km2": 10599.7
+        },
+        {
+          "year": 2020,
+          "km2": 10585.7
+        },
+        {
+          "year": 2021,
+          "km2": 10577.2
+        },
+        {
+          "year": 2022,
+          "km2": 10568.7
+        },
+        {
+          "year": 2023,
+          "km2": 10560.3
+        }
+      ],
+      "forest_emissions_t_yr": 778493.5727627527,
+      "forest_removals_t_yr": 3113205.0873719286,
+      "forest_net_t_yr": -2334711.5139234336,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/TLS/home/",
+      "research_chapter": "sea-tls",
+      "project_method": "No country project methodology implemented",
+      "registry": "No regional registry transaction or issuance integration"
+    },
+    {
+      "iso3": "VNM",
+      "name": {
+        "en": "Viet Nam",
+        "th": "เวียดนาม"
+      },
+      "forest_km2": 147449.4,
+      "forest_pct": 47.0439557284106,
+      "co2_mt": 390.7253,
+      "forest_history": [
+        {
+          "year": 2000,
+          "km2": 117841
+        },
+        {
+          "year": 2001,
+          "km2": 119445
+        },
+        {
+          "year": 2002,
+          "km2": 121048.9
+        },
+        {
+          "year": 2003,
+          "km2": 122652.9
+        },
+        {
+          "year": 2004,
+          "km2": 124256.8
+        },
+        {
+          "year": 2005,
+          "km2": 125860.8
+        },
+        {
+          "year": 2006,
+          "km2": 127464.8
+        },
+        {
+          "year": 2007,
+          "km2": 129068.7
+        },
+        {
+          "year": 2008,
+          "km2": 130672.7
+        },
+        {
+          "year": 2009,
+          "km2": 132276.6
+        },
+        {
+          "year": 2010,
+          "km2": 133880.6
+        },
+        {
+          "year": 2011,
+          "km2": 135228.2
+        },
+        {
+          "year": 2012,
+          "km2": 136575.8
+        },
+        {
+          "year": 2013,
+          "km2": 137923.4
+        },
+        {
+          "year": 2014,
+          "km2": 139271
+        },
+        {
+          "year": 2015,
+          "km2": 140618.6
+        },
+        {
+          "year": 2016,
+          "km2": 141849.3
+        },
+        {
+          "year": 2017,
+          "km2": 143080
+        },
+        {
+          "year": 2018,
+          "km2": 144310.8
+        },
+        {
+          "year": 2019,
+          "km2": 145541.5
+        },
+        {
+          "year": 2020,
+          "km2": 146772.2
+        },
+        {
+          "year": 2021,
+          "km2": 146997.9
+        },
+        {
+          "year": 2022,
+          "km2": 147223.6
+        },
+        {
+          "year": 2023,
+          "km2": 147449.4
+        }
+      ],
+      "forest_emissions_t_yr": 110912381.43551867,
+      "forest_removals_t_yr": 115273804.03079562,
+      "forest_net_t_yr": -4361422.776100245,
+      "fra_url": "https://fra-data.fao.org/assessments/fra/2025/VNM/home/",
+      "research_chapter": "sea-vnm",
+      "project_method": "No country project methodology implemented",
+      "registry": "No regional registry transaction or issuance integration"
+    }
+  ],
+  "totals": {
+    "forest_km2": {
+      "value": 2060171.9000000001,
+      "coveredCountries": 11,
+      "expectedCountries": 11
+    },
+    "co2_mt": {
+      "value": 2025.523,
+      "coveredCountries": 11,
+      "expectedCountries": 11
+    },
+    "forest_emissions_t_yr": {
+      "value": 1730792627.5561235,
+      "coveredCountries": 11,
+      "expectedCountries": 11
+    },
+    "forest_removals_t_yr": {
+      "value": 1206598237.5033135,
+      "coveredCountries": 11,
+      "expectedCountries": 11
+    },
+    "forest_net_t_yr": {
+      "value": 524194387.7806343,
+      "coveredCountries": 11,
+      "expectedCountries": 11
+    }
+  },
+  "checks": {
+    "gfwIndependent": "Independent ADM0 endpoint unavailable (404); only source-internal net and Thai ledger checks performed",
+    "thaiLedger": "Thai GFW emissions/removals agree with deployed province ledger; no ledger rewrite"
+  },
+  "receipts": {
+    "AG.LND.FRST.K2.json": {
+      "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/AG.LND.FRST.K2?format=json&date=2000:2023&per_page=1000",
+      "sha256": "fd389e88c307dc1516f31697519435dcef577bfce763e179817e54b068e5169c",
+      "bytes": 53728,
+      "retrievedAt": "2026-10-15T14:15:37.328393+00:00"
+    },
+    "AG.LND.FRST.ZS.json": {
+      "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/AG.LND.FRST.ZS?format=json&date=2000:2023&per_page=1000",
+      "sha256": "90f5513520dd0423e6ed87ba428e30617e98c349180a02eb79a0209b6c63e6e6",
+      "bytes": 58246,
+      "retrievedAt": "2026-10-15T14:16:23.433101+00:00"
+    },
+    "EN.GHG.CO2.MT.CE.AR5.json": {
+      "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/EN.GHG.CO2.MT.CE.AR5?format=json&date=2000:2023&per_page=1000",
+      "sha256": "abe59067db69975847d41f285335fc902f387692fc9c24d3f1ceec7c0a738c9a",
+      "bytes": 67235,
+      "retrievedAt": "2026-10-15T14:16:25.412082+00:00"
+    },
+    "gfw.csv": {
+      "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql=select%20iso%2C%20sum%28%22gfw_full_extent_gross_removals__Mg_CO2%22%29%20as%20removals_mg_co2%2C%20sum%28%22gfw_full_extent_gross_emissions_biomass_soil__Mg_CO2e%22%29%20as%20emissions_mg_co2e%2C%20sum%28%22gfw_full_extent_net_flux__Mg_CO2e%22%29%20as%20net_mg_co2e%20from%20data%20where%20iso%20in%20%28%27BRN%27%2C%27KHM%27%2C%27IDN%27%2C%27LAO%27%2C%27MYS%27%2C%27MMR%27%2C%27PHL%27%2C%27SGP%27%2C%27THA%27%2C%27TLS%27%2C%27VNM%27%29%20and%20is__flux_model_extent%20%3D%20true%20and%20umd_tree_cover_density_2000__threshold%3D30%20group%20by%20iso%20order%20by%20iso",
+      "sha256": "a503108b2be248d9c719a2bb66567637d9734442b66d4cb6f608c2015dd8c313",
+      "bytes": 1151,
+      "retrievedAt": "2026-10-15T14:16:51.604557+00:00"
+    },
+    "natural-earth.json": {
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_admin_0_countries.geojson",
+      "sha256": "3e458fc036ad0a66411f2c1e6cac49c5d7bfb81cb1123bc513b22511a2b7fdeb",
+      "bytes": 3083490,
+      "retrievedAt": "2026-10-15T14:16:52.855118+00:00"
+    }
+  },
+  "limitations": [
+    "Country statistics are not parcel measurements or corporate footprints.",
+    "Forest-area differences are not carbon-credit quantities.",
+    "Never subtract GFW forest flux from WDI CO2 as a synthesized national net.",
+    "No regional biomass-stock raster or parcel model is ingested.",
+    "No country credit entitlement, authorization, retirement or issued-credit amount is inferred."
+  ]
+}
