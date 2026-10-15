@@ -88,7 +88,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#kAreaHint').textContent=s.cells!=null?t('boxHint').replace('{c}',fmt(s.cells)):t('forestShare').replace('{f}',fmt(100*s.forest_area_ha/s.area_ha,1));
     $('#kStock').textContent=stock?.tooCoarse?'—':big(stock?.value);
     const pct=b=>fmt(100*(b[1]-stock.value)/stock.value,b[1]-stock.value<.01*stock.value?2:0);
-    $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?.value!=null&&stock.value>0?(stock.central?`${t('band')}: ±${pct(stock.central)}% · ${t('bandSpan')} ±${pct(stock.optimistic)}–${pct(stock.conservative)}%`:`${t('band')}: ±${pct(stock.optimistic)}% – ±${pct(stock.conservative)}%`)+` · CCI ${S.manifest.datasets.cci.version}`:'—';
+    $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?.value!=null&&stock.value>0?`${S.manifest.datasets.cci.year} · ${stock.central?`${t('band')}: ±${pct(stock.central)}% · ${t('bandSpan')} ±${pct(stock.optimistic)}–${pct(stock.conservative)}%`:`${t('band')}: ±${pct(stock.optimistic)}% – ±${pct(stock.conservative)}%`} · CCI ${S.manifest.datasets.cci.version}`:'—';
     $('#kRemove').textContent=big(rem?.value);$('#kEmit').textContent=big(em?.value);
     $('#kRemoveHint').textContent=$('#kEmitHint').textContent=rem?`GFW ${S.manifest.datasets.gfw.version.split(' ')[0]} · ${S.manifest.datasets.gfw.period}`:t('gridNotIngested').split('.')[0];
     $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):!s.area_ha?t('emptySelection'):stock?.tooCoarse?t('tooCoarseGrid'):t('verdictBox').replace('{s}',big(stock?.value));
@@ -174,8 +174,15 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   document.addEventListener('keydown',e=>{if(e.key==='Escape')setDrawing(false);});
   $('#drawBox').onclick=()=>setDrawing(!S.drawing);
   $('#pickArea').onclick=()=>ready.then(()=>setDrawing(!S.drawing));
-  $('#moreLayers').onclick=()=>{document.body.dataset.layers=document.body.dataset.layers==='open'?'closed':'open';$('#layerMore').open=true;document.body.dataset.view='map';map.invalidateSize();};
-  const showMap=()=>{onSelect();document.body.dataset.view='map';map.invalidateSize();};
+  // Centralised view switch: every action that shows the map also keeps the bottom-nav button
+  // aria-pressed in agreement with the visible pane. The F05 audit caught that layers and
+  // drawing left the bottom-nav button stuck on a different view from the actual visible pane.
+  const setView=view=>{
+    document.body.dataset.view=view;
+    document.querySelectorAll('.bottom-nav button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
+  };
+  $('#moreLayers').onclick=()=>{document.body.dataset.layers=document.body.dataset.layers==='open'?'closed':'open';$('#layerMore').open=true;setView('map');map.invalidateSize();};
+  const showMap=()=>{onSelect();setView('map');map.invalidateSize();};
   $('#showVegetation').onclick=()=>ready.then(()=>{showMap();document.querySelector('input[name=overlay][value=fnf]').checked=true;setOverlay('fnf');});
   $('#showAerosol').onclick=()=>{showMap();document.body.dataset.layers='open';$('#layerMore').open=true;$('#atmos').value=$('#atmos').value==='aod'?'':'aod';$('#atmosDate').value='';setAtmos();};
   function renderProvinces(){
