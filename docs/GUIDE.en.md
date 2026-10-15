@@ -12,7 +12,7 @@
 
 Open **Research → Carbon Bible**, or **Explain this number + diagram** beside a map equation. Search in Thai or English, choose a category, then open a chapter. The diagram shows the path; the worked example shows the arithmetic; the source shelf gives versions and dates. TH/EN preserves the chapter and search. **Clear** restores all chapters. **Copy chapter link** shares the view; **Print this chapter** prints its explanation and sources. The reader opens separately to preserve workbench inputs. [Open the Bible](bible.html?lang=en).
 
-The reader has **61 TH/EN chapters**. Choose **Assessment design** for client briefs, evidence tables, all 15 Scope 3 categories, product life cycles, a hypothetical SME calculation and review/handover templates. The **In this chapter** links jump to sections. Choose **Impacts & reuse** for dated public-domain photographs with source/rights links and downloads. New diagrams have TH/EN SVG downloads under CC0; the dedication does not cover logos or upstream assets. The Bible teaches CFO study design; the workbench remains a forest assessment tool.
+The reader has **65 TH/EN chapters**. Choose **Assessment design** for client briefs, evidence tables, all 15 Scope 3 categories, product life cycles, a hypothetical SME calculation and review/handover templates. The **In this chapter** links jump to sections. Choose **Impacts & reuse** for dated public-domain photographs with source/rights links and downloads. New diagrams have TH/EN SVG downloads under CC0; the dedication does not cover logos or upstream assets. The Bible teaches CFO study design; the workbench remains a forest assessment tool.
 
 ## What this release does
 
@@ -206,3 +206,10 @@ Selection resolution: ODIAC's upstream fossil grid is approximately 1 km, but th
 On **Carbon map**, select **All Thailand** or a province. Click **Forest Watch · GFW** at the top to open its results. Read the snapshot version and 30-day window before the number. The headline combines high and highest confidence alert area; the daily chart includes all confidence levels. Expand **Read the 30-day data table** for exact values. In the national view, click a province in the five-province list to inspect it.
 
 Success checkpoint: the province name changes and its own alert area appears. Open **How to read alerts + diagram** for interpretation. Use recent imagery and field checks to investigate the cause. A zero does not prove no disturbance. Alert hectares do not calculate tonnes or credits. Drawn boxes and imported project boundaries do not inherit province alerts. **Export JSON** includes this context; **Export CSV** remains the carbon ledger.
+
+
+## Find a chapter and return to search
+
+A shared chapter link opens at the explanation. Use **Search / contents** in the reader header to return to the index; choose another chapter to resume reading. Your language, query and category remain intact. Start with **Choose the decision before the number**, then use the worked uncertainty and evidence-pack chapters before handing results to a reviewer.
+
+On the workbench, **Read** groups Research and the manual. **Layers & Watch** groups vegetation, aerosols, layers and Forest Watch. On phones/tablets the bottom bar is the single assessment navigation. Scroll the measurement strip horizontally to inspect every dated quantity. Partner marks, installation and ISO scope remain inside Research.

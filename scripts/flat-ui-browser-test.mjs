@@ -1,3 +1,4 @@
+import {clickControl,revealControl} from './browser-controls.mjs';
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
@@ -24,11 +25,11 @@ for(const lang of ['th','en'])for(const width of [375,1440]){
  await page.setViewportSize({width,height:900});
  for(const path of [`/?lang=${lang}`,`bible.html?lang=${lang}#forest-watch`,`guide-${lang}.html`,`research-${lang}.html`]){
   await page.goto(new URL(path,base).href,{waitUntil:'domcontentloaded'});
-  const control=path.startsWith('/')?page.locator('#openForestWatch'):path.startsWith('bible')?page.locator('#clear'):page.locator('nav a').first();
+  if(path.startsWith('/'))await revealControl(page,'#openForestWatch');const control=path.startsWith('/')?page.locator('#openForestWatch'):path.startsWith('bible')?page.locator('#clear'):page.locator('nav a').first();
   if(path.startsWith('/'))await page.locator('#kStock').filter({hasText:'M'}).waitFor();
   else if(path.startsWith('bible'))await page.locator('.illustration').waitFor();
   await audit();await control.hover();await audit();
-  await control.focus();
+  await page.keyboard.press('Tab');await control.focus();
   assert.notEqual(await control.evaluate(e=>getComputedStyle(e).outlineStyle),'none','keyboard focus disappeared');
   if(path.startsWith('/')||path.startsWith('bible')){
    const box=await control.boundingBox();await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();

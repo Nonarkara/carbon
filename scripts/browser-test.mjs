@@ -1,3 +1,4 @@
+import {clickControl,revealControl} from './browser-controls.mjs';
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
@@ -61,16 +62,16 @@ await page.mouse.move(mb.x+mb.width*.35,mb.y+mb.height*.3);await page.mouse.down
 await page.waitForFunction(()=>document.querySelector('#carbonVerdict').textContent.startsWith('Drawn box'));
 assert.equal(await page.locator('#place').inputValue(),'box');assert.match(await page.locator('#kStock').innerText(),/\d/);assert.match(await page.locator('#kStockHint').innerText(),/±[\d.]+% · floor–ceiling/);assert.equal(await page.locator('#kRemove').innerText(),'—');
 assert.match(await page.locator('#ledger').innerText(),/not ingested[\s\S]*Not shown as zero/);
-await page.locator('#moreLayers').click();for(const v of ['stock','fnf']){await page.locator(`input[name=overlay][value=${v}]`).check();await page.waitForFunction(()=>{const i=document.querySelector('img.leaflet-image-layer');return i&&i.complete&&i.naturalWidth>0;});}
+await clickControl(page,'#moreLayers');for(const v of ['stock','fnf']){await page.locator(`input[name=overlay][value=${v}]`).check();await page.waitForFunction(()=>{const i=document.querySelector('img.leaflet-image-layer');return i&&i.complete&&i.naturalWidth>0;});}
 await page.locator('input[name=overlay][value=flux]').check();assert.ok(await page.locator('#overlayLegend').isVisible());
 await page.locator('#pickArea').click();await page.mouse.click(mb.x+mb.width*.3,mb.y+mb.height*.3);await page.mouse.click(mb.x+mb.width*.7,mb.y+mb.height*.7);await page.waitForFunction(()=>document.querySelector('#place').value==='box');await page.waitForTimeout(600);assert.equal(await page.locator('#place').inputValue(),'box');
 const ledgerDl=page.waitForEvent('download');await page.locator('#ledgerJSON').click();await (await ledgerDl).saveAs('test-results/ledger.json');
 const lj=JSON.parse(await readFile('test-results/ledger.json','utf8'));assert.equal(lj.notCredits,true);assert.equal(lj.selection.kind,'box');assert.ok(lj.rows.every(r=>r.dataset&&r.unit));
-await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator('.lenses [data-tab=project]').click();
+await page.locator('.advanced-tools').evaluate(e=>e.open=true);await clickControl(page,'.lenses [data-tab=project]');
 await page.locator('#example').click();await page.locator('#boundaryInfo').waitFor({state:'visible'});
 // T-VER registry overlap check: appears below the boundary info with province name and project list.
 await page.locator('#registryCheck').waitFor({state:'visible'});assert.match(await page.locator('#registryCheck .tver-check').first().innerText(),/Chiang Mai|Bangkok|Saraburi|Kanchanaburi|Phuket|เชียงใหม่|กรุงเทพ|สระบุรี|กาญจนบุรี|ภูเก็ต/);
-await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator('.lenses [data-tab=calculate]').click();await page.locator('[type=submit]').click();
+await page.locator('.advanced-tools').evaluate(e=>e.open=true);await clickControl(page,'.lenses [data-tab=calculate]');await page.locator('[type=submit]').click();
 assert.match(await page.locator('#result').innerText(),/218\.86/);
 const downloaded=page.waitForEvent('download');await page.locator('#exportJSON').click();const dl=await downloaded;await dl.saveAs('test-results/export.json');const report=JSON.parse(await readFile('test-results/export.json','utf8'));assert.equal(report.status,'illustrative-unverified-estimate');assert.ok(Math.abs(report.result.net-218.8633333)<.00001);assert.equal(report.issuedCredits,null);
 await page.locator('[data-lang=th]').click();assert.equal(await page.locator('html').getAttribute('lang'),'th');assert.match(await page.locator('#result').innerText(),/218\.86/);assert.match(await page.locator('#provinceRows tr').first().innerText(),/^สระบุรี2561/);assert.ok((await page.locator('#provinceMetric option[value=net]').textContent()).includes(mf.datasets.gfw.period),'th metric options re-derive after langchange');
@@ -81,10 +82,10 @@ await page.locator('#canopyDeath').selectOption('unknown');await page.locator('[
 await page.locator('#canopyDeath').selectOption('no');
 // Prove unit transitions cannot silently reinterpret the baseline.
 await page.locator('#unit').selectOption('co2');assert.equal(await page.locator('#previous').inputValue(),'');assert.equal(await page.locator('#current').inputValue(),'');await page.locator('#previous').fill('100');
-await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator('.lenses [data-tab=evidence]').click();await page.locator('#equationConfirmed').check();await page.locator('#plotFile').setInputFiles('public/data/example-plots.csv');await page.locator('#usePlots').waitFor({state:'visible'});await page.waitForFunction(()=>!document.querySelector('#usePlots').disabled);await page.locator('#usePlots').click();assert.equal(await page.locator('#previous').inputValue(),'');await page.locator('[type=submit]').click();assert.equal(await page.locator('#result').innerText(),'');
+await page.locator('.advanced-tools').evaluate(e=>e.open=true);await clickControl(page,'.lenses [data-tab=evidence]');await page.locator('#equationConfirmed').check();await page.locator('#plotFile').setInputFiles('public/data/example-plots.csv');await page.locator('#usePlots').waitFor({state:'visible'});await page.waitForFunction(()=>!document.querySelector('#usePlots').disabled);await page.locator('#usePlots').click();assert.equal(await page.locator('#previous').inputValue(),'');await page.locator('[type=submit]').click();assert.equal(await page.locator('#result').innerText(),'');
 // Prove factor edits invalidate plot-derived stock before replacing a boundary.
 await page.locator('#group').selectOption('palm');assert.equal(await page.locator('#current').inputValue(),'');await page.locator('#group').selectOption('general');
-await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator('.lenses [data-tab=project]').click();await page.locator('#boundaryFile').setInputFiles({name:'smaller.geojson',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({type:'Polygon',coordinates:[[[100,14],[100.001,14],[100.001,14.001],[100,14.001],[100,14]]]}))});await page.waitForFunction(()=>document.querySelector('#boundaryInfo').textContent.includes('smaller.geojson'));assert.equal(await page.locator('#current').inputValue(),'');
+await page.locator('.advanced-tools').evaluate(e=>e.open=true);await clickControl(page,'.lenses [data-tab=project]');await page.locator('#boundaryFile').setInputFiles({name:'smaller.geojson',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({type:'Polygon',coordinates:[[[100,14],[100.001,14],[100.001,14.001],[100,14.001],[100,14]]]}))});await page.waitForFunction(()=>document.querySelector('#boundaryInfo').textContent.includes('smaller.geojson'));assert.equal(await page.locator('#current').inputValue(),'');
 const area=await page.locator('#areaValue').innerText();await page.locator('#boundaryFile').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{"type":"Point","coordinates":[100,14]}')});await page.waitForFunction(()=>!document.querySelector('#message').hidden);assert.equal(await page.locator('#areaValue').innerText(),area);
 await page.locator('#reset').click();assert.equal(await page.locator('#areaValue').innerText(),'No boundary yet');
 for(const width of [1280,768,390,375]){
@@ -98,9 +99,9 @@ for(const width of [1280,768,375]){
  await page.setViewportSize({width,height:900});
  for(const lang of ['en','th']){
   await page.goto(base+`/?lang=${lang}`);
-  if(width>700)await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator(width<=700?'.bottom-nav [data-tab=project]':'.lenses [data-tab=project]').click();await page.locator('#projectName').fill('Research preserves my project');
+  if(width>1100)await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator(width<=1100?'.bottom-nav [data-tab=project]':'.lenses [data-tab=project]').click();await page.locator('#projectName').fill('Research preserves my project');
   // About tab: native TH/EN story, illustrations filled from the shipped ledger, research notebook one link away.
-  await page.locator('#aboutTab').click();await page.locator('#aboutBody h1').waitFor({state:'visible'});
+  await clickControl(page,'#aboutTab');await page.locator('#aboutBody h1').waitFor({state:'visible'});
   assert.equal(await page.locator('#aboutBody figure.il').count(),9);assert.equal(await page.locator('#abFire .bar').count(),12);
   assert.match(await page.locator('#aboutBody [data-fig=forestPct]').innerText(),/^44[.,]7%$/);assert.equal(await page.locator('#abgrid rect').count(),80);
   // About annualisation and stock year travel from the manifest too.
@@ -116,7 +117,7 @@ for(const width of [1280,768,375]){
   await research.waitForLoadState();
   assert.equal(await research.locator('html').getAttribute('lang'),lang);
   assert.equal(await research.locator('.research-diagram').count(),7);
-  assert.equal(await research.locator('.research-toc a').count(),18);
+  assert.equal(await research.locator('.research-toc a').count(),19);
   assert.equal(await research.locator('.kabonna-poses img').count(),6);
   assert.equal(await research.locator('.sysmap').count(),1);
   await research.locator('.research-toc a[href="#section-9"]').click();
@@ -131,7 +132,7 @@ for(const width of [1280,768,375]){
 // Slow network: a reader who opens About or Project before the ledger arrives must not be pulled back to the map.
 {const slow=await browser.newPage({viewport:{width:390,height:900}});slow.on('pageerror',e=>errors.push(e.message));
  await slow.route('**/data/ledger/provinces.json',async r=>{await new Promise(res=>setTimeout(res,3000));await r.continue();});
- await slow.goto(base+'/?lang=en');await slow.locator('#aboutTab').click();await slow.locator('#aboutBody h1').waitFor({state:'visible'});
+ await slow.goto(base+'/?lang=en');await clickControl(slow,'#aboutTab');await slow.locator('#aboutBody h1').waitFor({state:'visible'});
  await slow.waitForFunction(()=>/M/.test(document.querySelector('#kStock').textContent));await slow.waitForTimeout(500);
  assert.equal(await slow.evaluate(()=>document.body.dataset.about),'true','About must stay open after late ledger data');await slow.close();}
 assert.deepEqual(errors,[]);await writeFile('test-results/browser-summary.json',JSON.stringify({base,checkedAt:new Date().toISOString(),viewports:[1440,1280,768,390,375],checks:['slow-network navigation kept','about tab TH/EN with ledger-driven illustrations','carbon map national figures','manifest-derived KPI and source labels','answers-first calculation trace','manifest-travel metric options','province selection matches ledger','drawn box','overlays','ledger export','example arithmetic','JSON export and provenance','language state','loss','unknown fire','unit switch','plot import','factor edit','boundary replacement','malformed geometry','reset','mobile navigation','guide diagrams','research navigation and language','research diagrams and portrait','research open-data credits section','research preserves input'],pageErrors:errors},null,2));await browser.close();console.log('PASS: browser flows, export, unit/provenance regressions, 5 viewports, 2 guides, bilingual research with portrait and preserved inputs; '+base);

@@ -1,0 +1,155 @@
+{
+  "base": "http://127.0.0.1:19147",
+  "checkedAt": "2026-10-15T15:54:57.348Z",
+  "measurements": [
+    {
+      "lang": "th",
+      "width": 320,
+      "height": 568,
+      "overflow": false,
+      "mapWidth": 320,
+      "mapHeight": 340,
+      "header": 184,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "th",
+      "width": 375,
+      "height": 667,
+      "overflow": false,
+      "mapWidth": 375,
+      "mapHeight": 377,
+      "header": 178,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "th",
+      "width": 700,
+      "height": 900,
+      "overflow": false,
+      "mapWidth": 700,
+      "mapHeight": 610,
+      "header": 178,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "th",
+      "width": 701,
+      "height": 900,
+      "overflow": false,
+      "mapWidth": 701,
+      "mapHeight": 610,
+      "header": 178,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "th",
+      "width": 768,
+      "height": 1024,
+      "overflow": false,
+      "mapWidth": 768,
+      "mapHeight": 734,
+      "header": 178,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "th",
+      "width": 1440,
+      "height": 900,
+      "overflow": false,
+      "mapWidth": 860,
+      "mapHeight": 682.40625,
+      "header": 130,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "en",
+      "width": 320,
+      "height": 568,
+      "overflow": false,
+      "mapWidth": 320,
+      "mapHeight": 340,
+      "header": 222,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "en",
+      "width": 375,
+      "height": 667,
+      "overflow": false,
+      "mapWidth": 375,
+      "mapHeight": 377,
+      "header": 184,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "en",
+      "width": 700,
+      "height": 900,
+      "overflow": false,
+      "mapWidth": 700,
+      "mapHeight": 610,
+      "header": 178,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "en",
+      "width": 701,
+      "height": 900,
+      "overflow": false,
+      "mapWidth": 701,
+      "mapHeight": 610,
+      "header": 178,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "en",
+      "width": 768,
+      "height": 1024,
+      "overflow": false,
+      "mapWidth": 768,
+      "mapHeight": 734,
+      "header": 178,
+      "footerVisible": false,
+      "round": "0px"
+    },
+    {
+      "lang": "en",
+      "width": 1440,
+      "height": 900,
+      "overflow": false,
+      "mapWidth": 860,
+      "mapHeight": 664.40625,
+      "header": 130,
+      "footerVisible": false,
+      "round": "0px"
+    }
+  ],
+  "checks": [
+    "F01–F12 regression cases",
+    "minimum map area and 700/701 transition",
+    "single active navigation",
+    "source year",
+    "toast/legend separation",
+    "partner information retained",
+    "square zoom container",
+    "text enlargement stress",
+    "reader-first deep links",
+    "search return and language state"
+  ],
+  "limits": [
+    "No independent novice usability session",
+    "No field-accuracy or certification claim"
+  ],
+  "pageErrors": []
+}

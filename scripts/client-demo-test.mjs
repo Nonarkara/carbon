@@ -1,3 +1,4 @@
+import {clickControl,revealControl} from './browser-controls.mjs';
 import {chromium} from 'playwright';import assert from 'node:assert/strict';
 const base=process.env.BASE_URL||'http://127.0.0.1:8788';const b=await chromium.launch();const p=await b.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));
 for(const width of [1440,1280,390])for(const lang of ['th','en']){
@@ -6,8 +7,8 @@ for(const width of [1440,1280,390])for(const lang of ['th','en']){
  for(const img of await p.locator('.brand-strip img').all())assert.ok(await img.evaluate(e=>e.complete&&e.naturalWidth>0));
  assert.equal(await p.locator('.brand-strip').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)');
  assert.equal(await p.locator('#standardsLink').getAttribute('href'),`research-${lang}.html#standards`);
- if(width===1280){await p.locator('.advanced-tools>summary').click();await p.locator('.lenses [data-tab=project]').click();await p.locator('#example').click();assert.equal(await p.locator('.advanced-tools').getAttribute('open'),null);}
- await p.locator('#aboutTab').click();await p.locator('.research-person').waitFor();await p.locator('.research-person>img').evaluate(e=>e.decode());
+ if(width===1280){await clickControl(p,'.advanced-tools>summary');await clickControl(p,'.lenses [data-tab=project]');await p.locator('#example').click();assert.equal(await p.locator('.advanced-tools').getAttribute('open'),null);}
+ await clickControl(p,'#aboutTab');await p.locator('.research-person').waitFor();await p.locator('.research-person>img').evaluate(e=>e.decode());
  const person=await p.locator('.research-person').boundingBox();assert.ok(person.y+person.height<900,'Profile visible immediately');
  assert.match(await p.locator('#standards').innerText(),/ISO 14064-2:2019[\s\S]*ISO 14064-3:2019[\s\S]*ISO 14065:2020/);
  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));

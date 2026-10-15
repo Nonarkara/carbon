@@ -91,3 +91,12 @@ Owner requested a MoMA/screen-real-estate audit using the live phone screenshot.
 The Bible now has 61 TH/EN chapters, including 17 regional chapters, and 20 original downloadable diagram topics. Country profiles embed current snapshot figures at build time; they are research starting points, not a live legal register. Preserve all original Thai functions and browser-local files. The original checkout had uncommitted `landscape.js` audit fixes; this extension was built in an isolated worktree without modifying them.
 
 Verify `node scripts/sea-browser-test.mjs` with BASE_URL as well as existing flows; the new suite covers country/search/keyboard/export/outage states and 320/375/768/1440 widths.
+
+
+## Bible / research operational release · 15 October 2026
+
+Baseline f7f9a69 retained. Four practical bilingual chapters expand the Bible to 65 chapters, 80 sources and 24 original diagram topics. Research section 19 covers decision selection, worked uncertainty, evidence dossiers, competing explanations and the actual capability boundary. See docs/SHIP_READINESS.md and docs/plans/SHIP_BIBLE_RESEARCH.md. These are authored operating procedures, not an external scientific acceptance or certification.
+
+The remaining frontend audit corrections live in public/css/ship.css, loaded after kabonna.css and before the flat-control guard. Phone/tablet layout uses native vertical flow through 1100px; the map never collapses below 340px. Read groups references, Layers & Watch groups map context, and four primary bottom destinations plus More replace duplicate phone workflow navigation. The full partner/footer/installation/ISO content is retained inside About. setNav checks both view and tab, preserving F05–F07. ResizeObserver reserves actual bottom-nav height for enlarged text. Bible deep links focus the article; the sticky Search / contents link returns to the existing index without changing query/category/chapter.
+
+Browser tests use scripts/browser-controls.mjs to follow visible native disclosures and the correct responsive workflow. Do not force clicks or re-expose all menu contents to make old tests pass. The new ship-browser suite checks short screens, 700/701px, text stress, navigation, source year, toast separation and reader deep links. Preserve all data and scientific limits.

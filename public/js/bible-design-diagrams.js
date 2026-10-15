@@ -1,6 +1,10 @@
 // Newly authored teaching diagrams only: CC0 1.0. No dedication of upstream assets.
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const definitions={
+"decision-guide":["Choose the decision before the number", "เลือกการตัดสินใจก่อนเลือกตัวเลข", ["Decision", "Quantity & boundary", "Evidence request", "Appropriate output"], ["ตัดสินใจอะไร", "ปริมาณและขอบเขต", "ขอหลักฐาน", "ผลที่ใช้ได้"]],
+"uncertainty-worked":["Work uncertainty without hiding assumptions", "คำนวณความไม่แน่นอนโดยไม่ซ่อนสมมติฐาน", ["Define inputs", "State covariance", "Calculate scenarios", "Qualify the interval"], ["กำหนดข้อมูล", "ระบุความสัมพันธ์", "คำนวณกรณี", "บอกขอบเขตช่วง"]],
+"evidence-dossier":["Prepare an evidence pack another person can reproduce", "เตรียมชุดหลักฐานให้คนอื่นคำนวณซ้ำได้", ["Original records", "Boundary & method", "Result & uncertainty", "Independent replay"], ["บันทึกต้นฉบับ", "ขอบเขตและวิธี", "ผลและความไม่แน่นอน", "คำนวณซ้ำอิสระ"]],
+"critical-review":["Challenge disagreements and release claims", "ตรวจโต้แย้งความต่างและคำอ้างของรุ่นระบบ", ["Competing explanations", "Matched evidence", "Held-out test", "Bounded conclusion"], ["คำอธิบายคู่แข่ง", "จับคู่หลักฐาน", "ทดสอบแยก", "สรุปมีขอบเขต"]],
 "sea-overview":["Three questions require separate evidence", "สามคำถาม ใช้หลักฐานแยกกัน", ["Country context", "Parcel measurement", "Project review", "Registry claim"], ["บริบทประเทศ", "วัดแปลง", "ตรวจโครงการ", "หลักฐานทะเบียน"]],
 "sea-data-methods":["Compare within the same dataset and period", "เทียบภายในชุดและช่วงเวลาเดียวกัน", ["Define quantity", "Align period", "Check all 11", "Keep sources"], ["กำหนดปริมาณ", "เทียบช่วงเวลา", "ตรวจครบ 11", "เก็บที่มา"]],
 "sea-ecosystems":["Trees alone do not describe every ecosystem", "ต้นไม้อย่างเดียวไม่อธิบายทุกระบบนิเวศ", ["Vegetation", "Soil & water", "Disturbance", "Pool evidence"], ["พืชพรรณ", "ดินและน้ำ", "การรบกวน", "หลักฐานรายแหล่ง"]],

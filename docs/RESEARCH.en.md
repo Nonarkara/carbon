@@ -625,3 +625,153 @@ Each original response is hashed and cached outside the public site. The public 
 - [GFW carbonflux_adm1_summary v20260327](https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327): forest carbon flux v1.4.3; 2001–2025; source threshold 30; CC BY 4.0.
 - [Natural Earth v5.1.2, 1:50m countries](https://github.com/nvkelso/natural-earth-vector/tree/v5.1.2): public-domain orientation geometry.
 - [Download exact results, source URLs, hashes and checks](data/sea/snapshot.json). [Rebuild script](https://github.com/Nonarkara/carbon/blob/main/scripts/ingest/southeast_asia.py).
+
+
+## From a useful estimate to a reviewable decision
+
+This is an operating protocol authored for this release, not an external validation opinion. Read the four linked methods below; their teaching arithmetic is separate from the deployed forest figures.
+
+### Choose the decision before the number
+
+[Carbon Bible →](bible.html?lang=en#decision-guide)
+
+#### Start with the decision, not a layer
+A client asks, “How much carbon is here?” Write down what “here” and “carbon” mean before opening a map. Is the decision to prioritize a field visit, report an organization's annual emissions, estimate tree biomass change, or support an application to a credit programme? These decisions need different evidence. A green map can be useful without answering all four questions.
+
+The following is our operating decision guide, not a new accounting standard. GHG Protocol's inventory/project comparison distinguishes an inventory within a reporting boundary from the effect of an intervention against a counterfactual. A national forest model adds another scale. An issued unit needs its own registry evidence.
+
+| Decision | Minimum evidence | Appropriate result | Stop if… |
+|---|---|---|---|
+| Compare countries | Same source, period, definition and unit | Dated national context | Someone interprets a country mean as a parcel measurement |
+| Plan a forest survey | Boundary, ecosystem, access and proposed strata | Sampling and evidence plan | Accessible plots are treated as representative without justification |
+| Estimate measured stock change | Compatible dated measurements, area and method | Conditional change estimate | Dates, units or expansion areas are incompatible |
+| Compile a corporate footprint | Activities, reporting boundary and applicable factors | Inventory by scope | A forest sink is subtracted from unrelated activity emissions |
+| Support a credit claim | Rights, eligible method, baseline, monitoring, review and registry evidence | Evidence pack for the relevant programme | Software output is presented as issuance |
+
+#### Walk through one site
+Imagine a cooperative considering ten hectares of restoration. That is a teaching scenario, not a real project. Use the map to understand the surrounding landscape. Then obtain the actual boundary and land-use history. Identify which pools and activities the applicable method covers. Design a representative survey, record dated measurements and keep the original records. A regional forest-cover percentage cannot fill those records.
+
+Before comparing two visits, confirm that both cover the same population and area, and that tree dimensions, allometry, root treatment and carbon fraction are compatible. If methods changed, document a bridge or recomputation. Do not interpret a better map or a newly included plot as extra tree growth.
+
+The workbench can trace supplied measurements through its implemented Thai method. It does not establish the cooperative's rights or eligibility. For another Southeast Asian country, the national screen and research profile help frame the enquiry; they do not activate a country project methodology.
+
+#### Use the first session to make an evidence request
+Leave the first meeting with a named decision owner, reporting period, boundary version, list of missing records, responsible data owners and review date. Ask who will be affected by field access and who can challenge the proposed interpretation. Missing records stay missing. An LLM may help organize questions; it must not invent measurements, land rights or registry serials.
+
+A useful result can be “we can screen this location, but cannot estimate eligible credits yet.” That answer protects the next investment in evidence. Reopen the conclusion when a new boundary, local measurements, programme decision or revised source changes the question. Document the reason rather than overwriting the original result.
+
+### Work uncertainty without hiding assumptions
+
+[Carbon Bible →](bible.html?lang=en#uncertainty-worked)
+
+#### A precise-looking answer can still be uncertain
+Separate uncertainty in measurements and parameters from uncertainty about the model and the question itself. Repeating a calculation proves that the software is deterministic; it does not prove that the input represents the forest. A narrow interval can coexist with systematic error, an unsuitable allometric equation or the wrong boundary.
+
+The examples below are newly authored teaching calculations. They are not uncertainty estimates for Kabonna's countries, forests or credit projects. The deployed landscape's own three random-error scenarios and inventory discrepancy remain separate.
+
+#### Work an activity-factor example
+Let illustrative activity A = 1,000 kWh and factor f = 0.50 kgCO₂e/kWh. The result is E = A × f = 500 kgCO₂e, or 0.50 tCO₂e. Suppose the standard uncertainties are u(A) = 50 kWh and u(f) = 0.05 kgCO₂e/kWh. These factors and uncertainties are hypothetical, not current grid values.
+
+For independent inputs, a first-order propagation is:
+
+`u(E)² ≈ f²u(A)² + A²u(f)² = 0.5² × 50² + 1000² × 0.05² = 3125 (kgCO₂e)²`
+
+`u(E) ≈ 55.90 kgCO₂e`
+
+Under an approximately normal, adequately supported distribution, a teaching interval using 1.96 × standard uncertainty is 390.43–609.57 kgCO₂e. Normality, large-sample approximation and independence are assumptions, not facts supplied by a spreadsheet. Correlation adds the term `2Af Cov(A,f)`. Do not report this interval if those assumptions cannot be defended; describe the unresolved sources instead.
+
+#### Why correlation changes a forest-change result
+Suppose two hypothetical stock estimates have standard uncertainties of 10 tCO₂e each. Their difference has:
+
+`u(Δ)² = 10² + 10² − 2ρ × 10 × 10`
+
+If ρ = 0, u(Δ) = 14.14 tCO₂e. If ρ = 0.8, u(Δ) = 6.32 tCO₂e. Shared errors can partly cancel in a difference. This does not justify choosing a high correlation because it gives a smaller interval. Estimate or justify the covariance with an appropriate repeated-measurement design and independent evidence. A changing sensor, forest mask, equation or sampling frame can introduce additional error that this simple example omits.
+
+Spatial correlation matters too. Thousands of nearby pixels do not automatically provide thousands of independent observations. The deployed block-correlation scenario is a sensitivity assumption, not proof of interval coverage. Agreement between related producer products is not an independent field test.
+
+#### Write a usable uncertainty statement
+Record the quantity and unit, coverage period, random components, covariance assumptions, distribution, calculation method and exclusions. State whether the interval is standard uncertainty, a statistical confidence interval, a prediction interval or a scenario range; these terms are not interchangeable. Keep systematic uncertainty and boundary mismatch visible even if no defensible numerical distribution exists.
+
+Use sensitivity analysis to decide what to measure next. Change one assumption at a time, then examine defensible joint scenarios. If the decision changes under plausible inputs, request more evidence or state the conditional decision. A programme's prescribed conservative deduction is a separate rule; it must not be invented from this teaching interval. Neither an interval nor a lower bound creates an entitlement to credits.
+
+### Prepare an evidence pack another person can reproduce
+
+[Carbon Bible →](bible.html?lang=en#evidence-dossier)
+
+#### Make the calculation easy to challenge
+A screenshot communicates a result. An evidence pack lets another person examine it. Build the pack while collecting records, rather than reconstructing it after a client asks how the number was obtained. IPCC's national-inventory QA/QC chapter provides a useful historical distinction between routine checks and review. The folder structure below is our practical adaptation for this system, not an IPCC submission template or a verification opinion.
+
+#### Keep six connected records
+| Record | What to keep | A useful rejection test |
+|---|---|---|
+| Decision brief | Purpose, intended audience, claim, owner and reporting period | Can the reviewer tell screening from an inventory or a credit application? |
+| Boundary register | Geometry version, CRS, area basis, exclusions and rights evidence where applicable | Can the same physical extent and accounting boundary be reconstructed? |
+| Input register | Original measurement or activity, unit, date, collector, evidence ID and corrections | Does each input point to a real record rather than a model-generated explanation? |
+| Method register | Equation, parameter source, applicable edition, assumptions and exclusions | Can another analyst reproduce the unit conversions and know why this method applies? |
+| Result and uncertainty | Unrounded calculation, display rounding, missing values, scenarios and warnings | Does a missing value remain missing in the export? |
+| Review and change log | Checker, issue, resolution, date, approval scope and superseded version | Can someone recover the previous conclusion and explain the change? |
+
+Use stable evidence IDs rather than personal names in public deliverables. Keep permission to disclose each record separate from permission to calculate with it. Landholder information and precise field locations may need controlled handling. Kabonna's supplied files remain in browser memory; it does not create this archive or back it up for you. Export the result before closing or refreshing the assessment tab.
+
+#### Reproduce a result without guessing
+Save the original user-input JSON and any source documents in a controlled project folder. Save the landscape or regional JSON separately; those are contextual datasets, never substitutes for plot inputs. Record the application's release commit and source versions. Preserve the original byte hashes when available; a hash proves byte identity, not truth, lawful access or measurement quality.
+
+Ask a colleague to reconstruct a small subset without verbal coaching. They should identify the quantity, boundary and period, obtain the same unrounded arithmetic within the documented tolerance, and reproduce the displayed rounding. Record any missing software version, hidden default or ambiguous unit as a defect. A copied screenshot matching another screenshot does not satisfy this check.
+
+#### Review changes and corrections openly
+For a corrected tree diameter, retain the original record, correction reason, responsible person and downstream results affected. For a new dataset, distinguish a statistical revision from a real-world change. Rebuild derived outputs and rerun relevant conservation and browser checks; do not hand-edit a published aggregate to make it agree.
+
+Issue an evidence status with the deliverable: prepared, internally checked, independently reviewed, or externally accepted by a named process. These are different statements. Do not call an internal review an accreditation, ISO certification or programme approval. Define who can reopen an issue and what evidence would be needed to close it.
+
+A complete software export still cannot contain rights or measurements that were never collected. The value of the dossier is the visible chain from claim to evidence, including the gaps.
+
+### Challenge disagreements and release claims
+
+[Carbon Bible →](bible.html?lang=en#critical-review)
+
+#### When two credible sources disagree
+Keep both results visible. First ask whether they estimate the same quantity on the same land, in the same period, using compatible definitions and pools. Different answers can follow from different questions. A national inventory total and a satellite raster total do not identify map bias merely because their ratio is large.
+
+Gibbs and colleagues' 2025 forest-flux paper describes revisions to a geospatial modelling framework and its uncertainty. It supports reading model versions and assumptions carefully. It does not independently validate this site's ingestion, every Southeast Asian country or any project parcel. The implemented GFW version is pinned separately in the source manifest; the paper's reporting period must not silently replace the deployed period.
+
+#### Work through four possible explanations
+| Possible explanation | Evidence to request | What would weaken it? |
+|---|---|---|
+| Different forest boundaries | Matched masks, area totals and exclusions | The discrepancy persists on identical spatial support |
+| Different pools or equations | Pool definitions, root treatment and local allometry | Recomputing with compatible assumptions leaves the gap |
+| Different dates or disturbance | Observation dates, losses, harvest and recovery records | Matched dates and documented changes do not explain it |
+| Measurement/model error | Independent representative field evidence and error analysis | A held-out test supports the estimate within its stated scope |
+
+This is a diagnostic agenda authored for Kabonna. It is not a claim that any one explanation has been established. Avoid selecting the explanation that makes a preferred source look correct. Keep a competing hypothesis and its strongest contrary evidence in the review notes.
+
+#### Design a test that can fail
+Define the target population, unit of analysis, field protocol and acceptable errors before looking at held-out outcomes. Explain the tolerance in terms of the intended decision; do not invent a universal “accurate enough” percentage. Use spatial separation or appropriately blocked validation when nearby samples share information. Keep model tuning and final testing distinct. If an area is inaccessible, state what population remains untested.
+
+Report signed bias, absolute error and the distribution of residuals at the actual decision scale, alongside sample size and sampling design. If reporting interval coverage, compare each test observation with its applicable interval and explain sampling uncertainty around the observed coverage. A good overall average can conceal poor results in mangroves, plantations or small holdings; inspect prespecified strata. Do not claim those strata were validated unless the samples support that statement.
+
+For causal credit claims, predictive accuracy is insufficient. The baseline must address what would have happened without the activity, together with the programme's other requirements. A high-resolution picture does not observe that counterfactual.
+
+#### Separate a software release from scientific acceptance
+For this release, automated tests check arithmetic, provenance, dataset conservation, navigation, bilingual rendering, exports and failure handling. These checks can reject software defects. They cannot certify field accuracy, lawful rights, additionality, human usability or credit issuance. A browser screenshot is evidence of a rendered state, not a scientific validation report.
+
+The current operational boundary is national screening across eleven countries and a supplied-measurement workbench under its stated Thai method. There is no trained regional parcel model or automatic country approval. Research should become more specific when new independent observations arrive, rather than becoming more certain merely because the interface looks finished.
+
+Write the remaining uncertainties, the next evidence to collect, the reviewer and the date to revisit. An honest release can be operationally usable while leaving a scientific claim unproven. The failure is not having a limit; it is making that limit disappear.
+
+### What this release actually supports
+
+| Surface | Available | Outside this implementation |
+|---|---|---|
+| Southeast Asia | Eleven-country dated national comparisons and exports | Regional parcel model, country project eligibility or issuance |
+| Thailand | Landscape screening and supplied measurements under the stated Thai method | Field validation, legal rights or a verification opinion |
+| Corporate footprint | Detailed bilingual study-design teaching | Complete CFO submission or regional emission-factor engine |
+| Evidence and privacy | Source receipts, explicit downloads and browser-memory files | Automatic archive, upload or backup |
+
+The release acceptance checks software behaviour; independent novice usability and scientific acceptance remain separate tasks. [Reproducible release scope and checks](https://github.com/Nonarkara/carbon/blob/main/docs/SHIP_READINESS.md).
+
+### Primary references / เอกสารต้นทาง
+
+- [GHG Protocol · Inventory and Project Accounting: A Comparative Review](https://ghgprotocol.org/blog/inventory-and-project-accounting) · 2023-12-20 · accounting distinction; historical guidance, not later standard adoption · accessed 2026-10-15
+- [IPCC 2006 · Volume 1 chapter 6 · QA/QC and Verification](https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_6_Ch6_QA_QC.pdf) · Sections 6.1–6.8 · historical methodological reference · accessed 2026-10-15
+- [IPCC 2006 · Volume 1 chapter 3 · Uncertainties](https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_3_Ch3_Uncertainties.pdf) · Chapter 3 · propagation assumptions and quantitative uncertainty · accessed 2026-10-15
+- [Gibbs et al. 2025 · revised forest flux framework](https://essd.copernicus.org/articles/17/1217/2025/) · ESSD 17, 1217–1243 · doi:10.5194/essd-17-1217-2025; framework, not independent validation of this deployment · accessed 2026-10-15

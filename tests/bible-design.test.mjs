@@ -13,7 +13,7 @@ test('Assessment-design editions retain detailed paired explanations and searcha
  assert.ok(searchChapters(designChapters,'ฟอกขาว','impacts').some(c=>c.id==='climate-impacts'));
 });
 test('Original learning diagrams expose accessible descriptions and conserve the worked quantities',async()=>{
- assert.equal(designDiagramIds.length,20);
+ assert.equal(designDiagramIds.length,24);
  for(const id of designDiagramIds)for(const lang of ['en','th']){const svg=designSvg(id,lang);assert.ok(svg.includes('<title>'));assert.ok(svg.includes('<desc>'));assert.ok(svg.includes('CC0 1.0'));assert.ok(!/shadow|<filter|\bNaN\b|undefined/i.test(svg));assert.equal(await readFile(`public/images/bible/diagrams/${id}-${lang}.svg`,'utf8'),svg);}
  const rows=[2000*2.68/1000,2*1430/1000,50000*.48/1000,12000*.1/1000,10000*.8/1000];
  assert.equal(Number(rows.reduce((a,b)=>a+b,0).toFixed(2)),41.42);

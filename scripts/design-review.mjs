@@ -1,3 +1,4 @@
+import {clickControl,revealControl} from './browser-controls.mjs';
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
@@ -35,15 +36,15 @@ for(const lang of ['th','en']) for(const width of [375,768,1440]){
  }
  assert.ok((await p.locator('#map').boundingBox()).height>280,'map lost its working area');
  if(width===375){
-  const nav=await p.locator('#worldMobile').boundingBox();assert.ok(nav.x>=0&&nav.x+nav.width<=width,'World navigation clipped');
-  await p.locator('#worldMobile').click();await p.locator('#worldFeeds').waitFor({state:'visible'});
+  await revealControl(p,'#worldMobile');const nav=await p.locator('#worldMobile').boundingBox();assert.ok(nav.x>=0&&nav.x+nav.width<=width,'World navigation clipped');
+  await clickControl(p,'#worldMobile');await p.locator('#worldFeeds').waitFor({state:'visible'});
   await p.locator('.bottom-nav [data-view=map]').click();
  }
  await p.screenshot({path:`test-results/design-${lang}-${width}.png`});
  await p.locator('#exploreProvinces').click();await p.locator('.province-row').first().waitFor();
  assert.equal(await p.locator('.province-row').count(),77);
  await p.locator('.province-row').first().click();
- await p.locator('#aboutTab').click();await p.locator('.research-person').waitFor();
+ await clickControl(p,'#aboutTab');await p.locator('.research-person').waitFor();
  await p.screenshot({path:`test-results/design-research-${lang}-${width}.png`});
  await p.goto(`${base}/guide-${lang}.html`,{waitUntil:'domcontentloaded'});await p.locator('.manual-routes').waitFor();
  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'manual overflow');

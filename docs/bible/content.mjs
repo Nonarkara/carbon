@@ -1,3 +1,4 @@
+import {practiceChapters} from './practice.mjs';
 import {seaChapters} from './sea.mjs';
 import {designChapters} from './design.mjs';
 import {academicChapters} from './academic.mjs';
@@ -254,3 +255,5 @@ chapters.find(c=>c.id==='forest-watch').reviewed='2026-10-05';
 chapters.push(...designChapters);
 
 chapters.push(...seaChapters);
+
+chapters.push(...practiceChapters);

@@ -8,3 +8,5 @@ input::file-selector-button{border:1px solid currentColor;border-radius:0;box-sh
 /* Native controls receive flat surfaces without removing their focus or disabled states. */
 button:disabled,[aria-disabled=true]{cursor:not-allowed}
 .leaflet-popup-content-wrapper,.leaflet-popup-tip,.leaflet-tooltip{border-radius:0!important}
+
+.leaflet-bar{border-radius:0!important}

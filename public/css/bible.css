@@ -17,3 +17,7 @@
 @media print{.mobile-diagram{display:none}.design-illustration>svg{display:block}}
 .prose .table-scroll{border:1px solid var(--ink);margin:20px 0}.prose .table-scroll table{min-width:620px;margin:0;table-layout:auto}.table-scroll:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 @media print{.prose .table-scroll{overflow:visible;border:0}.prose .table-scroll table{min-width:0;table-layout:fixed}}
+
+/* Deep-linked chapters open at their answer; the index remains one click away. */
+header{position:sticky;top:0;z-index:20;flex-wrap:wrap}#indexJump{font-size:14px;min-height:44px;display:flex;align-items:center;padding:6px}article,#reader-index,.prose h2,.prose h3{scroll-margin-top:110px}
+@media(max-width:700px){header{gap:6px}header strong{display:none}header>a{min-height:44px}.language button{min-width:44px;min-height:44px}.index{scroll-margin-top:100px}}

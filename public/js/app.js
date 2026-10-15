@@ -19,7 +19,7 @@ Object.values(tiles).forEach(layer=>layer.on('tileerror',()=>{$('#tileStatus').t
 function message(text){$('#message').textContent=text;$('#message').hidden=!text;}
 function error(err){const code=String(err.message||err).split(':').at(-1);const explanation={
  fileSize:['ไฟล์ต้องมีขนาดไม่เกิน 2 MB','File must be at most 2 MB'],coordinates:['พิกัดต้องเป็น WGS84 [ลองจิจูด, ละติจูด] ในประเทศไทย','Coordinates must be WGS84 [longitude, latitude] in Thailand'],overlap:['รูปหลายเหลี่ยมซ้อนกัน ห้ามนับพื้นที่ซ้ำ','Polygons overlap; double counting is prohibited'],fireAssessment:['ต้องประเมินไฟป่าก่อนคำนวณ','Assess canopy fire before calculation'],period:['วันที่ติดตามผลต้องอยู่หลังวันที่ฐาน','Monitoring date must follow baseline date'],duplicateTree:['รหัสต้นไม้ซ้ำในแปลงเดียวกัน','Duplicate tree ID within a plot'],csvHeaders:['ตรวจชื่อคอลัมน์และจำนวนแถวใน CSV','Check required CSV headers and row count'],sampleArea:['พื้นที่สำรวจมากกว่าพื้นที่โครงการ','Sample area exceeds project area'],selfIntersection:['ขอบเขตตัดกันเอง','Boundary self-intersects'],crs:['แปลงเป็น GeoJSON WGS84 ก่อนนำเข้า ไม่รับ CRS อื่น','Reproject to WGS84 GeoJSON; other CRS declarations are not accepted']};message(t('invalid')+' — '+(explanation[code]?.[getLang()==='th'?0:1]||code));}
-function tab(name){document.querySelector('.advanced-tools').open=false;if(name==='about'){showAbout();return;}delete document.body.dataset.about;$('#about').hidden=true;$('#aboutTab').setAttribute('aria-pressed','false');state.tab=name;document.body.dataset.mode=name;document.querySelectorAll('[data-panel]').forEach(e=>e.hidden=e.dataset.panel!==name);document.querySelectorAll('.lenses [data-tab]').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.tab===name)));$('#panelTitle').textContent=t(name);$('#step').textContent=`0${['carbon','project','calculate','evidence','sources'].indexOf(name)+1} / 05`;document.querySelectorAll('[data-kpi]').forEach(e=>e.hidden=e.dataset.kpi!==(name==='carbon'?'carbon':'project'));document.body.dataset.view='rail';setNav();$('#tabBody').scrollTop=0;map.invalidateSize();message('');}
+function tab(name){document.querySelector('.more-nav').open=false;document.querySelector('.reference-menu').open=false;document.querySelector('.advanced-tools').open=false;if(name==='about'){showAbout();return;}delete document.body.dataset.about;$('#about').hidden=true;$('#aboutTab').setAttribute('aria-pressed','false');state.tab=name;document.body.dataset.mode=name;document.querySelectorAll('[data-panel]').forEach(e=>e.hidden=e.dataset.panel!==name);document.querySelectorAll('.lenses [data-tab]').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.tab===name)));$('#panelTitle').textContent=t(name);$('#step').textContent=`0${['carbon','project','calculate','evidence','sources'].indexOf(name)+1} / 05`;document.querySelectorAll('[data-kpi]').forEach(e=>e.hidden=e.dataset.kpi!==(name==='carbon'?'carbon':'project'));document.body.dataset.view='rail';setNav();$('#tabBody').scrollTop=0;map.invalidateSize();message('');}
 function redrawBoundary(){if(drawn)map.removeLayer(drawn);if(!state.boundary)return;drawn=L.geoJSON(state.boundary.geojson,{style:{color:'#ffcc00',weight:3,fillColor:'#ffcc00',fillOpacity:.16}}).addTo(map);map.fitBounds(drawn.getBounds(),{padding:[40,40],maxZoom:15});}
 function invalidate(){state.result=null;state.input=null;$('#result').replaceChildren();summary();}
 function clearPlots(){state.plots=null;state.rows=null;state.plotFile=null;if(state.plotUsed){$('#current').value='';$('#inputSource').value='';}state.plotUsed=false;$('#plotFile').value='';$('#usePlots').disabled=true;$('#plotResult').replaceChildren();}
@@ -66,7 +66,7 @@ const setNav=()=>{
   document.querySelectorAll('.bottom-nav button').forEach(b=>{
     let pressed=false;
     if(aboutOpen)pressed=false;
-    else if(b.dataset.view==='rail')pressed=b.dataset.tab===state.tab;
+    else if(b.dataset.view==='rail')pressed=document.body.dataset.view==='rail'&&b.dataset.tab===state.tab;
     else if(b.dataset.view==='map')pressed=document.body.dataset.view==='map';
     else if(b.dataset.view==='world')pressed=document.body.dataset.view==='world';
     b.setAttribute('aria-pressed',String(pressed));
@@ -102,11 +102,20 @@ digest.ready.then(d=>{
   landscape.render();
 }).catch(err=>error(err));
 registry.ready.then(()=>{if(state.boundary)renderRegistry();}).catch(err=>error(err));
-function showAbout(){document.querySelectorAll('.lenses [data-tab]').forEach(e=>e.setAttribute('aria-pressed','false'));document.body.dataset.about='true';$('#about').hidden=false;$('#aboutTab').setAttribute('aria-pressed','true');$('#about').scrollTop=0;setNav();about.show().catch(err=>error(err));}
+function showAbout(){document.querySelector('.reference-menu').open=false;document.querySelectorAll('.lenses [data-tab]').forEach(e=>e.setAttribute('aria-pressed','false'));document.body.dataset.about='true';$('#about').hidden=false;$('#aboutTab').setAttribute('aria-pressed','true');$('#about').scrollTop=0;setNav();about.show().catch(err=>error(err));}
 const landscape=initLandscape({map,t,fmt,getLang,getBoundary:()=>state.boundary,download,message,onSelect:()=>{if(state.tab!=='carbon'||document.body.dataset.about)tab('carbon');}});
 landscape.ready.catch(err=>error(err));
 setLang(getLang());$('#standardsLink').href=`research-${getLang()}.html#standards`;fields();summary();
 document.querySelectorAll('.flow span').forEach((el,i)=>el.textContent=(getLang()==='th'?['ดาวเทียม + แปลงสำรวจ','แบบจำลองมวลชีวภาพ','ตรวจสอบด้วยแปลงอิสระ','รับรองวิธี + ทวนสอบ']:['Satellite + plots','Biomass model','Independent validation','Method approval + verification'])[i]);
 Promise.all([fetch('data/source-catalog.json').then(r=>{if(!r.ok)throw Error('source catalog');return r.json();}),fetch('data/province-forest-area.json').then(r=>{if(!r.ok)throw Error('province data');return r.json();}),fetch('version.json').then(r=>r.json())]).then(([s,p,v])=>{state.sources=s;state.province=p;state.version=v.commit;$('#version').textContent=v.commit;renderSources();}).catch(err=>error(err));
-$('#worldMobile').onclick=()=>{delete document.body.dataset.about;$('#about').hidden=true;$('#aboutTab').setAttribute('aria-pressed','false');document.body.dataset.view='world';setNav();};
+$('#worldMobile').onclick=()=>{document.querySelector('.more-nav').open=false;delete document.body.dataset.about;$('#about').hidden=true;$('#aboutTab').setAttribute('aria-pressed','false');document.body.dataset.view='world';setNav();};
 window.addEventListener('resize',()=>map.invalidateSize());
+
+// Close the reading menu after opening a separate document.
+document.querySelector('.reference-menu').addEventListener('click',e=>{if(e.target.closest('a'))document.querySelector('.reference-menu').open=false;});
+// Reserve the actual navigation height when text enlargement wraps its rows.
+new ResizeObserver(([entry])=>document.body.style.setProperty('--nav-space',`${entry.target.getBoundingClientRect().height+8}px`)).observe(document.querySelector('.bottom-nav'));
+document.addEventListener('click',e=>{for(const menu of document.querySelectorAll('.map-tools,.reference-menu,.more-nav'))if(!menu.contains(e.target))menu.open=false;});
+
+document.querySelector('.map-tools').addEventListener('click',e=>{const button=e.target.closest('button');if(button){document.querySelector('.map-tools').open=false;(button.id==='openForestWatch'?$('#tabBody'):button.id==='moreLayers'?$('#base'):$('#map')).focus({preventScroll:true});}});
+document.querySelector('.more-nav').addEventListener('click',e=>{if(e.target.closest('button'))(document.body.dataset.view==='world'?$('#worldRail'):$('#tabBody')).focus({preventScroll:true});});

@@ -70,7 +70,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       if(revision!==selectionRevision)return;S.src={...totals,cells,pcode:null};
       S.shape=(sel.box?L.rectangle([[sel.box.south,sel.box.west],[sel.box.north,sel.box.east]]):L.geoJSON(sel.geojson)).setStyle({color:'#ffcc00',weight:3,fillOpacity:.08,interactive:false}).addTo(map);
     }
-    render();if(innerWidth<=700&&sel.kind!=='national'){document.body.dataset.view='rail';document.querySelectorAll('.bottom-nav button').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.tab==='carbon')));}
+    render();if(innerWidth<=1100&&sel.kind!=='national'){document.body.dataset.view='rail';document.querySelectorAll('.bottom-nav button').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.tab==='carbon')));}
   }
 
   function rowsFor(){

@@ -1,3 +1,4 @@
+import {clickControl,revealControl} from './browser-controls.mjs';
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,readFile} from 'node:fs/promises';
@@ -8,7 +9,7 @@ await mkdir('test-results',{recursive:true});
 for(const lang of ['th','en'])for(const width of [375,1440]){
  await page.setViewportSize({width,height:900});
  await page.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});
- await page.locator('#openForestWatch').click();
+ await clickControl(page,'#openForestWatch');
  await page.locator('.forest-watch').waitFor({state:'visible'});
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'page overflow');
  assert.equal(await page.locator('.watch-confidence div').count(),3);
@@ -37,7 +38,7 @@ for(const response of [{status:503,body:'Unavailable'},{status:200,contentType:'
  await page.unroute('**/data/gfw/watch.json');
  await page.route('**/data/gfw/watch.json',r=>r.fulfill(response));
  await page.goto(`${base}/?lang=en`,{waitUntil:'domcontentloaded'});
- await page.locator('#openForestWatch').click();await page.locator('.watch-status').waitFor({state:'visible'});
+ await clickControl(page,'#openForestWatch');await page.locator('.watch-status').waitFor({state:'visible'});
  assert.match(await page.locator('.watch-status').innerText(),/unavailable/);assert.match(await page.locator('#kStock').innerText(),/M/);
 }
 assert.deepEqual(errors,[]);await browser.close();console.log('Forest Watch: TH/EN, phone/desktop, province selection, JSON provenance, Bible diagram and failed-feed checks passed.');

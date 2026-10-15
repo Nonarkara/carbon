@@ -8,3 +8,5 @@ For the photographs, consult /data/bible-artifacts.json and each individual sour
 No TGO, ISO, USGS or other agency endorsement is implied.
 
 Southeast Asia extension (2026-10-15): six additional diagrams, each in Thai and English, under the same CC0 1.0 dedication. Upstream map geometry remains Natural Earth public domain; upstream statistical sources retain their own licences.
+
+Practical review extension (2026-10-15): four further original diagram topics × TH/EN, CC0 1.0; 24 original topics in total.
