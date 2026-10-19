@@ -5,9 +5,9 @@ export const strings={
 };
 strings.th.forestWatchButton='เฝ้าดูป่า · GFW';
 strings.en.forestWatchButton='Forest Watch · GFW';
-strings.th.mapChrome='ชั้น';
+strings.th.mapChrome='ชั้นข้อมูล';
 strings.en.mapChrome='Layers';
-strings.th.mapChromeLabel='ชั้นและตัวเลข';
+strings.th.mapChromeLabel='ชั้นข้อมูลและตัวเลข';
 strings.en.mapChromeLabel='Layers and figures';
 for(const l of ['th','en'])Object.assign(strings[l],dashboardCopy[l]);
 let lang=new URLSearchParams(location.search).get('lang')==='en'?'en':'th';
