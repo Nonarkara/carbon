@@ -4,7 +4,7 @@ Pick the result you need. No account or API key is needed for these steps. Keep 
 
 <div class="manual-routes"><a href="#province"><b>Compare provinces</b><span>Start here · no files needed →</span></a><a href="#area"><b>Check an area</b><span>Select two corners on the map →</span></a><a href="#project"><b>Calculate a project</b><span>Try the example, then use measurements →</span></a></div>
 
-<figure class="screen-guide"><figcaption>Where to look on a computer</figcaption><div class="screen-top">TOP · Province search / ↖ Select an area / T-VER project tools</div><div class="screen-columns"><span>LEFT<br><b>World indicators</b><br>Different sources and dates</span><span>CENTRE<br><b>Your map</b><br>Click a province or select an area</span><span>RIGHT<br><b>Your result</b><br>Inputs → equation → estimate</span></div><p>On a phone: use the bottom tabs to switch between Map, Carbon results and World. Project steps also appear in the bottom tabs.</p></figure>
+<figure class="screen-guide"><figcaption>Where to look on a computer</figcaption><div class="screen-top">TOP · Province search / ↖ Select an area / T-VER project tools</div><div class="screen-columns"><span>LEFT<br><b>World indicators</b><br>Different sources and dates</span><span>CENTRE<br><b>Your map</b><br>Click a province or select an area</span><span>RIGHT<br><b>Your result</b><br>Inputs → equation → estimate</span></div><p>On a phone or tablet: use Map, Carbon, Project and Calculate in the bottom bar. Open More for Evidence, Sources and World & markets. Read → About opens the research; Read → User guide opens this manual.</p></figure>
 
 <section id="province">
 
@@ -56,7 +56,7 @@ This is a separate workflow. Province and rectangle estimates do not fill projec
 
 **For your own project, prepare:** a WGS84 GeoJSON boundary; baseline/last-credited and monitoring dates; total dry aboveground biomass in tonnes for the entire net project area at both dates **or** total tree stock already in tCO₂e; measurement source; burned-area percentage and canopy-fire status. Unknown fire status blocks calculation. Do not enter tonnes per hectare into a total-tonnes field.
 
-To use measured trees, open **Evidence**, download the CSV template, confirm the equation applies to the forest type, upload your file, and apply the plot result. The file format and supported forest types are in **Detailed reference** below. Changing the boundary or factors invalidates affected results; calculate again.
+To use measured trees, open **Evidence** (**More → Evidence** on a phone/tablet), download the CSV template, confirm the equation applies to the forest type, upload your file, and apply the plot result. The file format and supported forest types are in **Detailed reference** below. Changing the boundary or factors invalidates affected results; calculate again.
 
 **Before closing the tab, export.** Inputs are held in browser memory. Refreshing or closing the original tab loses them. The system produces an estimate for review, not issued credits.
 
@@ -80,10 +80,10 @@ Instructions: [Apple Support](https://support.apple.com/guide/iphone/open-as-web
 
 ## Use layers and world data
 
-- **Vegetation** shows the JAXA forest map. **Aerosols** shows particles in the atmosphere; it does not measure forest credits. On desktop, **More layers** offers the other overlays. On a phone, the Aerosols button opens the layer panel.
+- **Vegetation** shows the JAXA forest map. **Aerosols** shows particles in the atmosphere; it does not measure forest credits. Open **Layers & Watch → Vegetation**, **Aerosols** or **More layers** on every screen size.
 - Read the date and legend before comparing colours. The basemap is for location, not proof of a monitoring date.
-- World indicators are on the left (**World & markets** on a phone). **Refresh** checks the feed cache. Read the observation date: daily concentrations, half-hour electricity data and quarterly auctions do not share a clock or unit.
-- **Research** explains methods, diagrams, sources and ISO reference scope. It preserves your inputs.
+- World indicators are on the left (**More → World & markets** on a phone/tablet). **Refresh** checks the feed cache. Read the observation date: daily concentrations, half-hour electricity data and quarterly auctions do not share a clock or unit.
+- **Read → About** explains methods, diagrams, sources and ISO reference scope. It preserves your inputs.
 
 </section>
 <section id="help">

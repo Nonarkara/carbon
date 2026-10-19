@@ -3,14 +3,14 @@
 ## Explore Southeast Asia
 
 1. In the workbench’s area selector, choose **Southeast Asia → All 11 countries** or a country. The regional screen opens separately and preserves your Thai project inputs. [Open it directly](sea.html?lang=en).
-2. Choose **Country** and a **Map metric**. Read each quantity with its source and period. Forest cover and CO₂ are 2023 statistics; GFW fluxes are annual averages over 2001–2025.
+2. Choose **Country** and a **Map metric**. **Whole region** is at the map’s top right. Open **Read** for methods or the Thailand workbench. Read each quantity with its source and period. Forest cover and CO₂ are 2023 statistics; GFW fluxes are annual averages over 2001–2025.
 3. Search the comparison table by Thai/English name or ISO code, then select a country. Positive GFW net means a modelled source, negative a sink. Grey means missing data, never zero.
 4. Expand **Sources and reuse rights**; open **Country research** for the assumptions and next evidence to collect. Export **JSON** for full provenance or **CSV** for the selected figures.
 5. For measured Thai project inputs, return to the original workbench. This regional view has no parcel carbon calculator, regional credit issuance or corporate inventory submission.
 
 ## Search the Carbon Bible
 
-Open **Research → Carbon Bible**, or **Explain this number + diagram** beside a map equation. Search in Thai or English, choose a category, then open a chapter. The diagram shows the path; the worked example shows the arithmetic; the source shelf gives versions and dates. TH/EN preserves the chapter and search. **Clear** restores all chapters. **Copy chapter link** shares the view; **Print this chapter** prints its explanation and sources. The reader opens separately to preserve workbench inputs. [Open the Bible](bible.html?lang=en).
+Open **Read → About → Carbon Bible**, or **Explain this number + diagram** beside a map equation. Search in Thai or English, choose a category, then open a chapter. The diagram shows the path; the worked example shows the arithmetic; the source shelf gives versions and dates. TH/EN preserves the chapter and search. **Clear** restores all chapters. **Copy chapter link** shares the view; **Print this chapter** prints its explanation and sources. The reader opens separately to preserve workbench inputs. [Open the Bible](bible.html?lang=en).
 
 The reader has **65 TH/EN chapters**. Choose **Assessment design** for client briefs, evidence tables, all 15 Scope 3 categories, product life cycles, a hypothetical SME calculation and review/handover templates. The **In this chapter** links jump to sections. Choose **Impacts & reuse** for dated public-domain photographs with source/rights links and downloads. New diagrams have TH/EN SVG downloads under CC0; the dedication does not cover logos or upstream assets. The Bible teaches CFO study design; the workbench remains a forest assessment tool.
 
@@ -20,7 +20,7 @@ An independent Thai/English workbench for assessing forest carbon from supplied 
 
 **Live:** [Open the workbench](https://carbon.nonarkara.org/?lang=en). **Source:** [Nonarkara/carbon](https://github.com/Nonarkara/carbon).
 
-The default view is Thai. Select **EN** at the top to translate the interface without losing inputs. The app opens on the **Carbon map**. On a phone, use the bottom navigation to switch between Map, Carbon, Project, Calculate, Evidence and Sources. On desktop, the map and assessment rail remain side by side.
+The default view is Thai. Select **EN** at the top to translate the interface without losing inputs. The app opens on the **Carbon map**. On a phone or tablet, use the bottom bar for **Map**, **Carbon**, **Project** and **Calculate**; open **More** for **Evidence**, **Sources** and **World & markets**. On desktop, the map and assessment rail remain side by side.
 
 ```mermaid
 flowchart TD
@@ -40,7 +40,7 @@ The carbon map opens first. It answers a landscape question from published satel
 5. **Layers.** *Data layers* shows forest carbon density, the JAXA forest map, or province net flux. *Atmosphere* shows NASA GIBS images of aerosol, fire detections, carbon monoxide or column CO₂ for a chosen date. These are concentrations or detections, not emissions, and never produce numbers.
 6. **Export.** *Export JSON* saves the rows with dataset versions, conversion factors and the conservation check; *Export CSV* saves the rows with both uncertainty ranges.
 
-Limits you will see on screen: a box counts Thai land only; datasets coarser than a box are greyed out (fire 28 km; stock and fossil selections 2.8 km in this deployment); GFW flux inside a drawn box is marked *not ingested* because its 30 m grids need an API key. The **Research** button at the top opens an illustrated explanation inside the app, without losing your inputs. The [research notebook, section 06](research-en.html#section-6) gives every method, source and check in full.
+Limits you will see on screen: a box counts Thai land only; datasets coarser than a box are greyed out (fire 28 km; stock and fossil selections 2.8 km in this deployment); GFW flux inside a drawn box is marked *not ingested* because its 30 m grids need an API key. **Read → About** opens an illustrated explanation inside the app, without losing your inputs. The [research notebook, section 06](research-en.html#section-6) gives every method, source and check in full.
 
 ## 1. Try the complete flow
 

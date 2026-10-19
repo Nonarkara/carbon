@@ -21,3 +21,11 @@
 /* Deep-linked chapters open at their answer; the index remains one click away. */
 header{position:sticky;top:0;z-index:20;flex-wrap:wrap}#indexJump{font-size:14px;min-height:44px;display:flex;align-items:center;padding:6px}article,#reader-index,.prose h2,.prose h3{scroll-margin-top:110px}
 @media(max-width:700px){header{gap:6px}header strong{display:none}header>a{min-height:44px}.language button{min-width:44px;min-height:44px}.index{scroll-margin-top:100px}}
+
+/* Keep prose readable on wide monitors; diagrams and scrollable tables retain their columns. */
+.prose,.reading .deck{max-width:65ch}
+
+/* A sticky rail starts below the sticky header, never underneath it. */
+article,#reader-index,.prose h2,.prose h3{scroll-margin-top:calc(var(--reader-header,66px) + 16px)}
+@media(min-width:1000px){.index{top:var(--reader-header,66px);height:calc(100dvh - var(--reader-header,66px))}.evidence{top:var(--reader-header,66px);max-height:calc(100dvh - var(--reader-header,66px))}}
+@media print{.evidence{position:static;max-height:none}}

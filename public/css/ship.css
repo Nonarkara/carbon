@@ -42,7 +42,7 @@ body.dashboard{font-size:1rem}
  .dashboard .tab-body{overflow:visible;height:auto}
  .dashboard .bottom-nav{display:flex;flex-wrap:wrap;position:fixed;bottom:0;left:0;right:0;z-index:2000;min-height:56px;background:var(--ink);padding-bottom:env(safe-area-inset-bottom);border-top:1px solid white;overflow:visible}
  .dashboard .bottom-nav>button,.dashboard .bottom-nav>.more-nav{flex:1 1 max(20%,4rem);width:auto;min-width:0}
- .dashboard .bottom-nav button{font-size:var(--text-meta);min-height:56px;min-width:0;padding:6px 3px;color:white;white-space:normal;overflow-wrap:normal;word-break:normal;line-height:1.5}
+ .dashboard .bottom-nav button{background:transparent;border:0;font-size:var(--text-meta);min-height:56px;min-width:0;padding:6px 3px;color:white;white-space:normal;overflow-wrap:normal;word-break:normal;line-height:1.5}
  .dashboard .bottom-nav button[aria-pressed=true]{background:var(--signal);color:var(--ink);border:0}
  .dashboard .more-nav{position:relative;color:white}.dashboard .more-nav>summary{display:flex;align-items:center;justify-content:center;min-height:56px;padding:6px;font-size:var(--text-meta);height:100%}
  .dashboard .more-nav>div{position:absolute;bottom:100%;right:0;width:220px;max-height:calc(100dvh - var(--nav-space,64px) - 12px);overflow:auto;border:2px solid var(--ink);background:var(--ink);display:grid;padding:4px;gap:4px}
