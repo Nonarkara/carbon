@@ -1,4 +1,4 @@
-import {clickControl,revealControl} from './browser-controls.mjs';
+import {clickControl,revealControl,waitForStock} from './browser-controls.mjs';
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
@@ -11,7 +11,7 @@ function luminance(rgb){assert.equal(rgb.length,3,'Three resolved RGB channels r
 for(const lang of ['th','en']) for(const width of [375,768,1440]){
  await p.setViewportSize({width,height:width===375?812:1000});
  await p.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});
- await p.locator('#kStock').filter({hasText:'M'}).waitFor();
+ await waitForStock(p);
  await p.evaluate(()=>document.fonts.ready);
  const branding=await p.locator('.kabonna-mark').evaluate(async img=>{await img.decode();return {fit:getComputedStyle(img).objectFit,background:getComputedStyle(img).backgroundColor,loaded:img.naturalWidth>0}});
  assert.deepEqual(branding,{fit:'contain',background:'rgba(0, 0, 0, 0)',loaded:true});
@@ -41,7 +41,7 @@ for(const lang of ['th','en']) for(const width of [375,768,1440]){
   await p.locator('.bottom-nav [data-view=map]').click();
  }
  await p.screenshot({path:`test-results/design-${lang}-${width}.png`});
- await p.locator('#exploreProvinces').click();await p.locator('.province-row').first().waitFor();
+ await clickControl(p,'#exploreProvinces');await p.locator('.province-row').first().waitFor();
  assert.equal(await p.locator('.province-row').count(),77);
  await p.locator('.province-row').first().click();
  await clickControl(p,'#aboutTab');await p.locator('.research-person').waitFor();
@@ -53,7 +53,7 @@ for(const lang of ['th','en']) for(const width of [375,768,1440]){
  await p.screenshot({path:`test-results/design-manual-${lang}-${width}.png`});
 }
 await p.setViewportSize({width:1280,height:900});
-await p.goto(`${base}/?lang=en`,{waitUntil:'domcontentloaded'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
+await p.goto(`${base}/?lang=en`,{waitUntil:'domcontentloaded'});await waitForStock(p);
 const manifest=await p.request.get(`${base}/manifest.json`).then(r=>r.json());
 assert.equal(manifest.display,'standalone');
 for(const file of ['ct-mark.png','ct-app.png','ct-colour.png','ct-monochrome.png','icon-180.png','icon-192.png','icon-512.png']){

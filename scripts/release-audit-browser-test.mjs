@@ -1,3 +1,4 @@
+import {waitForStock} from './browser-controls.mjs';
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
@@ -17,7 +18,7 @@ async function checkNavContrast(){
  for(const {text,fg,bg} of colours){const a=luminance(fg),b=luminance(bg),ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);assert.ok(ratio>=4.5,`${text} contrast ${ratio.toFixed(2)}: ${base}`);}
 }
 for(const lang of ['th','en'])for(const width of [390,700,701,768,1024,1100]){
- await page.setViewportSize({width,height:900});await page.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});await page.locator('#kStock').filter({hasText:'M'}).waitFor();
+ await page.setViewportSize({width,height:900});await page.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});await waitForStock(page);
  await checkNavContrast();await page.locator('.more-nav summary').click();await checkNavContrast();await page.locator('.more-nav summary').click();
  await page.locator('.bottom-nav [data-tab=project]').click();await checkNavContrast();assert.equal(await page.locator('.bottom-nav button[aria-pressed=true]').count(),1);
  if(width===1024)await page.screenshot({path:`test-results/oct19/after-nav-${lang}-1024.png`});

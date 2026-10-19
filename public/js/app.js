@@ -118,4 +118,11 @@ new ResizeObserver(([entry])=>document.body.style.setProperty('--nav-space',`${e
 document.addEventListener('click',e=>{for(const menu of document.querySelectorAll('.map-tools,.reference-menu,.more-nav'))if(!menu.contains(e.target))menu.open=false;});
 
 document.querySelector('.map-tools').addEventListener('click',e=>{const button=e.target.closest('button');if(button){document.querySelector('.map-tools').open=false;(button.id==='openForestWatch'?$('#tabBody'):button.id==='moreLayers'?$('#base'):$('#map')).focus({preventScroll:true});}});
+// Phone keeps layers and the stock/flux strip in a closed drawer so the first screen is the map.
+const mapChrome=$('#mapChrome'),phoneChrome=matchMedia('(max-width:1100px)');
+const syncMapChrome=()=>{if(!phoneChrome.matches)mapChrome.open=true;};
+syncMapChrome();
+phoneChrome.addEventListener('change',()=>{mapChrome.open=!phoneChrome.matches;map.invalidateSize();});
+mapChrome.addEventListener('click',e=>{if(phoneChrome.matches&&e.target.closest('#mapChrome button'))mapChrome.open=false;});
+map.invalidateSize();
 document.querySelector('.more-nav').addEventListener('click',e=>{if(e.target.closest('button'))(document.body.dataset.view==='world'?$('#worldRail'):$('#tabBody')).focus({preventScroll:true});});

@@ -5,6 +5,8 @@ export const strings={
 };
 strings.th.forestWatchButton='เฝ้าดูป่า · GFW';
 strings.en.forestWatchButton='Forest Watch · GFW';
+strings.th.mapChrome='ชั้น/ตัวเลข';
+strings.en.mapChrome='Layers';
 for(const l of ['th','en'])Object.assign(strings[l],dashboardCopy[l]);
 let lang=new URLSearchParams(location.search).get('lang')==='en'?'en':'th';
 export const getLang=()=>lang;
