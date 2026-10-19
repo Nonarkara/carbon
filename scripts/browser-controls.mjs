@@ -4,9 +4,9 @@ export async function waitForStock(page){
 }
 export async function revealControl(page,selector){
  const target=page.locator(selector);if(await target.isVisible())return;
- if(await target.evaluate(e=>!!e.closest('#mapChrome'))){
-  const chrome=page.locator('#mapChrome');
-  if((await chrome.getAttribute('open'))===null&&await chrome.locator('>summary').isVisible())await chrome.locator('>summary').click();
+ if(await target.evaluate(e=>!!e.closest('#mapChrome,#phoneFigures')||!!e.closest('.kpis'))){
+  const toggle=page.locator('#mapChromeToggle');
+  if(!(await page.locator('#mapChrome').evaluate(e=>e.classList.contains('is-open')))&&await toggle.isVisible())await toggle.click();
   if(await target.isVisible())return;
  }
  if(await target.evaluate(e=>!!e.closest('#about'))){await clickControl(page,'#aboutTab');}

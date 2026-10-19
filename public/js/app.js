@@ -119,10 +119,16 @@ document.addEventListener('click',e=>{for(const menu of document.querySelectorAl
 
 document.querySelector('.map-tools').addEventListener('click',e=>{const button=e.target.closest('button');if(button){document.querySelector('.map-tools').open=false;(button.id==='openForestWatch'?$('#tabBody'):button.id==='moreLayers'?$('#base'):$('#map')).focus({preventScroll:true});}});
 // Phone keeps layers and the stock/flux strip in a closed drawer so the first screen is the map.
-const mapChrome=$('#mapChrome'),phoneChrome=matchMedia('(max-width:1100px)');
-const syncMapChrome=()=>{if(!phoneChrome.matches)mapChrome.open=true;};
-syncMapChrome();
-phoneChrome.addEventListener('change',()=>{mapChrome.open=!phoneChrome.matches;map.invalidateSize();});
-mapChrome.addEventListener('click',e=>{if(phoneChrome.matches&&e.target.closest('#mapChrome button'))mapChrome.open=false;});
+const mapChrome=$('#mapChrome'),chromeToggle=$('#mapChromeToggle'),phoneFigures=$('#phoneFigures'),phoneChrome=matchMedia('(max-width:1100px)');
+const parkFigures=()=>{const nodes=[...document.querySelectorAll('.verdict,.kpis')];if(phoneChrome.matches)phoneFigures.append(...nodes);else document.querySelector('main.stage').before(...nodes);};
+const setChrome=open=>{const show=!!(phoneChrome.matches&&open);mapChrome.classList.toggle('is-open',show);chromeToggle.setAttribute('aria-expanded',String(show));};
+parkFigures();setChrome(false);
+chromeToggle.addEventListener('click',()=>setChrome(!mapChrome.classList.contains('is-open')));
+phoneChrome.addEventListener('change',()=>{parkFigures();setChrome(false);map.invalidateSize();});
+mapChrome.addEventListener('click',e=>{if(phoneChrome.matches&&e.target.closest('#mapChrome button:not(#mapChromeToggle)'))setChrome(false);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')setChrome(false);});
+map.on('click',()=>setChrome(false));
+for(const menu of ['.reference-menu','.more-nav'])document.querySelector(menu).addEventListener('toggle',e=>{if(e.target.open)setChrome(false);});
+$('#overlayLegend').addEventListener('click',()=>{$('#overlayLegend').classList.toggle('is-open');});
 map.invalidateSize();
 document.querySelector('.more-nav').addEventListener('click',e=>{if(e.target.closest('button'))(document.body.dataset.view==='world'?$('#worldRail'):$('#tabBody')).focus({preventScroll:true});});
