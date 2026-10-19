@@ -1,6 +1,14 @@
 // Follow the same disclosures and responsive navigation available to a person.
+export async function waitForStock(page){
+ await page.waitForFunction(()=>/M/.test(document.querySelector('#kStock')?.textContent||''));
+}
 export async function revealControl(page,selector){
  const target=page.locator(selector);if(await target.isVisible())return;
+ if(await target.evaluate(e=>!!e.closest('#mapChrome,#phoneFigures')||!!e.closest('.kpis'))){
+  const toggle=page.locator('#mapChromeToggle');
+  if(!(await page.locator('#mapChrome').evaluate(e=>e.classList.contains('is-open')))&&await toggle.isVisible())await toggle.click();
+  if(await target.isVisible())return;
+ }
  if(await target.evaluate(e=>!!e.closest('#about'))){await clickControl(page,'#aboutTab');}
  const menu=await target.evaluate(e=>e.closest('.reference-menu')?'.reference-menu':e.closest('.map-tools')?'.map-tools':e.closest('.more-nav')?'.more-nav':null);
  if(menu&&(await page.locator(menu).getAttribute('open'))===null)await page.locator(menu+'>summary').click();
