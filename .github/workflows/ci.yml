@@ -30,6 +30,8 @@ jobs:
           node scripts/sea-browser-test.mjs
           node scripts/ship-browser-test.mjs
           node scripts/release-audit-browser-test.mjs
+          node scripts/anti-slop-browser-test.mjs
+          node scripts/spatial-gate.mjs
           npm run test:design
           BASE_URL=http://127.0.0.1:8788 node scripts/academic-browser-test.mjs
   secrets:

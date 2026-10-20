@@ -6,6 +6,7 @@ for(const lang of ['th','en'])for(const width of [1280,390]){
  const cdp=await context.newCDPSession(page);await cdp.send('Network.enable');await cdp.send('Network.emulateNetworkConditions',{offline:false,latency:100,downloadThroughput:1500000,uploadThroughput:750000});
  await page.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});await page.locator('#kStock').filter({hasText:'M'}).waitFor();await revealControl(page,'#guideLink');assert.ok(await page.locator('#guideLink').isVisible());
  const popup=page.waitForEvent('popup');await clickControl(page,'#guideLink');const guide=await popup;await guide.waitForLoadState();assert.equal(await guide.locator('html').getAttribute('lang'),lang);
+ if(width<=800)await guide.locator('.manual-contents>summary').click();
  for(const id of ['province','area','project','layers','help','reference']){await guide.locator(`.manual-index a[href="#${id}"]`).click();assert.equal(await guide.locator(`#${id}`).count(),1);}
  assert.ok(await guide.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await guide.locator('.manual-index a[href="#province"]').click();await guide.screenshot({path:`test-results/manual-${lang}-${width}.png`});
  // First visit: follow province route, no supplied files.

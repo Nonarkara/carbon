@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "retrievedAt": "2026-10-15T14:14:57.032168+00:00",
+  "retrievedAt": "2026-10-20T13:25:15.882802+00:00",
   "scope": "Eleven geographic Southeast Asian countries",
   "observationYear": 2023,
   "sources": {
@@ -44,6 +44,35 @@
       "licence": "CC BY 4.0",
       "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327",
       "kind": "landscape model estimate"
+    },
+    "gfw-layers": {
+      "name": "GFW integrated layers · carbonflux_adm1_summary",
+      "version": "v20260327",
+      "period": "tree cover loss 2001–2025 cumulative; carbon stock reference year 2000",
+      "treeCoverThreshold": 30,
+      "slice": "is__flux_model_extent = true",
+      "unit": "ha; t carbon",
+      "licence": "CC BY 4.0",
+      "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327",
+      "kind": "integrated landscape model outputs on the flux-model extent"
+    },
+    "gfw-mangrove": {
+      "name": "GFW mangrove biomass extent",
+      "version": "v20260327",
+      "slice": "is__mangrove_biomass_extent = true",
+      "unit": "t carbon; tCO2/year",
+      "licence": "CC BY 4.0",
+      "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327",
+      "kind": "blue-carbon mangrove extent; reported separately from forest totals; present for 10 of 11 countries"
+    },
+    "gfw-peat": {
+      "name": "GFW peatlands layer",
+      "version": "v20260327",
+      "slice": "is__gfw_peatlands = true",
+      "unit": "t carbon",
+      "licence": "CC BY 4.0",
+      "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327",
+      "kind": "peatland carbon stock; coverage stated per country in checks.peatCoverage"
     },
     "geometry": {
       "name": "Natural Earth 1:50m Admin 0",
@@ -169,6 +198,22 @@
       "forest_emissions_t_yr": 875062.7736444174,
       "forest_removals_t_yr": 1178105.4601297136,
       "forest_net_t_yr": -303042.6871463915,
+      "tree_cover_loss_ha": 33292.25359336175,
+      "tree_cover_extent_2000_ha": 529312.9082544718,
+      "carbon_stock_t_c": 134932251.17935002,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 79494241.36090498,
+        "belowground_c_mg": 16481612.65300515,
+        "deadwood_c_mg": 4764352.292402675,
+        "litter_c_mg": 630956.8110215995,
+        "soil_c_mg": 33561088.062015824
+      },
+      "emissions_co2_only_t_yr": 863372.0313852616,
+      "emissions_non_co2_t_yr": 11690.742259155817,
+      "mangrove_stock_t_c": 402516.765246373,
+      "mangrove_removals_t_yr": 16024.772563152132,
+      "mangrove_emissions_t_yr": 46.842540756403096,
+      "peat_stock_t_c": 13680633.600593692,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/BRN/home/",
       "research_chapter": "sea-brn",
       "project_method": "No country project methodology implemented",
@@ -284,6 +329,22 @@
       "forest_emissions_t_yr": 71499881.90528296,
       "forest_removals_t_yr": 25920696.28527589,
       "forest_net_t_yr": 45579185.6457868,
+      "tree_cover_loss_ha": 2980551.787354921,
+      "tree_cover_extent_2000_ha": 8827503.8640942,
+      "carbon_stock_t_c": 1679532042.9728136,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 928387019.2459545,
+        "belowground_c_mg": 225202702.35067213,
+        "deadwood_c_mg": 47900283.18800389,
+        "litter_c_mg": 7326288.515008826,
+        "soil_c_mg": 470715749.67317593
+      },
+      "emissions_co2_only_t_yr": 71305294.21133873,
+      "emissions_non_co2_t_yr": 194587.69394422538,
+      "mangrove_stock_t_c": 9941303.557182685,
+      "mangrove_removals_t_yr": 652205.903937146,
+      "mangrove_emissions_t_yr": 127171.32429933076,
+      "peat_stock_t_c": 51373663.92190803,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/KHM/home/",
       "research_chapter": "sea-khm",
       "project_method": "No country project methodology implemented",
@@ -399,6 +460,22 @@
       "forest_emissions_t_yr": 969910919.6283708,
       "forest_removals_t_yr": 605419215.7596729,
       "forest_net_t_yr": 364491702.2821438,
+      "tree_cover_loss_ha": 33120852.969430827,
+      "tree_cover_extent_2000_ha": 160585369.41730887,
+      "carbon_stock_t_c": 38098659169.338,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 20278011721.3183,
+        "belowground_c_mg": 5213778393.069524,
+        "deadwood_c_mg": 1215440739.592113,
+        "litter_c_mg": 161683591.6693603,
+        "soil_c_mg": 11229744723.68874
+      },
+      "emissions_co2_only_t_yr": 947232635.4721689,
+      "emissions_non_co2_t_yr": 22678284.15620182,
+      "mangrove_stock_t_c": 1477080781.8870072,
+      "mangrove_removals_t_yr": 52795412.133570805,
+      "mangrove_emissions_t_yr": 5381743.6866866825,
+      "peat_stock_t_c": 5303469167.177705,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/IDN/home/",
       "research_chapter": "sea-idn",
       "project_method": "No country project methodology implemented",
@@ -514,6 +591,22 @@
       "forest_emissions_t_yr": 116244090.69141904,
       "forest_removals_t_yr": 41749806.75380025,
       "forest_net_t_yr": 74494283.88487852,
+      "tree_cover_loss_ha": 5393324.586780064,
+      "tree_cover_extent_2000_ha": 19118849.483963955,
+      "carbon_stock_t_c": 3774368497.365876,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 2065872311.6565425,
+        "belowground_c_mg": 508274080.7993378,
+        "deadwood_c_mg": 87159159.49721709,
+        "litter_c_mg": 16269584.977905221,
+        "soil_c_mg": 1096793360.4348722
+      },
+      "emissions_co2_only_t_yr": 115907268.44251567,
+      "emissions_non_co2_t_yr": 336822.2489033477,
+      "mangrove_stock_t_c": null,
+      "mangrove_removals_t_yr": null,
+      "mangrove_emissions_t_yr": null,
+      "peat_stock_t_c": 20032157.98446124,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/LAO/home/",
       "research_chapter": "sea-lao",
       "project_method": "No country project methodology implemented",
@@ -629,6 +722,22 @@
       "forest_emissions_t_yr": 227571881.8818869,
       "forest_removals_t_yr": 102932821.31187424,
       "forest_net_t_yr": 124639060.38675703,
+      "tree_cover_loss_ha": 9776756.163676333,
+      "tree_cover_extent_2000_ha": 29443773.09694156,
+      "carbon_stock_t_c": 6784081504.720454,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 3677978015.297315,
+        "belowground_c_mg": 906693604.7860324,
+        "deadwood_c_mg": 221925455.22615296,
+        "litter_c_mg": 29096382.36261496,
+        "soil_c_mg": 1948388047.04832
+      },
+      "emissions_co2_only_t_yr": 225298575.87572113,
+      "emissions_non_co2_t_yr": 2273306.0061657913,
+      "mangrove_stock_t_c": 180192689.28730932,
+      "mangrove_removals_t_yr": 6486816.466208902,
+      "mangrove_emissions_t_yr": 2315261.2675152095,
+      "peat_stock_t_c": 710894464.4439713,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/MYS/home/",
       "research_chapter": "sea-mys",
       "project_method": "No country project methodology implemented",
@@ -744,6 +853,22 @@
       "forest_emissions_t_yr": 122975515.25632845,
       "forest_removals_t_yr": 121572362.69383559,
       "forest_net_t_yr": 1403152.3289038357,
+      "tree_cover_loss_ha": 5373886.907225798,
+      "tree_cover_extent_2000_ha": 42858524.475398436,
+      "carbon_stock_t_c": 9064325648.930056,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 4904118773.908752,
+        "belowground_c_mg": 1201593159.5668657,
+        "deadwood_c_mg": 216527428.2553678,
+        "litter_c_mg": 39720341.071658194,
+        "soil_c_mg": 2702365946.1274467
+      },
+      "emissions_co2_only_t_yr": 122498728.31146689,
+      "emissions_non_co2_t_yr": 476786.9448615485,
+      "mangrove_stock_t_c": 32643162.829479005,
+      "mangrove_removals_t_yr": 5373194.608885625,
+      "mangrove_emissions_t_yr": 760073.1210606752,
+      "peat_stock_t_c": 113757288.31346776,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/MMR/home/",
       "research_chapter": "sea-mmr",
       "project_method": "No country project methodology implemented",
@@ -859,6 +984,22 @@
       "forest_emissions_t_yr": 38312786.107527696,
       "forest_removals_t_yr": 96410799.7426338,
       "forest_net_t_yr": -58098013.55852317,
+      "tree_cover_loss_ha": 1565481.7395382894,
+      "tree_cover_extent_2000_ha": 18594135.52060998,
+      "carbon_stock_t_c": 3907901212.060166,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 1946483799.4846773,
+        "belowground_c_mg": 523013821.45037585,
+        "deadwood_c_mg": 116141459.96287037,
+        "litter_c_mg": 15613295.5524767,
+        "soil_c_mg": 1306648835.609766
+      },
+      "emissions_co2_only_t_yr": 38137047.339443326,
+      "emissions_non_co2_t_yr": 175738.768084368,
+      "mangrove_stock_t_c": 127552807.68009447,
+      "mangrove_removals_t_yr": 5887846.977767676,
+      "mangrove_emissions_t_yr": 417999.15203725675,
+      "peat_stock_t_c": 136088685.9772702,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/PHL/home/",
       "research_chapter": "sea-phl",
       "project_method": "No country project methodology implemented",
@@ -974,6 +1115,22 @@
       "forest_emissions_t_yr": 54637.22995796504,
       "forest_removals_t_yr": 120864.06339134864,
       "forest_net_t_yr": -66226.83378037435,
+      "tree_cover_loss_ha": 3019.954443102116,
+      "tree_cover_extent_2000_ha": 18681.62683480974,
+      "carbon_stock_t_c": 2801616.6530962293,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 1398693.6831067437,
+        "belowground_c_mg": 355540.4509597942,
+        "deadwood_c_mg": 84202.17428823591,
+        "litter_c_mg": 12077.534501410619,
+        "soil_c_mg": 951102.8102400404
+      },
+      "emissions_co2_only_t_yr": 54385.868857711284,
+      "emissions_non_co2_t_yr": 251.3611002537609,
+      "mangrove_stock_t_c": 299302.82208244596,
+      "mangrove_removals_t_yr": 12720.049825639628,
+      "mangrove_emissions_t_yr": 1824.2075085015188,
+      "peat_stock_t_c": 535247.8095617185,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/SGP/home/",
       "research_chapter": "sea-sgp",
       "project_method": "No country project methodology implemented",
@@ -1089,6 +1246,22 @@
       "forest_emissions_t_yr": 71656977.07342361,
       "forest_removals_t_yr": 92906556.31453237,
       "forest_net_t_yr": -21249579.37836199,
+      "tree_cover_loss_ha": 2802708.306023465,
+      "tree_cover_extent_2000_ha": 19953901.295740377,
+      "carbon_stock_t_c": 3849095656.9016185,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 2060674934.8523386,
+        "belowground_c_mg": 543920867.2994825,
+        "deadwood_c_mg": 63156581.147469826,
+        "litter_c_mg": 18072860.734358214,
+        "soil_c_mg": 1163270412.867968
+      },
+      "emissions_co2_only_t_yr": 71493359.72612438,
+      "emissions_non_co2_t_yr": 163617.3472992258,
+      "mangrove_stock_t_c": 89816433.2342481,
+      "mangrove_removals_t_yr": 5408111.651532323,
+      "mangrove_emissions_t_yr": 266570.4792229646,
+      "peat_stock_t_c": 99747171.7289506,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/THA/home/",
       "research_chapter": "sea-tha",
       "project_method": "Thailand T-VER workbench only",
@@ -1204,6 +1377,22 @@
       "forest_emissions_t_yr": 778493.5727627527,
       "forest_removals_t_yr": 3113205.0873719286,
       "forest_net_t_yr": -2334711.5139234336,
+      "tree_cover_loss_ha": 34679.96977673101,
+      "tree_cover_extent_2000_ha": 726234.9038725554,
+      "carbon_stock_t_c": 136376660.6843924,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 67999440.2818566,
+        "belowground_c_mg": 20186722.691548895,
+        "deadwood_c_mg": 3264130.1769254287,
+        "litter_c_mg": 544773.2642061993,
+        "soil_c_mg": 44381594.26985547
+      },
+      "emissions_co2_only_t_yr": 773197.2458094493,
+      "emissions_non_co2_t_yr": 5296.326953303275,
+      "mangrove_stock_t_c": 75629.85576722221,
+      "mangrove_removals_t_yr": 818.540976420009,
+      "mangrove_emissions_t_yr": 206.16714596555113,
+      "peat_stock_t_c": 388984.6838417785,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/TLS/home/",
       "research_chapter": "sea-tls",
       "project_method": "No country project methodology implemented",
@@ -1319,6 +1508,22 @@
       "forest_emissions_t_yr": 110912381.43551867,
       "forest_removals_t_yr": 115273804.03079562,
       "forest_net_t_yr": -4361422.776100245,
+      "tree_cover_loss_ha": 3802827.846611301,
+      "tree_cover_extent_2000_ha": 16534691.88997902,
+      "carbon_stock_t_c": 3178842337.1407332,
+      "carbon_pools_t_c": {
+        "aboveground_c_mg": 1637375684.7756991,
+        "belowground_c_mg": 420750720.17484623,
+        "deadwood_c_mg": 75224580.16065677,
+        "litter_c_mg": 13051335.351048227,
+        "soil_c_mg": 1032440016.678483
+      },
+      "emissions_co2_only_t_yr": 110696822.48422688,
+      "emissions_non_co2_t_yr": 215558.9512917871,
+      "mangrove_stock_t_c": 29098862.614901613,
+      "mangrove_removals_t_yr": 3862544.294674397,
+      "mangrove_emissions_t_yr": 286170.80783803936,
+      "peat_stock_t_c": 49275875.577061996,
       "fra_url": "https://fra-data.fao.org/assessments/fra/2025/VNM/home/",
       "research_chapter": "sea-vnm",
       "project_method": "No country project methodology implemented",
@@ -1350,48 +1555,100 @@
       "value": 524194387.7806343,
       "coveredCountries": 11,
       "expectedCountries": 11
+    },
+    "tree_cover_loss_ha": {
+      "value": 64887382.484454185,
+      "coveredCountries": 11,
+      "expectedCountries": 11
+    },
+    "tree_cover_extent_2000_ha": {
+      "value": 317190978.4829982,
+      "coveredCountries": 11,
+      "expectedCountries": 11
+    },
+    "carbon_stock_t_c": {
+      "value": 70610916597.94655,
+      "coveredCountries": 11,
+      "expectedCountries": 11
+    },
+    "mangrove_stock_t_c": {
+      "value": null,
+      "coveredCountries": 10,
+      "expectedCountries": 11,
+      "partialSum": 1947103490.5333185
+    },
+    "peat_stock_t_c": {
+      "value": 6499243341.218793,
+      "coveredCountries": 11,
+      "expectedCountries": 11
     }
   },
   "checks": {
     "gfwIndependent": "Independent ADM0 endpoint unavailable (404); only source-internal net and Thai ledger checks performed",
-    "thaiLedger": "Thai GFW emissions/removals agree with deployed province ledger; no ledger rewrite"
+    "thaiLedger": "Thai GFW emissions/removals agree with deployed province ledger; no ledger rewrite",
+    "mangroveCoverage": "Mangrove biomass extent present for 10 of 11 countries (BRN,IDN,KHM,MMR,MYS,PHL,SGP,THA,TLS,VNM); absent for LAO. The missing country is not zero mangrove",
+    "peatCoverage": "Peatland carbon present for 11 of 11 countries (BRN,IDN,KHM,LAO,MMR,MYS,PHL,SGP,THA,TLS,VNM); absent for none",
+    "carbonPools": "For every country, aboveground + belowground + deadwood + litter + soil carbon equals the published total carbon stock (exact source-internal identity)",
+    "gasSplit": "For every country, CO2-only + non-CO2 (CH4 and N2O) gross forest emissions equal the published total gross emissions",
+    "slices": "Tree-cover loss, carbon stock and gas split use is__flux_model_extent; mangrove uses is__mangrove_biomass_extent; peat uses is__gfw_peatlands. The table is a ~72,000-row-per-country cross-product, so every aggregate is slice-filtered and never summed unfiltered"
   },
   "receipts": {
     "AG.LND.FRST.K2.json": {
       "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/AG.LND.FRST.K2?format=json&date=2000:2023&per_page=1000",
       "sha256": "fd389e88c307dc1516f31697519435dcef577bfce763e179817e54b068e5169c",
       "bytes": 53728,
-      "retrievedAt": "2026-10-15T14:15:37.328393+00:00"
+      "retrievedAt": "2026-10-20T12:07:13.942358+00:00"
     },
     "AG.LND.FRST.ZS.json": {
       "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/AG.LND.FRST.ZS?format=json&date=2000:2023&per_page=1000",
       "sha256": "90f5513520dd0423e6ed87ba428e30617e98c349180a02eb79a0209b6c63e6e6",
       "bytes": 58246,
-      "retrievedAt": "2026-10-15T14:16:23.433101+00:00"
+      "retrievedAt": "2026-10-20T12:07:41.710833+00:00"
     },
     "EN.GHG.CO2.MT.CE.AR5.json": {
       "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/EN.GHG.CO2.MT.CE.AR5?format=json&date=2000:2023&per_page=1000",
       "sha256": "abe59067db69975847d41f285335fc902f387692fc9c24d3f1ceec7c0a738c9a",
       "bytes": 67235,
-      "retrievedAt": "2026-10-15T14:16:25.412082+00:00"
+      "retrievedAt": "2026-10-20T12:08:47.353534+00:00"
     },
     "gfw.csv": {
       "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql=select%20iso%2C%20sum%28%22gfw_full_extent_gross_removals__Mg_CO2%22%29%20as%20removals_mg_co2%2C%20sum%28%22gfw_full_extent_gross_emissions_biomass_soil__Mg_CO2e%22%29%20as%20emissions_mg_co2e%2C%20sum%28%22gfw_full_extent_net_flux__Mg_CO2e%22%29%20as%20net_mg_co2e%20from%20data%20where%20iso%20in%20%28%27BRN%27%2C%27KHM%27%2C%27IDN%27%2C%27LAO%27%2C%27MYS%27%2C%27MMR%27%2C%27PHL%27%2C%27SGP%27%2C%27THA%27%2C%27TLS%27%2C%27VNM%27%29%20and%20is__flux_model_extent%20%3D%20true%20and%20umd_tree_cover_density_2000__threshold%3D30%20group%20by%20iso%20order%20by%20iso",
       "sha256": "a503108b2be248d9c719a2bb66567637d9734442b66d4cb6f608c2015dd8c313",
       "bytes": 1151,
-      "retrievedAt": "2026-10-15T14:16:51.604557+00:00"
+      "retrievedAt": "2026-10-20T12:09:03.984062+00:00"
+    },
+    "gfw-loss-stock.csv": {
+      "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql=select%20iso%2C%20sum%28%22umd_tree_cover_loss__ha%22%29%20as%20tree_cover_loss_ha%2C%20sum%28%22umd_tree_cover_extent_2000__ha%22%29%20as%20tree_cover_extent_2000_ha%2C%20sum%28%22gfw_aboveground_carbon_stock_2000__Mg%22%29%20as%20aboveground_c_mg%2C%20sum%28%22gfw_belowground_carbon_stock_2000__Mg%22%29%20as%20belowground_c_mg%2C%20sum%28%22gfw_deadwood_carbon_stock_2000__Mg%22%29%20as%20deadwood_c_mg%2C%20sum%28%22gfw_litter_carbon_stock_2000__Mg%22%29%20as%20litter_c_mg%2C%20sum%28%22gfw_soil_carbon_stock_2000__Mg%22%29%20as%20soil_c_mg%2C%20sum%28%22gfw_total_carbon_stock_2000__Mg%22%29%20as%20total_c_mg%2C%20sum%28%22gfw_full_extent_gross_emissions_CO2_only_biomass_soil__Mg_CO2%22%29%20as%20emissions_co2_mg%2C%20sum%28%22gfw_full_extent_gross_emissions_non_CO2_biomass_soil__Mg_CO2e%22%29%20as%20emissions_nonco2_mg%20from%20data%20where%20umd_tree_cover_density_2000__threshold%3D30%20and%20is__flux_model_extent%20%3D%20true%20and%20iso%20in%20%28%27BRN%27%2C%27IDN%27%2C%27KHM%27%2C%27LAO%27%2C%27MMR%27%2C%27MYS%27%2C%27PHL%27%2C%27SGP%27%2C%27THA%27%2C%27TLS%27%2C%27VNM%27%29%20group%20by%20iso%20order%20by%20iso",
+      "sha256": "ee0142242ec94ddcf09d810adf602d043fc3b25632eee581e17b1032a2a3bdef",
+      "bytes": 3259,
+      "retrievedAt": "2026-10-20T12:12:23.066142+00:00"
+    },
+    "gfw-mangrove.csv": {
+      "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql=select%20iso%2C%20sum%28%22gfw_total_carbon_stock_2000__Mg%22%29%20as%20total_c_mg%2C%20sum%28%22gfw_full_extent_gross_removals__Mg_CO2%22%29%20as%20removals_mg%2C%20sum%28%22gfw_full_extent_gross_emissions_biomass_soil__Mg_CO2e%22%29%20as%20emissions_mg%20from%20data%20where%20umd_tree_cover_density_2000__threshold%3D30%20and%20is__mangrove_biomass_extent%20%3D%20true%20and%20iso%20in%20%28%27BRN%27%2C%27IDN%27%2C%27KHM%27%2C%27LAO%27%2C%27MMR%27%2C%27MYS%27%2C%27PHL%27%2C%27SGP%27%2C%27THA%27%2C%27TLS%27%2C%27VNM%27%29%20group%20by%20iso%20order%20by%20iso",
+      "sha256": "098e0cb02eac2b02a2b9ba2a736f163945658ab8effce1a7ceb81fc82ff4eb6d",
+      "bytes": 864,
+      "retrievedAt": "2026-10-20T12:12:41.543831+00:00"
+    },
+    "gfw-peat.csv": {
+      "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql=select%20iso%2C%20sum%28%22gfw_total_carbon_stock_2000__Mg%22%29%20as%20total_c_mg%20from%20data%20where%20umd_tree_cover_density_2000__threshold%3D30%20and%20is__gfw_peatlands%20%3D%20true%20and%20iso%20in%20%28%27BRN%27%2C%27IDN%27%2C%27KHM%27%2C%27LAO%27%2C%27MMR%27%2C%27MYS%27%2C%27PHL%27%2C%27SGP%27%2C%27THA%27%2C%27TLS%27%2C%27VNM%27%29%20group%20by%20iso%20order%20by%20iso",
+      "sha256": "bdaf097775eb78594964aeca35dc0a65c3248cb1417384a772e7cd347f05d8e9",
+      "bytes": 384,
+      "retrievedAt": "2026-10-20T12:12:57.245761+00:00"
     },
     "natural-earth.json": {
       "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_admin_0_countries.geojson",
       "sha256": "3e458fc036ad0a66411f2c1e6cac49c5d7bfb81cb1123bc513b22511a2b7fdeb",
       "bytes": 3083490,
-      "retrievedAt": "2026-10-15T14:16:52.855118+00:00"
+      "retrievedAt": "2026-10-20T12:10:47.080466+00:00"
     }
   },
   "limitations": [
     "Country statistics are not parcel measurements or corporate footprints.",
     "Forest-area differences are not carbon-credit quantities.",
     "Never subtract GFW forest flux from WDI CO2 as a synthesized national net.",
+    "Tree cover loss is cumulative 2001–2025 and is not a rate; it is not comparable with a single-year flux figure.",
+    "Carbon stock is a 2000 reference-year standing quantity, not a measured current value.",
+    "Mangrove and peatland carbon are reported separately and must not be added to forest carbon: mangrove uses its own extent flag and is mapped for 10 of 11 countries, peat for 11 of 11. Where a layer is incomplete its regional total is withheld and the partial sum is kept under totals.partialSum, never as a regional value.",
     "No regional biomass-stock raster or parcel model is ingested.",
     "No country credit entitlement, authorization, retirement or issued-credit amount is inferred."
   ]

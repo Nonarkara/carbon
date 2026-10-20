@@ -1,0 +1,161 @@
+{
+ "schemaVersion": 1,
+ "snapshot": "2026-10-20",
+ "purpose": "Southeast Asian carbon-market context. Published issuance statistics, Article 6 cooperation status and the retirement gap, each carried with its publisher, publication date and URL. These are cited market facts, not a registry integration and not a price feed.",
+ "sources": {
+  "iseas-2026-53": {
+   "name": "ISEAS Perspective 2026/53 · Can Carbon Markets Finance Climate Action in Southeast Asia's Agri-food Sector?",
+   "authors": "Elyssa Ludher and Paul Teng",
+   "published": "2026-07",
+   "url": "https://www.iseas.edu.sg/articles-commentaries/iseas-perspective/2026-53-can-carbon-markets-finance-climate-action-in-southeast-asias-agri-food-sector-by-elyssa-ludher-and-paul-teng/",
+   "underlying_data": "Berkeley Carbon Trading Project, Voluntary Registry Offsets Database",
+   "licence": "CC BY-NC-ND 4.0 (ISEAS Perspective)",
+   "unit": "million credits, cumulative 1996–2024",
+   "note": "ISEAS notes the World Bank database records a higher regional total (>350 million). Treat 217.46 million as the lower, database-specific figure, not as a regional ceiling."
+  },
+  "sg-art6": {
+   "name": "Singapore Carbon Markets Cooperation · Article 6 Cooperation",
+   "publisher": "Singapore National Climate Change Secretariat",
+   "checked": "2026-10-20",
+   "url": "https://www.carbonmarkets-cooperation.gov.sg/our-art6-cooperation/",
+   "licence": "Government public information",
+   "note": "Implementation Agreement status changes; re-check before citing entry-into-force status."
+  },
+  "sg-nccs": {
+   "name": "Singapore National Climate Change Secretariat · International Collaboration",
+   "publisher": "NCCS Singapore",
+   "checked": "2026-10-20",
+   "url": "https://www.nccs.gov.sg/singapores-climate-action/mitigation-efforts/internationalcollaboration/",
+   "licence": "Government public information"
+  },
+  "sg-th-ia": {
+   "name": "Annex C · Information on the Singapore–Thailand Implementation Agreement",
+   "publisher": "Singapore National Environment Agency",
+   "signed": "2025-08-19",
+   "url": "https://www.nea.gov.sg/docs/default-source/carbon-credits/annex-c_information-on-the-singapore-thailand-implementation-agreement3514af14-4079-4d2f-803e-214623c14faa.pdf",
+   "licence": "Government public information",
+   "note": "States Thailand was Singapore's first ASEAN Implementation Agreement and defines the corresponding-adjustment arithmetic."
+  },
+  "asia-carbon-report": {
+   "name": "ASEAN Capital Markets Forum · Voluntary Carbon Market Development Plan",
+   "publisher": "ACMF / Securities Commission Malaysia",
+   "url": "https://www.sc.com.my/api/documentms/download.ashx?id=dace64b6-e3a5-4b75-bed9-923f5568acb5",
+   "licence": "Public report",
+   "underlying_data": "Climate Focus (2023); Berkeley Voluntary Registry Offsets Database (2025)",
+   "note": "Concentration and retirement figures below are taken from this report and are attributed to Climate Focus and Allied Offsets."
+  },
+  "eria-2025": {
+   "name": "ERIA · The Invisible Infrastructure: What ASEAN's Carbon Market Needs Most",
+   "publisher": "Economic Research Institute for ASEAN and East Asia",
+   "url": "https://www.eria.org/news-and-views/the-invisible-infrastructure--what-asean-s-carbon-market-needs-most",
+   "licence": "CC BY 4.0 (ERIA)",
+   "underlying_data": "Climate Focus (2023) via ACMF (2025); Asia Carbon Credit Market Development Report 2024"
+  },
+  "accf": {
+   "name": "ASEAN Alliance on Carbon Markets · ASEAN Common Carbon Framework",
+   "publisher": "AACM (Indonesia-based), five business associations",
+   "signed": "2024-11 (COP29, Baku)",
+   "url": "https://www.bangchak.co.th/en/newsroom/bangchak-news/1916/asean-common-carbon-framework-advances-regional-coordination-and-moves-toward-practical-implementation",
+   "signatories": [
+    "Malaysia Carbon Market Association",
+    "Indonesia Carbon Trade Association",
+    "Thailand Carbon Markets Club",
+    "Singapore Sustainable Finance Association",
+    "ASEAN Alliance on Carbon Markets"
+   ],
+   "licence": "Public announcement",
+   "note": "A framework of industry associations, not an ASEAN treaty. Objectives are supply/demand, market infrastructure, capacity building, policy alignment and pilot transactions. It explicitly does not seek uniformity."
+  }
+ },
+ "issuance": {
+  "unit": "million credits",
+  "period": "1996–2024 cumulative",
+  "source": "iseas-2026-53",
+  "by_country": [
+   {"iso3": "KHM", "forestry_land_use": 47.74, "renewable_energy": 0.03, "household_community": 5.94, "waste": 0.0, "agriculture": 0.0, "other": 0.0, "total": 53.71, "share_pct": 24.7},
+   {"iso3": "IDN", "forestry_land_use": 76.66, "renewable_energy": 18.84, "household_community": 0.74, "waste": 0.31, "agriculture": 0.0, "other": 0.51, "total": 97.06, "share_pct": 44.6},
+   {"iso3": "LAO", "forestry_land_use": 0.39, "renewable_energy": 1.25, "household_community": 1.46, "waste": 0.0, "agriculture": 0.0, "other": 0.0, "total": 3.11, "share_pct": 1.4},
+   {"iso3": "MYS", "forestry_land_use": 6.34, "renewable_energy": 0.01, "household_community": 0.0, "waste": 0.04, "agriculture": 0.0, "other": 0.0, "total": 6.39, "share_pct": 2.9},
+   {"iso3": "MMR", "forestry_land_use": 0.29, "renewable_energy": 0.0, "household_community": 0.37, "waste": 0.0, "agriculture": 0.0, "other": 0.0, "total": 0.66, "share_pct": 0.3},
+   {"iso3": "PHL", "forestry_land_use": 0.01, "renewable_energy": 0.99, "household_community": 0.49, "waste": 0.0, "agriculture": 0.0, "other": 0.0, "total": 1.49, "share_pct": 0.7},
+   {"iso3": "SGP", "forestry_land_use": 0.0, "renewable_energy": 0.0, "household_community": 0.07, "waste": 0.0, "agriculture": 0.0, "other": 1.74, "total": 1.81, "share_pct": 0.8},
+   {"iso3": "THA", "forestry_land_use": 0.0, "renewable_energy": 8.15, "household_community": 0.22, "waste": 9.52, "agriculture": 0.35, "other": 1.97, "total": 20.21, "share_pct": 9.3},
+   {"iso3": "TLS", "forestry_land_use": 0.13, "renewable_energy": 0.0, "household_community": 0.0, "waste": 0.0, "agriculture": 0.0, "other": 0.0, "total": 0.13, "share_pct": 0.1},
+   {"iso3": "VNM", "forestry_land_use": 0.0, "renewable_energy": 12.76, "household_community": 17.88, "waste": 2.25, "agriculture": 0.0, "other": 0.0, "total": 32.89, "share_pct": 15.1}
+  ],
+  "by_sector": [
+   {"sector": "forestry_land_use", "million": 131.57, "share_pct": 60.5},
+   {"sector": "renewable_energy", "million": 42.03, "share_pct": 19.3},
+   {"sector": "household_community", "million": 27.17, "share_pct": 12.5},
+   {"sector": "waste", "million": 12.12, "share_pct": 5.6},
+   {"sector": "agriculture", "million": 0.35, "share_pct": 0.2},
+   {"sector": "other", "million": 4.23, "share_pct": 1.9}
+  ],
+  "totals": {"million": 217.46, "countries_reported": 10, "countries_expected": 11},
+  "excluded": ["Brunei Darussalam — data unavailable in the cited database"],
+  "caveat": "The regional total is database-specific. ISEAS cites the World Bank database at >350 million for the same period. The difference is coverage and methodology, not error in either source."
+ },
+ "concentration": {
+  "source": "asia-carbon-report",
+  "underlying": "Climate Focus (2023)",
+  "statements": [
+   {"claim": "284 carbon projects registered in Southeast Asia, 171.5 MtCO2e cumulative issuance as of 2023.", "status": "cited"},
+   {"claim": "Nature-based-solution projects were 5.3% of projects but generated 73% of issuances, and ACMF flags NBS as carrying relatively high reversal and permanence risk in ASEAN.", "status": "cited"},
+   {"claim": "From January 2007 to January 2025, only 1.73 MtCO2 of the 65.76 MtCO2 retired through ASEAN carbon-market projects was for ASEAN entities — 2.6%.", "status": "cited from Allied Offsets (2025) via ACMF (2025)"},
+   {"claim": "From 2009 to 2024, ASEAN issuance was about 7.38% of global issuance.", "status": "cited from Abatable (2024)"},
+   {"claim": "Asia had cumulatively issued 2.978 billion carbon credits (56% of the global total) by end-2024.", "status": "cited from Asia Carbon Credit Market Development Report 2024 via ERIA"}
+  ]
+ },
+ "article6": {
+  "explanation_en": "Article 6 of the Paris Agreement lets a country sell an emission reduction it has counted. To stop the same tonne being claimed twice, the selling country applies a corresponding adjustment: it adds the transferred amount back into its own inventory, and the buying country subtracts it. The credit does not erase the emission; it moves who is allowed to count it.",
+  "explanation_th": "ข้อ 6 ของข้อตกลงปารีสี้อนุญาตให้ประเทศขายการลดการปล่อยที่ตนนับไว้ เพื่อไม่ให้ตันคาร์บอนหนึ่งตันถูกนับซ้ำสองครั้ง ประเทศผู้ขายจะทำ 'การปรับสมดุล' โดยเพิ่มปริมาณที่โอนออกกลับเข้าบัญชีของตน และประเทศผู้ซื้อจะหักออก เครดิตไม่ได้ลบการปล่อย แต่ย้ายสิทธิ์ในการนับ",
+  "source": "sg-th-ia",
+  "singapore_ias": [
+   {"country": "Bhutan", "region": "other", "status": "entered_into_force"},
+   {"country": "Chile", "region": "other", "status": "entered_into_force"},
+   {"country": "Ghana", "region": "other", "status": "entered_into_force"},
+   {"country": "Lao PDR", "region": "asean", "status": "signed_not_yet_in_force"},
+   {"country": "Mongolia", "region": "other", "status": "entered_into_force"},
+   {"country": "Papua New Guinea", "region": "other", "status": "signed_not_yet_in_force"},
+   {"country": "Paraguay", "region": "other", "status": "signed_not_yet_in_force"},
+   {"country": "Peru", "region": "other", "status": "entered_into_force"},
+   {"country": "Philippines", "region": "asean", "status": "signed_not_yet_in_force"},
+   {"country": "Rwanda", "region": "other", "status": "entered_into_force"},
+   {"country": "Thailand", "region": "asean", "status": "entered_into_force", "signed": "2025-08-19", "note": "Singapore's first ASEAN Implementation Agreement."},
+   {"country": "Vietnam", "region": "asean", "status": "signed_not_yet_in_force"}
+  ],
+  "counts": {"total_ias_signed": 12, "asean_ias": 4, "asean_entered_into_force": 1},
+  "singapore_use_limits": {
+   "source": "sg-art6",
+   "statements": [
+    "Carbon credits from projects hosted in countries without a Singapore Implementation Agreement are not allowed to offset carbon-tax liability under Singapore's ICC Framework.",
+    "Carbon tax-liable companies may use eligible International Carbon Credits to offset up to 5% of their carbon tax liabilities annually."
+   ]
+  },
+  "mou_only": ["Cambodia", "Chile", "Mongolia", "Rwanda"]
+ },
+ "regional_framework": {
+  "name": "ASEAN Common Carbon Framework",
+  "source": "accf",
+  "status": "Framework of five industry associations signed at COP29 (November 2024); operational work continuing through 2026. Not an ASEAN treaty.",
+  "workstreams": ["supply and demand", "market infrastructure", "strategic communications and capacity building", "policy alignment", "pilot transactions"],
+  "explicit_non_goal": "Uniformity. The stated objective is interoperability — the ability for different national systems to connect — not a single regional standard.",
+  "alignment_targets": ["ICVCM Core Carbon Principles", "CORSIA"],
+  "national_developments": [
+   {"iso3": "THA", "item": "Climate Change Act expected around Q3 2027; ETS and carbon tax expected to begin 2029–2030; voluntary credits may offset up to 15% of surrender obligations under the draft."},
+   {"iso3": "MYS", "item": "National Carbon Market Policy launched April 2026; carbon tax then ETS planned; alignment of Sabah and Sarawak carbon statutes with federal policy; Climate Change Bill expected in Parliament 2026."},
+   {"iso3": "IDN", "item": "Dual registry — SRN for compliance, SRUK for voluntary; IDXCarbon trading platform since 2023, open to global investors from 2025."},
+   {"iso3": "VNM", "item": "Piloting an emissions trading system with mandatory compliance targeted for 2028."},
+   {"iso3": "KHM", "item": "Foundational market infrastructure still being built."},
+   {"iso3": "LAO", "item": "Foundational market infrastructure still being built; Article 6 IA with Singapore signed."},
+   {"iso3": "SGP", "item": "Regional demand anchor; 12 Implementation Agreements; ICC framework with a 5% annual offset cap."}
+  ]
+ },
+ "limitations": [
+  "Issuance figures are cumulative registry statistics, not prices, not current-year flow, and not a quality-adjusted figure.",
+  "Brunei Darussalam is absent from the cited database and is not zero.",
+  "The two published regional totals (217.46 million and >350 million) come from different databases; neither is a ceiling.",
+  "Implementation Agreement status is time-sensitive and is re-checked manually, not by a feed.",
+  "Nothing here authorises, issues, retires or prices a credit. This is published context for screening."
+ ]
+}

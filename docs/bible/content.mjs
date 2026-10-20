@@ -1,5 +1,6 @@
 import {practiceChapters} from './practice.mjs';
 import {seaChapters} from './sea.mjs';
+import {creditChapters} from './credits.mjs';
 import {designChapters} from './design.mjs';
 import {academicChapters} from './academic.mjs';
 // Authored bilingual explanations. Worked values and source versions are injected by build-bible.
@@ -255,5 +256,7 @@ chapters.find(c=>c.id==='forest-watch').reviewed='2026-10-05';
 chapters.push(...designChapters);
 
 chapters.push(...seaChapters);
+
+chapters.push(...creditChapters);
 
 chapters.push(...practiceChapters);

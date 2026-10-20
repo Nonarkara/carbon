@@ -8,6 +8,8 @@ The layout, palette and reference CSS are adapted from **Nonarkara/Malaysia**, c
 
 | Component | Licence | Use |
 |---|---|---|
+| Jost 5.3.0 | SIL Open Font License | Current Latin type, self-hosted Fontsource files; public/vendor/fonts/licenses/Jost-OFL.txt |
+| Prompt 5.3.0 | SIL Open Font License | Current Thai type, self-hosted Fontsource files; public/vendor/fonts/licenses/Prompt-OFL.txt |
 | Leaflet 1.9.4 | BSD-2-Clause | Self-hosted map library |
 | Turf packages | MIT | Geometry validation and geodesic area; dependency versions in package-lock.json |
 | Newsreader | SIL Open Font License | English display typography |

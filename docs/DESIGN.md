@@ -64,3 +64,7 @@ Review findings: box shadows were already disabled on dashboard and guide descen
 Purpose review: strong structural rules separate working regions; chart bars, numbered procedure diagrams and dataset colours communicate evidence; source shelves and real partner marks retain attribution. No new hero, testimonial, badge grid, texture, decorative animation or invented statistic was added. An anti-slop cleanup does not establish carbon accuracy, certification or independent usability validation.
 
 Browser verification covers dashboard, Bible, manuals and research, TH/EN at phone and desktop widths, visible nodes and pseudo-elements, hover, pressed states and keyboard focus. Existing design checks cover contrast, map height and navigation. The axiom-audit executable is unavailable locally; rendered browser checks and source inspection supply the review evidence instead.
+
+## Visual simplification · 19 October 2026
+
+Current typography is Jost (Latin) with Prompt (Thai), self-hosted under OFL; type.css loads after the functional page styles, before the shared flat-control guard. Historical reference type declarations remain in malaysia.css. reading.css owns the unboxed reader/manual/research treatment. The map holds colour dominance; the world rail is neutral. Native contents and diagram disclosures shorten the phone guide while retaining every link and instructional figure. Chapter outlines are available on demand. See docs/audits/2026-10-19/anti-slop/README.md. No font was designed by this project; no scientific capability changed.

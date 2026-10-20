@@ -54,3 +54,10 @@ body.dashboard{font-size:1rem}
 }
 @media(max-width:360px){.dashboard .brand h1{font-size:1.28rem}.dashboard .brand{gap:6px}.dashboard .top-right{gap:4px}}
 @media print{.dashboard .reference-menu,.dashboard .map-tools{display:none}.dashboard .foot{display:block}}
+
+/* The map is the coloured instrument. Supporting feeds use neutral structure. */
+.dashboard .world-rail{--ink:#161616;--ink-mid:#383838;--ink-low:#595959;--rule:#ccc;--rule-strong:#161616;background:#f0f0ee;color:var(--ink)}
+.dashboard .world-heading{background:transparent}.dashboard .world-heading h2,.dashboard .world-item h3,.dashboard .world-value,.dashboard .world-value small{color:var(--ink)}
+.dashboard .world-heading .btn{color:var(--ink)}.dashboard .world-item a{color:var(--ink)}.dashboard .world-item svg{color:var(--ink)}
+.dashboard #exploreProvinces{background:var(--structure);color:white;border-color:var(--structure)}
+.dashboard .tab-body>.btn,.dashboard .tab-body .actions>.btn{width:auto;flex:0 1 auto}

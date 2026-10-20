@@ -7,9 +7,10 @@ page.on('pageerror',e=>errors.push(e.message));await mkdir('test-results',{recur
 for(const lang of ['th','en'])for(const width of [375,1440]){
  await page.setViewportSize({width,height:1000});
  await page.goto(`${base}/bible.html?lang=${lang}#sme-worked`);await page.locator('.prose').waitFor();
- assert.match(await page.locator('#count').textContent(),/65/);
+ assert.match(await page.locator('#count').textContent(),/68/);
  assert.ok((await page.locator('.prose').textContent()).includes('41.42'));
  assert.equal(await page.locator('.design-illustration svg').count(),1);
+ if(!await page.locator('[data-section]').first().isVisible())await page.locator('.chapter-outline>summary').click();
  const hash=new URL(page.url()).hash;await page.locator('[data-section]').first().click();assert.equal(new URL(page.url()).hash,hash);
  assert.ok(await page.locator('[data-section]').count()>=4);
  await page.locator('.design-illustration a[download]').scrollIntoViewIfNeeded();

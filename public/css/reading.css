@@ -1,0 +1,59 @@
+/* Reading tools stay subordinate to the chapter; outlines mark fields, not every paragraph. */
+body:has(#reader-index) header{background:white;border-bottom:1px solid var(--ink)}
+.index{border-right:1px solid #ccc}.evidence{border-left:1px solid #ccc}
+#filters button{border:0;padding:5px 7px;min-height:32px;background:transparent;color:var(--ink)}
+#filters button[aria-pressed=true]{background:var(--ink);color:white}
+#filters button:hover{background:#fff3a6;color:var(--ink)}
+#readingPaths{border:0;border-bottom:1px solid #ccc;padding:0 0 10px;gap:0}
+#readingPaths a{padding:5px 0}
+.reading{padding:20px 28px}.reading .deck{font-size:17px;line-height:1.6}
+.design-illustration,.illustration{border:0;padding:0;margin:16px 0}
+.design-illustration>svg{max-height:300px}
+.design-illustration figcaption,.illustration figcaption{border-top:1px solid #ccc;padding:6px 0;font-size:12px}
+.chapter-toc nav{border:0;border-block:1px solid #ccc;background:transparent;padding:8px 0;margin:16px 0}
+.chapter-toc a{padding:3px 0}
+.flow{border:0}.flow figcaption{background:transparent;color:var(--ink);padding:6px 0;border-bottom:1px solid #ccc}
+.flow ol{padding:10px 0}.flow li{border:0;border-left:1px solid #ccc;padding:6px 10px}.flow li:last-child{background:transparent}
+.reader-tools{display:flex;flex-wrap:wrap;gap:6px 12px}.reader-tools button{width:auto;min-height:36px;padding:5px 8px;border:1px solid var(--ink)}
+.reader-tools>a,#receipt,#shareStatus{flex-basis:100%}
+.prose h2{border:0;padding-top:0}.example{border:0;border-left:2px solid var(--ink);padding:8px 14px;background:#f0f0ee}
+@media(max-width:700px){.reading{padding:16px}.reading .deck{margin-bottom:12px}.mobile-diagram{padding:0;font-size:14px}.mobile-diagram ol{gap:16px;margin:8px 0}.mobile-diagram li,.mobile-diagram li:first-child,.mobile-diagram li:last-child{border:0;border-left:2px solid var(--ink);background:transparent;color:var(--ink);padding:5px 12px}.mobile-diagram li:not(:last-child):after{bottom:-19px;left:12px}.chapter-toc nav{font-size:13px}.chapter-toc a{padding:2px 0}}
+/* Task manual: the first screen reaches a task, rather than repeating its index. */
+.manual nav,.research nav{background:white;border-bottom:1px solid var(--ink);color:var(--ink);padding:6px 0}
+.manual nav a,.research nav a{color:var(--ink)!important;padding:4px 0;text-decoration:underline;text-underline-offset:4px}
+.manual-routes{display:flex;flex-wrap:wrap;gap:8px 24px;border:0;margin:12px 0;padding:0}
+.manual-routes a,.manual-routes a:last-child{flex:0 1 auto;border:0;background:transparent!important;color:var(--ink)!important;padding:4px 0}
+.manual-routes b{text-decoration:underline;text-underline-offset:4px}.manual-routes span{margin-top:2px}
+.manual-index .manual-brand{width:110px;height:auto;margin-bottom:12px}
+.manual-contents>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600}
+.manual-links>a{display:block;padding:8px 0;border-bottom:1px solid #ddd}
+.manual-index .manual-open{width:fit-content;background:var(--ink);color:white;padding:8px 10px}
+.screen-guide{background:transparent;padding:0;margin:16px 0}.screen-top{background:#f0f0ee;color:var(--ink);padding:6px 10px}
+.screen-columns span,.screen-columns span:first-child,.screen-columns span:last-child{background:white;color:var(--ink);border:0;border-left:1px solid #ccc;padding:8px 10px}
+.manual p,.manual li{max-width:65ch}.manual section{border-top:1px solid #ccc}.manual .manual-routes{border-top:0}
+@media(min-width:801px){.manual-contents>summary{display:none}}
+@media(max-width:800px){.manual-index{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;border:0;margin:6px 0 14px}.manual-index .manual-brand{width:70px;margin:0}.manual-contents{flex:1;min-width:180px}.manual-links{padding-bottom:8px}.manual-index .manual-open{margin:0;padding:6px 8px;font-size:12px}.manual nav,.research nav{gap:6px 10px}.manual-routes{display:grid;grid-template-columns:1fr;gap:4px}.manual-routes a{padding:2px 0}.manual-routes span{display:none}.screen-guide{font-size:12px}.screen-guide p{font-size:12px}.manual h1{font-size:28px}}
+/* Research is a readable paper with an author beside the opening argument. */
+.research-intro{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:0 28px;border:0;padding-bottom:12px;margin:16px 0 20px}
+.research-intro>*{grid-column:1;min-width:0}.research-intro .research-byline{grid-column:2;grid-row:1/span 8;align-self:start;font-size:13px;position:sticky;top:90px}
+.research-byline .research-brand{width:150px!important;max-width:100%;height:auto;display:block;margin:0 0 16px}
+.research-byline .author-photo{width:100px;height:100px;object-fit:cover;display:block;margin:0 0 8px}
+.research-byline a{display:block;font-size:12px}.research .research-intro h1{font-size:34px;max-width:30ch;line-height:1.3}
+.research .research-deck{font-size:18px;line-height:1.65;max-width:65ch;font-weight:600}
+.research-intro p,.research-intro li,.research article p,.research article li{max-width:65ch}
+.research .thesis-abstract{background:transparent;border:0;padding:0}.research .thesis-abstract h2,.research .thesis-abstract h3{font-size:16px;border:0;padding:0;margin:16px 0 6px}
+.research-diagram,.sysmap{border-top:1px solid var(--ink);border-bottom:1px solid #ccc;background:transparent;padding:10px 0}
+@media(max-width:700px){.research-intro{display:flex;flex-direction:column;gap:0;margin-top:8px}.research-intro .research-byline{order:0;display:flex;align-items:center;gap:12px;margin-bottom:10px}.research-byline .research-brand{width:90px!important;margin:0}.research-byline .author-photo{width:48px;height:48px;margin:0}.research-byline p{font-size:12px!important;margin:0}.research .research-intro h1{font-size:28px;line-height:1.5}.research .research-kicker{font-size:11px}.research .research-deck{font-size:17px}}
+
+.research-intro .thesis{max-width:65ch;background:transparent;border:0;padding:0;margin:12px 0}
+.research-intro .thesis dt{margin-top:14px}.research-intro .thesis dd{line-height:1.7}
+.screen-map>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;border-bottom:1px solid #ccc;font-size:13px}
+.screen-map>summary::after{content:' ▾';margin-left:8px}
+@media(min-width:801px){.screen-map>summary{display:none}}
+
+.chapter-outline>summary{cursor:pointer;min-height:40px;padding:8px 0;border-bottom:1px solid #ccc;font-size:13px;font-weight:600}
+.chapter-toc .chapter-outline nav{margin:0;padding:6px 0;border:0}
+
+.manual-contents>summary::after{content:' ▾';margin-left:8px}
+.manual-contents[open]>summary::after,.screen-map[open]>summary::after{content:' ▴'}
+@media(max-width:800px){.manual-routes span{display:block;font-size:12px;line-height:1.4;margin-top:1px}}
