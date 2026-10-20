@@ -26,7 +26,7 @@ Province CSV records originate from Saraburi and Kanchanaburi government catalog
 
 OpenStreetMap tiles: © OpenStreetMap contributors, ODbL data attribution and applicable tile-use policy. Esri World Imagery: Esri, Maxar, Earthstar Geographics and the service's contributing providers. Attribution is visible on the map. Neither provider's basemap is used as a dated carbon measurement.
 
-Public research snapshots are sanitized: upstream token patterns and API-key values embedded in provider resource URLs were removed before publication. Original acquisition hashes are preserved separately from sanitized public-file hashes. Requests needing credentials require your own authorized access.
+Public research snapshots are sanitized: upstream token patterns and API-key values embedded in provider resource URLs were removed before publication. Maintainer email addresses and telephone numbers from [data.go.th](https://data.go.th/) catalogue responses are omitted as well. Original acquisition hashes are preserved separately from sanitized public-file hashes. Source URLs for the catalogue pages are in `research/extracted/data-go-th-sources.json`. Requests needing credentials require your own authorized access.
 
 ## Carbon map data
 

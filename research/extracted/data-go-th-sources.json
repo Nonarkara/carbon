@@ -1,0 +1,40 @@
+{
+  "credit": "Government of Thailand open data catalogue (data.go.th). Dataset metadata is published by the agencies listed on each record. This repository does not republish maintainer email addresses or telephone numbers.",
+  "portal": "https://data.go.th/",
+  "api": "https://data.go.th/api/3/action/package_search",
+  "keyword": "ป่าไม้",
+  "retrieved": "2026-09-25",
+  "licence_note": "Each dataset keeps the licence declared by its publisher on data.go.th. No blanket licence is added here.",
+  "pages": [
+    {
+      "file": "research/raw/data-go-th-search-000.json",
+      "url": "https://data.go.th/api/3/action/package_search?q=%E0%B8%9B%E0%B9%88%E0%B8%B2%E0%B9%84%E0%B8%A1%E0%B9%89&rows=100&start=0",
+      "note": "First page of the keyword search with data.go.th's default ordering."
+    },
+    {
+      "file": "research/raw/data-go-th-sorted-000.json",
+      "url": "https://data.go.th/api/3/action/package_search?q=%E0%B8%9B%E0%B9%88%E0%B8%B2%E0%B9%84%E0%B8%A1%E0%B9%89&rows=100&start=0&sort=id+asc"
+    },
+    {
+      "file": "research/raw/data-go-th-sorted-100.json",
+      "url": "https://data.go.th/api/3/action/package_search?q=%E0%B8%9B%E0%B9%88%E0%B8%B2%E0%B9%84%E0%B8%A1%E0%B9%89&rows=100&start=100&sort=id+asc"
+    },
+    {
+      "file": "research/raw/data-go-th-sorted-200.json",
+      "url": "https://data.go.th/api/3/action/package_search?q=%E0%B8%9B%E0%B9%88%E0%B8%B2%E0%B9%84%E0%B8%A1%E0%B9%89&rows=100&start=200&sort=id+asc"
+    },
+    {
+      "file": "research/raw/data-go-th-sorted-300.json",
+      "url": "https://data.go.th/api/3/action/package_search?q=%E0%B8%9B%E0%B9%88%E0%B8%B2%E0%B9%84%E0%B8%A1%E0%B9%89&rows=100&start=300&sort=id+asc"
+    },
+    {
+      "file": "research/raw/data-go-th-sorted-400.json",
+      "url": "https://data.go.th/api/3/action/package_search?q=%E0%B8%9B%E0%B9%88%E0%B8%B2%E0%B9%84%E0%B8%A1%E0%B9%89&rows=100&start=400&sort=id+asc"
+    },
+    {
+      "file": "research/raw/data-go-th-sorted-500.json",
+      "url": "https://data.go.th/api/3/action/package_search?q=%E0%B8%9B%E0%B9%88%E0%B8%B2%E0%B9%84%E0%B8%A1%E0%B9%89&rows=100&start=500&sort=id+asc"
+    }
+  ],
+  "derived": "research/extracted/catalog.json is the merged dataset list from the sorted pages, with the same contact fields removed."
+}
