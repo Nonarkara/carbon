@@ -15,7 +15,11 @@ export const creditSnapshot=snap;
 // Figures are drawn from the deployed JSON so a diagram can never drift from the numbers beside it.
 export function creditFigures(lang){
  const th=lang==='th',esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const fig=(title,body,note='')=>`<figure class="illustration"><svg viewBox="0 0 600 340" role="img" aria-label="${esc(title)}"><title>${esc(title)}</title>${body}</svg><figcaption>${esc(title)}</figcaption>${note?`<p class="illustration-note">${esc(note)}</p>`:''}</figure>`;
+ const fig=(title,body,note='')=>{
+  // Generate the text alternative from the same labels, including snapshot values.
+  const labels=[...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(m=>m[1].replace(/<[^>]*>/g,' '));
+  return `<figure class="illustration credit-figure"><p class="diagram-scroll-hint">${th?'เลื่อนภาพแนวนอนเพื่ออ่านรายละเอียด':'Scroll the diagram horizontally to read the detail'}</p><div class="credit-diagram-scroll" role="region" tabindex="0" aria-label="${esc(title)}"><svg viewBox="0 0 600 368" role="img" aria-label="${esc(title)}"><title>${esc(title)}</title>${body}</svg></div><figcaption>${esc(title)}</figcaption><details class="diagram-transcript"><summary>${th?'อ่านข้อความในภาพ':'Read the diagram labels as text'}</summary><ul>${labels.map(label=>`<li>${label}</li>`).join('')}</ul></details>${note?`<p class="illustration-note">${esc(note)}</p>`:''}</figure>`;
+ };
  const out={};
 
  if(th){
@@ -32,7 +36,7 @@ export function creditFigures(lang){
 <path d="M384 92H570" stroke="#bd251b" stroke-width="2.5" marker-end="url(#aB)"/>
 <text x="384" y="108" font-size="10">ความร้อนที่พื้นผิวปล่อยกลับ (อินฟราเรด)</text>
 <path d="M440 118V88" stroke="#bd251b" stroke-width="2" stroke-dasharray="4 3"/>
-<text x="450" y="134" font-size="10" fill="#bd251b">CO₂ ดูดซับและปล่อยกลับลงมา</text>
+<text x="384" y="134" font-size="10" fill="#bd251b">CO₂ ดูดซับและปล่อยกลับลงมา</text>
 <text x="384" y="152" font-size="10" font-weight="600">CO₂ มากขึ้น → พลังงานที่หลุดออกอวกาศน้อยลง</text>
 <rect x="14" y="180" width="572" height="52" fill="#fff" stroke="#161616" stroke-width="2"/><text x="30" y="202" font-size="12" font-weight="600">ผลสองข้อที่สำคัญ</text><text x="30" y="222" font-size="11">๑ สะสม — CO₂ ที่เพิ่มในปีนี้ยังอยู่ในสมดุลนาน หักล้างทันทีไม่ได้  ๒ ระดับโลก — โมเลกุดไม่เคารพพรมแดน</text>
 <rect x="14" y="248" width="572" height="76" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/><text x="30" y="270" font-size="12" font-weight="600">สิ่งที่เครดิตไม่ได้ทำ</text><text x="30" y="290" font-size="11">มันไม่ได้ลบก๊าซที่ปล่อยไปแล้ว มันไม่ได้ทำให้อากาศเย็นลง</text><text x="30" y="310" font-size="11">มันเป็น “บันทึกของความต่าง” ที่วัดได้ ตรวจแล้ว และเขียนลงทะเบียนไว้ครั้งเดียว</text>`, th?'ภาพนี้อธิบายว่าทำไมกฎทุกข้อในสาขานี้จึงเกี่ยวกับการไม่ให้ตันเดียวกันถูกนับซ้ำ ไม่ใช่เรื่องความสะอาดของอากาศ':'This figure explains why every rule in the field is about not counting the same tonne twice, not about cleaning the air.');
@@ -58,10 +62,10 @@ ${[['ไม่มีวันที่','แผนลอย ๆ ที่ไม�
 <path d="M384 92H570" stroke="#bd251b" stroke-width="2.5" marker-end="url(#aB)"/>
 <text x="384" y="108" font-size="9.5">surface re-radiates (infrared)</text>
 <path d="M440 118V88" stroke="#bd251b" stroke-width="2" stroke-dasharray="4 3"/>
-<text x="450" y="134" font-size="9.5" fill="#bd251b">CO₂ absorbs and re-emits downward</text>
+<text x="384" y="134" font-size="9.5" fill="#bd251b">CO₂ absorbs and re-emits downward</text>
 <text x="384" y="152" font-size="10" font-weight="600">more CO₂ → less energy leaves to space</text>
-<rect x="14" y="180" width="572" height="52" fill="#fff" stroke="#161616" stroke-width="2"/><text x="30" y="202" font-size="12" font-weight="600">Two consequences that matter</text><text x="30" y="222" font-size="11">① Cumulative — CO₂ added this year stays in the balance; it cannot be cancelled by removing the same amount next month  ② Global — the molecule respects no border</text>
-<rect x="14" y="248" width="572" height="76" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/><text x="30" y="270" font-size="12" font-weight="600">What a credit does not do</text><text x="30" y="290" font-size="11">It does not remove the gas already emitted. It does not cool the atmosphere.</text><text x="30" y="310" font-size="11">It is a record of a difference — measured, verified, and written down once.</text>`, th?'ภาพนี้อธิบายว่าทำไมกฎทุกข้อในสาขานี้จึงเกี่ยวกับการไม่ให้ตันเดียวกันถูกนับซ้ำ ไม่ใช่เรื่องความสะอาดของอากาศ':'This figure explains why every rule in the field is about not counting the same tonne twice, not about cleaning the air.');
+<rect x="14" y="180" width="572" height="84" fill="#fff" stroke="#161616" stroke-width="2"/><text x="30" y="202" font-size="12" font-weight="600">Two consequences that matter</text><text x="30" y="222" font-size="11"><tspan x="30" dy="0">① Cumulative — CO₂ added this year stays in the balance.</tspan><tspan x="30" dy="16">Removing CO₂ later does not undo the warming during that interval.</tspan><tspan x="30" dy="16">② Global — the molecule respects no border.</tspan></text>
+<rect x="14" y="280" width="572" height="76" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/><text x="30" y="302" font-size="12" font-weight="600">What a credit does not do</text><text x="30" y="322" font-size="11">It does not remove the gas already emitted. It does not cool the atmosphere.</text><text x="30" y="342" font-size="11">It is a record of a difference — measured, verified, and written down once.</text>`, th?'ภาพนี้อธิบายว่าทำไมกฎทุกข้อในสาขานี้จึงเกี่ยวกับการไม่ให้ตันเดียวกันถูกนับซ้ำ ไม่ใช่เรื่องความสะอาดของอากาศ':'This figure explains why every rule in the field is about not counting the same tonne twice, not about cleaning the air.');
 
   out['credit-anatomy']=fig('Anatomy of one credit claim',
   `<rect x="16" y="16" width="568" height="86" fill="#fff" stroke="#161616" stroke-width="2"/>

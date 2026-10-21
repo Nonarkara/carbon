@@ -1,7 +1,7 @@
 ## A precise-looking answer can still be uncertain
 Separate uncertainty in measurements and parameters from uncertainty about the model and the question itself. Repeating a calculation proves that the software is deterministic; it does not prove that the input represents the forest. A narrow interval can coexist with systematic error, an unsuitable allometric equation or the wrong boundary.
 
-The examples below are newly authored teaching calculations. They are not uncertainty estimates for Kabonna's countries, forests or credit projects. The deployed landscape's own three random-error scenarios and inventory discrepancy remain separate.
+The examples below are newly authored teaching calculations. They are not uncertainty estimates for Carbona's countries, forests or credit projects. The deployed landscape's own three random-error scenarios and inventory discrepancy remain separate.
 
 ## Work an activity-factor example
 Let illustrative activity A = 1,000 kWh and factor f = 0.50 kgCO₂e/kWh. The result is E = A × f = 500 kgCO₂e, or 0.50 tCO₂e. Suppose the standard uncertainties are u(A) = 50 kWh and u(f) = 0.05 kgCO₂e/kWh. These factors and uncertainties are hypothetical, not current grid values.
@@ -31,7 +31,7 @@ Use sensitivity analysis to decide what to measure next. Change one assumption a
 ## ตัวเลขละเอียดไม่ได้แปลว่าแน่นอน
 แยกความไม่แน่นอนของผลวัดและพารามิเตอร์ออกจากความไม่แน่นอนของแบบจำลองกับคำถาม การคำนวณซ้ำได้พิสูจน์ว่าซอฟต์แวร์ทำงานสม่ำเสมอ ไม่ได้พิสูจน์ว่าข้อมูลแทนป่าได้ ช่วงแคบอาจยังมีความคลาดเคลื่อนเชิงระบบ สมการไม่เหมาะ หรือขอบเขตผิด
 
-ตัวอย่างต่อไปนี้เราเขียนเพื่อสอน ไม่ใช่ค่าความไม่แน่นอนของประเทศ ป่า หรือโครงการเครดิตในคาบอนนะ สามกรณีความคลาดเคลื่อนสุ่มของแผนที่ที่ใช้อยู่และความต่างจากการสำรวจยังแยกไว้ตามเดิม
+ตัวอย่างต่อไปนี้เราเขียนเพื่อสอน ไม่ใช่ค่าความไม่แน่นอนของประเทศ ป่า หรือโครงการเครดิตในคาร์บอนนะ สามกรณีความคลาดเคลื่อนสุ่มของแผนที่ที่ใช้อยู่และความต่างจากการสำรวจยังแยกไว้ตามเดิม
 
 ## ลองคำนวณกิจกรรมคูณตัวคูณ
 ให้กิจกรรมสมมติ A = 1,000 kWh และ f = 0.50 kgCO₂e/kWh ได้ E = A × f = 500 kgCO₂e หรือ 0.50 tCO₂e สมมติความไม่แน่นอนมาตรฐาน u(A) = 50 kWh และ u(f) = 0.05 kgCO₂e/kWh ทั้งตัวคูณและค่าความไม่แน่นอนนี้เป็นค่าสอน ไม่ใช่ค่าไฟฟ้าปัจจุบัน

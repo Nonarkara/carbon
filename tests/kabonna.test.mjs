@@ -4,13 +4,15 @@ import {readFileSync} from 'node:fs';
 
 const poses=['pose-greet','pose-look','pose-both','pose-measure','pose-wonder','pose-stop'];
 
-test('the public name is คาบอนนะ in both languages and in the header mark',()=>{
+test('Carbona and คาร์บอนนะ are the public localized names',()=>{
   const i18n=readFileSync('public/js/i18n.js','utf8');
-  assert.equal(i18n.match(/title:'คาบอนนะ'/g).length,2);
+  assert.match(i18n,/title:'คาร์บอนนะ'/);
+  assert.match(i18n,/title:'Carbona'/);
+  assert.doesNotMatch(i18n,/title:'คาบอนนะ'/);
   assert.doesNotMatch(i18n,/title:'Forest Carbon'|title:'คาร์บอนป่าไม้'/);
   const html=readFileSync('public/index.html','utf8');
   assert.match(html,/class="kabonna-mark" src="images\/brand\/ct-mark.png" width="40" height="40"/);
-  assert.match(html,/<title>คาบอนนะ/);
+  assert.match(html,/<title>Carbona/);
 });
 
 test('the historical six poses and original mark remain available',()=>{

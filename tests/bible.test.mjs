@@ -48,7 +48,9 @@ test('Credit figures are generated from the deployed snapshots, so a diagram can
  const en=creditFigures('en'),th=creditFigures('th');
  assert.deepEqual(Object.keys(en).sort(),['border-article6','border-ledger','credit-anatomy','credit-physics','industry-gap','industry-issuance']);
  for(const [k,v] of Object.entries(en)){
-  assert.ok(v.startsWith('<figure class="illustration">'),k);
+  assert.match(v,/^<figure class="illustration credit-figure">/,k);
+  assert.match(v, /class="credit-diagram-scroll" role="region" tabindex="0"/,k);
+  assert.match(v, /class="diagram-transcript"/,k);
   assert.match(v,/<svg[^>]*role="img"/,k);
   assert.match(v,/<title>/,k);
   assert.match(v,/<figcaption>/,k);
@@ -62,7 +64,7 @@ test('Credit figures are generated from the deployed snapshots, so a diagram can
  }
  // Every published sector must appear, and the shares on screen must add to the whole. A hand-picked
  // list once dropped 'other' (1.9%), so the figure showed 98.1% with no explanation.
- const shown=[...en['industry-gap'].matchAll(/>([0-9]+\.[0-9])%</g)].map(m=>Number(m[1]));
+ const shown=[...en['industry-gap'].match(/<svg[\s\S]*?<\/svg>/)[0].matchAll(/>([0-9]+\.[0-9])%</g)].map(m=>Number(m[1]));
  assert.equal(shown.length,market.issuance.by_sector.length,'the gap figure must show every published sector');
  for(const s of market.issuance.by_sector)assert.ok(shown.includes(s.share_pct),`sector share missing: ${s.sector}`);
  assert.ok(Math.abs(shown.reduce((a,b)=>a+b,0)-100)<0.05,`shown shares sum to ${shown.reduce((a,b)=>a+b,0)}, not 100`);

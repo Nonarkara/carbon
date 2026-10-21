@@ -11,7 +11,7 @@ Gibbs and colleagues' 2025 forest-flux paper describes revisions to a geospatial
 | Different dates or disturbance | Observation dates, losses, harvest and recovery records | Matched dates and documented changes do not explain it |
 | Measurement/model error | Independent representative field evidence and error analysis | A held-out test supports the estimate within its stated scope |
 
-This is a diagnostic agenda authored for Kabonna. It is not a claim that any one explanation has been established. Avoid selecting the explanation that makes a preferred source look correct. Keep a competing hypothesis and its strongest contrary evidence in the review notes.
+This is a diagnostic agenda authored for Carbona. It is not a claim that any one explanation has been established. Avoid selecting the explanation that makes a preferred source look correct. Keep a competing hypothesis and its strongest contrary evidence in the review notes.
 
 ## Design a test that can fail
 Define the target population, unit of analysis, field protocol and acceptable errors before looking at held-out outcomes. Explain the tolerance in terms of the intended decision; do not invent a universal “accurate enough” percentage. Use spatial separation or appropriately blocked validation when nearby samples share information. Keep model tuning and final testing distinct. If an area is inaccessible, state what population remains untested.

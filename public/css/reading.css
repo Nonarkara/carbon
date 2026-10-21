@@ -57,3 +57,29 @@ body:has(#reader-index) header{background:white;border-bottom:1px solid var(--in
 .manual-contents>summary::after{content:' ▾';margin-left:8px}
 .manual-contents[open]>summary::after,.screen-map[open]>summary::after{content:' ▴'}
 @media(max-width:800px){.manual-routes span{display:block;font-size:12px;line-height:1.4;margin-top:1px}}
+/* Product text stays live, so the official name never depends on an old raster lockup. */
+.product-identity{display:flex;align-items:center;gap:8px;margin:0 0 12px;color:var(--ink);font-size:20px;line-height:1.3}
+.product-identity .manual-brand,.product-identity .research-brand{width:32px!important;height:32px!important;object-fit:contain;margin:0!important}
+.product-identity b{font-weight:600;white-space:nowrap}
+.research-byline .product-identity{font-size:17px}
+@media(max-width:800px){.manual-index .product-identity{margin:0;font-size:17px}}
+/* Reading options have a tighter rhythm than tasks, figures and explanatory prose. */
+#readingPaths{gap:0}#readingPaths a{min-height:24px;padding:2px 0;font-size:13px;line-height:1.45}
+.manual-links>a{min-height:24px;padding:2px 0;font-size:13px;line-height:1.5}
+.research-toc a{padding:3px 0;font-size:13px;line-height:1.5}
+.chapter-toc a{min-height:24px;padding:2px 0;line-height:1.45}
+.evidence .source{padding:8px 0}
+.evidence .source b{font-size:13px;line-height:1.5}
+.evidence .source span{font-size:12px;line-height:1.45;margin-top:3px}
+
+/* Credit figures keep readable labels; pan inside the figure, never the page. */
+.credit-diagram-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+.credit-diagram-scroll svg{min-width:960px}
+.credit-diagram-scroll:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.diagram-scroll-hint{font-size:12px;line-height:1.5;margin:4px 0;color:#444}
+.diagram-transcript{font-size:14px;line-height:1.6;margin:6px 0}
+.diagram-transcript summary{cursor:pointer;min-height:24px}
+.diagram-transcript ul{padding-left:20px}
+.diagram-transcript li{margin:2px 0}
+@media(min-width:1200px){.credit-diagram-scroll svg{min-width:840px}}
+@media print{.credit-diagram-scroll{overflow:visible}.credit-diagram-scroll svg{min-width:0}.diagram-scroll-hint{display:none}}

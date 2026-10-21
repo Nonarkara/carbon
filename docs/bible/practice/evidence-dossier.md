@@ -11,7 +11,7 @@ A screenshot communicates a result. An evidence pack lets another person examine
 | Result and uncertainty | Unrounded calculation, display rounding, missing values, scenarios and warnings | Does a missing value remain missing in the export? |
 | Review and change log | Checker, issue, resolution, date, approval scope and superseded version | Can someone recover the previous conclusion and explain the change? |
 
-Use stable evidence IDs rather than personal names in public deliverables. Keep permission to disclose each record separate from permission to calculate with it. Landholder information and precise field locations may need controlled handling. Kabonna's supplied files remain in browser memory; it does not create this archive or back it up for you. Export the result before closing or refreshing the assessment tab.
+Use stable evidence IDs rather than personal names in public deliverables. Keep permission to disclose each record separate from permission to calculate with it. Landholder information and precise field locations may need controlled handling. Carbona's supplied files remain in browser memory; it does not create this archive or back it up for you. Export the result before closing or refreshing the assessment tab.
 
 ## Reproduce a result without guessing
 Save the original user-input JSON and any source documents in a controlled project folder. Save the landscape or regional JSON separately; those are contextual datasets, never substitutes for plot inputs. Record the application's release commit and source versions. Preserve the original byte hashes when available; a hash proves byte identity, not truth, lawful access or measurement quality.
@@ -38,7 +38,7 @@ A complete software export still cannot contain rights or measurements that were
 | ผลและความไม่แน่นอน | ค่าก่อนปัดเศษ ค่าที่แสดง ข้อมูลขาด สถานการณ์ คำเตือน | ค่าที่ขาดยังขาดในไฟล์ส่งออกไหม? |
 | การตรวจและเปลี่ยน | ผู้ตรวจ ประเด็น วิธีแก้ วันที่ ขอบเขตการยอมรับ รุ่นเก่า | เรียกข้อสรุปเก่ากลับมาและอธิบายเหตุผลที่เปลี่ยนได้ไหม? |
 
-ใช้รหัสหลักฐานคงที่แทนชื่อคนในเอกสารสาธารณะ แยกสิทธิเปิดเผยจากสิทธินำไปคำนวณ ข้อมูลผู้ถือครองและตำแหน่งสำรวจละเอียดอาจต้องจำกัดการเข้าถึง ไฟล์ที่ป้อนในคาบอนนะอยู่ในหน่วยความจำเบราว์เซอร์ ระบบไม่ได้ทำคลังหรือสำรองชุดหลักฐานนี้ให้ ส่งออกก่อนปิดหรือโหลดแท็บประเมินใหม่
+ใช้รหัสหลักฐานคงที่แทนชื่อคนในเอกสารสาธารณะ แยกสิทธิเปิดเผยจากสิทธินำไปคำนวณ ข้อมูลผู้ถือครองและตำแหน่งสำรวจละเอียดอาจต้องจำกัดการเข้าถึง ไฟล์ที่ป้อนในคาร์บอนนะอยู่ในหน่วยความจำเบราว์เซอร์ ระบบไม่ได้ทำคลังหรือสำรองชุดหลักฐานนี้ให้ ส่งออกก่อนปิดหรือโหลดแท็บประเมินใหม่
 
 ## คำนวณซ้ำโดยไม่ต้องเดา
 เก็บ JSON ข้อมูลเข้าต้นฉบับและเอกสารในโฟลเดอร์โครงการที่ควบคุมได้ เก็บ JSON ภูมิทัศน์หรือภูมิภาคแยก เพราะเป็นบริบท ไม่ใช่ข้อมูลแปลง บันทึกรุ่นระบบและรุ่นแหล่งข้อมูล เก็บแฮชไบต์ต้นฉบับถ้ามี แฮชพิสูจน์ว่าไบต์เหมือนเดิม ไม่ได้พิสูจน์ความจริง สิทธิใช้ หรือคุณภาพการวัด

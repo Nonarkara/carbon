@@ -1,10 +1,10 @@
-<p class="research-kicker">Independent study, written as a short thesis · คาบอนนะ · Thailand · September 2026</p>
+<p class="research-kicker">Independent study, written as a short thesis · คาร์บอนนะ · Thailand · September 2026</p>
 
 # Building a system to calculate a forest carbon footprint from public and open data
 
 <p class="research-deck">Open and public data can estimate a landscape. A comparison with Thailand's inventory exposes a discrepancy that requires matched-support investigation. They cannot mint a credit. This study builds the system that keeps those sentences apart, and shows every number that results.</p>
 
-This is an independent study in the form of a short thesis. It is not a university submission, not a degree, and not an official TGO assessment. The working system is called คาบอนนะ. The chapters below are the thesis: question, method, evidence, limits, and the design of the public face.
+This is an independent study in the form of a short thesis. It is not a university submission, not a degree, and not an official TGO assessment. The working system is called คาร์บอนนะ. The chapters below are the thesis: question, method, evidence, limits, and the design of the public face.
 
 <dl class="thesis">
 <dt>Question</dt>
@@ -30,7 +30,7 @@ This is an independent study in the form of a short thesis. It is not a universi
 | Where the evidence is kept | 10 |
 | TGO’s registry as context, not an input | 11, 12 |
 | How far the map can be trusted: uncertainty and the national forest inventory check | 06 |
-| Why the public name is คาบอนนะ | 13 |
+| Why the public name is คาร์บอนนะ | 13 |
 | Other systems, and whose methods this one uses | 14 |
 
 A person can spend years protecting a forest and still struggle to prove what that work has achieved. The trees are there. The effort is real. The evidence is scattered across survey sheets, maps, government tables and satellite archives. Turning those pieces into a defensible carbon estimate takes work that a beautiful dashboard cannot wish away.
@@ -479,17 +479,17 @@ The slices come from one static snapshot of TGO's public listing. They are not a
 Further views TGO may want — retirements by project, vintages, corresponding-adjustment status — would need data the public listing does not carry. Views of what it does carry are small additions to the same snapshot.
 
 
-## 13 · Why the name is คาบอนนะ
+## 13 · Why the name is คาร์บอนนะ
 
 Brand update · 2 October 2026: the owner supplied the CT leaf identity now used in the header, browser icon and mobile web app. The following mascot discussion records the earlier identity exploration; its six teaching poses remain available. The interface now follows the owner’s Bauhaus direction.
 
-The product is called **คาบอนนะ** (Kabonna, カボンナ). The name, the mark and the six poses are soft on purpose. Softness is how a person who is not a carbon accountant finds the tab, says the name, and stays. It is not how a tonne is calculated. The ledger, the sources and the uncertainty stay in the square record. The face never sits on a number.
+The official product name is **Carbona**, or **คาร์บอนนะ** in Thai, from 21 October 2026. The name, the mark and the six poses are soft on purpose. Softness is how a person who is not a carbon accountant finds the tab, says the name, and stays. It is not how a tonne is calculated. The ledger, the sources and the uncertainty stay in the square record. The face never sits on a number.
 
-<figure class="kabonna-lockup"><img src="images/kabonna/mark.svg" alt=""><figcaption><b>คาบอนนะ</b><span>Kabonna · カボンナ</span></figcaption></figure>
+<figure class="kabonna-lockup"><img src="images/kabonna/mark.svg" alt=""><figcaption><b>คาร์บอนนะ</b><span>Carbona</span></figcaption></figure>
 
 ### The name is a hedge you can hear
 
-คาร์บอน is the Thai word for carbon. It is written with a silent ร under the การันต์ mark and spoken in two syllables, คา-บอน. คาบอนนะ spells it the way it sounds and adds a third syllable, นะ. Thai นะ softens what was just said: it asks to be heard rather than closing the point. In katakana the name is written カボンナ, a transliteration of the Thai name rather than a Japanese word. The field this tool sits next to is full of acronyms: TGO, T-VER, CCI, GFW, ODIAC. An item that differs from the rest of a list is more likely to be remembered (von Restorff, 1933). The cute name is that item. It is memorable because it does not look like a registry.
+คาร์บอนนะ combines the standard Thai spelling of carbon with the particle นะ. The ending softens an utterance; it does not establish the truth of a carbon claim. No official Japanese name is specified. The field this tool sits next to is full of acronyms: TGO, T-VER, CCI, GFW, ODIAC. A distinctive name can help someone find the tool (von Restorff, 1933); it cannot replace source evidence or verification.
 
 The softness is also the claim the product is willing to make. An estimate is not a credit. A name that already sounds like it is checking with you — “carbon, yeah?” — is harder to mistake for a stamp.
 
@@ -504,12 +504,12 @@ So the mascot is allowed to be round, and almost nothing else is. The map, the r
 The same character, so the face stays one memory. The pose changes, so the face can carry a job without being pasted onto a result.
 
 <ul class="kabonna-poses">
-<li><img src="images/kabonna/pose-greet.svg" alt="คาบอนนะ waving"><b>Greet</b><span>The mark. Open hands, come closer. The earlier logo exploration.</span></li>
-<li><img src="images/kabonna/pose-look.svg" alt="คาบอนนะ looking through a square"><b>Look</b><span>A square, the drawn box and the satellite cell. Looking is not a verdict.</span></li>
-<li><img src="images/kabonna/pose-both.svg" alt="คาบอนนะ holding a leaf and a plume apart"><b>Both</b><span>A leaf in one hand, a plume in the other, with a gap. Absorption and emission are shown together and never added.</span></li>
-<li><img src="images/kabonna/pose-measure.svg" alt="คาบอนนะ planting a small flag"><b>Measure</b><span>A flag in a small square plot. Field evidence, not a guess from the portrait.</span></li>
-<li><img src="images/kabonna/pose-wonder.svg" alt="คาบอนนะ with a hand to the cheek"><b>Wonder</b><span>Eyes up, mouth open. The uncertain part stays visible. Not knowing is a pose, not a hole to be filled with a zero.</span></li>
-<li><img src="images/kabonna/pose-stop.svg" alt="คาบอนนะ holding up a yellow square palm"><b>Stop</b><span>Palm forward. The cute layer ends before a credit. Issued units are not this character's job.</span></li>
+<li><img src="images/kabonna/pose-greet.svg" alt="คาร์บอนนะ waving"><b>Greet</b><span>The mark. Open hands, come closer. The earlier logo exploration.</span></li>
+<li><img src="images/kabonna/pose-look.svg" alt="คาร์บอนนะ looking through a square"><b>Look</b><span>A square, the drawn box and the satellite cell. Looking is not a verdict.</span></li>
+<li><img src="images/kabonna/pose-both.svg" alt="คาร์บอนนะ holding a leaf and a plume apart"><b>Both</b><span>A leaf in one hand, a plume in the other, with a gap. Absorption and emission are shown together and never added.</span></li>
+<li><img src="images/kabonna/pose-measure.svg" alt="คาร์บอนนะ planting a small flag"><b>Measure</b><span>A flag in a small square plot. Field evidence, not a guess from the portrait.</span></li>
+<li><img src="images/kabonna/pose-wonder.svg" alt="คาร์บอนนะ with a hand to the cheek"><b>Wonder</b><span>Eyes up, mouth open. The uncertain part stays visible. Not knowing is a pose, not a hole to be filled with a zero.</span></li>
+<li><img src="images/kabonna/pose-stop.svg" alt="คาร์บอนนะ holding up a yellow square palm"><b>Stop</b><span>Palm forward. The cute layer ends before a credit. Issued units are not this character's job.</span></li>
 </ul>
 
 Greet is the only pose in the header and the tab icon, so the public face is an invitation. Look, Both, Measure and Wonder are the work: see the area, keep the two sides apart, ask for a plot, and leave the uncertainty on the screen. Stop is the limit of the whole idea. Cuteness that crosses into the credit line would spend the trust the baby schema borrowed. The character can wave. It cannot certify.
@@ -536,7 +536,7 @@ Forest-carbon estimation from space is a crowded field. The systems below were r
 
 The four Thai platforms are the ones TGO recognised for T-VER forestry work in June 2025 (section 11). None publishes an accuracy figure that can be checked. The global vendors publish validation reports, mostly for their own models against LiDAR.
 
-### What คาบอนนะ does differently
+### What คาร์บอนนะ does differently
 
 Of the systems in this list, it is the one that publishes all of the following together for Thailand (Global Forest Watch also publishes open code for its flux model):
 
@@ -667,7 +667,7 @@ A useful result can be “we can screen this location, but cannot estimate eligi
 #### A precise-looking answer can still be uncertain
 Separate uncertainty in measurements and parameters from uncertainty about the model and the question itself. Repeating a calculation proves that the software is deterministic; it does not prove that the input represents the forest. A narrow interval can coexist with systematic error, an unsuitable allometric equation or the wrong boundary.
 
-The examples below are newly authored teaching calculations. They are not uncertainty estimates for Kabonna's countries, forests or credit projects. The deployed landscape's own three random-error scenarios and inventory discrepancy remain separate.
+The examples below are newly authored teaching calculations. They are not uncertainty estimates for Carbona's countries, forests or credit projects. The deployed landscape's own three random-error scenarios and inventory discrepancy remain separate.
 
 #### Work an activity-factor example
 Let illustrative activity A = 1,000 kWh and factor f = 0.50 kgCO₂e/kWh. The result is E = A × f = 500 kgCO₂e, or 0.50 tCO₂e. Suppose the standard uncertainties are u(A) = 50 kWh and u(f) = 0.05 kgCO₂e/kWh. These factors and uncertainties are hypothetical, not current grid values.
@@ -711,7 +711,7 @@ A screenshot communicates a result. An evidence pack lets another person examine
 | Result and uncertainty | Unrounded calculation, display rounding, missing values, scenarios and warnings | Does a missing value remain missing in the export? |
 | Review and change log | Checker, issue, resolution, date, approval scope and superseded version | Can someone recover the previous conclusion and explain the change? |
 
-Use stable evidence IDs rather than personal names in public deliverables. Keep permission to disclose each record separate from permission to calculate with it. Landholder information and precise field locations may need controlled handling. Kabonna's supplied files remain in browser memory; it does not create this archive or back it up for you. Export the result before closing or refreshing the assessment tab.
+Use stable evidence IDs rather than personal names in public deliverables. Keep permission to disclose each record separate from permission to calculate with it. Landholder information and precise field locations may need controlled handling. Carbona's supplied files remain in browser memory; it does not create this archive or back it up for you. Export the result before closing or refreshing the assessment tab.
 
 #### Reproduce a result without guessing
 Save the original user-input JSON and any source documents in a controlled project folder. Save the landscape or regional JSON separately; those are contextual datasets, never substitutes for plot inputs. Record the application's release commit and source versions. Preserve the original byte hashes when available; a hash proves byte identity, not truth, lawful access or measurement quality.
@@ -742,7 +742,7 @@ Gibbs and colleagues' 2025 forest-flux paper describes revisions to a geospatial
 | Different dates or disturbance | Observation dates, losses, harvest and recovery records | Matched dates and documented changes do not explain it |
 | Measurement/model error | Independent representative field evidence and error analysis | A held-out test supports the estimate within its stated scope |
 
-This is a diagnostic agenda authored for Kabonna. It is not a claim that any one explanation has been established. Avoid selecting the explanation that makes a preferred source look correct. Keep a competing hypothesis and its strongest contrary evidence in the review notes.
+This is a diagnostic agenda authored for Carbona. It is not a claim that any one explanation has been established. Avoid selecting the explanation that makes a preferred source look correct. Keep a competing hypothesis and its strongest contrary evidence in the review notes.
 
 #### Design a test that can fail
 Define the target population, unit of analysis, field protocol and acceptable errors before looking at held-out outcomes. Explain the tolerance in terms of the intended decision; do not invent a universal “accurate enough” percentage. Use spatial separation or appropriately blocked validation when nearby samples share information. Keep model tuning and final testing distinct. If an area is inaccessible, state what population remains untested.
