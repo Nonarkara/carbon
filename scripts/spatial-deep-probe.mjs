@@ -1,13 +1,16 @@
 // Deep spatial audit: the content, not just the shells.
 //
-// The shell gate measures the page furniture — header, rails, controls. But three parts of this
-// site are never seen by that gate at all:
+// The shell gate measures the page furniture — header, rails, controls. But most of this site is
+// never seen by that gate at all:
 //
 //   * the Bible renders ONE chapter at a time, so 67 of its 68 chapters were never measured;
 //   * the manual is one long page, so each section was measured only as part of the whole;
 //   * the Southeast Asia page became a four-view workspace (map / evidence / compare / research),
 //     and a view that is hidden contributes zero-size rectangles — the collector skips it, so an
-//     unmeasured view reads exactly like a clean one.
+//     unmeasured view reads exactly like a clean one;
+//   * content that hides inside a <details> has zero-height children and is skipped the same way;
+//   * the research pages carry a two-column layout, an audit table and a standards note that the
+//     shell pass only ever saw from the outside.
 //
 // This audit visits each of those and reports the geometry of the content itself.
 //
@@ -24,8 +27,9 @@ const chapters=bible.chapters.map(c=>c.id);
 const MANUAL_SECTIONS=['province','area','project','layers','install','help','reference'];
 const SEA_VIEWS=['map','evidence','compare','research'];
 
-// Widths where the layouts actually differ. 320 is the narrowest phone the site supports, 390 a
-// modern phone, 768 a tablet, 1440 a desktop.
+// The two widths where the layout actually changes: 390 is a modern phone with the narrowest
+// column, 1440 a desktop with the widest. The shell gate already covers 320, 768 and 1440 on the
+// page furniture; this audit is about what the content does at the two ends of that range.
 const PHONE=390,DESKTOP=1440;
 
 const browser=await chromium.launch();
@@ -65,9 +69,18 @@ async function run(job){
  // Prove the page is in the state we think it is. A hidden view contributes zero-size rectangles
  // and is skipped by the collector, so a view that never opened would measure exactly as clean as
  // a view that is genuinely well laid out. The audit must be able to tell those apart.
+ //
+ // The check is retried, because the app renders some panels after its data arrives and that
+ // render replaces the nodes the setup touched — a page that is briefly ready and then replaces
+// itself is a race, not a defect. Three attempts outlast a late render; a page that still is not
+ // in the expected state after that is a real finding.
  if(job.expect){
-  const state=await page.evaluate(job.expect);
-  if(state!==true){
+  let state=false;
+  for(let attempt=0;attempt<3&&!state;attempt++){
+   state=await page.evaluate(job.expect);
+   if(!state&&attempt<2){await page.waitForTimeout(350);if(job.act)await job.act();await page.waitForTimeout(250);}
+  }
+  if(!state){
    report.push({...job,width,error:`page was not in the expected state: ${job.expectLabel||job.expect}`});
    return;
   }
@@ -93,10 +106,6 @@ for(const lang of ['th','en']){
 // The views are switched with the visible control for that width — a button on desktop, the
 // select on a phone — so the measured page is the one a reader actually sees.
 for(const width of [PHONE,DESKTOP]){
- await run({
-  kind:'sea-view',id:'map',width,path:'sea.html?lang=th',ready:'body[data-ready]',
-  act:async()=>{},
- });
  for(const view of SEA_VIEWS){
   await run({
    kind:'sea-view',id:view,width,path:'sea.html?lang=th',ready:'body[data-ready]',
@@ -124,6 +133,46 @@ for(const [path,label] of [['guide-th.html','th'],['guide-en.html','en']]){
     scope:`#${id}`,
     expect:`(()=>{const e=document.querySelector('#${id}');return !!e&&e.getBoundingClientRect().height>0})()`,expectLabel:`the #${id} section must be open and have height`,
     act:async()=>{await page.evaluate(s=>document.querySelector(s)?.scrollIntoView({block:'start'}),`#${id}`);await page.waitForTimeout(80);},
+   });
+  }
+ }
+}
+
+// --- 4. The pages whose content hides inside a disclosure.
+// A collapsed <details> has zero-height children, so the collector skips it and the content is
+// never measured at all. Opening every disclosure before measuring puts the real geometry —
+// reference chapters, screen maps, layer notes, the about text — back in play.
+for(const [path,label,ready] of [
+ ['guide-th.html','th','.manual-routes'],
+ ['guide-en.html','en','.manual-routes'],
+ ['?lang=th','th','#kStock'],
+ ['?lang=en','en','#kStock'],
+]){
+ for(const width of [PHONE,DESKTOP]){
+  await run({
+   kind:'open-page',id:'all-disclosures-open',lang:label,width,path,ready,
+   expect:`(()=>{const d=[...document.querySelectorAll('details')];return d.length>0&&d.every(x=>x.open)})()`,
+   expectLabel:'every disclosure must be open before the page is measured',
+   act:async()=>{
+    // Wait for the app's own data to land first: a panel that renders late replaces the nodes
+    // the setup just opened, and the measurement would be of a page that is no longer there.
+    await page.waitForLoadState('networkidle',{timeout:6000}).catch(()=>{});
+    await page.evaluate(()=>{for(const d of document.querySelectorAll('details'))d.open=true;});
+    await page.waitForTimeout(150);
+   },
+  });
+ }
+}
+
+// --- 5. The research pages: the two-column layout and the sections inside it.
+for(const [path,label] of [['research-th.html','th'],['research-en.html','en']]){
+ for(const width of [PHONE,DESKTOP]){
+  await run({kind:'research',id:'whole-page',lang:label,width,path,ready:'.research-intro'});
+  for(const sel of ['.research-layout','.audit-results','.author-profile','.standards-note','.research-toc']){
+   await run({
+    kind:'research',id:sel,width,lang:label,path,ready:'.research-intro',scope:sel,
+    expect:`(()=>{const e=document.querySelector(${JSON.stringify(sel)});return !!e&&e.getBoundingClientRect().height>0})()`,expectLabel:`${sel} must have height`,
+    act:async()=>{await page.evaluate(s=>document.querySelector(s)?.scrollIntoView({block:'start'}),sel);await page.waitForTimeout(80);},
    });
   }
  }

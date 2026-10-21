@@ -186,7 +186,17 @@ export function collectSpatial(root){
  // --- D. Scattered actions: related controls in one strip that do not share a line.
  for(const c of strips('[role=toolbar],.reader-actions,.chart-controls,.toolbar,.actions,.map-tools,.quick-tools'.split(','))){
   if(!shown(c))continue;
-  const acts=[...c.querySelectorAll('button,a[href],[role=button]')].filter(shown);
+  const acts=[...c.querySelectorAll('button,a[href],[role=button]')].filter(shown).filter(a=>{
+   // A dropdown panel is a MENU. Its items stack down the panel on purpose, one per row, all
+   // aligned to the same edge — that is what a menu is, and calling it "scattered actions"
+   // condemns a correct layout. The summary that opens the panel is the strip's own control and
+   // does belong on the strip's line; the items below it do not.
+   const owner=a.closest('details');
+   if(owner&&owner!==c)return a.tagName==='SUMMARY';
+   // The strip is itself a menu trigger: everything under its summary is the menu's content.
+   if(c.tagName==='DETAILS'&&a.tagName!=='SUMMARY')return false;
+   return true;
+  });
   if(acts.length<2)continue;
   const lines=countLines(acts.map(a=>a.getBoundingClientRect().top));
   if(lines>1)out.push({kind:'scattered-actions',severity:'medium',el:desc(c),gap:lines,note:`${acts.length} controls spread over ${lines} lines`});

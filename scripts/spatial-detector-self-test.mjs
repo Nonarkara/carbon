@@ -65,11 +65,50 @@ found=await collect();
 assert.ok(found.some(o=>o.kind==='empty-track'),`empty-track must be detected, got ${JSON.stringify(found)}`);
 await page.evaluate(()=>document.querySelector('#synthetic-track').remove());
 
-// --- 5. The clean page must still be clean, so the detectors are not simply always-firing.
+// --- 5. A dropdown menu is vertical on purpose and must NOT be reported as scattered actions.
+// The map-tools panel is a correct menu: four items in one aligned column. The first version of
+// rule D counted the summary and the four items together and called the result "scattered", which
+// condemns a correct layout. A menu has to be exempt, and a genuine scattered toolbar has to
+// still be caught.
+await page.evaluate(()=>{
+ const d=document.createElement('details');
+ d.id='synthetic-menu';
+ d.open=true;
+ d.style.cssText='position:relative;width:240px';
+ d.innerHTML='<summary style="height:44px">tools</summary><div style="position:absolute;top:44px;left:0;width:240px;display:grid">'
+  +'<button style="height:40px">one</button><button style="height:40px">two</button><button style="height:40px">three</button></div>';
+ document.body.prepend(d);
+ const strip=document.createElement('div');
+ strip.id='synthetic-strip';
+ strip.className='quick-tools';
+ strip.style.cssText='display:flex;gap:8px;width:600px;align-items:center';
+ strip.innerHTML='<button style="height:44px">alpha</button><details id="synthetic-menu-2"><summary style="height:44px">beta</summary></details>';
+ document.body.prepend(strip);
+});
+found=await collect();
+assert.ok(!found.some(o=>o.kind==='scattered-actions'&&o.el.includes('synthetic-menu')),`a vertical menu must not be reported as scattered actions, got ${JSON.stringify(found)}`);
+assert.ok(!found.some(o=>o.kind==='scattered-actions'&&o.el.includes('synthetic-strip')),`a strip whose trigger is on the header line must not be reported, got ${JSON.stringify(found)}`);
+await page.evaluate(()=>{document.querySelector('#synthetic-menu')?.remove();document.querySelector('#synthetic-strip')?.remove();});
+
+// --- 6. A genuinely scattered toolbar must still be caught, so the menu exemption did not
+// simply switch the rule off.
+await page.evaluate(()=>{
+ const d=document.createElement('div');
+ d.id='synthetic-scattered';
+ d.className='chart-controls';
+ d.style.cssText='display:flex;flex-wrap:wrap;width:260px;gap:6px';
+ d.innerHTML='<button style="width:120px;height:40px">a</button><button style="width:120px;height:40px">b</button><button style="width:120px;height:40px">c</button>';
+ document.body.prepend(d);
+});
+found=await collect();
+assert.ok(found.some(o=>o.kind==='scattered-actions'),`a scattered toolbar must still be detected, got ${JSON.stringify(found)}`);
+await page.evaluate(()=>document.querySelector('#synthetic-scattered')?.remove());
+
+// --- 7. The clean page must still be clean, so the detectors are not simply always-firing.
 found=await collect();
 assert.equal(found.length,0,`the clean page must measure clean, got ${JSON.stringify(found)}`);
 
-// --- 6. Scoped measurement must see a defect inside the scope and ignore one outside it.
+// --- 8. Scoped measurement must see a defect inside the scope and ignore one outside it.
 await page.evaluate(()=>{
  const s=document.createElement('section');s.id='synthetic-scope';
  s.style.cssText='display:block;width:400px';
@@ -82,4 +121,4 @@ const scopedClean=await page.evaluate(`(${collectSpatial.toString()})(document.q
 assert.ok(!scopedClean.some(o=>o.kind==='gap-outlier'),'a scoped measurement must not invent a defect');
 
 await browser.close();
-console.log('PASS spatial detector self-test: row-leftover, gap-outlier, accidental-wrap, empty-track and scoped measurement are all detected; the clean page measures clean.');
+console.log('PASS spatial detector self-test: row-leftover, gap-outlier, accidental-wrap, empty-track and scoped measurement are all detected; a scattered toolbar is caught; a vertical dropdown menu is not; the clean page measures clean.');
