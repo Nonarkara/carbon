@@ -46,7 +46,7 @@ test('The three credit-teaching chapters are bilingual, grouped as credits, and 
 });
 test('Credit figures are generated from the deployed snapshots, so a diagram cannot drift from its numbers',async()=>{
  const en=creditFigures('en'),th=creditFigures('th');
- assert.deepEqual(Object.keys(en).sort(),['border-article6','border-ledger','credit-anatomy','credit-physics','industry-gap','industry-issuance']);
+ assert.deepEqual(Object.keys(en).sort(),['border-article6','border-ledger','credit-anatomy','credit-layers','credit-physics','industry-gap','industry-issuance']);
  for(const [k,v] of Object.entries(en)){
   assert.match(v,/^<figure class="illustration credit-figure">/,k);
   assert.match(v, /class="credit-diagram-scroll" role="region" tabindex="0"/,k);
@@ -68,4 +68,39 @@ test('Credit figures are generated from the deployed snapshots, so a diagram can
  assert.equal(shown.length,market.issuance.by_sector.length,'the gap figure must show every published sector');
  for(const s of market.issuance.by_sector)assert.ok(shown.includes(s.share_pct),`sector share missing: ${s.sector}`);
  assert.ok(Math.abs(shown.reduce((a,b)=>a+b,0)-100)<0.05,`shown shares sum to ${shown.reduce((a,b)=>a+b,0)}, not 100`);
+ // The layers figure exists to kill one specific beginner misconception: that burning damages the
+ // ozone layer. If that sentence is dropped, the figure silently stops teaching the correction.
+ assert.ok(en['credit-layers'].includes('Burning does not damage the ozone layer'),'the English layers figure must state that burning does not damage the ozone layer');
+ assert.ok(th['credit-layers'].includes('การเผาไหม้ไม่ได้ทำลายชั้นโอโซน'),'the Thai layers figure must state that burning does not damage the ozone layer');
+ assert.ok(en['credit-layers'].includes('Stratosphere')&&en['credit-layers'].includes('Troposphere'),'the layers figure must name both layers');
+ // Both languages must actually differ, and the figure must fit its own viewBox.
+ for(const k of ['credit-layers']){
+  const svg=en[k].match(/<svg[\s\S]*?<\/svg>/)[0];
+  assert.equal(svg.includes('viewBox="0 0 600 368"'),true,k+' must use the shared viewBox');
+ }
+});
+test('Every credit diagram fits inside its own canvas, so no label is silently clipped',async()=>{
+ const en=creditFigures('en'),th=creditFigures('th');
+ for(const [lang,figs] of [['en',en],['th',th]]){
+  for(const [k,v] of Object.entries(figs)){
+   const svg=v.match(/<svg[^>]*viewBox="0 0 ([\d.]+) ([\d.]+)"[\s\S]*?<\/svg>/);
+   assert.ok(svg,k+' ('+lang+') must declare a viewBox');
+   const W=Number(svg[1]),H=Number(svg[2]);
+   // Every rect must sit fully inside the canvas. A rect that runs past the edge is a clipped
+   // diagram, and the clip is invisible in code review.
+   for(const m of v.matchAll(/<rect[^>]*\bx="([\d.-]+)"[^>]*\by="([\d.-]+)"[^>]*\bwidth="([\d.-]+)"[^>]*\bheight="([\d.-]+)"/g)){
+    const x=+m[1],y=+m[2],w=+m[3],h=+m[4];
+    assert.ok(x>=0&&y>=0&&x+w<=W+0.5&&y+h<=H+0.5,`${k} (${lang}): rect ${x},${y} ${w}x${h} escapes the ${W}x${H} canvas`);
+   }
+   // Every text baseline must be on the canvas. Text below the canvas is unreadable, and text
+   // below the bottom of its own panel reads as belonging to nothing.
+   for(const m of v.matchAll(/<text[^>]*\by="([\d.-]+)"/g)){
+    const y=+m[1];
+    assert.ok(y>=0&&y<=H,`${k} (${lang}): text baseline ${y} is outside the ${H}-high canvas`);
+   }
+   // The figure must not be empty in the middle: a band of the canvas with nothing in it is a
+   // hole the reader has to explain.
+   assert.ok(v.includes('</svg>'),k+' must close its svg');
+  }
+ }
 });

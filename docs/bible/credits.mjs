@@ -5,7 +5,7 @@ const specs=[
  ['sea-borders','How a credit crosses a border without being counted twice','เครดิตข้ามพรมแดนโดยไม่ถูกนับซ้ำ','Two national inventories, one corresponding adjustment, one tonne.','บัญชีสองประเทศ การปรับสมดุลหนึ่งครั้ง โทนเดียว',['sg-art6','sg-th-ia','accf']],
  ['sea-industry','Where Southeast Asia\'s credits come from, and what that changes','เครดิตของเอเชียตะวันออกเฉียงใต้มาจากไหน และเปลี่ยนอะไร','Issuance by country, then the projects the market has not built.','การออกเครดิตรายประเทศ แล้วหมวดที่ตลาดยังไม่สร้าง',['sea-market','sea-market-data','acmf-vcm']]
 ];
-export const creditChapters=specs.map(([id,en,th,se,st,sources])=>{const [bodyEn,bodyTh]=read(`./sea/${id}.md`).split('\n<!-- TH -->\n');if(!bodyTh)throw Error('Missing Thai '+id);return {id,group:'credits',title:{en,th},summary:{en:se,th:st},body:{en:bodyEn,th:bodyTh},sources,reviewed:'2026-10-20',related:id==='sea-what-is-a-credit'?['sea-borders','sea-industry','credits','scopes','sea-overview']:id==='sea-borders'?['sea-what-is-a-credit','sea-industry','credits','offsets','sea-governance']:['sea-what-is-a-credit','sea-borders','credits','sea-ecosystems'],diagram:{en:['Start from the physics of burning','Measure the change against a baseline','Pass independent review','Issue once, on a single registry'],th:['เริ่มจากฟิสิกส์ของการเผาไหม้','วัดการเปลี่ยนแปลงเทียบกรณีฐาน','ผ่านการทวนสอบอิสระ','ออกครั้งเดียว ในทะเบียนเดียว']}};});
+export const creditChapters=specs.map(([id,en,th,se,st,sources])=>{const [bodyEn,bodyTh]=read(`./sea/${id}.md`).split('\n<!-- TH -->\n');if(!bodyTh)throw Error('Missing Thai '+id);return {id,group:'credits',title:{en,th},summary:{en:se,th:st},body:{en:bodyEn,th:bodyTh},sources,reviewed:'2026-10-20',related:id==='sea-what-is-a-credit'?['sea-borders','sea-industry','credits','scopes','fossil','atmosphere']:id==='sea-borders'?['sea-what-is-a-credit','sea-industry','credits','offsets','sea-governance']:['sea-what-is-a-credit','sea-borders','credits','sea-ecosystems'],diagram:{en:['Start from the physics of burning','Measure the change against a baseline','Pass independent review','Issue once, on a single registry'],th:['เริ่มจากฟิสิกส์ของการเผาไหม้','วัดการเปลี่ยนแปลงเทียบกรณีฐาน','ผ่านการทวนสอบอิสระ','ออกครั้งเดียว ในทะเบียนเดียว']}};});
 
 const market=JSON.parse(read('../../public/data/sea/carbon-market.json'));
 const snap=JSON.parse(read('../../public/data/sea/snapshot.json'));
@@ -41,6 +41,34 @@ export function creditFigures(lang){
 <rect x="14" y="180" width="572" height="52" fill="#fff" stroke="#161616" stroke-width="2"/><text x="30" y="202" font-size="12" font-weight="600">ผลสองข้อที่สำคัญ</text><text x="30" y="222" font-size="11">๑ สะสม — CO₂ ที่เพิ่มในปีนี้ยังอยู่ในสมดุลนาน หักล้างทันทีไม่ได้  ๒ ระดับโลก — โมเลกุดไม่เคารพพรมแดน</text>
 <rect x="14" y="248" width="572" height="76" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/><text x="30" y="270" font-size="12" font-weight="600">สิ่งที่เครดิตไม่ได้ทำ</text><text x="30" y="290" font-size="11">มันไม่ได้ลบก๊าซที่ปล่อยไปแล้ว มันไม่ได้ทำให้อากาศเย็นลง</text><text x="30" y="310" font-size="11">มันเป็น “บันทึกของความต่าง” ที่วัดได้ ตรวจแล้ว และเขียนลงทะเบียนไว้ครั้งเดียว</text>`, th?'ภาพนี้อธิบายว่าทำไมกฎทุกข้อในสาขานี้จึงเกี่ยวกับการไม่ให้ตันเดียวกันถูกนับซ้ำ ไม่ใช่เรื่องความสะอาดของอากาศ':'This figure explains why every rule in the field is about not counting the same tonne twice, not about cleaning the air.');
 
+  out['credit-layers']=fig('ชั้นของบรรยากาศ และที่ที่ CO₂ ทำงาน',
+  `<rect x="14" y="14" width="572" height="58" fill="#ffffff" stroke="#161616" stroke-width="2"/>
+<text x="24" y="46" font-size="15" font-weight="600">อวกาศ</text>
+<text x="162" y="46" font-size="12">พลังงานออกจากระบบไปยังอวกาศตรงนี้</text>
+<rect x="14" y="72" width="572" height="96" fill="#eef2f7" stroke="#161616" stroke-width="2"/>
+<text x="24" y="94" font-size="13" font-weight="600">สตราโตสเฟียร์</text>
+<text x="24" y="111" font-size="10.5">12–50 กม.</text>
+<rect x="14" y="120" width="136" height="24" fill="#ffd9a0" stroke="#161616" stroke-width="2"/>
+<text x="24" y="136" font-size="10.5">โอโซน (O₃)</text>
+<text x="162" y="94" font-size="12.5" font-weight="600">ชั้นโอโซนอยู่ที่นี่ ในสตราโตสเฟียร์</text>
+<text x="162" y="112" font-size="11">ถูกทำลายด้วยคลอรีนและโบรมีนจาก CFC และฮาลอน</text>
+<text x="162" y="130" font-size="11">คาร์บอนไดออกไซด์ไม่ได้ทำให้โอโซนหาย</text>
+<text x="162" y="152" font-size="11">ชั้นนี้อยู่เหนือสภาพอากาศ และไม่ใช่สิ่งที่เครดิตเคลื่อนย้าย</text>
+<rect x="14" y="168" width="572" height="132" fill="#dceaf4" stroke="#161616" stroke-width="2"/>
+<text x="24" y="192" font-size="13" font-weight="600">โทรโพสเฟียร์</text>
+<text x="24" y="209" font-size="10.5">0–12 กม.</text>
+<circle cx="40" cy="240" r="4" fill="#bd251b"/><circle cx="56" cy="252" r="4" fill="#bd251b"/><circle cx="44" cy="264" r="4" fill="#bd251b"/>
+<text x="70" y="258" font-size="10.5">CO₂</text>
+<text x="162" y="192" font-size="12.5" font-weight="600">ชั้นที่เราอาศัยอยู่ สภาพอากาศเกิดที่นี่</text>
+<text x="162" y="210" font-size="11">ภูมิอุณหภูมิเรือนเกิดเกือบทั้งหมดที่นี่</text>
+<text x="162" y="228" font-size="11">CO₂ ดูดกลืนรังสีอินฟราเรดที่ออกจากพื้นผิว แล้วปล่อยกลับลงมาส่วนหนึ่ง</text>
+<text x="162" y="244" font-size="11">พลังงานจึงออกไปยังอวกาศน้อยลง</text>
+<text x="162" y="270" font-size="11">เครดิตไม่ได้ไปยกเลิกแก๊สที่อยู่ในอากาศแล้ว</text>
+<rect x="14" y="300" width="572" height="40" fill="#ecebe4" stroke="#161616" stroke-width="2"/>
+<text x="24" y="326" font-size="12" font-weight="600">พื้นผิว</text>
+<text x="162" y="326" font-size="11">การเผาไหม้เกิดขึ้นที่นี่ ถ่านหิน น้ำมัน แก๊ส ไม้ และไฟป่า</text>
+<rect x="14" y="340" width="572" height="22" fill="#fff9d7" stroke="#161616" stroke-width="2"/>
+<text x="24" y="355" font-size="11">การเผาไหม้ไม่ได้ทำลายชั้นโอโซน แต่เปลี่ยนสมดุลพลังงานของชั้นที่เราอาศัยอยู่</text>`);
   out['credit-anatomy']=fig('องค์ประกอบของการอ้างสิทธิ์หนึ่งหน่วย',
   `<rect x="16" y="16" width="568" height="86" fill="#fff" stroke="#161616" stroke-width="2"/>
 <text x="32" y="40" font-size="12" font-weight="600">สิ่งที่ทำให้ข้ออ้างนี้เป็นเครดิต ไม่ใช่แค่คำพูด</text>
@@ -67,6 +95,34 @@ ${[['ไม่มีวันที่','แผนลอย ๆ ที่ไม�
 <rect x="14" y="180" width="572" height="84" fill="#fff" stroke="#161616" stroke-width="2"/><text x="30" y="202" font-size="12" font-weight="600">Two consequences that matter</text><text x="30" y="222" font-size="11"><tspan x="30" dy="0">① Cumulative — CO₂ added this year stays in the balance.</tspan><tspan x="30" dy="16">Removing CO₂ later does not undo the warming during that interval.</tspan><tspan x="30" dy="16">② Global — the molecule respects no border.</tspan></text>
 <rect x="14" y="280" width="572" height="76" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/><text x="30" y="302" font-size="12" font-weight="600">What a credit does not do</text><text x="30" y="322" font-size="11">It does not remove the gas already emitted. It does not cool the atmosphere.</text><text x="30" y="342" font-size="11">It is a record of a difference — measured, verified, and written down once.</text>`, th?'ภาพนี้อธิบายว่าทำไมกฎทุกข้อในสาขานี้จึงเกี่ยวกับการไม่ให้ตันเดียวกันถูกนับซ้ำ ไม่ใช่เรื่องความสะอาดของอากาศ':'This figure explains why every rule in the field is about not counting the same tonne twice, not about cleaning the air.');
 
+  out['credit-layers']=fig('The layers of the atmosphere, and where CO₂ acts',
+  `<rect x="14" y="14" width="572" height="58" fill="#ffffff" stroke="#161616" stroke-width="2"/>
+<text x="24" y="46" font-size="15" font-weight="600">Space</text>
+<text x="162" y="46" font-size="12">Energy leaves to space here.</text>
+<rect x="14" y="72" width="572" height="96" fill="#eef2f7" stroke="#161616" stroke-width="2"/>
+<text x="24" y="94" font-size="13" font-weight="600">Stratosphere</text>
+<text x="24" y="111" font-size="10.5">12–50 km</text>
+<rect x="14" y="120" width="136" height="24" fill="#ffd9a0" stroke="#161616" stroke-width="2"/>
+<text x="24" y="136" font-size="10.5">Ozone (O₃)</text>
+<text x="162" y="94" font-size="12.5" font-weight="600">The ozone layer sits here, in the stratosphere</text>
+<text x="162" y="112" font-size="11">Thinned by chlorine and bromine from CFCs and halons.</text>
+<text x="162" y="130" font-size="11">Carbon dioxide does not deplete it.</text>
+<text x="162" y="152" font-size="11">It is above the weather, and it is not what a credit moves.</text>
+<rect x="14" y="168" width="572" height="132" fill="#dceaf4" stroke="#161616" stroke-width="2"/>
+<text x="24" y="192" font-size="13" font-weight="600">Troposphere</text>
+<text x="24" y="209" font-size="10.5">0–12 km</text>
+<circle cx="40" cy="240" r="4" fill="#bd251b"/><circle cx="56" cy="252" r="4" fill="#bd251b"/><circle cx="44" cy="264" r="4" fill="#bd251b"/>
+<text x="70" y="258" font-size="10.5">CO₂</text>
+<text x="162" y="192" font-size="12.5" font-weight="600">The layer we live in — the weather happens here</text>
+<text x="162" y="210" font-size="11">Almost all of the greenhouse effect happens here.</text>
+<text x="162" y="228" font-size="11">CO₂ absorbs infrared leaving the surface and re-emits part</text>
+<text x="162" y="244" font-size="11">of it back down, so less energy reaches space.</text>
+<text x="162" y="270" font-size="11">A credit does not act on the gas already in the air.</text>
+<rect x="14" y="300" width="572" height="40" fill="#ecebe4" stroke="#161616" stroke-width="2"/>
+<text x="24" y="326" font-size="12" font-weight="600">Surface</text>
+<text x="162" y="326" font-size="11">Burning happens here — coal, oil, gas, wood, and fire.</text>
+<rect x="14" y="340" width="572" height="22" fill="#fff9d7" stroke="#161616" stroke-width="2"/>
+<text x="24" y="355" font-size="11">Burning does not damage the ozone layer. It changes the energy balance of the layer we live in.</text>`);
   out['credit-anatomy']=fig('Anatomy of one credit claim',
   `<rect x="16" y="16" width="568" height="86" fill="#fff" stroke="#161616" stroke-width="2"/>
 <text x="32" y="40" font-size="12" font-weight="600">What makes this a credit rather than a sentence</text>

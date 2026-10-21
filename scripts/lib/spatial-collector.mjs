@@ -32,7 +32,10 @@ export const SURFACES=[
  {name:'research-en',path:'research-en.html',ready:'.research-intro',key:'.thesis'},
 ];
 
-export function collectSpatial(){
+export function collectSpatial(root){
+ // The scope defaults to the whole document. A caller may pass an element to measure one
+ // section in isolation, so a long page can be audited part by part instead of only as a whole.
+ const scope=root||document;
  const out=[];
  const desc=e=>{
   if(!e||e.nodeType!==1)return '?';
@@ -67,8 +70,27 @@ export function collectSpatial(){
  const spansRows=e=>{const c=csOf(e);return /span/.test(c.gridRowEnd)||(/^\d+$/.test(c.gridRowStart)&&/^\d+$/.test(c.gridRowEnd)&&Number(c.gridRowEnd)-Number(c.gridRowStart)>1);};
  const styleCache_=styleCache;
 
- const CANDIDATES=document.querySelectorAll('div,section,article,main,header,footer,nav,ul,ol,dl,table,figure,aside,span,p,li');
- const containers=[...CANDIDATES].filter(e=>e.children.length>=2);
+ const SEL='div,section,article,main,header,footer,nav,ul,ol,dl,table,figure,aside,span,p,li';
+ const STRIPS='nav,header,footer,[role=toolbar],[role=tablist],.reader-actions,.chart-controls,.toolbar,.actions,.map-tools,.quick-tools,.bottom-nav,.more-nav';
+ // When the caller scopes the measurement to one section, that section is itself a container whose
+ // own children carry the gaps — a query of descendants alone would miss exactly what was asked
+ // for. So a scoped root joins its own candidate list.
+ const isElementRoot=typeof Element!=='undefined'&&scope instanceof Element;
+ const CANDIDATES=isElementRoot?[scope,...scope.querySelectorAll(SEL)]:[...scope.querySelectorAll(SEL)];
+ // Every strip of controls inside the scope, plus the scope itself when it is one. A scoped root
+ // that is a nav has to be judged by the same rule as any other nav.
+ const strips=list=>{
+  const found=[];
+  for(const sel of list)found.push(...scope.querySelectorAll(sel));
+  if(isElementRoot&&list.some(sel=>scope.matches(sel)))found.push(scope);
+  // One element can match several selectors — a nav that also carries .bottom-nav, for instance —
+  // and it must be judged once, or the same defect is reported twice.
+  return [...new Set(found)];
+ };
+ // A grid with a single child in a two-column template is the clearest possible empty track, so
+ // the shared candidate list keeps containers with one child. Each detector below applies its own
+ // sibling-count guard before it draws a conclusion.
+ const containers=[...CANDIDATES].filter(e=>e.children.length>=1);
 
  // --- A. Grid rows and tracks.
  for(const g of containers){
@@ -127,15 +149,20 @@ export function collectSpatial(){
   }
   if(gaps.length<2)continue;
   const median=[...gaps].sort((a,b)=>a.g-b.g)[Math.floor(gaps.length/2)].g;
+  // A flush stack has no rhythm at all, so its median gap is zero. Requiring a positive median
+  // made the detector blind to the worst case: siblings sitting flush against each other with one
+  // huge hole between two of them. In a flush stack there is no spacing convention to excuse a
+  // hole, so a hole has to stand on its own size — which is why the bar is higher there.
+  const bar=median>0?Math.max(40,2.2*median):64;
   for(const {g,i} of gaps){
-   if(g>=40&&median>0&&g>2.2*median){
-    out.push({kind:'gap-outlier',severity:g>=96?'high':'medium',el:desc(stack[i].k),gap:Math.round(g),note:`${Math.round(g)}px gap vs ${Math.round(median)}px typical in the same container`});
+   if(g>=bar){
+    out.push({kind:'gap-outlier',severity:g>=96?'high':'medium',el:desc(stack[i].k),gap:Math.round(g),note:median>0?`${Math.round(g)}px gap vs ${Math.round(median)}px typical in the same container`:`${Math.round(g)}px gap inside a flush stack with no spacing convention`});
    }
   }
  }
 
  // --- C. Accidental wrapping of a control strip.
- for(const c of document.querySelectorAll('nav,header,footer,[role=toolbar],[role=tablist],.reader-actions,.chart-controls,.toolbar,.actions,.map-tools,.quick-tools,.bottom-nav,.more-nav')){
+ for(const c of strips(STRIPS.split(','))){
   if(!shown(c))continue;
   const cs=csOf(c);
   if(cs.display!=='flex'&&cs.display!=='inline-flex')continue;
@@ -157,7 +184,7 @@ export function collectSpatial(){
  }
 
  // --- D. Scattered actions: related controls in one strip that do not share a line.
- for(const c of document.querySelectorAll('[role=toolbar],.reader-actions,.chart-controls,.toolbar,.actions,.map-tools,.quick-tools')){
+ for(const c of strips('[role=toolbar],.reader-actions,.chart-controls,.toolbar,.actions,.map-tools,.quick-tools'.split(','))){
   if(!shown(c))continue;
   const acts=[...c.querySelectorAll('button,a[href],[role=button]')].filter(shown);
   if(acts.length<2)continue;

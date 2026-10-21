@@ -27,15 +27,22 @@ jobs:
           node scripts/forest-watch-browser-test.mjs
           node scripts/flat-ui-browser-test.mjs
           node scripts/bible-design-browser-test.mjs
+          node scripts/credit-figure-browser-test.mjs
           node scripts/sea-browser-test.mjs
           node scripts/ship-browser-test.mjs
           node scripts/release-audit-browser-test.mjs
           node scripts/anti-slop-browser-test.mjs
           node scripts/spatial-gate.mjs
+          node scripts/spatial-detector-self-test.mjs
           node scripts/carbona-browser-test.mjs
           node scripts/workspace-browser-test.mjs
           npm run test:design
           BASE_URL=http://127.0.0.1:8788 node scripts/academic-browser-test.mjs
+      - name: Deep content spatial audit
+        run: |
+          PORT=8789 node dev-server.mjs > /tmp/carbon-dev-deep.log 2>&1 &
+          for i in 1 2 3 4 5 6 7 8 9 10; do curl -fsS http://127.0.0.1:8789/ > /dev/null && break || sleep 1; done
+          BASE_URL=http://127.0.0.1:8789 node scripts/spatial-deep-probe.mjs
   secrets:
     runs-on: ubuntu-latest
     steps:
