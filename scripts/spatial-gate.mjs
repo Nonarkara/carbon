@@ -24,7 +24,7 @@ const OUT='test-results/spatial';
 // project changed most recently.
 const MATRIX=[
  {name:'home',path:'?lang=th',ready:'#kStock',widths:[320,768,1440]},
- {name:'sea',path:'sea.html?lang=th',ready:'#countryRows tr',widths:[320,390,768,1440]},
+ {name:'sea',path:'sea.html?lang=th',ready:'body[data-ready]',widths:[320,390,768,1440]},
  {name:'bible',path:'bible.html?lang=th#sea-overview',ready:'.prose',widths:[390,1440]},
  {name:'bible-credits',path:'bible.html?lang=en#sea-what-is-a-credit',ready:'.figure-stack',widths:[390,1440]},
  {name:'guide-th',path:'guide-th.html',ready:'.manual-routes',widths:[320,390,768]},

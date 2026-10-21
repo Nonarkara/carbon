@@ -23,7 +23,7 @@ for(const lang of ['th','en'])for(const width of [390,700,701,768,1024,1100]){
  if(width===1024)await page.screenshot({path:`test-results/oct19/after-nav-${lang}-1024.png`});
 }
 for(const lang of ['th','en']){
- await page.setViewportSize({width:390,height:844});await page.goto(`${base}/sea.html?lang=${lang}`,{waitUntil:'domcontentloaded'});await page.locator('#countryRows tr').first().waitFor();
+ await page.setViewportSize({width:390,height:844});await page.goto(`${base}/sea.html?lang=${lang}`,{waitUntil:'domcontentloaded'});await page.locator('body[data-ready]').first().waitFor();
  for(const [iso,key,name] of [['SGP','Enter',lang==='th'?'สิงคโปร์':'Singapore'],['BRN',' ',lang==='th'?'บรูไน':'Brunei']]){
   const dot=page.locator(`[data-locator=${iso}]`);assert.equal(await dot.getAttribute('role'),'button');assert.match(await dot.getAttribute('aria-label'),new RegExp(name));await dot.focus();await page.keyboard.press(key);
   assert.equal(await page.locator('#country').inputValue(),iso);assert.equal(await dot.getAttribute('aria-pressed'),'true');assert.equal(await page.locator(`path[data-country=${iso}]`).getAttribute('aria-pressed'),'true');

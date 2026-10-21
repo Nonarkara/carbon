@@ -2,9 +2,9 @@
 
 ## Explore Southeast Asia
 
-1. In the workbench’s area selector, choose **Southeast Asia → All 11 countries** or a country. The regional screen opens separately and preserves your Thai project inputs. [Open it directly](sea.html?lang=en).
-2. Choose **Country** and a **Map metric**. **Whole region** is at the map’s top right. Open **Read** for methods or the Thailand workbench. Read each quantity with its source and period. Forest cover and CO₂ are 2023 statistics; GFW fluxes are annual averages over 2001–2025.
-3. Search the comparison table by Thai/English name or ISO code, then select a country. Positive GFW net means a modelled source, negative a sink. Grey means missing data, never zero.
+1. In the workbench’s area selector, choose **Southeast Asia → All 11 countries** or a country. The regional view opens beneath the same header and preserves Thai project inputs in memory. Choose Thailand in the same selector to return. Reloading still clears unsaved inputs. [Open it directly](sea.html?lang=en).
+2. Choose **Country** and a **Map metric**. **Whole region** is at the map’s top right. Use **Map**, **Compare 11** and **Research** to change views. On phones, **Evidence** opens the selected country’s numbers, equations, sources and exports. On desktop this evidence stays beside the map and scrolls independently. Open **Read** for methods; the header geography selector returns to Thailand. Read each quantity with its source and period. Forest cover and CO₂ are 2023 statistics; GFW fluxes are annual averages over 2001–2025.
+3. Choose **Compare 11**, search the table by Thai/English name or ISO code, then select a country to return to its map and evidence. Positive GFW net means a modelled source, negative a sink. Grey means missing data, never zero.
 4. Expand **Sources and reuse rights**; open **Country research** for the assumptions and next evidence to collect. Export **JSON** for full provenance or **CSV** for the selected figures.
 5. For measured Thai project inputs, return to the original workbench. This regional view has no parcel carbon calculator, regional credit issuance or corporate inventory submission.
 
@@ -12,7 +12,7 @@
 
 Open **Read → About → Carbon Bible**, or **Explain this number + diagram** beside a map equation. Search in Thai or English, choose a category, then open a chapter. The diagram shows the path; the worked example shows the arithmetic; the source shelf gives versions and dates. TH/EN preserves the chapter and search. **Clear** restores all chapters. **Copy chapter link** shares the view; **Print this chapter** prints its explanation and sources. The reader opens separately to preserve workbench inputs. [Open the Bible](bible.html?lang=en).
 
-The reader has **65 TH/EN chapters**. Choose **Assessment design** for client briefs, evidence tables, all 15 Scope 3 categories, product life cycles, a hypothetical SME calculation and review/handover templates. The **In this chapter** links jump to sections. Choose **Impacts & reuse** for dated public-domain photographs with source/rights links and downloads. New diagrams have TH/EN SVG downloads under CC0; the dedication does not cover logos or upstream assets. The Bible teaches CFO study design; the workbench remains a forest assessment tool.
+The reader has **68 TH/EN chapters**. Choose **Assessment design** for client briefs, evidence tables, all 15 Scope 3 categories, product life cycles, a hypothetical SME calculation and review/handover templates. The **In this chapter** links jump to sections. Choose **Impacts & reuse** for dated public-domain photographs with source/rights links and downloads. New diagrams have TH/EN SVG downloads under CC0; the dedication does not cover logos or upstream assets. The Bible teaches CFO study design; the workbench remains a forest assessment tool.
 
 ## What this release does
 

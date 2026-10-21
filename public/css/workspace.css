@@ -1,0 +1,50 @@
+/* One persistent application bar for both geographies. */
+.workspace-bar{display:grid;grid-template-columns:minmax(140px,1fr) minmax(180px,380px) auto;grid-template-areas:"brand search right";align-items:center;gap:8px 12px;padding:6px 16px;min-height:56px;background:white;color:var(--ink);border-bottom:1px solid var(--ink)}
+.workspace-bar .brand{grid-area:brand;display:flex;align-items:center;gap:8px;min-width:0;max-height:none;overflow:visible}
+.workspace-bar .brand img{width:32px;height:32px;flex:0 0 32px;object-fit:contain}
+.workspace-bar .brand h1,.dashboard .workspace-bar .brand h1{font-size:22px;line-height:1.2;margin:0;white-space:nowrap;letter-spacing:0}
+.workspace-bar .brand .country{font-size:11px;font-weight:400;margin-left:8px;text-transform:uppercase}
+.workspace-bar .brand p{display:none}
+.workspace-bar .search{grid-area:search;min-width:0;width:100%;margin:0}
+.workspace-bar .search select,.dashboard .workspace-bar .search select{width:100%;height:40px;min-height:40px;padding:4px 10px;font-size:13px;border:1px solid var(--ink);background:white;color:var(--ink)}
+.workspace-bar .top-right{grid-area:right;display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+.workspace-bar .langs{display:flex;border:1px solid var(--ink)}
+.workspace-bar .langs button,.dashboard .workspace-bar .langs button{width:40px;min-width:40px;min-height:40px;height:40px;padding:4px;border:0;border-radius:0;background:white;color:var(--ink);font-size:13px;line-height:1.3}
+.workspace-bar .langs button[aria-pressed=true]{background:#ffdf00;color:var(--ink)}
+.workspace-bar .reference-menu{position:relative;z-index:1500}
+.workspace-bar .reference-menu>summary,.dashboard .workspace-bar .reference-menu>summary{display:flex;align-items:center;justify-content:center;min-height:40px;height:40px;padding:4px 10px;border:1px solid var(--ink);background:white;list-style:none;font-size:13px;line-height:1.3}
+.workspace-bar .reference-menu>summary::after{content:none}
+.workspace-bar .reference-menu>div{position:absolute;right:0;top:100%;width:230px;padding:6px;background:white;border:1px solid var(--ink);z-index:1600}
+.workspace-bar .reference-menu:not([open])>div{display:none}
+.workspace-bar .reference-menu a{display:block;padding:8px;font-size:13px}
+.workspace-bar .status{display:none}.sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.dashboard .top{display:block;padding:0;gap:0;grid-template-areas:none}
+.dashboard .top .quick-tools{margin:0;padding-left:16px}
+body:not(.dashboard)>header.top{display:block;position:sticky;top:0;padding:0;min-height:0;border:0;z-index:1400}
+#regionalView[hidden]{display:none!important}
+body[data-region]>.top .quick-tools,body[data-region]>.top .advanced-tools,body[data-region]>.verdict,body[data-region]>.kpis,body[data-region]>.stage,body[data-region]>.bottom-nav,body[data-region]>.foot,body[data-region]>.about{display:none!important}
+body.dashboard[data-region]{display:block;overflow:hidden;height:100dvh;min-height:0;padding-bottom:0}
+#regionalView{position:fixed;inset:var(--workspace-bar-height,56px) 0 0;z-index:1200;background:white}
+#regionalFrame{display:block;width:100%;height:100%;border:0}
+@media(max-width:700px){
+ .workspace-bar{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"brand right" "search search";gap:4px 8px;padding:4px 12px;min-height:0}
+ .workspace-bar .brand h1,.dashboard .workspace-bar .brand h1{font-size:20px}
+ .workspace-bar .brand .country{display:none}
+ .workspace-bar .search{order:initial;flex:initial}
+ .workspace-bar .top-right{order:initial;flex:initial}
+ .dashboard .top .quick-tools{margin:0;padding-left:12px}
+}
+@media print{.workspace-bar{position:static}#regionalView{position:static;height:auto}}
+/* Phones keep the geography control on the same thin line as the mark. */
+@media(max-width:700px){
+ .workspace-bar{grid-template-columns:28px minmax(0,1fr) auto;grid-template-areas:"brand search right";gap:6px;padding:4px 8px;min-height:50px}
+ .workspace-bar .brand img{width:28px;height:28px;flex-basis:28px}
+ .workspace-bar .brand>div{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ .workspace-bar .search select,.dashboard .workspace-bar .search select{padding:4px;font-size:12px}
+ .workspace-bar .reference-menu>summary,.dashboard .workspace-bar .reference-menu>summary{padding:4px 7px}
+ .workspace-bar .langs button,.dashboard .workspace-bar .langs button{width:34px;min-width:34px}
+}
+.dashboard[data-region]>.top{position:relative;z-index:1400}
+body[data-embedded]>header.top{display:none}
+.workspace-bar .langs{flex-shrink:0}
+.workspace-bar .langs button,.dashboard .workspace-bar .langs button{width:auto;flex:1;white-space:nowrap}
