@@ -178,6 +178,39 @@ for(const [path,label] of [['research-th.html','th'],['research-en.html','en']])
  }
 }
 
+// --- 6. The home workbench: each of its five tab panels.
+// The workbench shows one panel at a time and hides the other four, so a hidden panel has
+// zero-size children and is skipped by the collector exactly like a hidden SEA view. Only the
+// carbon panel was ever measured.
+const HOME_TABS=['carbon','project','calculate','evidence','sources'];
+for(const lang of ['th','en']){
+ for(const width of [PHONE,DESKTOP]){
+  for(const t of HOME_TABS){
+   await run({
+    kind:'home-tab',id:t,lang,width,path:`?lang=${lang}`,ready:'#kStock',
+    scope:`[data-panel="${t}"]`,
+    expect:`document.body.dataset.mode==='${t}'`,expectLabel:`the ${t} panel must actually be open`,
+    act:async()=>{
+     // The same tab is offered in the lens strip on a desktop and in the bottom bar on a phone,
+     // but the last two tabs sit inside the "more" disclosure on a phone. Open whatever holds
+     // the button, then tap it — a reader opens that disclosure first, and the audit has to walk
+     // the same path or it measures a panel that was never on screen.
+     await page.evaluate(name=>{
+      const visible=b=>{const r=b.getBoundingClientRect();return r.width>0&&r.height>0;};
+      let btn=[...document.querySelectorAll(`[data-tab="${name}"]`)].find(visible);
+      if(!btn){
+       for(const d of document.querySelectorAll('details'))if(d.querySelector(`[data-tab="${name}"]`))d.open=true;
+       btn=[...document.querySelectorAll(`[data-tab="${name}"]`)].find(visible);
+      }
+      if(btn)btn.click();
+     },t);
+     await page.waitForTimeout(220);
+    },
+   });
+  }
+ }
+}
+
 await writeFile(`${OUT}/deep-report.json`,JSON.stringify({base,checkedAt:new Date().toISOString(),report,pageErrors:errors},null,2));
 await browser.close();
 

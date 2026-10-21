@@ -3,6 +3,9 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 const base=process.env.BASE_URL||'http://127.0.0.1:8788';
+// The deployed snapshot is the source of truth for what the country panel must show, so the
+// panel is checked against it rather than against a hand-written expectation.
+const snap=JSON.parse(await readFile('public/data/sea/snapshot.json','utf8'));
 const browser=await chromium.launch();const page=await browser.newPage({acceptDownloads:true});const errors=[];const layouts=[];
 page.on('pageerror',e=>errors.push(e.message));await mkdir('test-results',{recursive:true});
 for(const lang of ['th','en'])for(const width of [320,370,375,700,701,768,1440]){
@@ -22,6 +25,30 @@ for(const lang of ['th','en'])for(const width of [320,370,375,700,701,768,1440])
 
  await page.selectOption('#country','TLS');assert.match(await page.locator('#countryTitle').innerText(),lang==='th'?/ติมอร์/:/Timor/);assert.match(await page.locator('#countryChapter').getAttribute('href'),/sea-tls/);
  await page.locator('#fitRegion').click();assert.equal(await page.locator('#country').inputValue(),'SEA');await page.selectOption('#country','TLS');
+ // A withheld value must read as missing and publish its coverage. It must never print a zero
+ // and it must never print a sum of the ten countries that do publish it.
+ const MISSING=lang==='th'?'ยังไม่มีข้อมูล':'Not available',PARTIAL=lang==='th'?'ข้อมูลไม่ครบ จึงไม่แสดงยอดภูมิภาค':'Incomplete coverage: regional total withheld';
+ const FIELDS={stock:'carbon_stock_t_c',loss:'tree_cover_loss_ha',peat:'peat_stock_t_c',mangrove:'mangrove_stock_t_c'};
+ const checkPanel=async iso=>{
+  await page.selectOption('#country',iso);
+  const c=iso==='SEA'?null:snap.countries.find(x=>x.iso3===iso);
+  for(const [key,field] of Object.entries(FIELDS)){
+   const row=page.locator(`#countryNumbers div[data-number="${key}"]`);
+   assert.equal(await row.count(),1,`${iso}: the country panel has no ${key} row`);
+   const value=(await row.locator('dd').innerText()).trim(),note=(await row.locator('small').innerText()).trim();
+   assert.ok(/\d{4}/.test(note),`${iso} ${key}: the source note carries no period, got "${note}"`);
+   const raw=iso==='SEA'?(snap.totals[field].value):c[field];
+   if(raw===null||raw===undefined){
+    assert.equal(value,MISSING,`${iso} ${key}: a withheld value must read as missing, not "${value}"`);
+    assert.notEqual(value,'0',`${iso} ${key}: a missing value must never print as zero`);
+    if(iso==='SEA')assert.ok(note.includes(PARTIAL),`${iso} ${key}: a withheld regional total must publish its coverage, got "${note}"`);
+   }else{
+    assert.notEqual(value,MISSING,`${iso} ${key}: a published value must not read as missing`);
+    assert.ok(await row.locator('dd .metric-unit').count(),`${iso} ${key}: a published value must carry its unit`);
+   }
+  }
+ };
+ await checkPanel('IDN');await checkPanel('SEA');await checkPanel('SGP');
  await page.selectOption('#metric','forest_net_t_yr');assert.match(page.url(),/metric=forest_net_t_yr/);
  await selectSeaView(page,'compare');await page.fill('#countrySearch','สิงคโปร์');assert.equal(await page.locator('#countryRows tr').count(),1);await page.locator('#countryRows button').click();assert.equal(await page.locator('#country').inputValue(),'SGP');
  await selectSeaView(page,'compare');await page.fill('#countrySearch','xyznoresult');assert.ok(await page.locator('#noCountries').isVisible());await page.fill('#countrySearch','');await selectSeaView(page,'map');
