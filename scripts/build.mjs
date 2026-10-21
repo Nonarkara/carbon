@@ -18,3 +18,6 @@ console.log('Built static site at',commit);
 await import('./build-research.mjs');
 
 await import('./build-bible.mjs');
+
+const {versionAssets}=await import('./version-assets.mjs');
+await versionAssets(['public/index.html','public/sea.html','public/bible.html',... ['th','en'].flatMap(lang=>[`public/guide-${lang}.html`,`public/research-${lang}.html`])]);

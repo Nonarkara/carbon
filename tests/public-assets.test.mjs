@@ -84,3 +84,13 @@ test('Every published page loads its own stylesheets and scripts from public/',a
  }
  assert.deepEqual(problems,[],problems.join('\n'));
 });
+
+test('Page CSS and entry scripts are pinned to their actual content bytes',async()=>{
+ const {createHash}=await import('node:crypto');
+ for(const name of ['index.html','sea.html','bible.html','guide-th.html','guide-en.html','research-th.html','research-en.html']){
+  const html=await readFile(join(PUBLIC,name),'utf8');
+  const refs=[...html.matchAll(/(?:href|src)="((?:css|js|vendor)\/[^"?]+\.(?:css|js))(?:\?v=([a-f0-9]+))?"/g)];
+  assert.ok(refs.length>0,name);
+  for(const [,asset,digest]of refs){const hash=createHash('sha256').update(await readFile(join(PUBLIC,asset))).digest('hex').slice(0,12);assert.equal(digest,hash,`${name}: ${asset} can resolve to a different asset generation`);}
+ }
+});

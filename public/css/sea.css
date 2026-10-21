@@ -103,3 +103,26 @@ body[data-sea-view=evidence] .workspace{display:grid}
  body[data-sea-view=research]>footer p{margin:4px 0;font-size:11px}
 }
 @media(max-width:850px){.workspace{overflow:auto}#seaMap{min-height:300px}}
+/* Country, metric and view occupy a single line at every screen width. */
+.scope-tools{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;padding:4px 12px}
+.scope-tools>label{flex:0 1 240px;max-width:none;min-width:0}
+.scope-tools>label:nth-child(2){flex-basis:300px}
+.scope-tools label>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.scope-tools select{min-height:44px;height:44px;font-size:13px}
+.sea-views{position:static;display:flex;flex:none;gap:4px;background:transparent;padding:0}
+.sea-views .view-select{display:none}
+@media(min-width:851px){
+ .workspace,body[data-embedded] .workspace{height:max(420px,calc(100dvh - var(--sea-chrome-height,128px)))}
+}
+@media(max-width:850px){
+ body{padding-bottom:0}
+ .scope-tools{padding:4px 8px;gap:4px}
+ .scope-tools>label:first-child{flex:1 1 95px}
+ .scope-tools>label:nth-child(2){flex:1.4 1 130px}
+ .scope-tools select{font-size:12px;padding:4px;min-height:44px;height:44px;max-width:100%}
+ .sea-views{flex:1 1 95px;min-width:0}
+ .sea-views button{display:none}
+ .sea-views .view-select{display:block;width:100%;min-width:0}
+ .sea-views select{width:100%}
+}
+@media print{.scope-tools,.sea-views{display:none}body{height:auto;overflow:visible;padding:0;display:block}main{display:block}.workspace,body[data-embedded] .workspace{height:auto!important;overflow:visible}#countryEvidence{height:auto;overflow:visible}}

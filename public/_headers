@@ -11,3 +11,9 @@
   Cache-Control: no-cache
 /css/*
   Cache-Control: no-cache
+/
+  Cache-Control: no-cache
+/sea
+  Cache-Control: no-cache
+/sea.html
+  Cache-Control: no-cache

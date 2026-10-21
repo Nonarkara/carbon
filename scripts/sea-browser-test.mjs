@@ -1,3 +1,4 @@
+import {selectSeaView} from './browser-controls.mjs';
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
@@ -22,8 +23,8 @@ for(const lang of ['th','en'])for(const width of [320,370,375,700,701,768,1440])
  await page.selectOption('#country','TLS');assert.match(await page.locator('#countryTitle').innerText(),lang==='th'?/ติมอร์/:/Timor/);assert.match(await page.locator('#countryChapter').getAttribute('href'),/sea-tls/);
  await page.locator('#fitRegion').click();assert.equal(await page.locator('#country').inputValue(),'SEA');await page.selectOption('#country','TLS');
  await page.selectOption('#metric','forest_net_t_yr');assert.match(page.url(),/metric=forest_net_t_yr/);
- await page.locator('button[data-sea-view=compare]').click();await page.fill('#countrySearch','สิงคโปร์');assert.equal(await page.locator('#countryRows tr').count(),1);await page.locator('#countryRows button').click();assert.equal(await page.locator('#country').inputValue(),'SGP');
- await page.locator('button[data-sea-view=compare]').click();await page.fill('#countrySearch','xyznoresult');assert.ok(await page.locator('#noCountries').isVisible());await page.fill('#countrySearch','');await page.locator('button[data-sea-view=map]').click();
+ await selectSeaView(page,'compare');await page.fill('#countrySearch','สิงคโปร์');assert.equal(await page.locator('#countryRows tr').count(),1);await page.locator('#countryRows button').click();assert.equal(await page.locator('#country').inputValue(),'SGP');
+ await selectSeaView(page,'compare');await page.fill('#countrySearch','xyznoresult');assert.ok(await page.locator('#noCountries').isVisible());await page.fill('#countrySearch','');await selectSeaView(page,'map');
  const shadow=await page.locator('button').evaluateAll(nodes=>nodes.map(e=>getComputedStyle(e).boxShadow).filter(x=>x!=='none'));assert.deepEqual(shadow,[]);
  await page.locator('[data-lang=en]').click();assert.equal(await page.locator('#country').inputValue(),'SGP');assert.equal(await page.locator('html').getAttribute('lang'),'en');
  if(width===1440&&lang==='en')await page.screenshot({path:'test-results/sea-preview.png'});

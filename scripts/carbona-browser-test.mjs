@@ -1,3 +1,4 @@
+import {selectSeaView} from './browser-controls.mjs';
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
@@ -9,7 +10,7 @@ const manifest=await page.request.get(`${base}/manifest.json`).then(r=>r.json())
 for(const lang of ['th','en'])for(const width of [320,390,768,1440]){
  const name=lang==='th'?'คาร์บอนนะ':'Carbona';await page.setViewportSize({width,height:900});await page.goto(`${base}/sea.html?lang=${lang}&country=BRN`,{waitUntil:'domcontentloaded'});await page.locator('body[data-ready]').first().waitFor();await page.evaluate(()=>document.fonts.ready);
  assert.equal(await page.locator('#brandName').textContent(),name);assert.match(await page.title(),new RegExp(name));
- await page.locator('button[data-sea-view=research]').click();const r=await page.locator('#readingRoutes').evaluate(e=>{const links=[...e.children];return {height:e.offsetHeight,count:links.length,font:parseFloat(getComputedStyle(links[0]).fontSize),rowGap:parseFloat(getComputedStyle(e).rowGap),targets:links.map(a=>a.getBoundingClientRect().height)};});measurements.push({lang,width,...r});assert.equal(r.count,9);assert.ok(r.height<=(width<=700?240:100),'auxiliary list consumes primary-content space');assert.ok(r.targets.every(h=>h>=24),'auxiliary targets too small');assert.ok(r.font<=13&&r.rowGap<=2,'auxiliary hierarchy lost');assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ await selectSeaView(page,'research');const r=await page.locator('#readingRoutes').evaluate(e=>{const links=[...e.children];return {height:e.offsetHeight,count:links.length,font:parseFloat(getComputedStyle(links[0]).fontSize),rowGap:parseFloat(getComputedStyle(e).rowGap),targets:links.map(a=>a.getBoundingClientRect().height)};});measurements.push({lang,width,...r});assert.equal(r.count,9);assert.ok(r.height<=(width<=700?240:100),'auxiliary list consumes primary-content space');assert.ok(r.targets.every(h=>h>=24),'auxiliary targets too small');assert.ok(r.font<=13&&r.rowGap<=2,'auxiliary hierarchy lost');assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await page.locator('#readingRoutes a').first().focus();assert.equal(await page.locator('#readingRoutes a').first().evaluate(e=>document.activeElement===e),true);
  if(width===390){await page.locator('.research-route').scrollIntoViewIfNeeded();await page.screenshot({path:`test-results/carbona/reading-${lang}.png`});}
  await page.locator(`[data-lang=${lang==='th'?'en':'th'}]`).click();assert.equal(await page.locator('#country').inputValue(),'BRN');assert.equal(await page.locator('#brandName').textContent(),lang==='th'?'Carbona':'คาร์บอนนะ');
