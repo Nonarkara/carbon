@@ -226,9 +226,116 @@ const cost=await page.evaluate(`(${chromeCost.toString()})(document)`);
 assert.ok(cost.totalPct>25,`the chrome cost of a 400px bar on a 900px screen must exceed the limit, got ${cost.totalPct}%`);
 await page.evaluate(()=>document.querySelector('#synthetic-bar')?.remove());
 
+// --- 9g. unreachable-content: content cut off by a clip that cannot scroll.
+//
+// This is the defect the research page actually had: `td{min-width:125px}` guaranteed every
+// table was wider than the phone's reading column, and the table's own `overflow:auto` hid
+// the overflow in a second scroller. Thirty tables were cut at the column edge with the rest
+// of the text unreachable.
+//
+// The fixture reproduces that shape: content that is wider than the box it sits in, inside a
+// clip that cannot scroll. The detector must report it.
+await page.evaluate(()=>{
+ const box=document.createElement('div');
+ box.id='synthetic-clip';
+ // Fixed, not absolute: the page may already be scrolled, and a fixture parked at a document
+ // coordinate can land outside the viewport — where content is simply not painted, which is a
+ // different failure from content that is cut off.
+ box.style.cssText='position:fixed;left:20px;top:300px;width:300px;overflow:hidden;background:#fff;z-index:1';
+ const p=document.createElement('p');
+ p.textContent='this paragraph is far wider than the box that clips it and can never be read';
+ p.style.cssText='margin:0;width:900px;background:#eee';
+ box.append(p);
+ document.body.append(box);
+});
+foundLaw=await law();
+assert.ok(foundLaw.some(o=>o.kind==='unreachable-content'),`unreachable-content must be detected, got ${JSON.stringify(foundLaw)}`);
+await page.evaluate(()=>document.querySelector('#synthetic-clip')?.remove());
+
+// --- 9h. The SAME content in a scrollable box is NOT a defect. A wide table that scrolls is
+// a table that needs the room; the law allows a table to take the space it needs to be
+// understood. Only content that is cut off AND unreachable is a failure, and conflating the
+// two would condemn every scrollable table in the project.
+await page.evaluate(()=>{
+ const box=document.createElement('div');
+ box.id='synthetic-scroller';
+ box.style.cssText='position:fixed;left:20px;top:300px;width:300px;overflow-x:auto;background:#fff;z-index:1';
+ const p=document.createElement('p');
+ p.textContent='this paragraph is far wider than the box that holds it and the box can scroll';
+ p.style.cssText='margin:0;width:900px;background:#eee';
+ box.append(p);
+ document.body.append(box);
+});
+foundLaw=await law();
+assert.ok(!foundLaw.some(o=>o.kind==='unreachable-content'),`a scrollable wide block is not unreachable content, got ${JSON.stringify(foundLaw)}`);
+await page.evaluate(()=>document.querySelector('#synthetic-scroller')?.remove());
+
+// --- 9i. nested-scroll: the overflow moved into a scroller inside a scroller.
+//
+// This is the defect the research page really had. The page wrapped every table in a
+// `.table-scroll` frame, and the table itself was `display:block;overflow:auto` as well, so
+// the frame the reader could see never scrolled and the overflow lived in a second scroll
+// area inside the table. Twenty-five of them, at 390px.
+//
+// The fixture reproduces that: a frame that cannot scroll, holding a scroller that can.
+await page.evaluate(()=>{
+ const frame=document.createElement('div');
+ frame.id='synthetic-frame';
+ frame.style.cssText='position:fixed;left:20px;top:300px;width:300px;overflow:auto;background:#fff;z-index:1';
+ const inner=document.createElement('div');
+ inner.id='synthetic-inner';
+ // The inner scroller is the same width as its frame and holds content wider than itself —
+ // so the INNER scrolls and the frame cannot, which is the shape the research page had.
+ inner.style.cssText='width:100%;height:40px;overflow:auto;background:#eee';
+ inner.innerHTML='<div style="width:900px">the overflow that lives in the wrong scroller</div>';
+ frame.append(inner);
+ document.body.append(frame);
+});
+foundLaw=await law();
+assert.ok(foundLaw.some(o=>o.kind==='nested-scroll'),`nested-scroll must be detected, got ${JSON.stringify(foundLaw)}`);
+await page.evaluate(()=>document.querySelector('#synthetic-frame')?.remove());
+
+// --- 9j. A pair of scroll containers where NEITHER scrolls is not a defect. The SEA page has
+// one: a workspace with an inner panel, both overflow:auto, both with nothing to scroll.
+// Reporting that would be reporting a CSS detail the reader never meets.
+await page.evaluate(()=>{
+ const frame=document.createElement('div');
+ frame.id='synthetic-inert-frame';
+ frame.style.cssText='position:fixed;left:20px;top:300px;width:300px;overflow:auto;background:#fff;z-index:1';
+ const inner=document.createElement('div');
+ inner.id='synthetic-inert-inner';
+ inner.style.cssText='width:200px;height:40px;overflow:auto;background:#eee';
+ inner.textContent='nothing here overflows at all';
+ frame.append(inner);
+ document.body.append(frame);
+});
+foundLaw=await law();
+assert.ok(!foundLaw.some(o=>o.kind==='nested-scroll'),`an inert pair of scroll containers is not a defect, got ${JSON.stringify(foundLaw)}`);
+await page.evaluate(()=>document.querySelector('#synthetic-inert-frame')?.remove());
+
+// --- 9k. A nested area that scrolls DOWNWARD is not a defect either. The Southeast Asia page
+// has one: its evidence panel scrolls 462px inside the workspace frame, and that layout is
+// correct — the workspace fills the viewport below the chrome and the page itself never
+// scrolls, so the panel IS the reading surface. The defect is an area that overflows
+// SIDEWAYS inside a document read from top to bottom.
+await page.evaluate(()=>{
+ const frame=document.createElement('div');
+ frame.id='synthetic-vertical-frame';
+ frame.style.cssText='position:fixed;left:20px;top:200px;width:300px;height:120px;overflow:auto;background:#fff;z-index:1';
+ const inner=document.createElement('div');
+ inner.id='synthetic-vertical-inner';
+ inner.style.cssText='width:100%;height:100%;overflow:auto;background:#eee';
+ inner.innerHTML='<div style="height:900px">the panel that is the reading surface</div>';
+ frame.append(inner);
+ document.body.append(frame);
+});
+foundLaw=await law();
+assert.ok(!foundLaw.some(o=>o.kind==='nested-scroll'),`a nested area that scrolls downward is the reading surface, not a defect, got ${JSON.stringify(foundLaw)}`);
+await page.evaluate(()=>document.querySelector('#synthetic-vertical-frame')?.remove());
+
 // --- 9f. And the page must be clean again once the defects are gone.
 foundLaw=await law();
 assert.deepEqual(foundLaw,[],`the page must measure clean once the defects are removed, got ${JSON.stringify(foundLaw)}`);
 
 await browser.close();
-console.log('PASS spatial detector self-test: row-leftover, gap-outlier, accidental-wrap, empty-track and scoped measurement are all detected; a scattered toolbar is caught; a vertical dropdown menu is not; the law classes catch overlapping chrome, inflated controls, empty spacers, equal-weight blocks and a giant top bar; the clean page measures clean.');
+console.log('PASS spatial detector self-test: row-leftover, gap-outlier, accidental-wrap, empty-track and scoped measurement are all detected; a scattered toolbar is caught; a vertical dropdown menu is not; the law classes catch overlapping chrome, inflated controls, empty spacers, equal-weight blocks, a giant top bar, content cut off with no way to scroll it into view, and overflow moved sideways into a nested scroll area; a scrollable wide block, an inert pair of scroll containers and a nested panel that scrolls downward are not reported; the clean page measures clean.');

@@ -1,7 +1,10 @@
 import {readFile} from 'node:fs/promises';
 import {marked} from 'marked';
+import {wrapTables} from './lib/table-wrap.mjs';
 export async function manual(lang,reference){
- const th=lang==='th',quick=marked.parse(await readFile(`docs/QUICKSTART.${lang}.md`,'utf8')).replace(/<figure class="screen-guide">[\s\S]*?<\/figure>/,figure=>`<details class="screen-map"><summary>${th?'ปุ่มและผลลัพธ์อยู่ตรงไหน':'Where are the controls and results?'}</summary>${figure}</details>`);
+ const th=lang==='th';
+ reference=wrapTables(reference);
+ const quick=wrapTables(marked.parse(await readFile(`docs/QUICKSTART.${lang}.md`,'utf8')).replace(/<figure class="screen-guide">[\s\S]*?<\/figure>/,figure=>`<details class="screen-map"><summary>${th?'ปุ่มและผลลัพธ์อยู่ตรงไหน':'Where are the controls and results?'}</summary>${figure}</details>`));
  const linkedQuick=quick.replaceAll('href="https://carbon.nonarkara.org/', 'target="_blank" rel="noopener" href="https://carbon.nonarkara.org/');
  const chunks=reference.split(/(?=<h2>)/),intro=chunks.shift();
  const details=chunks.map((chunk,i)=>chunk.replace(/^<h2>(.*?)<\/h2>([\s\S]*)$/,(_,title,body)=>`<details class="reference-chapter" id="reference-${i}"><summary>${title}</summary><div>${body}</div></details>`)).join('');

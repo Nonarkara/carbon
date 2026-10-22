@@ -17,9 +17,16 @@ import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {collectSpatial} from './lib/spatial-collector.mjs';
 import {collectLaw,chromeCost,LAW_VIEWPORTS,CHROME_LIMIT_PCT} from './lib/msh-law.mjs';
+import {assertProjectServer} from './lib/server-identity.mjs';
 
 const base=process.env.BASE_URL||'http://127.0.0.1:8788';
 const OUT='test-results/spatial';
+
+// Before anything is measured: prove the server under the cursor is THIS project. A gate
+// pointed at another app on the same port reported a missing element as if it were a layout
+// failure. Measuring the wrong build and calling it a finding is worse than measuring nothing.
+const manifest=await assertProjectServer(base);
+console.log(`measuring ${manifest.commit} at ${base}`);
 
 // The surfaces and widths where a spatial failure actually occurred, plus the surfaces this
 // project changed most recently.

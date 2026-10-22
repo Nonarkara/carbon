@@ -146,6 +146,76 @@ export const EMPTY_MIN_W=120;
 // parallel explanations with no lead-in.
 export const EQUAL_MIN_BLOCKS=3;
 
+// --- Nested scroll areas -----------------------------------------------------
+//
+// The law: "Never force a fit by hiding overflow, clipping content, shrinking readable
+// text, removing earned features, or MOVING EVERYTHING INTO NESTED SCROLL AREAS."
+//
+// This is the class that catches the research page's real defect, and the measurement
+// behind it is exact. The old research table carried `display:block;overflow:auto` while
+// the page wrapped every table in a `.table-scroll` frame. The result:
+//
+//   nested scrollers on research-th ......... 25   (one per table)
+//   nested scrollers after the repair ....... 0
+//   the frame the reader could see .......... never scrolled (range 0)
+//   the scroller hiding the overflow ........ the table itself, 267px of overflow
+//
+// So the frame the page presented as the table's edge could not scroll, and the overflow
+// lived in a second scroll area inside the table, where no scrollbar hints at it. The
+// reader saw a table that appeared to end at the column edge while two of its five
+// columns sat somewhere else entirely.
+//
+// THE AXIS IS THE PART THAT MATTERS, and the first version of this rule got it wrong. The
+// rule originally fired on any nested pair where the inner scroller had overflow, and it
+// condemned the Southeast Asia page: its evidence panel scrolls 462px inside the workspace
+// frame. That layout is correct. On a phone the workspace fills the viewport below the
+// chrome (718px of 844), the page itself does not scroll at all, and the panel IS the
+// reading surface — the reader swipes and reads. Scroll delegation to the visible content
+// area is the ordinary pattern.
+//
+// The defect is specifically a nested area that overflows SIDEWAYS: the reader is asked to
+// swipe horizontally inside a box, in a document read from top to bottom, with nothing to
+// say the box continues. That is the pattern with no cue, and it is the one the research
+// tables had. A vertical inner scroller is the page's own reading surface, and is left
+// alone.
+export const NESTED_MIN_RANGE=1;
+
+// --- Unreachable content ------------------------------------------------------
+//
+// The law: "Never force a fit by hiding overflow, clipping content, shrinking readable
+// text, removing earned features, or moving everything into nested scroll areas." And in
+// section 6's evidence list: "Geometry failures: unexplained gaps, orphan elements,
+// inflated boxes, accidental wraps, overlap, CLIPPING, and unnecessary horizontal
+// scrolling."
+//
+// So clipping is a named geometry failure. But clipping alone is not the defect — a wide
+// table that scrolls is not broken, it is a table that needs the room. The defect is
+// content that is cut off AND cannot be brought into view.
+//
+// The two questions are answered separately, because conflating them produces false
+// positives and hides the real one:
+//
+//   1. Can it be REACHED? The nearest clipping ancestor must be able to scroll far
+//      enough to reveal the cut part. `overflow:hidden` cannot scroll, so content clipped
+//      by it is lost forever; `overflow:auto` can, so the same layout is fine.
+//   2. Is it PAINTED? Does any pixel of the cut part exist on screen at all.
+//
+// Only content that fails both is reported.
+//
+// Measured on this project: nothing. This class is the guard for a failure the project has
+// not yet had — content cut off with no way to scroll it back — and it is here because the
+// law names clipping in section 6's evidence list and a rule that is never exercised is a
+// rule that has never been trusted. The defect the research page ACTUALLY had was a
+// different one: the overflow was reachable, but only by scrolling inside the table, while
+// the frame the page presented to the reader could not scroll at all. That is the nested
+// scroll area below.
+//
+// The two classes are kept apart on purpose. "Clipped" is not a verdict on its own: a wide
+// table that scrolls is a table that needs the room, and reporting it would condemn every
+// scrollable table in the project.
+export const CLIP_MIN_PX=8;
+export const CLIP_MIN_TEXT=12;
+
 // --- The law's own test for a control's natural size ------------------------
 //
 // A control's text is measured with its OWN font. This is the one helper both the inflated rule
@@ -512,6 +582,124 @@ export function collectLaw(root){
     out.push({kind:'equal-weight',severity:'medium',el:desc(g),gap:row.items.length,
      note:`${row.items.length} blocks of identical ${Math.round(ws[0])}x${Math.round(hs[0])}px with the same ${fs[0]}px heading — nothing in the row is first`});
    }
+  }
+ }
+
+ // --- 6. Unreachable content: text cut off that no scroll can bring back.
+ {
+  // Only elements that carry their own text are candidates. A wrapper's box can stick out
+  // without losing anything, because the text inside it is measured too.
+  const candidates=[];
+  for(const e of scope.querySelectorAll('body *')){
+   if(!visible(e))continue;
+   const text=(e.textContent||'').trim();
+   if(text.length<12)continue;
+   // The element must OWN the text, not merely contain it, so one cut leaf is one finding.
+   let owns=false;
+   for(const n of e.childNodes)if(n.nodeType===3&&n.textContent.trim().length>=12){owns=true;break;}
+   if(!owns)continue;
+   candidates.push(e);
+  }
+  // The nearest ancestor that clips its overflow, and the content box it clips to.
+  const clipper=el=>{
+   let p=el.parentElement;
+   while(p&&p!==document.body){
+    const cs=getComputedStyle(p);
+    const ox=cs.overflowX,oy=cs.overflowY;
+    const clipsX=/hidden|clip|auto|scroll|overlay/.test(ox);
+    const clipsY=/hidden|clip|auto|scroll|overlay/.test(oy);
+    if(clipsX||clipsY){
+     const r=p.getBoundingClientRect();
+     const bl=p.clientLeft||0,bt=p.clientTop||0;
+     return {p,ox,oy,
+      box:{left:r.left+bl,top:r.top+bt,right:r.left+bl+p.clientWidth,bottom:r.top+bt+p.clientHeight}};
+    }
+    p=p.parentElement;
+   }
+   return null;
+  };
+  const scrollable=x=>/auto|scroll|overlay/.test(x);
+  const seen=new Set();
+  for(const e of candidates){
+   const c=clipper(e);
+   if(!c)continue;
+   const r=e.getBoundingClientRect();
+   // How far the content sticks out of the clip box, per axis.
+   const overX=Math.max(r.right-c.box.right,c.box.left-r.left);
+   const overY=Math.max(r.bottom-c.box.bottom,c.box.top-r.top);
+   if(overX<8&&overY<8)continue;
+   // REACHABLE? The clipper itself is the only thing that can reveal the cut part: scrolling
+   // an ANCESTOR moves the clipper and the content together, so the relationship between
+   // them never changes. A clipper that cannot scroll (hidden, clip) loses the content for
+   // good.
+   let reachable=false;
+   if(overX>=8){
+    if(scrollable(c.ox)&&(c.p.scrollWidth-c.p.clientWidth)>=overX-1)reachable=true;
+   }
+   if(overY>=8){
+    if(scrollable(c.oy)&&(c.p.scrollHeight-c.p.clientHeight)>=overY-1)reachable=true;
+   }
+   if(reachable)continue;
+   // PAINTED? If no pixel of the element is on screen at all, the reader never sees it —
+   // that is a different failure (an off-screen block), not a clip.
+   const cx=Math.min(Math.max(r.left+2,c.box.left+1),c.box.right-1);
+   const cy=Math.min(Math.max(r.top+2,c.box.top+1),c.box.bottom-1);
+   let painted=true;
+   if(cx>=0&&cy>=0&&cx<innerWidth&&cy<innerHeight){
+    const hit=document.elementFromPoint(cx,cy);
+    painted=!!hit&&(hit===e||e.contains(hit)||hit.contains(e));
+   }else painted=false;
+   if(!painted)continue;
+   const key=c.p;
+   if(seen.has(key))continue;
+   seen.add(key);
+   const amount=Math.round(Math.max(overX,overY));
+   const axis=overX>=overY?'horizontal':'vertical';
+   out.push({kind:'unreachable-content',severity:'high',el:desc(e),gap:amount,
+    note:`${axis} content is cut ${amount}px by ${desc(c.p)} and the clip cannot scroll to reveal it — the text is unreachable`});
+  }
+ }
+
+ // --- 7. Nested scroll areas: the overflow moved into a scroller inside a scroller.
+ {
+  const scrollers=[];
+  for(const e of scope.querySelectorAll('body *')){
+   const cs=getComputedStyle(e);
+   if(!/auto|scroll|overlay/.test(cs.overflowX)&&!/auto|scroll|overlay/.test(cs.overflowY))continue;
+   scrollers.push({e,ox:cs.overflowX,oy:cs.overflowY});
+  }
+  const isScroller=e=>{
+   const cs=getComputedStyle(e);
+   return /auto|scroll|overlay/.test(cs.overflowX)||/auto|scroll|overlay/.test(cs.overflowY);
+  };
+  const range=e=>Math.max(e.scrollWidth-e.clientWidth,e.scrollHeight-e.clientHeight);
+  const horizontalRange=e=>e.scrollWidth-e.clientWidth;
+  const reported=new Set();
+  // The threshold is inlined on purpose: this function is serialised with toString() and
+  // evaluated in the page, where the module's exports do not exist.
+  const minRange=1;
+  for(const s of scrollers){
+   // The inner scroller must actually carry something, and it must carry it SIDEWAYS.
+   // A vertical inner scroller is the page's reading surface — the SEA page's evidence
+   // panel scrolls 462px inside the workspace and is a correct layout, because the
+   // workspace fills the viewport and the page itself never scrolls.
+   const innerRange=range(s.e);
+   if(innerRange<minRange)continue;
+   if(horizontalRange(s.e)<minRange)continue;
+   // Walk up: the first ancestor that is also a scroller is the frame the overflow is
+   // hidden inside.
+   let p=s.e.parentElement,frame=null;
+   while(p&&p!==document.body){
+    if(isScroller(p)){frame=p;break;}
+    p=p.parentElement;
+   }
+   if(!frame)continue;
+   const key=s.e;
+   if(reported.has(key))continue;
+   reported.add(key);
+   const frameRange=range(frame);
+   out.push({kind:'nested-scroll',severity:'high',el:desc(s.e),gap:horizontalRange(s.e),
+    note:`${desc(s.e)} scrolls ${horizontalRange(s.e)}px sideways inside ${desc(frame)}, which itself scrolls ${frameRange}px — the overflow is in a nested scroll area, so the frame the reader can see does not move`});
   }
  }
 

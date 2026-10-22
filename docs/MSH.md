@@ -7,6 +7,8 @@ SH is like bureaucracy - good one works like bento box design: neat, full of var
 > `AGENTS.md` points here; `scripts/spatial-collector.mjs` and
 > `scripts/spatial-deep-probe.mjs` are the mechanical half of it, and
 > `scripts/spatial-detector-self-test.mjs` proves that half can fail.
+> `scripts/lib/msh-law.mjs` carries the chrome cost and the symptom classes,
+> `scripts/msh-table-proof.mjs` proves the table repair cannot come back.
 > Where a measurement tool and this law disagree, the law wins and the tool is wrong.
 
 # MSH — Massacre Spatial Hallucination

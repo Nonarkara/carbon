@@ -15,7 +15,7 @@
     "test:client": "node scripts/client-demo-test.mjs",
     "test:manual": "node scripts/manual-walkthrough.mjs",
     "test:design": "node scripts/design-review.mjs",
-    "test:spatial": "node scripts/spatial-gate.mjs && node scripts/spatial-detector-self-test.mjs",
+    "test:spatial": "node scripts/check-table-wrappers.mjs && node scripts/spatial-gate.mjs && node scripts/spatial-detector-self-test.mjs && node scripts/msh-table-proof.mjs",
     "test:deep": "node scripts/spatial-deep-probe.mjs"
   },
   "dependencies": {

@@ -20,9 +20,14 @@ import {chromium} from 'playwright';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {collectSpatial} from './lib/spatial-collector.mjs';
 import {collectLaw,chromeCost} from './lib/msh-law.mjs';
+import {assertProjectServer} from './lib/server-identity.mjs';
 
 const base=process.env.BASE_URL||'http://127.0.0.1:8788';
 const OUT='test-results/spatial';
+// Prove the server under measurement is this project before the audit starts. An audit of
+// another app's pages would produce findings about an interface that does not exist here.
+const manifest=await assertProjectServer(base);
+console.log(`auditing ${manifest.commit} at ${base}`);
 const bible=JSON.parse(await readFile('public/data/bible.json','utf8'));
 const chapters=bible.chapters.map(c=>c.id);
 const MANUAL_SECTIONS=['province','area','project','layers','install','help','reference'];
