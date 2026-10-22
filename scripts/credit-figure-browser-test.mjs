@@ -27,10 +27,13 @@ for(const lang of ['th','en']){
    await page.setViewportSize({width,height:900});
    await page.goto(`${base}/bible.html?lang=${lang}#${id}`);
    await page.locator('.prose').waitFor();
-   await page.locator('.figure-stack').waitFor();
+   // The credit figures live INSIDE the chapter body, beside the paragraph each one explains.
+   // They used to sit in a .figure-stack block at the top of the article; that class no longer
+   // exists for these chapters, and a test that still looks for it would wait forever.
+   await page.locator('figure.credit-figure').first().waitFor();
 
    // Every figure the chapter promises is actually on the page, with a rendered box.
-   const figs=page.locator('.figure-stack figure.credit-figure');
+   const figs=page.locator('figure.credit-figure');
    assert.equal(await figs.count(),count,`${id}/${lang}@${width}: figure count`);
    for(let i=0;i<count;i++){
     const f=figs.nth(i);
@@ -69,6 +72,95 @@ for(const lang of ['th','en']){
    const transcript=page.locator('.diagram-transcript').first();
    assert.ok(await transcript.count(),'the diagram must carry a text transcript');
    assert.ok((await transcript.locator('li').count())>3,'the transcript must list the diagram labels');
+
+   // THE LAW: "Explanations stay with the decision they support."
+   //
+   // These figures used to be stacked in one block at the top of the article, which put 2,000 to
+   // 3,500 pixels of diagram between a beginner and the chapter's first sentence, and left each
+   // figure far away from the paragraph it explains. This asserts the repair holds: every figure
+   // must sit immediately after the paragraph it explains, with no other content between them.
+   const adjacency=await page.evaluate(()=>{
+    const prose=document.querySelector('.prose');
+    const out=[];
+    for(const f of prose.querySelectorAll('figure.credit-figure')){
+     const prev=f.previousElementSibling;
+     const gap=prev?Math.round(f.getBoundingClientRect().top-prev.getBoundingClientRect().bottom):null;
+     out.push({
+      prevTag:prev?prev.tagName.toLowerCase():null,
+      prevChars:prev?prev.textContent.trim().length:0,
+      gap,
+      caption:(f.querySelector('figcaption')?.textContent||'').trim().slice(0,40),
+     });
+    }
+    // The chapter's own first paragraph must come BEFORE any diagram, or the reader still meets
+    // a wall of picture before a word of prose.
+    const kids=[...prose.children];
+    const firstPara=kids.findIndex(k=>k.tagName==='P');
+    const firstFig=kids.findIndex(k=>k.matches('figure.credit-figure'));
+    return {figures:out,firstPara,firstFig,totalKids:kids.length};
+   });
+   assert.ok(adjacency.figures.length===count,`${id}/${lang}@${width}: expected ${count} figures, found ${adjacency.figures.length}`);
+   for(const [i,f] of adjacency.figures.entries()){
+    assert.equal(f.prevTag,'p',`${id}/${lang}@${width}: figure ${i} is not directly after a paragraph (it follows ${f.prevTag||'nothing'})`);
+    // The explanation must be a real paragraph, not a stub. The measure is CHARACTERS, not
+    // words: Thai does not separate words with spaces, so the same paragraph counts as 5 "words"
+    // in Thai and 22 in English. The shortest genuine paragraph in these chapters is 100
+    // characters, and a heading or a fragment is far shorter than that.
+    assert.ok(f.prevChars>=80,`${id}/${lang}@${width}: figure ${i} follows a fragment, not an explanation (${f.prevChars} chars)`);
+    assert.ok(f.gap!==null&&f.gap>=0&&f.gap<=48,`${id}/${lang}@${width}: figure ${i} is ${f.gap}px from the paragraph it explains`);
+   }
+   if(adjacency.firstFig>=0){
+    assert.ok(adjacency.firstPara>=0&&adjacency.firstPara<adjacency.firstFig,
+     `${id}/${lang}@${width}: the chapter's first paragraph (index ${adjacency.firstPara}) must come before the first figure (index ${adjacency.firstFig})`);
+   }
+   // And the prose must actually start near the top of the chapter, not thousands of pixels down.
+   const lead=await page.evaluate(()=>{
+    const prose=document.querySelector('.prose');
+    const p=prose.querySelector('p');
+    return p?Math.round(p.getBoundingClientRect().top+scrollY):null;
+   });
+   assert.ok(lead!==null&&lead<1600,`${id}/${lang}@${width}: the first paragraph sits ${lead}px down the page — the reader meets diagram before prose`);
+
+   // Two labels in one diagram must never overprint. The border-ledger figure once printed
+   // "Vietnam" and a note line on top of each other, and no amount of reading the code saw it:
+   // the note's baseline sat inside the fourth row's band. Only a renderer can catch this.
+   const overprints=await page.evaluate(()=>{
+    const out=[];
+    for(const svg of document.querySelectorAll('.credit-figure svg')){
+     const texts=[...svg.querySelectorAll('text')].map(t=>{const b=t.getBBox();return {t:t.textContent.trim().slice(0,30),x:b.x,y:b.y,w:b.width,h:b.height};});
+     for(let i=0;i<texts.length;i++)for(let j=i+1;j<texts.length;j++){
+      const a=texts[i],b=texts[j];
+      const ox=Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x);
+      const oy=Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y);
+      // A couple of pixels is a font metric — a descender box meeting the next line's ascender
+      // box — not a collision. A real overprint shares a readable amount of both.
+      if(ox>4&&oy>4)out.push({a:a.t,b:b.t,overlap:`${Math.round(ox)}x${Math.round(oy)}`});
+     }
+    }
+    return out;
+   });
+   assert.deepEqual(overprints,[],`${id}/${lang}@${width}: labels overprint inside a diagram: ${JSON.stringify(overprints)}`);
+
+   // A label must also fit inside the box it belongs to. A note that runs under a status box, or
+   // out past the panel it sits in, is unreadable even when two labels do not technically touch.
+   // A label that begins OUTSIDE every box is a caption for the box beneath it and is allowed to
+   // sit above it — that is how a table header works.
+   const escapes=await page.evaluate(()=>{
+    const out=[];
+    for(const svg of document.querySelectorAll('.credit-figure svg')){
+     const boxes=[...svg.querySelectorAll('rect')].map(r=>({x:+r.getAttribute('x'),y:+r.getAttribute('y'),w:+r.getAttribute('width'),h:+r.getAttribute('height')}));
+     for(const t of svg.querySelectorAll('text')){
+      const b=t.getBBox();
+      const home=boxes.find(p=>b.x>=p.x-2&&b.y>=p.y-2&&b.x<=p.x+p.w+2&&b.y<=p.y+p.h+2);
+      if(!home)continue;
+      if(b.x+b.width>home.x+home.w+8||b.y+b.height>home.y+home.h+8){
+       out.push({t:t.textContent.trim().slice(0,30),x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.width),box:`${home.x},${home.y} ${home.w}x${home.h}`});
+      }
+     }
+    }
+    return out;
+   });
+   assert.deepEqual(escapes,[],`${id}/${lang}@${width}: a label does not fit its box: ${JSON.stringify(escapes)}`);
   }
  }
 }
@@ -78,8 +170,8 @@ for(const lang of ['th','en']){
 for(const [lang,phrase] of [['en','Burning does not damage the ozone layer'],['th','การเผาไหม้ไม่ได้ทำลายชั้นโอโซน']]){
  await page.setViewportSize({width:1440,height:900});
  await page.goto(`${base}/bible.html?lang=${lang}#sea-what-is-a-credit`);
- await page.locator('.figure-stack').waitFor();
- const text=await page.locator('.figure-stack').innerText();
+ await page.locator('figure.credit-figure').first().waitFor();
+ const text=await page.locator('#article').innerText();
  assert.ok(text.includes(phrase),`${lang}: the ozone correction is not visible on the page`);
  // And the chapter body must say the same thing in prose.
  const prose=await page.locator('.prose').innerText();

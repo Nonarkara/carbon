@@ -41,6 +41,12 @@ body.dashboard{font-size:1rem}
  .dashboard[data-view=map] .stage .map-wrap{display:block}.dashboard[data-view=rail] .stage .rail{display:flex}.dashboard[data-view=world] .stage .world-rail{display:block}
  .dashboard .tab-body{overflow:visible;height:auto}
  .dashboard .bottom-nav{display:flex;flex-wrap:wrap;position:fixed;bottom:0;left:0;right:0;z-index:2000;min-height:56px;background:var(--ink);padding-bottom:env(safe-area-inset-bottom);border-top:1px solid white;overflow:visible}
+ /* The fixed bottom nav sat exactly on top of the map's Leaflet attribution. The OpenStreetMap
+    credit was invisible AND unclickable on the phone, because the nav's own button was what the
+    hit test returned at the attribution's centre. The nav is furniture and the credit is the work,
+    so the map's bottom controls now clear the nav's occupied area instead of hiding under it.
+    The nav is 56px plus the device's safe-area inset. */
+ .dashboard .leaflet-bottom{bottom:calc(56px + env(safe-area-inset-bottom))}
  .dashboard .bottom-nav>button,.dashboard .bottom-nav>.more-nav{flex:1 1 max(20%,4rem);width:auto;min-width:0}
  .dashboard .bottom-nav button{background:transparent;border:0;font-size:var(--text-meta);min-height:56px;min-width:0;padding:6px 3px;color:white;white-space:normal;overflow-wrap:normal;word-break:normal;line-height:1.5}
  .dashboard .bottom-nav button[aria-pressed=true]{background:var(--signal);color:var(--ink);border:0}

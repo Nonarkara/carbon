@@ -160,20 +160,20 @@ ${rows.map((r,i)=>{const y=48+i*29;const key=(i===2||i===4);return `<rect x="22"
 
  const iaRows=market.article6.singapore_ias.filter(r=>r.region==='asean');
  out['border-ledger']=fig(th?'ข้อตกลงข้อ 6 ของสิงคโปร์: อาเซียนมีสี่ มีผลบังคับใช้หนึ่ง':"Singapore's Article 6 agreements: four ASEAN, one in force",
- `<rect x="16" y="14" width="568" height="106" fill="#fff" stroke="#161616" stroke-width="2"/>
-<text x="30" y="36" font-size="12" font-weight="600">${th?'ประเทศอาเซียนที่ลงนามกับสิงคโปร์':'ASEAN countries signed with Singapore'}</text>
-${iaRows.map((r,i)=>{const y=52+i*16;const live=r.status==='entered_into_force';return `<text x="34" y="${y+10}" font-size="11" font-weight="600">${esc(r.country)}</text><rect x="${live?200:296}" y="${y}" width="${live?96:86}" height="14" fill="${live?'#1643c5':'#f0f0ee'}" stroke="#161616"/><text x="${live?248:339}" y="${y+11}" font-size="9.5" text-anchor="middle" fill="${live?'#fff':'#161616'}">${live?(th?'มีผลบังคับใช้':'In force'):(th?'ยังไม่มีผล':'Not yet in force')}</text>`;}).join('')}
-<text x="30" y="112" font-size="9.5" fill="#383838">${th?'ทั้งสิบสองประเทศนอกอาเซียน: ภูฎี ชิลี กานา มองโกเลีย เปรู รวันดา ปาปัวนิวกินี ปารากวาย (7 มีผล, 2 ยังไม่มีผล)':'The other eight: Bhutan, Chile, Ghana, Mongolia, Peru, Rwanda in force; Papua New Guinea, Paraguay signed'}</text>
-<rect x="16" y="132" width="568" height="90" fill="#fff4d6" stroke="#161616" stroke-width="2"/>
-<text x="30" y="154" font-size="12" font-weight="600">${th?'ข้อตกลงนี้มีผลต่อราคาจริง':'An agreement changes what a credit is worth'}</text>
-<text x="30" y="176" font-size="11">${th?'เครดิตจากโครงการในประเทศที่ไม่มีข้อตกลง หักลดภาระภาษีคาร์บอนไม่ได้เลย':'Credits from a country without an agreement cannot offset carbon tax at all.'}</text>
-<text x="30" y="196" font-size="11">${th?'เครดิตที่เข้าเกณฑ์ หักลดภาระภาษีได้ไม่เกิน 5% ต่อปี':'Eligible credits may cover only 5% of tax liability per year.'}</text>
-<text x="30" y="216" font-size="9.5" fill="#383838">${th?'กรอบเครดิตคาร์บอนระหว่างประเทศของสิงคโปร์':'Singapore International Carbon Credit framework'}</text>
-<rect x="16" y="234" width="568" height="88" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/>
-<text x="30" y="256" font-size="12" font-weight="600">${th?'ทำไมไทยถึงสำคัญเป็นพิเศษ':'Why Thailand matters here'}</text>
-<text x="30" y="277" font-size="11">${th?'ไทยเป็นประเทศอาเซียนเพียงประเทศเดียวที่ข้อตกลงมีผลแล้ว (19 ส.ค. 2568)':'Thailand is the only ASEAN country with an agreement in force (19 Aug 2025).'}</text>
-<text x="30" y="297" font-size="11">${th?'และเป็นประเทศเดียวในระบบนี้ที่มีทะเบียนโครงการสาธารณะ จึงตรวจสอบได้':'It is also the only country here with a public project registry — which is why this tool can show T-VER projects at all.'}</text>
-<text x="30" y="316" font-size="9.5" fill="#383838">${th?'ACCF เป็นกรอบของสมาคมธุรกิจ ไม่ใช่อนุสัญญาอาเซียน และไม่ไล่หาความเป็นเอกฉันท์':'The ACCF is an industry framework, not an ASEAN treaty, and does not seek uniformity.'}</text>`,th?'สถานะข้อตกลงเปลี่ยนได้ตลอดเวลา ตรวจสอบก่อนอ้างอิงเสมอ':'Agreement status is time-sensitive. Re-check before citing.');
+ `<rect x="16" y="14" width="568" height="114" fill="#fff" stroke="#161616" stroke-width="2"/>
+<text x="30" y="32" font-size="12" font-weight="600">${th?'ประเทศอาเซียนที่ลงนามกับสิงคโปร์':'ASEAN countries signed with Singapore'}</text>
+${iaRows.map((r,i)=>{const y=42+i*16;const live=r.status==='entered_into_force';return `<text x="34" y="${y+10}" font-size="11" font-weight="600">${esc(r.country)}</text><rect x="${live?200:296}" y="${y}" width="${live?96:86}" height="14" fill="${live?'#1643c5':'#f0f0ee'}" stroke="#161616"/><text x="${live?248:339}" y="${y+11}" font-size="9.5" text-anchor="middle" fill="${live?'#fff':'#161616'}">${live?(th?'มีผลบังคับใช้':'In force'):(th?'ยังไม่มีผล':'Not yet in force')}</text>`;}).join('')}
+<text x="30" y="121" font-size="9.5" fill="#383838">${th?'ทั้งสิบสองประเทศนอกอาเซียน: ภูฎี ชิลี กานา มองโกเลีย เปรู รวันดา ปาปัวนิวกินี ปารากวาย (7 มีผล, 2 ยังไม่มีผล)':'The other eight: Bhutan, Chile, Ghana, Mongolia, Peru, Rwanda in force; Papua New Guinea, Paraguay signed'}</text>
+<rect x="16" y="140" width="568" height="90" fill="#fff4d6" stroke="#161616" stroke-width="2"/>
+<text x="30" y="162" font-size="12" font-weight="600">${th?'ข้อตกลงนี้มีผลต่อราคาจริง':'An agreement changes what a credit is worth'}</text>
+<text x="30" y="184" font-size="11">${th?'เครดิตจากโครงการในประเทศที่ไม่มีข้อตกลง หักลดภาระภาษีคาร์บอนไม่ได้เลย':'Credits from a country without an agreement cannot offset carbon tax at all.'}</text>
+<text x="30" y="204" font-size="11">${th?'เครดิตที่เข้าเกณฑ์ หักลดภาระภาษีได้ไม่เกิน 5% ต่อปี':'Eligible credits may cover only 5% of tax liability per year.'}</text>
+<text x="30" y="224" font-size="9.5" fill="#383838">${th?'กรอบเครดิตคาร์บอนระหว่างประเทศของสิงคโปร์':'Singapore International Carbon Credit framework'}</text>
+<rect x="16" y="242" width="568" height="88" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/>
+<text x="30" y="264" font-size="12" font-weight="600">${th?'ทำไมไทยถึงสำคัญเป็นพิเศษ':'Why Thailand matters here'}</text>
+<text x="30" y="285" font-size="11">${th?'ไทยเป็นประเทศอาเซียนเพียงประเทศเดียวที่ข้อตกลงมีผลแล้ว (19 ส.ค. 2568)':'Thailand is the only ASEAN country with an agreement in force (19 Aug 2025).'}</text>
+<text x="30" y="305" font-size="11">${th?'และเป็นประเทศเดียวในระบบนี้ที่มีทะเบียนโครงการสาธารณะ จึงตรวจสอบได้':'It is also the only country here with a public project registry — which is why this tool can show T-VER projects at all.'}</text>
+<text x="30" y="324" font-size="9.5" fill="#383838">${th?'ACCF เป็นกรอบของสมาคมธุรกิจ ไม่ใช่อนุสัญญาอาเซียน และไม่ไล่หาความเป็นเอกฉันท์':'The ACCF is an industry framework, not an ASEAN treaty, and does not seek uniformity.'}</text>`,th?'สถานะข้อตกลงเปลี่ยนได้ตลอดเวลา ตรวจสอบก่อนอ้างอิงเสมอ':'Agreement status is time-sensitive. Re-check before citing.');
 
  // Regional issuance, drawn from the deployed market JSON.
  const bc=market.issuance.by_country.filter(r=>r.total>0).sort((a,b)=>b.total-a.total);
@@ -190,13 +190,15 @@ ${bc.map((r,i)=>{const y=44+i*21;const w=Math.max(2,r.total/maxT*300);return `<t
  // One row per published sector, derived from the data rather than picked by index. A hand-picked list
  // silently dropped 'other' (1.9%), so the shares on screen added to 98.1% and nobody could say why.
  const SECTOR_ROW={
-  forestry_land_use:['Forestry & land use','สร้างเครดิตได้แล้ว แต่เป็นคอขวดด้านการกลับคืน','Built — but the reversal-risk concentration'],
-  renewable_energy:['Renewable energy','ลงทุนไปแล้ว','Invested'],
-  household_community:['Household & community','บางส่วน','Partial'],
-  waste:['Waste','ยังน้อย','Thin'],
-  agriculture:['Agriculture','เกือบไม่มี — ช่องว่างที่ใหญ่ที่สุด','Almost absent — the largest gap'],
-  other:['Other','ส่วนที่เหลือจากโครงการผสม','Small residual across mixed project types']};
- const gap=sectors.map(s=>{const r=SECTOR_ROW[s.sector];return {k:r[0],f:th?r[1]:r[2],v:s.share_pct,key:s.sector};});
+  forestry_land_use:['Forestry & land use','ป่าไม้และที่ดิน','สร้างเครดิตได้แล้ว แต่เป็นคอขวดด้านการกลับคืน','Built — but the reversal-risk concentration'],
+  renewable_energy:['Renewable energy','พลังงานหมุนเวียน','ลงทุนไปแล้ว','Invested'],
+  household_community:['Household & community','ครัวเรือนและชุมชน','บางส่วน','Partial'],
+  waste:['Waste','ขยะ','ยังน้อย','Thin'],
+  agriculture:['Agriculture','เกษตรกรรม','เกือบไม่มี — ช่องว่างที่ใหญ่ที่สุด','Almost absent — the largest gap'],
+  other:['Other','อื่น ๆ','ส่วนที่เหลือจากโครงการผสม','Small residual across mixed project types']};
+ // The sector name has to be in the reader's language. A Thai figure that labelled its bars
+ // "Forestry & land use" and "Waste" was a bilingual mix inside one panel.
+ const gap=sectors.map(s=>{const r=SECTOR_ROW[s.sector];return {k:th?r[1]:r[0],f:th?r[2]:r[3],v:s.share_pct,key:s.sector};});
  const highlight='agriculture';
  out['industry-gap']=fig(th?'สัดส่วนตามหมวด และช่องว่างที่ยังไม่ถูกสร้าง':'Sector share, and the gap the market has not built',
  `<rect x="16" y="12" width="568" height="212" fill="#fff" stroke="#161616" stroke-width="2"/>

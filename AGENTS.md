@@ -2,6 +2,8 @@
 
 Read `context.md`, the bilingual guides, and `RESEARCH.md` before changes. User approved the implementation plan and GitHub/Cloudflare release.
 
+**`docs/MSH.md` is the owner's design law — Massacre Spatial Hallucination. Read it before designing, building, or reviewing any interface, at any viewport.** When you find SH, massacre it: an interface that invents a reason for things to occupy space, instead of arranging them around how people read, choose and act. The test for every region is "Why is this here? Why this size? Why this far from that?" — "the grid put it there" is a failed answer. Measure the geometry; do not judge it from a screenshot. `scripts/spatial-gate.mjs` guards the shells, `scripts/spatial-deep-probe.mjs` audits the content, `scripts/lib/msh-law.mjs` is the instrument for chrome cost and the law's five symptom classes, and `scripts/spatial-detector-self-test.mjs` proves every detector can fail. Capture 390×844, 1024×768 and 1440×900. Report found / changed / verified / remaining, and never claim a clean pass while anything remains.
+
 - Preserve the exact Malaysia visual reference; do not replace the map or existing flows with cards.
 - Keep stock, monitoring-period estimates and issued credits separate. No connected model or registry may be implied without a real integration.
 - User files remain browser-local unless a future request explicitly changes privacy scope.

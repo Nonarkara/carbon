@@ -5,7 +5,11 @@ When something burns, the carbon that was locked in the fuel does not disappear.
 
 CO₂ is a greenhouse gas. Sunlight arrives as shortwave radiation, passes through the atmosphere, warms the surface. The surface re-radiates that energy as infrared. CO₂ absorbs and re-emits part of that infrared in all directions, including back toward the surface. More CO₂ means a larger share of outgoing energy is retained rather than escaping to space. That is the greenhouse effect, and it is why the extra carbon changes the energy balance rather than simply making the air "dirty".
 
+<div data-figure="credit-physics"></div>
+
 The atmosphere is layered, and the effect happens in the layer we live in. The **troposphere** is the bottom 0–12 km, where the weather is made; almost all of the greenhouse effect happens there, because CO₂ in that layer absorbs the infrared leaving the surface and re-emits part of it back down. Above it sits the **stratosphere**, and the **ozone layer** inside it does a different job: it absorbs ultraviolet. That layer is thinned by chlorine and bromine from CFCs and halons — not by carbon dioxide. So burning does not "damage the ozone layer". It changes the energy balance of the troposphere: the layer we live in, and the layer the weather is made of.
+
+<div data-figure="credit-layers"></div>
 
 Two consequences matter for this system. First, the effect is **cumulative**: CO₂ added this year stays in the balance for a long time, so it cannot simply be offset by removing the same amount next month. Second, the effect is **global**: the molecule does not respect a border, a province or a corporate balance sheet. A tonne emitted in Thailand, Indonesia and Vietnam warms the same atmosphere as a tonne emitted in Europe.
 
@@ -23,6 +27,8 @@ That single sentence contains the entire field, and every clause exists because 
 | *Issued* — created only after the checks pass | The gap between "planned" and "happened" |
 
 A credit is not a product anyone manufactures. It is a **record of a difference**, verified and then written down exactly once.
+
+<div data-figure="credit-anatomy"></div>
 
 ## The two kinds of market
 Once you can define a credit, the next thing to understand is that credits are bought for two completely different reasons, and the difference changes what evidence you should demand.
@@ -52,7 +58,11 @@ Conflating these is the most common error in the sector. A forest's carbon stock
 
 CO₂ เป็นแก๊สเรือนกระจก แสงอาทิตย์เดินทางมาเป็นรังสีคลื่นสั้น ผ่านชั้นบรรยากาศ แล้วทำให้พื้นผิวโลกอุ่นขึ้น พื้นผิวโลกดึงความร้อนกลับออกมาเป็นรังสีอินฟราเรด CO₂ ดูดกลืนและปล่อยรังสีอินฟราเรดบางส่วนกลับออกไปทุกทิศ รวมถึงกลับมาหาพื้นผิวโลก เมื่อ CO₂ มากขึ้น พลังงานที่ควรหลุดออกไปอวกาศจะถูกกักเก็บไว้มากขึ้น นี่คือภาวะเรือนกระจก และเป็นเหตุผลว่าทำไมคาร์บอนที่เพิ่มขึ้นถึงเปลี่ยนสมดุลพลังงาน ไม่ใช่แค่ทำให้อากาศ "สกปรก"
 
+<div data-figure="credit-physics"></div>
+
 บรรยากาศแบ่งเป็นชั้น และภูมิอุณหภูมิเรือนเกิดขึ้นในชั้นที่เราอาศัยอยู่ **โทรโพสเฟียร์** คือชั้นล่างสุด 0–12 กิโลเมตร ที่ซึ่งสภาพอากาศเกิดขึ้น และภูมิอุณหภูมิเรือนเกือบทั้งหมดก็เกิดที่นี่ เพราะ CO₂ ในชั้นนั้นดูดกลืนรังสีอินฟราเรดที่ออกจากพื้นผิว แล้วปล่อยกลับลงมาส่วนหนึ่ง เหนือขึ้นไปคือ **สตราโตสเฟียร์** และ **ชั้นโอโซน** ที่อยู่ข้างในทำหน้าที่ต่างออกไป คือดูดกลืนรังสีอัลตราไวโอเลต ชั้นนี้ถูกทำลายด้วยคลอรีนและโบรมีนจาก CFC และฮาลอน ไม่ใช่ด้วยคาร์บอนไดออกไซด์ ดังนั้นการเผาไหม้จึงไม่ได้ "ทำลายชั้นโอโซน" แต่เปลี่ยนสมดุลพลังงานของโทรโพสเฟียร์ ทั้งชั้นที่เราอาศัยอยู่ และชั้นที่สภาพอากาศเกิดขึ้น
+
+<div data-figure="credit-layers"></div>
 
 มีผลตามมาสองข้อที่สำคัญต่อระบบนี้ ประการแรก ผลกระทบเป็น **สะสม** เพราะ CO₂ ที่เพิ่มในปีนี้ยังอยู่ในสมดุลไปอีกนาน จึงไม่อาจหักล้างด้วยการดูดซับคืนในเดือนหน้า ประการที่สอง ผลกระทบเป็น **ระดับโลก** เพราะโมเลกุลไม่เคารพพรมแดน จังหวัด หรือบัญชีของบริษัท โทนคาร์บอนหนึ่งตันที่ปล่อยในไทย อินโดนีเซีย และเวียดนาม ทำให้บรรยากาศโลกร้อนขึ้นเท่ากับโทนที่ปล่อยในยุโรป
 
@@ -70,6 +80,8 @@ CO₂ เป็นแก๊สเรือนกระจก แสงอาท�
 | *ออกเครดิต* — สร้างหลังผ่านการตรวจแล้วเท่านั้น | ช่องว่างระหว่าง "แผนจะทำ" กับ "ทำแล้ว" |
 
 เครดิตไม่ใช่สินค้าที่ใครผลิตได้ แต่คือ **บันทึกของความต่าง** ที่ผ่านการทวนสอบแล้วถูกเขียนลงไป **ครั้งเดียว**
+
+<div data-figure="credit-anatomy"></div>
 
 ## ตลาดคาร์บอนสองแบบ
 เมื่อนิยามเครดิตได้แล้ว สิ่งที่ต้องเข้าใจต่อคือ เครดิตถูกซื้อด้วยเหตุผลสองแบบที่ต่างกันโดยสิ้นเชิง และความต่างนั้นเปลี่ยนว่าเราควรเรียกร้องหลักฐานอะไร

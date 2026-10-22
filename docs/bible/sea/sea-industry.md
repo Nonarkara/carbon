@@ -16,6 +16,8 @@ A carbon market sounds global. The credit supply is not. Between 1996 and 2024 S
 
 Two cautions before reading anything into this table. Brunei Darussalam is **absent because the database has no data for it, not because it issued nothing**. And ISEAS reports that the World Bank database records **over 350 million** for the same period — the gap is database coverage and method, not an error in either source. Treat 217 million as the lower, specific figure, never as a regional ceiling.
 
+<div data-figure="industry-issuance"></div>
+
 ## Why forestry dominates — and why that is a problem
 Forestry credits are attractive to buyers because removing carbon from the atmosphere is a durable physical act, not a bookkeeping one. But the region's forestry supply has a specific structural weakness that the ACMF report flags explicitly:
 
@@ -27,6 +29,8 @@ A concentrated portfolio of forest projects sharing a reversal risk is fragile i
 Issuance tells you how many credits were created. It does not tell you whether anyone used them, and it definitely does not tell you whether the emissions were actually reduced.
 
 Between January 2007 and January 2025, **65.76 Mt CO₂ was retired through ASEAN carbon-market projects — but only 1.73 Mt of that, about 2.6%, was retired for ASEAN entities.** The rest served demand elsewhere.
+
+<div data-figure="industry-gap"></div>
 
 Read that carefully, because it is easy to misuse. It does not mean ASEAN credits were fraudulent or worthless. It means most of the region's credit supply has historically been **exported as claims made by other people**. That is exactly the situation Article 6 corresponding adjustments were designed to correct, and exactly why the 2025 Thailand–Singapore agreement matters: it moves a share of those claims into a channel where the host country is a formal participant rather than an absent counterparty.
 
@@ -68,6 +72,8 @@ None of this is investment advice, and none of it is a quality ranking of any co
 
 ข้อควรระวังสองข้อก่อนอ่านตารางนี้ บรูไน **ไม่ปรากฏเพราะฐานข้อมูลไม่มีข้อมูล ไม่ใช่เพราะไม่ได้ออกเครดิต** และ ISEAS รายงานว่าฐานข้อมูลธนาคารโลกบันทึกตัวเลข **มากกว่า 350 ล้าน** ในช่วงเวลาเดียวกัน ช่องว่างนี้เกิดจากความครอบคลุมและระเบียบวิธีที่ต่างกัน ไม่ใช่ข้อผิดพลาดของแหล่งใดแหล่งหนึ่ง ให้มอง 217 ล้านเป็นตัวเลขล่างที่มีแหล่งกำเนิดชัดเจน ไม่ใช่เพดานของภูมิภาค
 
+<div data-figure="industry-issuance"></div>
+
 ## ทำไมป่าไม้ถึงเป็นใหญ่ — และทำไมนั่นจึงเป็นปัญหา
 เครดิตป่าไม้ดึงดูดผู้ซื้อ เพราะการดูดคาร์บอนออกจากบรรยากาศเป็นการกระทำที่คงอยู่จริงทางกายภาพ ไม่ใช่การจดบัญชี แต่อุปทานเครดิตป่าไม้ของภูมิภาคนี้มีจุดอ่อนเชิงโครงสร้างที่รายงานของ ACMF ระบุไว้ตรง ๆ ว่า
 
@@ -79,6 +85,8 @@ None of this is investment advice, and none of it is a quality ranking of any co
 การออกเครดิตบอกว่าสร้างเครดิตไปกี่เครดิต แต่ไม่ได้บอกว่ามีใครนำไปใช้จริงหรือไม่ และแน่นอนว่าไม่ได้บอกว่าการปล่อยถูกลดจริงหรือไม่
 
 ระหว่างมกราคม 2550 ถึงมกราคม 2568 **มีการยกเลิกเครดิต 65.76 ล้านตัน CO₂ ผ่านโครงการตลาดคาร์บอนของอาเซียน แต่มีเพียง 1.73 ล้านตัน หรือราว 2.6% ที่ยกเลิกเพื่อหน่วยงานในอาเซียน** ที่เหลือถูกใช้เป็นคำกล่าวอ้างของคนอื่น
+
+<div data-figure="industry-gap"></div>
 
 ต้องอ่านประโยคนี้อย่างระมัดระวัง เพราะมันง่ายที่จะใช้ผิด ไม่ได้แปลว่าเครดิตของอาเซียนเป็นของปลอมหรือไร้ค่า แต่แปลว่าอุปทานเครดิตของภูมิภาคส่วนใหญ่ในอดีต **ถูกส่งออกไปเป็นคำกล่าวอ้างของผู้อื่น** นี่คือสถานการณ์ที่การปรับสมดุลตามข้อ 6 ถูกออกแบบมาแก้ไข และเป็นเหตุผลว่าทำไมข้อตกลงไทย–สิงคโปร์ปี 2568 จึงสำคัญ เพราะย้ายส่วนหนึ่งของคำกล่าวอ้างเหล่านั้นเข้าสู่ช่องทางที่ประเทศเจ้าบ้านเป็นผู้เข้าร่วมอย่างเป็นทางการ แทนที่จะเป็นคู่สัญญาที่หายไป
 

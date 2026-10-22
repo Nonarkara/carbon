@@ -64,11 +64,11 @@ for(const lang of ['th','en']){
 for(const lang of ['th','en']){
  await page.setViewportSize({width:1440,height:900});
  await page.goto(`${base}/bible.html?lang=${lang}#sea-what-is-a-credit`);
- await page.locator('.figure-stack').waitFor({timeout:20000});
- assert.equal(await page.locator('.figure-stack figure.credit-figure').count(),3,`${lang}: the credit chapter is missing a figure`);
- const text=await page.locator('.figure-stack').innerText();
+ await page.locator('figure.credit-figure').first().waitFor({timeout:20000});
+ assert.equal(await page.locator('figure.credit-figure').count(),3,`${lang}: the credit chapter is missing a figure`);
+ const text=await page.locator('#article').innerText();
  assert.ok(lang==='en'?text.includes('Burning does not damage the ozone layer'):text.includes('การเผาไหม้ไม่ได้ทำลายชั้นโอโซน'),`${lang}: the ozone correction is not on the page`);
- await page.locator('.figure-stack figure.credit-figure').nth(1).screenshot({path:`${out}/credit-layers-${lang}.png`});
+ await page.locator('figure.credit-figure').nth(1).screenshot({path:`${out}/credit-layers-${lang}.png`});
 }
 
 // The version receipt must name the commit that was deployed.

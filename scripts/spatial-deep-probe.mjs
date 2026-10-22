@@ -19,6 +19,7 @@
 import {chromium} from 'playwright';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {collectSpatial} from './lib/spatial-collector.mjs';
+import {collectLaw,chromeCost} from './lib/msh-law.mjs';
 
 const base=process.env.BASE_URL||'http://127.0.0.1:8788';
 const OUT='test-results/spatial';
@@ -27,9 +28,10 @@ const chapters=bible.chapters.map(c=>c.id);
 const MANUAL_SECTIONS=['province','area','project','layers','install','help','reference'];
 const SEA_VIEWS=['map','evidence','compare','research'];
 
-// The two widths where the layout actually changes: 390 is a modern phone with the narrowest
-// column, 1440 a desktop with the widest. The shell gate already covers 320, 768 and 1440 on the
-// page furniture; this audit is about what the content does at the two ends of that range.
+// The viewports docs/MSH.md names: 390 x 844 is the phone, 1440 x 900 the desktop, and 1024 is
+// the width where the layout actually changes — the one width the old matrix never measured.
+// The heights are the law's, not a guess.
+const VIEWPORTS=[{width:390,height:844},{width:1024,height:768},{width:1440,height:900}];
 const PHONE=390,DESKTOP=1440;
 
 const browser=await chromium.launch();
@@ -49,12 +51,28 @@ async function measure(scopeSelector){
  const offenders=await page.evaluate(`(${collectSpatial.toString()})(document.querySelector(${JSON.stringify(scopeSelector)})||null)`);
  return offenders;
 }
+// The law's own classes, measured on the same page. The chrome cost is RECORDED for every
+// viewport, as section 6 of the law requires, whether or not it fails.
+async function measureLaw(){
+ const findings=await page.evaluate(`(${collectLaw.toString()})()`);
+ const cost=await page.evaluate(`(${chromeCost.toString()})(document)`);
+ return {findings,cost};
+}
 
 async function run(job){
  const width=job.width;
- await page.setViewportSize({width,height:width<=PHONE?700:900});
- try{await page.goto(`${base}/${job.path}`,{waitUntil:'domcontentloaded',timeout:20000});}
- catch(e){report.push({...job,error:'goto failed: '+e.message});return;}
+ const height=job.height||(width<=PHONE?844:(width<=1024?768:900));
+ await page.setViewportSize({width,height});
+ // A load can fail because the server was busy, not because the page is broken. One retry
+ // separates a transient stall from a page that will not load at all — and only the latter is a
+ // finding. Without the retry a busy server produced "2 pages could not be measured" on a run
+ // whose real result was zero findings.
+ let loaded=false,lastErr=null;
+ for(let attempt=0;attempt<2&&!loaded;attempt++){
+  try{await page.goto(`${base}/${job.path}`,{waitUntil:'domcontentloaded',timeout:20000});loaded=true;}
+  catch(e){lastErr=e;if(attempt===0)await page.waitForTimeout(1500);}
+ }
+ if(!loaded){report.push({...job,error:'goto failed: '+lastErr.message});return;}
  try{await page.locator(job.ready).first().waitFor({timeout:10000});}
  catch{report.push({...job,error:'ready selector never appeared: '+job.ready});return;}
  // A hash change does not reload the page, so the previous chapter's prose is still on screen for
@@ -86,7 +104,8 @@ async function run(job){
   }
  }
  const offenders=await measure(job.scope||'null');
- report.push({...job,width,offenders});
+ const law=await measureLaw();
+ report.push({...job,width,height,offenders,lawFindings:law.findings,chromeCost:law.cost});
 }
 
 // --- 1. The Bible: every chapter, in both languages, at both a phone and a desktop width.
@@ -95,9 +114,9 @@ async function run(job){
 // that break between them.
 const byId=new Map(bible.chapters.map(c=>[c.id,c]));
 for(const lang of ['th','en']){
- for(const width of [PHONE,DESKTOP]){
+ for(const vp of VIEWPORTS){
   for(const id of chapters){
-   await run({kind:'chapter',id,lang,width,path:`bible.html?lang=${lang}#${id}`,ready:'.prose',expectTitle:byId.get(id)?.title?.[lang]});
+   await run({kind:'chapter',id,lang,width:vp.width,height:vp.height,path:`bible.html?lang=${lang}#${id}`,ready:'.prose',expectTitle:byId.get(id)?.title?.[lang]});
   }
  }
 }
@@ -105,10 +124,11 @@ for(const lang of ['th','en']){
 // --- 2. The Southeast Asia workspace: every view, at both a phone and a desktop width.
 // The views are switched with the visible control for that width — a button on desktop, the
 // select on a phone — so the measured page is the one a reader actually sees.
-for(const width of [PHONE,DESKTOP]){
+for(const vp of VIEWPORTS){
+ const width=vp.width;
  for(const view of SEA_VIEWS){
   await run({
-   kind:'sea-view',id:view,width,path:'sea.html?lang=th',ready:'body[data-ready]',
+   kind:'sea-view',id:view,width,height:vp.height,path:'sea.html?lang=th',ready:'body[data-ready]',
    expect:`document.body.dataset.seaView==='${view}'`,expectLabel:`the ${view} view must actually be open`,
    act:async()=>{
     await page.evaluate(v=>{
@@ -125,11 +145,12 @@ for(const width of [PHONE,DESKTOP]){
 
 // --- 3. The manual: each section measured on its own, plus the whole page.
 for(const [path,label] of [['guide-th.html','th'],['guide-en.html','en']]){
- for(const width of [PHONE,DESKTOP]){
-  await run({kind:'manual',id:'whole-page',lang:label,width,path,ready:'.manual-routes'});
+ for(const vp of VIEWPORTS){
+  const width=vp.width;
+  await run({kind:'manual',id:'whole-page',lang:label,width,height:vp.height,path,ready:'.manual-routes'});
   for(const id of MANUAL_SECTIONS){
    await run({
-    kind:'manual',id,width,lang:label,path,ready:'.manual-routes',
+    kind:'manual',id,width,height:vp.height,lang:label,path,ready:'.manual-routes',
     scope:`#${id}`,
     expect:`(()=>{const e=document.querySelector('#${id}');return !!e&&e.getBoundingClientRect().height>0})()`,expectLabel:`the #${id} section must be open and have height`,
     act:async()=>{await page.evaluate(s=>document.querySelector(s)?.scrollIntoView({block:'start'}),`#${id}`);await page.waitForTimeout(80);},
@@ -148,9 +169,10 @@ for(const [path,label,ready] of [
  ['?lang=th','th','#kStock'],
  ['?lang=en','en','#kStock'],
 ]){
- for(const width of [PHONE,DESKTOP]){
+ for(const vp of VIEWPORTS){
+  const width=vp.width;
   await run({
-   kind:'open-page',id:'all-disclosures-open',lang:label,width,path,ready,
+   kind:'open-page',id:'all-disclosures-open',lang:label,width,height:vp.height,path,ready,
    expect:`(()=>{const d=[...document.querySelectorAll('details')];return d.length>0&&d.every(x=>x.open)})()`,
    expectLabel:'every disclosure must be open before the page is measured',
    act:async()=>{
@@ -166,11 +188,12 @@ for(const [path,label,ready] of [
 
 // --- 5. The research pages: the two-column layout and the sections inside it.
 for(const [path,label] of [['research-th.html','th'],['research-en.html','en']]){
- for(const width of [PHONE,DESKTOP]){
-  await run({kind:'research',id:'whole-page',lang:label,width,path,ready:'.research-intro'});
+ for(const vp of VIEWPORTS){
+  const width=vp.width;
+  await run({kind:'research',id:'whole-page',lang:label,width,height:vp.height,path,ready:'.research-intro'});
   for(const sel of ['.research-layout','.audit-results','.author-profile','.standards-note','.research-toc']){
    await run({
-    kind:'research',id:sel,width,lang:label,path,ready:'.research-intro',scope:sel,
+    kind:'research',id:sel,width,height:vp.height,lang:label,path,ready:'.research-intro',scope:sel,
     expect:`(()=>{const e=document.querySelector(${JSON.stringify(sel)});return !!e&&e.getBoundingClientRect().height>0})()`,expectLabel:`${sel} must have height`,
     act:async()=>{await page.evaluate(s=>document.querySelector(s)?.scrollIntoView({block:'start'}),sel);await page.waitForTimeout(80);},
    });
@@ -184,10 +207,11 @@ for(const [path,label] of [['research-th.html','th'],['research-en.html','en']])
 // carbon panel was ever measured.
 const HOME_TABS=['carbon','project','calculate','evidence','sources'];
 for(const lang of ['th','en']){
- for(const width of [PHONE,DESKTOP]){
+ for(const vp of VIEWPORTS){
+  const width=vp.width;
   for(const t of HOME_TABS){
    await run({
-    kind:'home-tab',id:t,lang,width,path:`?lang=${lang}`,ready:'#kStock',
+    kind:'home-tab',id:t,lang,width,height:vp.height,path:`?lang=${lang}`,ready:'#kStock',
     scope:`[data-panel="${t}"]`,
     expect:`document.body.dataset.mode==='${t}'`,expectLabel:`the ${t} panel must actually be open`,
     act:async()=>{
@@ -217,13 +241,17 @@ await browser.close();
 const counts={};
 let total=0;
 for(const r of report){
- for(const o of (r.offenders||[])){
+ for(const o of [...(r.offenders||[]),...(r.lawFindings||[])]){
   counts[o.kind]=(counts[o.kind]||0)+1;total++;
   console.log(`${o.severity.toUpperCase().padEnd(6)} ${o.kind.padEnd(16)} ${r.kind}/${r.id}${r.lang?'/'+r.lang:''}@${r.width} ${o.el} — ${o.note}`);
  }
 }
 const failed=report.filter(r=>r.error).length;
-console.log('\n'+JSON.stringify({total,byKind:counts,jobs:report.length,failed},null,2));
+// The chrome cost of every measured page, as the law's section 6 asks it to be recorded.
+const chromeCosts=report.filter(r=>r.chromeCost).map(r=>({kind:r.kind,id:r.id,width:r.width,topPct:r.chromeCost.topPct,bottomPct:r.chromeCost.bottomPct,totalPct:r.chromeCost.totalPct}));
+const worstChrome=chromeCosts.slice().sort((a,b)=>b.totalPct-a.totalPct).slice(0,5);
+console.log('\nworst chrome cost: '+worstChrome.map(c=>`${c.kind}/${c.id}@${c.width}=${c.totalPct}%`).join(' '));
+console.log('\n'+JSON.stringify({total,byKind:counts,jobs:report.length,failed,chrome:worstChrome},null,2));
 if(failed)for(const r of report)if(r.error)console.log('FAILED',r.kind,r.id,r.width,r.error);
 if(errors.length)console.log('PAGE ERRORS:',[...new Set(errors)].slice(0,10));
 
@@ -232,4 +260,4 @@ if(errors.length)console.log('PAGE ERRORS:',[...new Set(errors)].slice(0,10));
 if(failed){console.error(`\n${failed} page(s) could not be measured — a clean audit that did not run is not a clean audit.`);process.exit(1);}
 if(errors.length){console.error('\nPage errors during the deep audit.');process.exit(1);}
 if(total&&process.env.SPATIAL_DEEP_REPORT_ONLY!=='1'){console.error(`\n${total} spatial hallucination(s) found in the content.`);process.exit(1);}
-console.log(`PASS deep spatial audit: ${report.length} pages measured, no unjustified gaps, orphan tracks, stranded controls or scattered actions.`);
+console.log(`PASS deep spatial audit: ${report.length} pages measured at 390x844, 1024x768 and 1440x900, no unjustified gaps, orphan tracks, stranded controls, scattered actions, inflated controls, empty spacers, overlapping chrome or equal-weight blocks.`);

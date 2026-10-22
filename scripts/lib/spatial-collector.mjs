@@ -25,7 +25,7 @@ export const SURFACES=[
  {name:'sea-en',path:'sea.html?lang=en',ready:'#countryRows tr',key:'#countryNumbers'},
  {name:'bible',path:'bible.html?lang=th#sea-overview',ready:'.prose',key:'.prose p'},
  {name:'bible-en',path:'bible.html?lang=en#sea-overview',ready:'.prose',key:'.prose p'},
- {name:'bible-credits',path:'bible.html?lang=en#sea-what-is-a-credit',ready:'.figure-stack',key:'.prose p'},
+ {name:'bible-credits',path:'bible.html?lang=en#sea-what-is-a-credit',ready:'figure.credit-figure',key:'.prose p'},
  {name:'guide',path:'guide-th.html',ready:'.manual-routes',key:'#province h2'},
  {name:'guide-en',path:'guide-en.html',ready:'.manual-routes',key:'#province h2'},
  {name:'research',path:'research-th.html',ready:'.research-intro',key:'.thesis'},

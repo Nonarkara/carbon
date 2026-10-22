@@ -21,6 +21,8 @@ Singapore's own explanatory annex for the Thailand agreement states this arithme
 
 Note what this means physically: **nothing was emitted and nothing was absorbed.** The atmosphere did not change. What moved is *permission to count*. A corresponding adjustment is an accounting act, not an environmental one.
 
+<div data-figure="border-article6"></div>
+
 ## Who has actually signed
 Singapore has concluded or signed Implementation Agreements with twelve countries. Four are ASEAN members, and only one of those is in force:
 
@@ -34,6 +36,8 @@ Singapore has concluded or signed Implementation Agreements with twelve countrie
 | Papua New Guinea, Paraguay | Other | Signed, not yet in force |
 
 The asymmetry is the story. Thailand is the only ASEAN country with a live agreement, and Thailand is also the one country in this system with a fully published public project registry — which is why this tool can show you T-VER projects at all.
+
+<div data-figure="border-ledger"></div>
 
 An agreement is not cosmetic. Under Singapore's International Carbon Credit framework, **credits from projects hosted in a country without an agreement cannot offset carbon-tax liability at all**, and eligible credits may cover only 5% of a company's tax. That is a hard commercial constraint: it decides which projects are worth building.
 
@@ -78,6 +82,8 @@ That is why the boundaries in this system are drawn where they are. The workbenc
 
 สิ่งที่ต้องสังเกตคือ **ไม่มีการปล่อยและไม่มีการดูดซับ** บรรยากาศไม่เปลี่ยนแปลง สิ่งที่เคลื่อนไปคือ *สิทธิ์ในการนับ* การปรับสมดุลเป็นการกระทำทางบัญชี ไม่ใช่การกระทำต่อสิ่งแวดล้อม
 
+<div data-figure="border-article6"></div>
+
 ## ใครลงนามจริงบ้าง
 สิงคโปร์ได้ทำข้อตกลงหรือเจรจาข้อตกลงกับสิบสองประเทศ มีสี่ประเทศในอาเซียน และมีเพียงหนึ่งประเทศที่ข้อตกลงมีผลบังคับใช้แล้ว
 
@@ -91,6 +97,8 @@ That is why the boundaries in this system are drawn where they are. The workbenc
 | ปาปัวนิวกินี ปารากวาย | อื่น ๆ | ลงนามแล้ว ยังไม่มีผลบังคับใช้ |
 
 ความไม่สมมาตรคือประเด็นหลัก ไทยเป็นประเทศอาเซียนเพียงประเทศเดียวที่ข้อตกลงมีผลแล้ว และไทยก็เป็นประเทศเดียวในระบบนี้ที่มีทะเบียนโครงการสาธารณะครบถ้วน ซึ่งเป็นเหตุผลที่เครื่องมือนี้จึงแสดงโครงการ T-VER ให้คุณดูได้
+
+<div data-figure="border-ledger"></div>
 
 ข้อตกลงไม่ใช่เรื่องพิธีการ ภายใต้กรอบเครดิตคาร์บอนระหว่างประเทศของสิงคโปร์ **เครดิตจากโครงการในประเทศที่ไม่มีข้อตกลง หักลดภาระภาษีคาร์บอนไม่ได้เลย** และเครดิตที่เข้าเกณฑ์หักลดได้ไม่เกิน 5% ของภาษีของบริษัท นี่เป็นข้อจำกัดเชิงพาณิชย์ที่ชัดเจน เป็นตัวกำหนดว่าโครงการใดคุ้มค่าที่จะสร้าง
 
