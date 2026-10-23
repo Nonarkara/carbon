@@ -17,7 +17,6 @@
 // Usage: npm run deploy
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
-import {resolve} from 'node:path';
 import {assertCleanTree, createPristineTree, assertBuiltTreeMatchesCommit, headCommit, repoRoot, treeState} from './lib/release-tree.mjs';
 
 const exec = promisify(execFile);
@@ -86,17 +85,18 @@ async function main() {
     const dirty = !treeState(tree.dir).clean;
     console.log(`built tree equals ${commit.short}${dirty ? ' (build products only)' : ''}`);
 
-    // 4. Upload the measured bytes, naming the production branch explicitly.
+    // 4. Upload the measured bytes, naming the production branch explicitly. The uploader runs
+    // inside the pristine tree, so the tree it inspects for dirt is the tree it publishes —
+    // not the caller's, which another agent may be writing to at this moment.
     step('upload');
     const code = await run('npx', [
       'wrangler', 'pages', 'deploy',
-      resolve(tree.dir, 'public'),
       '--project-name', project,
       '--branch', productionBranch,
       '--commit-hash', commit.sha,
       '--commit-message', commit.subject,
       '--commit-dirty', String(dirty),
-    ], {cwd: root, label: 'the upload'});
+    ], {cwd: tree.dir, label: 'the upload'});
     if (code !== 0) process.exit(code);
 
     console.log(`\nPASS release: ${commit.short} built, measured and uploaded to ${project} (${productionBranch}).`);

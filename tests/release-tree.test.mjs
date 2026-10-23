@@ -72,6 +72,24 @@ test('a built tree that no longer matches its commit is refused', async () => {
   }
 });
 
+test('the release tree reports itself clean, so the uploader is told the truth', async () => {
+  const root = await scratchRepo();
+  try {
+    const tree = await createPristineTree({cwd: root});
+    try {
+      // The linked node_modules is a harness artefact. If it shows up in git status, the
+      // uploader reads the tree it runs in, sees dirt, and warns that a release of
+      // uncommitted work is being published — which is false.
+      const status = execFileSync('git', ['status', '--porcelain'], {cwd: tree.dir, encoding: 'utf8'}).trim();
+      assert.equal(status, '', 'the release tree must report itself clean');
+    } finally {
+      await tree.remove();
+    }
+  } finally {
+    await rm(root, {recursive: true, force: true});
+  }
+});
+
 test('the release names the production branch explicitly', async () => {
   const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
   assert.equal(pkg.scripts.deploy, 'node scripts/release.mjs', 'the release goes through scripts/release.mjs');

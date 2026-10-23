@@ -20,7 +20,7 @@
 // from the caller's tree.
 import {execFileSync, execFile} from 'node:child_process';
 import {promisify} from 'node:util';
-import {mkdtemp, symlink, rm, readdir, stat} from 'node:fs/promises';
+import {mkdtemp, symlink, rm, mkdir, appendFile, readFile} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join, resolve, dirname} from 'node:path';
@@ -124,6 +124,7 @@ export async function createPristineTree({commit, cwd} = {}) {
     throw new Error('node_modules is missing in the calling tree; run npm ci first');
   }
   await symlink(modules, join(dir, 'node_modules'), 'dir');
+  await excludeFromGit(dir, 'node_modules');
 
   return {
     dir,
@@ -137,6 +138,30 @@ export async function createPristineTree({commit, cwd} = {}) {
       await rm(parent, {recursive: true, force: true});
     },
   };
+}
+
+/**
+ * Keep a path out of git's status for this repository's worktrees.
+ *
+ * The linked node_modules is a harness artefact of the export. Left visible, it makes the
+ * published tree look dirty to git — and to the uploader, which reads the tree it runs in and
+ * warns that a release of uncommitted work is being published. It is not; it is a link to the
+ * same dependency set.
+ *
+ * Git reads the exclude file from the common directory, not from the worktree's own, so that
+ * is where the pattern goes. It is a local, uncommitted file, and the pattern it carries is
+ * already covered by .gitignore.
+ *
+ * @param {string} dir the worktree
+ * @param {string} pattern a gitignore pattern
+ */
+async function excludeFromGit(dir, pattern) {
+  const {stdout} = await exec('git', ['rev-parse', '--git-common-dir'], {cwd: dir});
+  const exclude = join(resolve(dir, stdout.trim()), 'info', 'exclude');
+  await mkdir(dirname(exclude), {recursive: true});
+  const current = existsSync(exclude) ? await readFile(exclude, 'utf8') : '';
+  if (current.split('\n').includes(pattern)) return;
+  await appendFile(exclude, `\n${pattern}\n`);
 }
 
 /**
