@@ -12,10 +12,10 @@ Source / ซอร์ส: https://github.com/Nonarkara/carbon
 3. `npm run test:browser:all` — every browser suite against the same kind of self-started server. For a single flow, `npm run test:browser` is enough.
 4. Scan secrets with `gitleaks git --redact` and `gitleaks dir public --redact`; run `npm audit`.
 5. Commit source, tests and docs with an `Agent: codex` or appropriate attribution trailer; push to main.
-6. `npm run deploy` rebuilds using the committed Git SHA, runs `npm test` and `npm run test:spatial`, then uploads only `public/`. A release cannot ship without the law passing.
+6. `npm run deploy` runs `scripts/release.mjs`: it checks the tree is clean, exports HEAD into a pristine worktree, builds there, runs `npm test`, `npm run test:spatial` and `npm run test:deep` against that build, and uploads that measured directory with `--branch main` so it lands on the production alias. A release cannot ship without the law passing, and it cannot ship bytes the commit does not contain.
 7. Inspect `/version.json`, security headers, TH/EN guides, then `BASE_URL=https://carbon.nonarkara.org npm run test:browser` and `npm run test:release` for exact deployed bytes.
 
-การ build หลัง commit ทำให้ version ตรงกับซอร์สที่เผยแพร่ ต้องตรวจรุ่นบน URL หลัก ไม่ใช้เพียงข้อความสำเร็จจาก Wrangler เป็นหลักฐาน ส่วน GitHub Actions ตรวจ build/test แต่ไม่ได้ deploy อัตโนมัติ
+การ build หลัง commit ทำให้ version ตรงกับซอร์สที่เผยแพร่ ต้องตรวจรุ่นบน URL หลัก ไม่ใช้เพียงข้อความสำเร็จจาก Wrangler เป็นหลักฐาน ส่วน GitHub Actions ตรวจ build/test แต่ไม่ได้ deploy อัตโนมัติ การ deploy สร้าง build จากสำเนา commit ที่สะอาด (pristine worktree) ไม่ใช่จากโฟลเดอร์ที่ทำงานอยู่ เพื่อให้ไฟล์ที่แก้ไขค้างอยู่ของใครไม่หลุดเข้าไปในรุ่นที่เผยแพร่
 
 ## Credentials / ข้อมูลรับรองสิทธิ
 

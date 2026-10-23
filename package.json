@@ -14,7 +14,7 @@
     "test:browser:all": "node scripts/browser-suite.mjs",
     "test:figures": "node scripts/shoot-figures.mjs",
     "test:release": "node scripts/release-smoke.mjs",
-    "deploy": "node scripts/lib/assert-clean-tree.mjs && npm run build && npm test && npm run test:spatial -- --no-build && npm run test:deep && wrangler pages deploy public --project-name forest-carbon-thailand",
+    "deploy": "node scripts/release.mjs",
     "test:client": "node scripts/client-demo-test.mjs",
     "test:manual": "node scripts/manual-walkthrough.mjs",
     "test:design": "node scripts/design-review.mjs",
