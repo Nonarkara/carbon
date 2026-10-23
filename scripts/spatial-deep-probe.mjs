@@ -51,6 +51,7 @@ function watch(p){p.on('pageerror',e=>errors.push(e.message));}
 watch(page);
 await mkdir(OUT,{recursive:true});
 const report=[];
+let measured=0;
 
 // A browser can die mid-audit — most often because the machine ran out of memory while other
 // work was running. That is not a layout finding, and it must not be allowed to look like one
@@ -142,6 +143,12 @@ async function runOnce(job){
 }
 
 async function run(job){
+ // A long audit accumulates memory in the browser. Refreshing the browser every hundred
+ // pages costs one launch and removes the drift that ends a run on page 300 of 546.
+ if(measured%100===0&&measured>0){
+  try{await relaunch();}catch{/* a browser that will not restart is caught by the recovery below */}
+ }
+ measured++;
  await measureWithRecovery(job,{
   measure:runOnce,
   relaunch,

@@ -19,20 +19,49 @@ export function isDeadTarget(err) {
   return /Target page, context or browser has been closed|Target closed|browser has been closed|has been closed|Protocol error|browserContext|Browser closed/i.test(m);
 }
 
+import {setTimeout as sleep} from 'node:timers/promises';
+
 /**
  * Measure one job, recovering from a dead browser.
  *
+ * Two failures have to be told apart. A browser that dies WHILE measuring is the machine
+ * under pressure: relaunch and measure again. A browser that will not START is the same
+ * pressure seen from the other side, and it usually clears in a second or two, so the launch
+ * is retried a few times before the page is given up on.
+ *
+ * Either way, a page that cannot be measured is recorded as unmeasurable. The caller decides
+ * what that means — for an audit, it means the audit fails, because a clean audit that did
+ * not run is not a clean audit.
+ *
  * @param {object} job the thing to measure
- * @param {{measure:(job:object)=>Promise<void>, relaunch:()=>Promise<void>, record:(job:object, err:Error)=>void}} parts
+ * @param {{measure:(job:object)=>Promise<void>, relaunch:()=>Promise<void>, record:(job:object, err:Error)=>void, relaunchAttempts?:number}} parts
  * @returns {Promise<'measured'|'unmeasurable'>}
  */
-export async function measureWithRecovery(job, {measure, relaunch, record}) {
+export async function measureWithRecovery(job, {measure, relaunch, record, relaunchAttempts = 4}) {
   try {
     await measure(job);
     return 'measured';
   } catch (err) {
     if (!isDeadTarget(err)) throw err;
-    await relaunch();
+
+    // Bring a browser back up. A launch that dies on arrival is the machine, not the page.
+    let up = false;
+    for (let attempt = 0; attempt < relaunchAttempts; attempt++) {
+      try {
+        await relaunch();
+        up = true;
+        break;
+      } catch (relaunchErr) {
+        if (!isDeadTarget(relaunchErr)) throw relaunchErr;
+        if (attempt === relaunchAttempts - 1) break;
+        await sleep(2000 * (attempt + 1));
+      }
+    }
+    if (!up) {
+      record(job, err);
+      return 'unmeasurable';
+    }
+
     try {
       await measure(job);
       return 'measured';

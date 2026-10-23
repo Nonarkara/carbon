@@ -60,6 +60,25 @@ test('a page that cannot be measured twice is recorded, never quietly passed', a
   assert.equal(recorded[0].job.id, 'chapter-9');
 });
 
+test('a browser that will not start is retried, then the page is given up on', async () => {
+  let relaunches = 0;
+  const recorded = [];
+  const outcome = await measureWithRecovery({id:'chapter-11'}, {
+    measure: async () => {
+      throw DEAD;
+    },
+    relaunch: async () => {
+      relaunches++;
+      throw new Error('browserType.launch: Target page, context or browser has been closed');
+    },
+    record: (job, err) => recorded.push({job, err}),
+    relaunchAttempts: 2,
+  });
+  assert.equal(outcome, 'unmeasurable');
+  assert.equal(relaunches, 2, 'the launch is tried again before the page is given up on');
+  assert.equal(recorded.length, 1, 'a page that could not be measured is recorded');
+});
+
 test('an error that is not a dead browser passes straight through', async () => {
   let relaunches = 0;
   await assert.rejects(
