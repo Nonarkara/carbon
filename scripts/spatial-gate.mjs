@@ -68,8 +68,22 @@ for(const s of MATRIX){
  for(const width of s.widths){
   const height=HEIGHT(width);
   await page.setViewportSize({width,height});
-  try{await page.goto(`${base}/${s.path}`,{waitUntil:'domcontentloaded',timeout:15000});}catch(e){assert.fail(`${s.name}@${width} could not load: ${e.message}`);}
-  await page.locator(s.ready).first().waitFor({timeout:8000});
+  // Load, then wait for the surface's own readiness signal. Both are retried once: a page
+  // that is slow because the MACHINE is busy is not a page with a layout defect, and a gate
+  // that blocks a release on a slow load is a gate people learn to bypass. The retry separates
+  // a transient stall from a surface that never renders.
+  let ready=false,lastErr=null;
+  for(let attempt=0;attempt<2&&!ready;attempt++){
+   try{
+    await page.goto(`${base}/${s.path}`,{waitUntil:'domcontentloaded',timeout:20000});
+    await page.locator(s.ready).first().waitFor({timeout:10000});
+    ready=true;
+   }catch(e){
+    lastErr=e;
+    if(attempt===0)await page.waitForTimeout(1000);
+   }
+  }
+  if(!ready)assert.fail(`${s.name}@${width} never became ready: ${lastErr?.message}`);
   await page.evaluate(()=>Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]));
   await page.waitForTimeout(80);
 

@@ -82,8 +82,16 @@ async function run(job){
   catch(e){lastErr=e;if(attempt===0)await page.waitForTimeout(1500);}
  }
  if(!loaded){report.push({...job,error:'goto failed: '+lastErr.message});return;}
- try{await page.locator(job.ready).first().waitFor({timeout:10000});}
- catch{report.push({...job,error:'ready selector never appeared: '+job.ready});return;}
+ // The readiness wait is retried on the same terms as the navigation: a surface that is slow
+ // because the machine is busy is not a surface with a layout defect, and a clean audit that
+ // did not run is not a clean audit. One retry separates a transient stall from a page that
+ // never renders.
+ let ready=false;
+ for(let attempt=0;attempt<2&&!ready;attempt++){
+  try{await page.locator(job.ready).first().waitFor({timeout:10000});ready=true;}
+  catch{ if(attempt===0)await page.waitForTimeout(1000); }
+ }
+ if(!ready){report.push({...job,error:'ready selector never appeared: '+job.ready});return;}
  // A hash change does not reload the page, so the previous chapter's prose is still on screen for
  // an instant. Waiting for the expected heading is what stops the audit from measuring a chapter
  // that is no longer there — a stale measurement is worse than no measurement.

@@ -256,12 +256,16 @@ const poseExemption=await page.evaluate(()=>{
   perRow:[...new Set(kids.map(k=>Math.round(k.getBoundingClientRect().top)))].length,
   heights:[...new Set(kids.map(k=>Math.round(k.getBoundingClientRect().height)))],
   labelSizes:[...new Set(kids.map(k=>Math.round(parseFloat(getComputedStyle(k.querySelector('b')).fontSize))))],
+  labels:kids.map(k=>k.querySelector('b').textContent.trim()),
+  columns:getComputedStyle(ul).gridTemplateColumns.split(' ').filter(Boolean).length,
  };
 });
 assert.ok(!poseExemption.missing,'the pose list must exist on the page the falsifier measures');
 assert.equal(poseExemption.count,6,'the pose list must hold the six poses the exemption names');
 assert.equal(poseExemption.heights.length,1,'the six poses must be one even peer set');
 assert.equal(poseExemption.labelSizes.length,1,'the six poses must carry one label size');
+assert.equal(new Set(poseExemption.labels).size,6,'the six poses must each have their own name');
+assert.equal(poseExemption.count%poseExemption.columns,0,'the grid must divide the six poses exactly');
 foundLaw=await law();
 assert.ok(!foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
  `the exempted pose list must not be reported, got ${JSON.stringify(foundLaw.filter(o=>o.el.includes('kabonna-poses')))}`);
@@ -282,6 +286,54 @@ await page.evaluate(()=>{
 foundLaw=await law();
 assert.ok(!foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
  'the exemption must apply again once the pose list is even again');
+
+// Revoke it the other way: break the peer SET. Take two poses away and the grid no longer
+// divides the count, so a card is left alone on the last row — the stranding the exemption
+// exists to keep impossible. The exemption is named for six, and six is what it protects.
+await page.evaluate(()=>{
+ const ul=document.querySelector('.kabonna-poses');
+ ul.dataset.savedCount=String(ul.children.length);
+ [...ul.children].slice(-2).forEach(k=>k.remove());
+});
+foundLaw=await law();
+assert.ok(foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
+ `the exemption must be revocable: a pose set that is no longer six must be reported, got ${JSON.stringify(foundLaw.filter(o=>o.el.includes('kabonna-poses')))}`);
+await page.goto(`${base}/research-en.html`,{waitUntil:'domcontentloaded'});
+await page.locator('.kabonna-poses').waitFor();
+foundLaw=await law();
+assert.ok(!foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
+ 'the exemption must apply again once the six poses are back');
+
+// Revoke it a third way: two poses that share a name are repetition, not a set of peers.
+await page.evaluate(()=>{
+ const ul=document.querySelector('.kabonna-poses');
+ ul.dataset.savedLabel=ul.children[1].querySelector('b').textContent;
+ ul.children[1].querySelector('b').textContent=ul.children[0].querySelector('b').textContent;
+});
+foundLaw=await law();
+assert.ok(foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
+ `the exemption must be revocable: two poses sharing a name must be reported, got ${JSON.stringify(foundLaw.filter(o=>o.el.includes('kabonna-poses')))}`);
+await page.goto(`${base}/research-en.html`,{waitUntil:'domcontentloaded'});
+await page.locator('.kabonna-poses').waitFor();
+foundLaw=await law();
+assert.ok(!foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
+ 'the exemption must apply again once the poses have their own names back');
+
+// Revoke it a fourth way: a grid that no longer divides the six. Four columns leaves the last
+// row short of a full set, and a peer set in a grid that strands a card is not a peer set.
+await page.evaluate(()=>{
+ const ul=document.querySelector('.kabonna-poses');
+ ul.dataset.savedColumns=ul.style.gridTemplateColumns;
+ ul.style.gridTemplateColumns='repeat(4,minmax(0,1fr))';
+});
+foundLaw=await law();
+assert.ok(foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
+ `the exemption must be revocable: a grid that does not divide the six must be reported, got ${JSON.stringify(foundLaw.filter(o=>o.el.includes('kabonna-poses')))}`);
+await page.goto(`${base}/research-en.html`,{waitUntil:'domcontentloaded'});
+await page.locator('.kabonna-poses').waitFor();
+foundLaw=await law();
+assert.ok(!foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
+ 'the exemption must apply again once the grid divides the six');
 
 // Back to the page the rest of the falsifier works on.
 await page.goto(`${base}/bible.html?lang=en#sea-overview`,{waitUntil:'domcontentloaded'});
@@ -415,4 +467,4 @@ await browser.close();
 // The measurement is done. Release the server this gate started, so the port is free and
 // nothing is left listening after the gate ends.
 await target.stop();
-console.log('PASS spatial detector self-test: row-leftover, gap-outlier, accidental-wrap, empty-track and scoped measurement are all detected; a scattered toolbar is caught; a vertical dropdown menu is not; the law classes catch overlapping chrome, inflated controls, empty spacers, equal-weight blocks (including a peer row labelled with bold rather than a heading), a giant top bar, content cut off with no way to scroll it into view, and overflow moved sideways into a nested scroll area; the named peer-set exemption holds for the six pose cards AND is revoked when one of them grows; a scrollable wide block, an inert pair of scroll containers and a nested panel that scrolls downward are not reported; the clean page measures clean.');
+console.log('PASS spatial detector self-test: row-leftover, gap-outlier, accidental-wrap, empty-track and scoped measurement are all detected; a scattered toolbar is caught; a vertical dropdown menu is not; the law classes catch overlapping chrome, inflated controls, empty spacers, equal-weight blocks (including a peer row labelled with bold rather than a heading), a giant top bar, content cut off with no way to scroll it into view, and overflow moved sideways into a nested scroll area; the named peer-set exemption holds for the six pose cards AND is revoked when one of them grows, when the set is no longer six, when two poses share a name, and when the grid stops dividing the six; a scrollable wide block, an inert pair of scroll containers and a nested panel that scrolls downward are not reported; the clean page measures clean.');

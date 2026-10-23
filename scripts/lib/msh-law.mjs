@@ -166,17 +166,21 @@ export const EQUAL_MIN_BLOCKS=3;
  * Genuine peer sets: a named element, the reason it is a peer set rather than a flattening,
  * and the conditions under which the exemption stops applying.
  *
- * @type {{selector:string,reason:string,expect:{count?:number,equalHeights?:boolean}}[]}
+ * @type {{selector:string,reason:string,expect:{count?:number,equalHeights?:boolean,evenGrid?:boolean,distinctLabels?:boolean}}[]}
  */
 export const EQUAL_WEIGHT_EXEMPTIONS=[
  {
   selector:'.kabonna-poses',
   reason:'The six poses of the character are six peers of ONE thing. The section asks the reader to understand all six, ' +
    'and an order would be a fiction. Measured: 2 columns x 3 rows at 390 (173x333px), 3 x 2 at 1024 (226x378px), ' +
-   '3 x 2 at 1440 (255x395px) — six identical blocks, each with its own illustration, label and one-line meaning, ' +
-   'under a section heading. grid-auto-rows:1fr keeps the rows equal, so no card is taller than its peers and ' +
+   '3 x 2 at 1440 (255x395px) — six identical blocks, each with its own illustration, label and one-line meaning, under a ' +
+   'section heading. grid-auto-rows:1fr keeps the rows equal, so no card is taller than its peers and ' +
    'the grid divides the count exactly at every width, so no card is stranded.',
-  expect:{count:6,equalHeights:true},
+  // The exemption holds only while the peer set is intact: six items, six distinct labels, an
+  // even grid, and one even row height. Break any of those — a card grows, a pose is added or
+  // dropped, two poses end up with the same name — and the exemption is revoked and the rule
+  // speaks again.
+  expect:{count:6,equalHeights:true,evenGrid:true,distinctLabels:true},
  },
 ];
 
@@ -626,6 +630,16 @@ export function collectLaw(root,exemptions){
      if(want.equalHeights){
       const heights=new Set(kids.map(k=>Math.round(k.getBoundingClientRect().height)));
       if(heights.size!==1)return false;
+     }
+     if(want.evenGrid){
+      // The grid must divide the count exactly, so no card is left alone on the last row.
+      const cols=cs.gridTemplateColumns.split(' ').filter(Boolean).length;
+      if(!cols||kids.length%cols!==0)return false;
+     }
+     if(want.distinctLabels){
+      // Peers have their own identity. Six blocks with the same name are repetition, not a set.
+      const labels=kids.map(k=>(k.querySelector('b,strong,h1,h2,h3,h4')?.textContent||'').trim());
+      if(new Set(labels).size!==kids.length)return false;
      }
      return true;
     });
