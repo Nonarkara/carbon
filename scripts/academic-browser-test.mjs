@@ -1,7 +1,8 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
-const base=process.env.BASE_URL||'http://localhost:8790';
+import {measurementTarget} from './lib/local-server.mjs';
+const base=(await measurementTarget()).base;
 await mkdir('test-results',{recursive:true});
 const b=await chromium.launch(),p=await b.newPage();
 const errors=[];p.on('pageerror',e=>errors.push(e.message));
@@ -17,7 +18,7 @@ for(const lang of ['th','en'])for(const width of [375,768,1440]){
  assert.ok(await p.locator('#results a').count()>0);
  await p.goto(`${base}/research-${lang}.html#section-15`,{waitUntil:'domcontentloaded'});
  await p.locator('.audit-results').waitFor();
- assert.equal(await p.locator('.research-toc a').count(),19);
+ assert.equal(await p.locator('.research-toc a').count(),22);
  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Research overflows');
 }
 assert.deepEqual(errors,[]);await b.close();console.log('Academic reader: TH/EN 375/768/1440, diagrams, tables, search, no overflow or page errors.');

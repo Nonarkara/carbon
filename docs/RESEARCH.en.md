@@ -594,6 +594,98 @@ No alert is converted into tonnes, assigned to a drawn parcel, deducted from a p
 **Reproduction:** `python3 scripts/ingest/gfw_watch.py --date 2026-10-05`. Future refreshes must select an available dataset version and rebuild/deploy; the snapshot does not silently refresh. No user boundary is sent to GFW. The public CSV download succeeded without authentication; absent CORS is handled by offline ingestion. An account subscription alone does not configure a Data API key: none is configured here. Authenticated raster ingestion remains a separate step, so drawn-area flux remains unavailable.
 
 
+## 17 · What a carbon footprint is — and which footprint this tool measures
+
+Short answer: a carbon footprint is an emissions account assigned to something you can name — a product, a company, a city, a country — over a stated period, inside a stated boundary. This workbench computes none of those inventories. It screens the forest carbon of a landscape. The two meet at exactly one honest point: an organization that intends to claim forest credits must first know its own footprint, and neither number is allowed to cancel the other. Reduction is claimed against the footprint; removal is claimed by the project; the credit is issued only after section 07's three gates.
+
+### The scopes, in one paragraph each
+
+The [GHG Protocol Corporate Standard](https://ghgprotocol.org/corporate-standard) (revised 2004) divided a company's emissions into three scopes, and the vocabulary stuck far beyond companies. **Scope 1** is what you burn yourself: fuel in owned vehicles and boilers, process emissions, fugitive releases. **Scope 2** is the energy you buy — electricity, steam, heat — accounted with dated grid factors, location-based or market-based, and the choice must be disclosed. **Scope 3** is everything up and down the value chain: the [Corporate Value Chain Standard](https://ghgprotocol.org/corporate-value-chain-scope-3-standard) (2011) names fifteen categories from purchased goods to end-of-life treatment, and in most sectors Scope 3 dominates the total. A product footprint asks the same question per unit of function through life-cycle assessment (ISO 14040/14044; [ISO 14067](https://www.iso.org/standard/71206.html) for the carbon claim). A territorial inventory asks it per country under the IPCC 2006 Guidelines — that is the shape of Thailand's BTR1 (2022), the same report the carbon map carries as a cross-check. Consumption-based accounting then reassigns trade: the emissions of imported goods follow the importer, not the exporter.
+
+| Footprint | Governing standard | Unit | Period | This tool's role |
+|---|---|---|---|---|
+| Corporate inventory | GHG Protocol Corporate + Scope 3 · ISO 14064-1:2018 | tCO₂e per year, by scope | Reporting year | None — no activity data is collected here |
+| Product footprint | ISO 14067:2018 via LCA (ISO 14040/14044) | tCO₂e per functional unit | Life cycle | None |
+| Territorial inventory | IPCC 2006 Guidelines · Thailand's BTR1 (2022) | MtCO₂e per year | Calendar year | Cross-check table beside the map |
+| Landscape screening | This workbench, from open data | tCO₂e stock · tCO₂e/yr flux | Each dataset's own period | The tool itself |
+| Credit project | T-VER-S-METH-13-01 v2 (or the fitting method) | tCO₂e over a monitoring period | Baseline → monitoring date | Arithmetic for supplied measurements only |
+
+```mermaid
+flowchart LR
+ A["Footprint: who emitted, inside which boundary"] --> B["Reduction: change the activities"]
+ B --> C["Residual emissions remain"]
+ C --> D["Removal: a project grows or protects carbon"]
+ D --> E["Credit: only after rights, method and verification"]
+```
+
+Four rules survive every one of these frameworks, and this tool borrows each of them. **Boundaries come before numbers**: a footprint without a stated boundary is a mood, not an account. **Scopes never cancel**: a forest sink does not shrink a Scope 1 figure — exactly as the map never nets forest flux against fossil CO₂; ODIAC2025 sits beside, never inside. **Factors are dated**: a grid factor without its year is unusable — the same discipline that puts a version and period on every ledger row. **The causal order matters**: reduction comes before removal is counted, because a credit bought before any reduction is a transfer, not a claim of change.
+
+### What a footprint cannot do
+
+A footprint is a scale, not a licence. Knowing an organization's tonnes does not make its reductions additional, its baselines defensible, or its credits real — that is section 07's territory. Conversely, a beautiful forest estimate does not shrink anyone's footprint. When a presenter shows one number to answer the other question, stop the meeting and ask which account is on screen.
+
+## 18 · Climate change and Thailand's forests
+
+Short answer: climate change is the reason this accounting exists, and it reaches Thai forests through water and fire more than through temperature alone. The most recent assessed decade (2011–2020) stood about 1.09 °C above the 1850–1900 baseline ([IPCC AR6 WG1, 2021](https://www.ipcc.ch/report/ar6/wg1/)); the WMO reported 2023 as the warmest year on record at about 1.45 °C. For the current figure, read the WMO's annual State of the Global Climate — this notebook dates its knowledge and does not quote a moving number as if it stood still.
+
+### Thailand's commitments, as documents rather than slogans
+
+Thailand's announced long-term targets are **carbon neutrality by 2050 and net-zero greenhouse-gas emissions by 2065**, announced at COP26 in Glasgow. The binding arithmetic lives in UNFCCC documents: the Nationally Determined Contribution registered for 2030 and the Biennial Transparency Report ([BTR1, 2022](https://unfccc.int/documents/627830)) whose LULUCF table the map displays beside GFW's satellite view. Those two views differ by definition, not by error — the national inventory counts managed land under national definitions; GFW counts satellite-mapped forest ecosystems. The tool shows both and chooses neither. Read the current NDC document for the binding percentage; a slogan with a number and no boundary is not a target.
+
+### What warming does to these forests — through water and fire
+
+The dry season sharpens: more weeks of high fire weather across the deciduous North, which is precisely the February–April peak the GFED chart shows. Drought stress lowers growth — removals — before it raises mortality — emissions; a flux average like GFW's 2001–2025 spans wet and dry regimes, so the period label on the row is doing real work. Mangroves face sea-level rise on top of the conversion pressure documented in the field observations; a mangrove project therefore carries both a carbon case and an adaptation case. And there is an accounting irony worth saying plainly: forests are Thailand's largest sink and its most climate-exposed asset. The same fire season that drives the ledger's emissions can destroy the stock a credit was issued against — which is why reversals, buffers and permanence belong to the registry's world, not to a screening tool.
+
+```mermaid
+flowchart TD
+ W["Warming shifts rainfall and lengthens the dry season"] --> F["Fire weather rises across the deciduous North"]
+ W --> D["Drought stress lowers growth first, mortality later"]
+ F --> E["GFW forest emissions rise; GFED Feb–Apr peak sharpens"]
+ D --> R["GFW removals soften"]
+ E --> S["Baseline and permanence risk for any credit"]
+ R --> S
+```
+
+### What this tool can and cannot say about climate
+
+It can say dated things: a 2001–2025 flux average that spans El Niño and La Niña years, a monthly fire seasonality measured over 2013–2022, an official inventory table from 2022, and alerts from the last 30 days. It cannot say forecast things: no climate projection is a carbon input here, no single year is attributed to a single cause, and no scenario replaces a measurement. Climate data in this tool is context for decisions — where to look, what to verify — exactly as section 05 demanded of every other dataset.
+
+## 19 · El Niño, La Niña and the burning season
+
+Short answer: ENSO — the El Niño–Southern Oscillation — is the Pacific's multi-year rhythm, and it modulates precisely the quantities this tool charts: rainfall, fire and forest flux across Southeast Asia. The 2023–24 El Niño was the strongest since 2015–16, peaking near **+2.0 °C** on NOAA's Oceanic Niño Index in late 2023 before fading to neutral during 2024. For the current phase, read the ONI series itself — this notebook dates its own knowledge instead of pretending to today's value.
+
+### The index, in three sentences
+
+[NOAA's Climate Prediction Center](https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/ensoyears.shtml) publishes the Oceanic Niño Index (ONI): the three-month running mean sea-surface-temperature anomaly in the Niño 3.4 region (5°N–5°S, 170°W–120°W). El Niño is declared when the anomaly holds at or above +0.5 °C, La Niña at or below −0.5 °C; thresholds of +1.0, +1.5 and +2.0 grade events into moderate, strong and very strong. The index is dated, versioned and public — the same honest-envelope discipline this tool applies to every carbon number.
+
+| Event | Phase | Approximate ONI peak | Consequence in this region |
+|---|---|---|---|
+| 1997–98 | Very strong El Niño | ≈ +2.4 | Indonesia's peat fires — the textbook emission episode |
+| 2015–16 | Very strong El Niño | ≈ +2.6 | Severe Indonesian fire and haze year; regional drought |
+| 2020–23 | Triple-dip La Niña | ≈ −1.0 to −1.3 | Three consecutive cooler events; a different fire geography |
+| 2023–24 | Strong El Niño | ≈ +2.0 | Regional drought; strongest since 2015–16; faded to neutral in 2024 |
+
+Rounded from NOAA CPC's ONI series; read the series for exact monthly values and the current phase.
+
+### What ENSO does to the numbers on this map
+
+El Niño's fingerprint on mainland Southeast Asia is a longer, sharper dry season. Fire follows fuel moisture with a lag, so El Niño years load the February–April burning season that the GFED monthly chart shows in every year of its average. Indonesia's great fire years — 1997–98 and 2015–16 — were El Niño years; Thailand's own burning-season severity swings with the same forcing year by year, inside the average. GFW's flux figure here is a 2001–2025 mean that deliberately spans strong El Niño years, the triple La Niña and everything between. That is exactly why the tool prints the period on the label: an average that includes 2015 is not a typical year, and one dry year is not a trend.
+
+```mermaid
+flowchart TD
+ A["ENSO state: ONI at or beyond ±0.5 °C"] --> B["Rainfall shifts over Maritime and Mainland Southeast Asia"]
+ B --> C["Fuel moisture falls through the dry season"]
+ C --> D["Escaped fires multiply — the Feb–Apr peak sharpens"]
+ D --> E["GFW forest emissions rise for that year"]
+ A --> F["Wetter phase: removals recover"]
+ E --> G["Read beside the dated average — never netted into it"]
+ F --> G
+```
+
+### What ENSO is not, here
+
+The ONI is context, not input. No ENSO phase enters the CSEQ arithmetic, the stock bands or the fire rows; a forecast is not an observation; and attributing one province's bad fire year to El Niño requires more than a correlation, because the same season carries land-management decisions inside it. The tool's role is narrower and more useful: date every quantity, show the burning season where it lives in the data, and let Forest Watch's 30-day alerts carry the recent, dated reality that an ENSO phase only partially explains.
+
 ## Southeast Asia · an auditable regional extension
 
 Open the [11-country map](sea.html?lang=en) or the [regional Bible](bible.html?lang=en&group=region#sea-overview). Brunei, Cambodia, Indonesia, Lao PDR, Malaysia, Myanmar, Philippines, Singapore, Thailand, Timor-Leste and Viet Nam are included. The original Thai project workflow remains separate. The 17 new bilingual chapters cover six methods and eleven country research profiles.
