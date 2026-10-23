@@ -1,0 +1,38 @@
+{
+  "note": "City markers are approximate populations (city proper, rounded) for orientation only. Built-up extent is not a measured carbon input. Sources: public city population figures, approx.",
+  "updated": "2026-09",
+  "thailand": [
+    {"id":"bkk","name":{"th":"กรุงเทพมหานคร","en":"Bangkok"},"lat":13.7563,"lon":100.5018,"population":11000000,"capital":true},
+    {"id":"nonthaburi","name":{"th":"นนทบุรี","en":"Nonthaburi"},"lat":13.8610,"lon":100.5171,"population":280000,"capital":false},
+    {"id":"pakkret","name":{"th":"ปากเกร็ด","en":"Pak Kret"},"lat":13.9167,"lon":100.5000,"population":190000,"capital":false},
+    {"id":"hatyai","name":{"th":"หาดใหญ่","en":"Hat Yai"},"lat":7.0081,"lon":100.4753,"population":157000,"capital":false},
+    {"id":"chiangmai","name":{"th":"เชียงใหม่","en":"Chiang Mai"},"lat":18.7883,"lon":98.9853,"population":127000,"capital":false},
+    {"id":"udonthani","name":{"th":"อุดรธานี","en":"Udon Thani"},"lat":17.4157,"lon":102.7869,"population":118000,"capital":false},
+    {"id":"nakhonratchasima","name":{"th":"นครราชสีมา","en":"Nakhon Ratchasima"},"lat":14.9788,"lon":102.0967,"population":130000,"capital":false},
+    {"id":"suratthani","name":{"th":"สุราษฎร์ธานี","en":"Surat Thani"},"lat":9.1399,"lon":99.3188,"population":130000,"capital":false},
+    {"id":"khonkaen","name":{"th":"ขอนแก่น","en":"Khon Kaen"},"lat":16.4362,"lon":102.8236,"population":115000,"capital":false},
+    {"id":"ubonratchathani","name":{"th":"อุบลราชธานี","en":"Ubon Ratchathani"},"lat":15.2389,"lon":104.8598,"population":90000,"capital":false},
+    {"id":"nakhonsisthammarat","name":{"th":"นครศรีธรรมราช","en":"Nakhon Si Thammarat"},"lat":8.4247,"lon":99.9678,"population":100000,"capital":false},
+    {"id":"phuket","name":{"th":"ภูเก็ต","en":"Phuket"},"lat":7.8887,"lon":98.3892,"population":79000,"capital":false},
+    {"id":"pattaya","name":{"th":"พัทยา","en":"Pattaya"},"lat":12.9236,"lon":100.8825,"population":100000,"capital":false},
+    {"id":"chiangrai","name":{"th":"เชียงราย","en":"Chiang Rai"},"lat":19.9075,"lon":99.8309,"population":78000,"capital":false},
+    {"id":"lampang","name":{"th":"ลำปาง","en":"Lampang"},"lat":18.2913,"lon":99.5016,"population":62000,"capital":false},
+    {"id":"chonburi","name":{"th":"ชลบุรี","en":"Chonburi"},"lat":13.3611,"lon":100.9839,"population":90000,"capital":false},
+    {"id":"rayong","name":{"th":"ระยอง","en":"Rayong"},"lat":12.6791,"lon":101.2558,"population":63000,"capital":false},
+    {"id":"songkhla","name":{"th":"สงขลา","en":"Songkhla"},"lat":7.2042,"lon":100.5981,"population":68000,"capital":false},
+    {"id":"phitsanulok","name":{"th":"พิษณุโลก","en":"Phitsanulok"},"lat":16.8223,"lon":100.2597,"population":68000,"capital":false}
+  ],
+  "seaCapitals": [
+    {"id":"bkk_sea","name":{"th":"กรุงเทพมหานคร","en":"Bangkok"},"country":{"th":"ไทย","en":"Thailand"},"lat":13.7563,"lon":100.5018,"population":11000000,"capital":true},
+    {"id":"jakarta","name":{"th":"จาการ์ตา","en":"Jakarta"},"country":{"th":"อินโดนีเซีย","en":"Indonesia"},"lat":-6.2088,"lon":106.8456,"population":10600000,"capital":true},
+    {"id":"hanoi","name":{"th":"ฮานอย","en":"Hanoi"},"country":{"th":"เวียดนาม","en":"Vietnam"},"lat":21.0285,"lon":105.8542,"population":8200000,"capital":true},
+    {"id":"manila","name":{"th":"มะนิลา","en":"Manila"},"country":{"th":"ฟิลิปปินส์","en":"Philippines"},"lat":14.5995,"lon":120.9842,"population":1800000,"capital":true},
+    {"id":"kualalumpur","name":{"th":"กัวลาลัมเปอร์","en":"Kuala Lumpur"},"country":{"th":"มาเลเซีย","en":"Malaysia"},"lat":3.1390,"lon":101.6869,"population":1800000,"capital":true},
+    {"id":"singapore","name":{"th":"สิงคโปร์","en":"Singapore"},"country":{"th":"สิงคโปร์","en":"Singapore"},"lat":1.3521,"lon":103.8198,"population":5900000,"capital":true},
+    {"id":"phnompenh","name":{"th":"พนมเปญ","en":"Phnom Penh"},"country":{"th":"กัมพูชา","en":"Cambodia"},"lat":11.5624,"lon":104.9170,"population":2300000,"capital":true},
+    {"id":"vientiane","name":{"th":"เวียงจันทน์","en":"Vientiane"},"country":{"th":"ลาว","en":"Laos"},"lat":17.9689,"lon":102.6146,"population":950000,"capital":true},
+    {"id":"yangon","name":{"th":"ย่างกุ้ง","en":"Yangon"},"country":{"th":"เมียนมา","en":"Myanmar"},"lat":16.8661,"lon":96.1951,"population":5200000,"capital":true},
+    {"id":"bandarseribegawan","name":{"th":"บันดาร์เซรีเบกawan","en":"Bandar Seri Begawan"},"country":{"th":"บรูไน","en":"Brunei"},"lat":4.8956,"lon":114.9408,"population":150000,"capital":true},
+    {"id":"dili","name":{"th":"ดิลี","en":"Dili"},"country":{"th":"ติมอร์-เลสเต","en":"Timor-Leste"},"lat":-8.5550,"lon":125.5677,"population":280000,"capital":true}
+  ]
+}

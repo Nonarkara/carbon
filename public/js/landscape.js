@@ -18,7 +18,7 @@ const ATMOS={
 const FLUX_CLASSES=[[-Infinity,'#1f5f4a'],[-1,'#5e9480'],[-.25,'#d9d6cc'],[.25,'#d39a6a'],[1,'#9c4a1a']]; // diverging, neutral midpoint
 const GROUP_ORDER=['forest','savanna_shrub_grass','cropland','deforestation','peat','other'];
 
-export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,onSelect=()=>{}}){
+export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,onSelect=()=>{},onState}){
   const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const S={data:null,manifest:null,grid:null,gridPromise:null,sel:null,src:null,rows:[],layer:null,shape:null,overlay:null,atmos:null,drawing:false};
   const byCode=new Map();let watchData=null,watchStatus='loading';
@@ -83,6 +83,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   function render(){
     if(!S.src)return;
     const s=S.src;S.rows=rowsFor();const r=id=>S.rows.find(x=>x.id===id);
+    if(onState)onState({kind:S.sel.kind,code:S.sel.code,box:S.sel.box,polygons:S.sel.polygons,geojson:S.sel.geojson});
     const stock=r('stock_forest'),rem=r('forest_removals'),em=r('forest_emissions');
     $('#kArea').textContent=`${big(s.area_ha)} ${t('ha')}`;
     $('#kAreaHint').textContent=s.cells!=null?t('boxHint').replace('{c}',fmt(s.cells)):t('forestShare').replace('{f}',fmt(100*s.forest_area_ha/s.area_ha,1));
@@ -126,6 +127,12 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     h.push(`<h3 class="lside">${esc(t('emitSide'))}</h3>`);
     if(em)h.push(line(t('rEmissions'),big(em.value),'tCO₂e/yr',dsMeta(ds.gfw)));
     if(net)h.push(line(t('rNet'),big(net.value),'tCO₂e/yr','GFW',net.value<0?(getLang()==='th'?'ค่าติดลบ = ป่าเป็นแหล่งดูดซับสุทธิ':'Negative = net forest sink'):''));
+    const nat=S.data?.national;
+    if(net&&nat&&nat.gfw_net_mg_co2e!=null&&nat.area_ha&&s.area_ha){
+      const selPerHa=s.gfw_net_mg_co2e/s.area_ha;const natPerHa=nat.gfw_net_mg_co2e/nat.area_ha;
+      const diff=selPerHa-natPerHa;
+      h.push(`<p class="hint">${t('refFlux')}: ${fmt(diff>=0?'+':'')}${fmt(diff,2)} ${t('perHa')} ${esc(t('refVsNational'))} (${fmt(natPerHa,2)} ${t('perHa')})</p>`);
+    }
     const fire=r('fire');
     if(fire)h.push(line(t('rFire'),fire.tooCoarse?'—':big(fire.value),'tCO₂/yr',dsMeta(ds.gfed),fire.tooCoarse?t('tooCoarse'):t('fireNote'),fire.tooCoarse?'unavailable':'')+(fire.tooCoarse||fire.value==null?'':fireCharts(s)));
     const fos=r('fossil');
@@ -270,5 +277,5 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const body=S.rows.map(r=>[r.id,r.value??'',r.unit,r.dataset.name,r.dataset.version||'',r.dataset.year||r.dataset.period||'',r.central?.[0]??'',r.central?.[1]??'',r.conservative?.[0]??'',r.conservative?.[1]??'',r.optimistic?.[0]??'',r.optimistic?.[1]??'',r.unavailable||(r.tooCoarse?'below-dataset-resolution':'')]);
     download('carbon-ledger.csv','﻿'+[head,...body].map(x=>x.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n'),'text/csv;charset=utf-8');};
 
-  return {ready,render:()=>{if(S.data){fillPlaces();render();if(S.overlayKind)setOverlay(S.overlayKind);}if(S.atmos)$('#atmosNote').textContent=t(ATMOS[$('#atmos').value].note);},invalidate:()=>{},setDigestBars:fn=>{digestBars=fn;if(S.data)render();}};
+  return {ready,select,render:()=>{if(S.data){fillPlaces();render();if(S.overlayKind)setOverlay(S.overlayKind);}if(S.atmos)$('#atmosNote').textContent=t(ATMOS[$('#atmos').value].note);},invalidate:()=>{},setDigestBars:fn=>{digestBars=fn;if(S.data)render();}};
 }

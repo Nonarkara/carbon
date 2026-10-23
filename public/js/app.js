@@ -1,12 +1,16 @@
 import {calculate,FACTORS,plotEstimate,METHOD} from './carbon.js';
 import {parseCSV,readFile} from './imports.js';
 import {validateBoundary} from './geometry.js';
+import {polygonsOf} from './ledger.js';
 import {t,fmt,setLang,getLang} from './i18n.js';
 import {initLandscape} from './landscape.js';
 import {initWorld} from './world.js';
 import {initAbout} from './about.js';
 import {initRegistry} from './registry.js';
 import {initDigest} from './digest.js';
+import {initGeocode} from './geocode.js';
+import {initMeasure} from './measure.js';
+import {initUrban,urbanToggle,urbanShown} from './urban.js';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const PROVINCE_EN={'สระบุรี':'Saraburi','กาญจนบุรี':'Kanchanaburi'};
  const provName=r=>getLang()==='th'?r.province_th:PROVINCE_EN[r.province_th]||r.province_th;
@@ -102,9 +106,18 @@ digest.ready.then(d=>{
   landscape.render();
 }).catch(err=>error(err));
 registry.ready.then(()=>{if(state.boundary)renderRegistry();}).catch(err=>error(err));
+let hashTimer=null;
+function writeHash(s){if(!s)return;clearTimeout(hashTimer);hashTimer=setTimeout(()=>{const u=new URL(location.href);if(s.kind==='box')u.hash=JSON.stringify({kind:'box',box:s.box});else if(s.kind==='boundary')u.hash=JSON.stringify({kind:'boundary',geojson:s.geojson});else u.hash=JSON.stringify({kind:s.kind,code:s.code});history.replaceState(null,'',u);},400);}
+function applyHash(){
+  try{const h=location.hash;if(!h||h.length<3)return;const s=JSON.parse(decodeURIComponent(h.slice(1)));if(s.kind==='box')return landscape.select({kind:'box',box:s.box});if(s.kind==='boundary')return landscape.select({kind:'boundary',polygons:polygonsOf(s.geojson),geojson:s.geojson});if(s.code)return landscape.select({kind:s.kind==='national'?'national':'province',code:s.code});}catch(e){/* ignore bad hash */}}
 function showAbout(){document.querySelector('.reference-menu').open=false;document.querySelectorAll('.lenses [data-tab]').forEach(e=>e.setAttribute('aria-pressed','false'));document.body.dataset.about='true';$('#about').hidden=false;$('#aboutTab').setAttribute('aria-pressed','true');$('#about').scrollTop=0;setNav();about.show().catch(err=>error(err));}
-const landscape=initLandscape({map,t,fmt,getLang,getBoundary:()=>state.boundary,download,message,onSelect:()=>{if(state.tab!=='carbon'||document.body.dataset.about)tab('carbon');}});
+const landscape=initLandscape({map,t,fmt,getLang,getBoundary:()=>state.boundary,download,message,onSelect:()=>{if(state.tab!=='carbon'||document.body.dataset.about)tab('carbon');},onState:writeHash});
 landscape.ready.catch(err=>error(err));
+landscape.ready.then(applyHash).catch(()=>{});
+initUrban({map,t,fmt,getLang});
+initGeocode({map,t,fmt,getLang});
+initMeasure({map,t,getLang});
+$('#showUrban').onclick=()=>{const on=!urbanShown();urbanToggle(on);$('#showUrban').setAttribute('aria-pressed',String(on));};
 setLang(getLang());$('#standardsLink').href=`research-${getLang()}.html#standards`;fields();summary();
 document.querySelectorAll('.flow span').forEach((el,i)=>el.textContent=(getLang()==='th'?['ดาวเทียม + แปลงสำรวจ','แบบจำลองมวลชีวภาพ','ตรวจสอบด้วยแปลงอิสระ','รับรองวิธี + ทวนสอบ']:['Satellite + plots','Biomass model','Independent validation','Method approval + verification'])[i]);
 Promise.all([fetch('data/source-catalog.json').then(r=>{if(!r.ok)throw Error('source catalog');return r.json();}),fetch('data/province-forest-area.json').then(r=>{if(!r.ok)throw Error('province data');return r.json();}),fetch('version.json').then(r=>r.json())]).then(([s,p,v])=>{state.sources=s;state.province=p;state.version=v.commit;$('#version').textContent=v.commit;renderSources();}).catch(err=>error(err));
