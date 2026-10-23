@@ -30,10 +30,8 @@ const exec = promisify(execFile);
 
 /** The root of this repository, whichever directory the command was launched from. */
 export function repoRoot() {
-  let dir = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-  // scripts/lib -> scripts -> repo root
-  dir = resolve(dir, '..');
-  return dir;
+  // scripts/lib/release-tree.mjs -> scripts -> the repository root
+  return resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 }
 
 const git = (args, cwd) =>
