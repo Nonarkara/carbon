@@ -19,6 +19,7 @@ import {collectSpatial} from './lib/spatial-collector.mjs';
 import {collectLaw,chromeCost,LAW_VIEWPORTS,CHROME_LIMIT_PCT,EQUAL_WEIGHT_EXEMPTIONS} from './lib/msh-law.mjs';
 import {assertProjectServer} from './lib/server-identity.mjs';
 import {measurementTarget} from './lib/local-server.mjs';
+import {measureWithRecovery} from './lib/browser-resilience.mjs';
 
 const OUT='test-results/spatial';
 
@@ -53,8 +54,8 @@ const MATRIX=[
 // The law names the height for each width. The height at 1024 is recorded, as section 6 asks.
 const HEIGHT=width=>width<=390?844:(width<=1024?768:900);
 
-const browser=await chromium.launch();
-const page=await browser.newPage();
+let browser=await chromium.launch();
+let page=await browser.newPage();
 const errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 await mkdir(OUT,{recursive:true});
@@ -64,8 +65,7 @@ const chrome=[];
 // What the reader's first screen actually shows, recorded per the law's section 6.
 const firstScreen=[];
 
-for(const s of MATRIX){
- for(const width of s.widths){
+async function measureSurface(s,width){
   const height=HEIGHT(width);
   await page.setViewportSize({width,height});
   // Load, then wait for the surface's own readiness signal. Both are retried once: a page
@@ -203,6 +203,26 @@ for(const s of MATRIX){
    });
    assert.equal(sticky,'sticky',`${s.name}@${width} research byline is ${sticky}, not sticky`);
   }
+ }
+
+// A browser can die mid-gate — most often because the machine ran out of memory while other
+// work was running. That is not a layout finding, and it must not end the gate: the browser
+// is relaunched and the surface is measured again. If it dies twice, the surface could not be
+// measured at all, and that IS a failure the gate must report, not absorb. The rule lives in
+// scripts/lib/browser-resilience.mjs and is tested there.
+async function relaunch(){
+ try{await browser.close();}catch{}
+ browser=await chromium.launch();
+ page=await browser.newPage();
+ page.on('pageerror',e=>errors.push(e.message));
+}
+for(const s of MATRIX){
+ for(const width of s.widths){
+  await measureWithRecovery({surface:s,width},{
+   measure:job=>measureSurface(job.surface,job.width),
+   relaunch,
+   record:(job,err)=>assert.fail(`the browser died twice measuring ${job.surface}@${job.width}: the surface could not be measured (${err.message})`),
+  });
  }
 }
 await browser.close();

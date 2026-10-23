@@ -22,6 +22,7 @@ import {collectSpatial} from './lib/spatial-collector.mjs';
 import {collectLaw,chromeCost,EQUAL_WEIGHT_EXEMPTIONS} from './lib/msh-law.mjs';
 import {assertProjectServer} from './lib/server-identity.mjs';
 import {measurementTarget} from './lib/local-server.mjs';
+import {measureWithRecovery} from './lib/browser-resilience.mjs';
 
 // No server named? Start this project's own, on a port this process chose. The audit must be
 // runnable as a single command and must measure this build and nothing else.
@@ -43,12 +44,27 @@ const SEA_VIEWS=['map','evidence','compare','research'];
 const VIEWPORTS=[{width:390,height:844},{width:1024,height:768},{width:1440,height:900}];
 const PHONE=390,DESKTOP=1440;
 
-const browser=await chromium.launch();
-const page=await browser.newPage();
+let browser=await chromium.launch();
+let page=await browser.newPage();
 const errors=[];
-page.on('pageerror',e=>errors.push(e.message));
+function watch(p){p.on('pageerror',e=>errors.push(e.message));}
+watch(page);
 await mkdir(OUT,{recursive:true});
 const report=[];
+
+// A browser can die mid-audit — most often because the machine ran out of memory while other
+// work was running. That is not a layout finding, and it must not be allowed to look like one
+// or to end the audit: the audit is 546 pages long, and a single dead page would otherwise
+// discard every page after it. So the browser is relaunched and the page is measured again.
+// If it dies twice, the page is recorded as unmeasurable, and an unmeasured page fails the
+// audit — a clean audit that did not run is not a clean audit. The rule lives in
+// scripts/lib/browser-resilience.mjs and is tested there.
+async function relaunch(){
+ try{await browser.close();}catch{}
+ browser=await chromium.launch();
+ page=await browser.newPage();
+ watch(page);
+}
 
 async function settle(){
  // Let lazy images and galleries take up their space, and let fonts settle before measuring.
@@ -68,7 +84,7 @@ async function measureLaw(){
  return {findings,cost};
 }
 
-async function run(job){
+async function runOnce(job){
  const width=job.width;
  const height=job.height||(width<=PHONE?844:(width<=1024?768:900));
  await page.setViewportSize({width,height});
@@ -123,6 +139,14 @@ async function run(job){
  const offenders=await measure(job.scope||'null');
  const law=await measureLaw();
  report.push({...job,width,height,offenders,lawFindings:law.findings,chromeCost:law.cost});
+}
+
+async function run(job){
+ await measureWithRecovery(job,{
+  measure:runOnce,
+  relaunch,
+  record:(j,err)=>report.push({...j,error:'the browser died while measuring this page: '+err.message}),
+ });
 }
 
 // --- 1. The Bible: every chapter, in both languages, at both a phone and a desktop width.
