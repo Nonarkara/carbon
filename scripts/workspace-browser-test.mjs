@@ -1,9 +1,10 @@
 import {selectSeaView} from './browser-controls.mjs';
 import{chromium}from'playwright';
 import assert from'node:assert/strict';
+import {measurementTarget} from './lib/local-server.mjs';
 import{mkdir,writeFile}from'node:fs/promises';
 import{clickControl}from'./browser-controls.mjs';
-const base=process.env.BASE_URL||'http://127.0.0.1:8788',b=await chromium.launch(),p=await b.newPage(),errors=[],checks=[];
+const base=(await measurementTarget()).base,b=await chromium.launch(),p=await b.newPage(),errors=[],checks=[];
 p.on('pageerror',e=>errors.push(e.message));await mkdir('test-results/workspace',{recursive:true});
 for(const lang of ['th','en'])for(const width of [320,390,768,1024,1440]){
  await p.setViewportSize({width,height:900});await p.goto(`${base}/sea.html?lang=${lang}`);await p.locator('body[data-ready]').first().waitFor();await p.evaluate(()=>document.fonts.ready);

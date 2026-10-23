@@ -2,7 +2,8 @@ import {selectSeaView} from './browser-controls.mjs';
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
-const base=process.env.BASE_URL||'http://127.0.0.1:8788';
+import {measurementTarget} from './lib/local-server.mjs';
+const base=(await measurementTarget()).base;
 // The deployed snapshot is the source of truth for what the country panel must show, so the
 // panel is checked against it rather than against a hand-written expectation.
 const snap=JSON.parse(await readFile('public/data/sea/snapshot.json','utf8'));

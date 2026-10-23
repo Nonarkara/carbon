@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {clickControl} from './browser-controls.mjs';
-const base=process.env.BASE_URL||'http://127.0.0.1:8788';const browser=await chromium.launch();const page=await browser.newPage();const errors=[],measurements=[];page.on('pageerror',e=>errors.push(e.message));await mkdir('test-results/carbona',{recursive:true});
+import {measurementTarget} from './lib/local-server.mjs';
+const base=(await measurementTarget()).base;const browser=await chromium.launch();const page=await browser.newPage();const errors=[],measurements=[];page.on('pageerror',e=>errors.push(e.message));await mkdir('test-results/carbona',{recursive:true});
 const logo=await page.request.get(`${base}/images/logos/axiom-navy-tile.png`);assert.ok(logo.ok());assert.equal(createHash('sha256').update(await logo.body()).digest('hex'),'e3a5787dd2b7e9d33e2dc55ff86faef6b2166df7ea15b6f9d15d54975290a51f','Axiom must be the exact owner-supplied PNG');
 const manifest=await page.request.get(`${base}/manifest.json`).then(r=>r.json());assert.equal(manifest.short_name,'Carbona');assert.equal(manifest.id,'/');assert.equal(manifest.start_url,'/');
 for(const lang of ['th','en'])for(const width of [320,390,768,1440]){

@@ -7,8 +7,9 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
+import {measurementTarget} from './lib/local-server.mjs';
 
-const base=process.env.BASE_URL||'http://127.0.0.1:8788';
+const base=(await measurementTarget()).base;
 const browser=await chromium.launch();
 const page=await browser.newPage();
 const errors=[];
@@ -31,6 +32,13 @@ for(const lang of ['th','en']){
    // They used to sit in a .figure-stack block at the top of the article; that class no longer
    // exists for these chapters, and a test that still looks for it would wait forever.
    await page.locator('figure.credit-figure').first().waitFor();
+   // The measurement below is a TEXT measurement, and text metrics belong to the font that is
+   // actually applied when the measurement is taken. This test used to measure while the Thai
+   // webfont was still loading, so it measured whatever fallback the machine had: the same
+   // commit passed in one place and failed in another by a single pixel, and CI was red for a
+   // diagram that was fine on the developer's laptop. Wait for the font, and the measurement
+   // is the same everywhere.
+   await page.evaluate(()=>document.fonts.ready);
 
    // Every figure the chapter promises is actually on the page, with a rendered box.
    const figs=page.locator('figure.credit-figure');
@@ -145,7 +153,13 @@ for(const lang of ['th','en']){
    // out past the panel it sits in, is unreadable even when two labels do not technically touch.
    // A label that begins OUTSIDE every box is a caption for the box beneath it and is allowed to
    // sit above it — that is how a table header works.
-   const escapes=await page.evaluate(()=>{
+   //
+   // The rule is a label may not SPILL out of its panel, with a small margin kept in hand. The
+   // old tolerance of eight pixels let a Thai label sit seven pixels outside its panel: it
+   // passed the test and looked wrong on the page. The margin is reported in the failure so a
+   // label that is merely close can be seen before it becomes a spill.
+   const MARGIN=2;
+   const escapes=await page.evaluate(margin=>{
     const out=[];
     for(const svg of document.querySelectorAll('.credit-figure svg')){
      const boxes=[...svg.querySelectorAll('rect')].map(r=>({x:+r.getAttribute('x'),y:+r.getAttribute('y'),w:+r.getAttribute('width'),h:+r.getAttribute('height')}));
@@ -153,13 +167,14 @@ for(const lang of ['th','en']){
       const b=t.getBBox();
       const home=boxes.find(p=>b.x>=p.x-2&&b.y>=p.y-2&&b.x<=p.x+p.w+2&&b.y<=p.y+p.h+2);
       if(!home)continue;
-      if(b.x+b.width>home.x+home.w+8||b.y+b.height>home.y+home.h+8){
-       out.push({t:t.textContent.trim().slice(0,30),x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.width),box:`${home.x},${home.y} ${home.w}x${home.h}`});
+      const slack=Math.round(Math.min(home.x+home.w-(b.x+b.width),home.y+home.h-(b.y+b.height)));
+      if(slack<margin){
+       out.push({t:t.textContent.trim().slice(0,30),x:Math.round(b.x),y:Math.round(b.y),w:Math.round(b.width),box:`${home.x},${home.y} ${home.w}x${home.h}`,slack});
       }
      }
     }
     return out;
-   });
+   },MARGIN);
    assert.deepEqual(escapes,[],`${id}/${lang}@${width}: a label does not fit its box: ${JSON.stringify(escapes)}`);
   }
  }

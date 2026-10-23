@@ -30,14 +30,15 @@ export function creditFigures(lang){
 <rect x="184" y="14" width="132" height="76" fill="#fff4d6" stroke="#161616" stroke-width="2"/><text x="250" y="44" font-size="13" text-anchor="middle">C + O₂ → CO₂</text><text x="250" y="66" font-size="11" text-anchor="middle">คาร์บอนหลุดจากของแข็ง</text>
 <path d="M322 52H360" stroke="#161616" stroke-width="2.5" marker-end="url(#aA)"/>
 <rect x="366" y="10" width="220" height="150" fill="#cfe0f5" stroke="#161616" stroke-width="2"/>
-<text x="476" y="32" font-size="13" text-anchor="middle" font-weight="600">บรรยากาศ</text>
-<path d="M382 58H570" stroke="#8a99a8" stroke-width="1.5"/>
-<text x="384" y="74" font-size="10">แสงอาทิตย์ (คลื่นสั้น) ผ่านลงมา</text>
-<path d="M384 92H570" stroke="#bd251b" stroke-width="2.5" marker-end="url(#aB)"/>
-<text x="384" y="108" font-size="10">ความร้อนที่พื้นผิวปล่อยกลับ (อินฟราเรด)</text>
-<path d="M440 118V88" stroke="#bd251b" stroke-width="2" stroke-dasharray="4 3"/>
-<text x="384" y="134" font-size="10" fill="#bd251b">CO₂ ดูดซับและปล่อยกลับลงมา</text>
-<text x="384" y="152" font-size="10" font-weight="600">CO₂ มากขึ้น → พลังงานที่หลุดออกอวกาศน้อยลง</text>
+<text x="476" y="30" font-size="13" text-anchor="middle" font-weight="600">บรรยากาศ</text>
+<path d="M382 54H570" stroke="#8a99a8" stroke-width="1.5"/>
+<text x="384" y="70" font-size="10">แสงอาทิตย์ (คลื่นสั้น) ผ่านลงมา</text>
+<path d="M372 88H570" stroke="#bd251b" stroke-width="2.5" marker-end="url(#aB)"/>
+<text x="384" y="104" font-size="10">ความร้อนที่พื้นผิวปล่อยกลับ (อินฟราเรด)</text>
+<path d="M372 88V118" stroke="#bd251b" stroke-width="2" stroke-dasharray="4 3"/>
+<text x="384" y="122" font-size="10" fill="#bd251b">CO₂ ดูดซับและปล่อยกลับลงมา</text>
+<text x="384" y="136" font-size="10" font-weight="600">CO₂ มากขึ้น →</text>
+<text x="384" y="150" font-size="10" font-weight="600">พลังงานที่หลุดออกอวกาศน้อยลง</text>
 <rect x="14" y="180" width="572" height="52" fill="#fff" stroke="#161616" stroke-width="2"/><text x="30" y="202" font-size="12" font-weight="600">ผลสองข้อที่สำคัญ</text><text x="30" y="222" font-size="11">๑ สะสม — CO₂ ที่เพิ่มในปีนี้ยังอยู่ในสมดุลนาน หักล้างทันทีไม่ได้  ๒ ระดับโลก — โมเลกุดไม่เคารพพรมแดน</text>
 <rect x="14" y="248" width="572" height="76" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/><text x="30" y="270" font-size="12" font-weight="600">สิ่งที่เครดิตไม่ได้ทำ</text><text x="30" y="290" font-size="11">มันไม่ได้ลบก๊าซที่ปล่อยไปแล้ว มันไม่ได้ทำให้อากาศเย็นลง</text><text x="30" y="310" font-size="11">มันเป็น “บันทึกของความต่าง” ที่วัดได้ ตรวจแล้ว และเขียนลงทะเบียนไว้ครั้งเดียว</text>`, th?'ภาพนี้อธิบายว่าทำไมกฎทุกข้อในสาขานี้จึงเกี่ยวกับการไม่ให้ตันเดียวกันถูกนับซ้ำ ไม่ใช่เรื่องความสะอาดของอากาศ':'This figure explains why every rule in the field is about not counting the same tonne twice, not about cleaning the air.');
 
@@ -67,7 +68,7 @@ export function creditFigures(lang){
 <rect x="14" y="300" width="572" height="40" fill="#ecebe4" stroke="#161616" stroke-width="2"/>
 <text x="24" y="326" font-size="12" font-weight="600">พื้นผิว</text>
 <text x="162" y="326" font-size="11">การเผาไหม้เกิดขึ้นที่นี่ ถ่านหิน น้ำมัน แก๊ส ไม้ และไฟป่า</text>
-<rect x="14" y="340" width="572" height="22" fill="#fff9d7" stroke="#161616" stroke-width="2"/>
+<rect x="14" y="340" width="572" height="26" fill="#fff9d7" stroke="#161616" stroke-width="2"/>
 <text x="24" y="355" font-size="11">การเผาไหม้ไม่ได้ทำลายชั้นโอโซน แต่เปลี่ยนสมดุลพลังงานของชั้นที่เราอาศัยอยู่</text>`);
   out['credit-anatomy']=fig('องค์ประกอบของการอ้างสิทธิ์หนึ่งหน่วย',
   `<rect x="16" y="16" width="568" height="86" fill="#fff" stroke="#161616" stroke-width="2"/>
@@ -84,14 +85,14 @@ ${[['ไม่มีวันที่','แผนลอย ๆ ที่ไม�
 <rect x="184" y="14" width="132" height="76" fill="#fff4d6" stroke="#161616" stroke-width="2"/><text x="250" y="44" font-size="13" text-anchor="middle">C + O₂ → CO₂</text><text x="250" y="66" font-size="10" text-anchor="middle">carbon leaves a solid</text>
 <path d="M322 52H360" stroke="#161616" stroke-width="2.5" marker-end="url(#aA)"/>
 <rect x="366" y="10" width="220" height="150" fill="#cfe0f5" stroke="#161616" stroke-width="2"/>
-<text x="476" y="32" font-size="13" text-anchor="middle" font-weight="600">Atmosphere</text>
-<path d="M382 58H570" stroke="#8a99a8" stroke-width="1.5"/>
-<text x="384" y="74" font-size="9.5">sunlight (shortwave) passes through</text>
-<path d="M384 92H570" stroke="#bd251b" stroke-width="2.5" marker-end="url(#aB)"/>
-<text x="384" y="108" font-size="9.5">surface re-radiates (infrared)</text>
-<path d="M440 118V88" stroke="#bd251b" stroke-width="2" stroke-dasharray="4 3"/>
-<text x="384" y="134" font-size="9.5" fill="#bd251b">CO₂ absorbs and re-emits downward</text>
-<text x="384" y="152" font-size="10" font-weight="600">more CO₂ → less energy leaves to space</text>
+<text x="476" y="30" font-size="13" text-anchor="middle" font-weight="600">Atmosphere</text>
+<path d="M382 54H570" stroke="#8a99a8" stroke-width="1.5"/>
+<text x="384" y="70" font-size="9.5">sunlight (shortwave) passes through</text>
+<path d="M372 88H570" stroke="#bd251b" stroke-width="2.5" marker-end="url(#aB)"/>
+<text x="384" y="104" font-size="9.5">surface re-radiates (infrared)</text>
+<path d="M372 88V118" stroke="#bd251b" stroke-width="2" stroke-dasharray="4 3"/>
+<text x="384" y="122" font-size="9.5" fill="#bd251b">CO₂ absorbs and re-emits downward</text>
+<text x="384" y="150" font-size="10" font-weight="600">more CO₂ → less energy leaves to space</text>
 <rect x="14" y="180" width="572" height="84" fill="#fff" stroke="#161616" stroke-width="2"/><text x="30" y="202" font-size="12" font-weight="600">Two consequences that matter</text><text x="30" y="222" font-size="11"><tspan x="30" dy="0">① Cumulative — CO₂ added this year stays in the balance.</tspan><tspan x="30" dy="16">Removing CO₂ later does not undo the warming during that interval.</tspan><tspan x="30" dy="16">② Global — the molecule respects no border.</tspan></text>
 <rect x="14" y="280" width="572" height="76" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/><text x="30" y="302" font-size="12" font-weight="600">What a credit does not do</text><text x="30" y="322" font-size="11">It does not remove the gas already emitted. It does not cool the atmosphere.</text><text x="30" y="342" font-size="11">It is a record of a difference — measured, verified, and written down once.</text>`, th?'ภาพนี้อธิบายว่าทำไมกฎทุกข้อในสาขานี้จึงเกี่ยวกับการไม่ให้ตันเดียวกันถูกนับซ้ำ ไม่ใช่เรื่องความสะอาดของอากาศ':'This figure explains why every rule in the field is about not counting the same tonne twice, not about cleaning the air.');
 
@@ -121,7 +122,7 @@ ${[['ไม่มีวันที่','แผนลอย ๆ ที่ไม�
 <rect x="14" y="300" width="572" height="40" fill="#ecebe4" stroke="#161616" stroke-width="2"/>
 <text x="24" y="326" font-size="12" font-weight="600">Surface</text>
 <text x="162" y="326" font-size="11">Burning happens here — coal, oil, gas, wood, and fire.</text>
-<rect x="14" y="340" width="572" height="22" fill="#fff9d7" stroke="#161616" stroke-width="2"/>
+<rect x="14" y="340" width="572" height="26" fill="#fff9d7" stroke="#161616" stroke-width="2"/>
 <text x="24" y="355" font-size="11">Burning does not damage the ozone layer. It changes the energy balance of the layer we live in.</text>`);
   out['credit-anatomy']=fig('Anatomy of one credit claim',
   `<rect x="16" y="16" width="568" height="86" fill="#fff" stroke="#161616" stroke-width="2"/>
@@ -152,28 +153,28 @@ ${[['No date','an intention with no number'],['No baseline','crediting what was 
 <rect x="16" y="36" width="568" height="188" fill="#fff" stroke="#161616" stroke-width="2"/>
 <line x1="316" y1="36" x2="316" y2="224" stroke="#161616" stroke-width="1.5"/>
 ${rows.map((r,i)=>{const y=48+i*29;const key=(i===2||i===4);return `<rect x="22" y="${y}" width="566" height="26" fill="${key?(i===2?'#ffdf00':'#1643c5'):'#f7f7f5'}"/><text x="30" y="${y+17}" font-size="10.5" font-weight="600"${key&&i===4?' fill="#fff"':''}>${r[0]}</text><text x="176" y="${y+17}" font-size="10"${key&&i===4?' fill="#fff"':''}>${r[1]}</text><text x="330" y="${y+17}" font-size="10"${key&&i===4?' fill="#fff"':''}>${r[2]}</text>`;}).join('')}
-<rect x="16" y="238" width="568" height="84" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/>
+<rect x="16" y="238" width="568" height="92" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/>
 <text x="30" y="260" font-size="12" font-weight="600">${th?'สิ่งที่ไม่เปลี่ยน':'What did not change'}</text>
 <text x="30" y="280" font-size="11">${th?'ไม่มีการปล่อย ไม่มีการดูดซับ บรรยากาศไม่เปลี่ยน':'Nothing was emitted. Nothing was absorbed. The atmosphere did not change.'}</text>
 <text x="30" y="298" font-size="11" font-weight="600">${th?'สิ่งที่เปลี่ยนคือ “สิทธิ์ในการนับ” ไม่ใช่สภาพแวดล้อม':'What moved is permission to count — not the environment.'}</text>
-<text x="30" y="316" font-size="9.5">${th?'เลขาธิการการตลาดคาร์บอนสิงคโปร์ (แนบ ข้อตกลงไทย–สิงคโปร์) ระบุคณิตนี้ไว้ตรง ๆ':'Singapore Carbon Markets Cooperation, Annex C to the Singapore–Thailand Implementation Agreement'}</text>`,th?'การปรับสมดุลเป็นการกระทำทางบัญชี ไม่ใช่การกระทำต่อสิ่งแวดล้อม':'A corresponding adjustment is an accounting act, not an environmental one.');
+<text x="30" y="313" font-size="9.5">${th?'เลขาธิการการตลาดคาร์บอนสิงคโปร์ (แนบ ข้อตกลงไทย–สิงคโปร์) ระบุคณิตนี้ไว้ตรง ๆ':'Singapore Carbon Markets Cooperation, Annex C to the Singapore–Thailand Implementation Agreement'}</text>`,th?'การปรับสมดุลเป็นการกระทำทางบัญชี ไม่ใช่การกระทำต่อสิ่งแวดล้อม':'A corresponding adjustment is an accounting act, not an environmental one.');
 
  const iaRows=market.article6.singapore_ias.filter(r=>r.region==='asean');
  out['border-ledger']=fig(th?'ข้อตกลงข้อ 6 ของสิงคโปร์: อาเซียนมีสี่ มีผลบังคับใช้หนึ่ง':"Singapore's Article 6 agreements: four ASEAN, one in force",
- `<rect x="16" y="14" width="568" height="114" fill="#fff" stroke="#161616" stroke-width="2"/>
+ `<rect x="16" y="14" width="568" height="120" fill="#fff" stroke="#161616" stroke-width="2"/>
 <text x="30" y="32" font-size="12" font-weight="600">${th?'ประเทศอาเซียนที่ลงนามกับสิงคโปร์':'ASEAN countries signed with Singapore'}</text>
 ${iaRows.map((r,i)=>{const y=42+i*16;const live=r.status==='entered_into_force';return `<text x="34" y="${y+10}" font-size="11" font-weight="600">${esc(r.country)}</text><rect x="${live?200:296}" y="${y}" width="${live?96:86}" height="14" fill="${live?'#1643c5':'#f0f0ee'}" stroke="#161616"/><text x="${live?248:339}" y="${y+11}" font-size="9.5" text-anchor="middle" fill="${live?'#fff':'#161616'}">${live?(th?'มีผลบังคับใช้':'In force'):(th?'ยังไม่มีผล':'Not yet in force')}</text>`;}).join('')}
-<text x="30" y="121" font-size="9.5" fill="#383838">${th?'ทั้งสิบสองประเทศนอกอาเซียน: ภูฎี ชิลี กานา มองโกเลีย เปรู รวันดา ปาปัวนิวกินี ปารากวาย (7 มีผล, 2 ยังไม่มีผล)':'The other eight: Bhutan, Chile, Ghana, Mongolia, Peru, Rwanda in force; Papua New Guinea, Paraguay signed'}</text>
-<rect x="16" y="140" width="568" height="90" fill="#fff4d6" stroke="#161616" stroke-width="2"/>
+<text x="30" y="119" font-size="9.5" fill="#383838">${th?'ทั้งสิบสองประเทศนอกอาเซียน: ภูฎี ชิลี กานา มองโกเลีย เปรู รวันดา ปาปัวนิวกินี ปารากวาย (7 มีผล, 2 ยังไม่มีผล)':'The other eight: Bhutan, Chile, Ghana, Mongolia, Peru, Rwanda in force; Papua New Guinea, Paraguay signed'}</text>
+<rect x="16" y="140" width="568" height="96" fill="#fff4d6" stroke="#161616" stroke-width="2"/>
 <text x="30" y="162" font-size="12" font-weight="600">${th?'ข้อตกลงนี้มีผลต่อราคาจริง':'An agreement changes what a credit is worth'}</text>
 <text x="30" y="184" font-size="11">${th?'เครดิตจากโครงการในประเทศที่ไม่มีข้อตกลง หักลดภาระภาษีคาร์บอนไม่ได้เลย':'Credits from a country without an agreement cannot offset carbon tax at all.'}</text>
 <text x="30" y="204" font-size="11">${th?'เครดิตที่เข้าเกณฑ์ หักลดภาระภาษีได้ไม่เกิน 5% ต่อปี':'Eligible credits may cover only 5% of tax liability per year.'}</text>
-<text x="30" y="224" font-size="9.5" fill="#383838">${th?'กรอบเครดิตคาร์บอนระหว่างประเทศของสิงคโปร์':'Singapore International Carbon Credit framework'}</text>
-<rect x="16" y="242" width="568" height="88" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/>
+<text x="30" y="221" font-size="9.5" fill="#383838">${th?'กรอบเครดิตคาร์บอนระหว่างประเทศของสิงคโปร์':'Singapore International Carbon Credit framework'}</text>
+<rect x="16" y="242" width="568" height="94" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/>
 <text x="30" y="264" font-size="12" font-weight="600">${th?'ทำไมไทยถึงสำคัญเป็นพิเศษ':'Why Thailand matters here'}</text>
 <text x="30" y="285" font-size="11">${th?'ไทยเป็นประเทศอาเซียนเพียงประเทศเดียวที่ข้อตกลงมีผลแล้ว (19 ส.ค. 2568)':'Thailand is the only ASEAN country with an agreement in force (19 Aug 2025).'}</text>
 <text x="30" y="305" font-size="11">${th?'และเป็นประเทศเดียวในระบบนี้ที่มีทะเบียนโครงการสาธารณะ จึงตรวจสอบได้':'It is also the only country here with a public project registry — which is why this tool can show T-VER projects at all.'}</text>
-<text x="30" y="324" font-size="9.5" fill="#383838">${th?'ACCF เป็นกรอบของสมาคมธุรกิจ ไม่ใช่อนุสัญญาอาเซียน และไม่ไล่หาความเป็นเอกฉันท์':'The ACCF is an industry framework, not an ASEAN treaty, and does not seek uniformity.'}</text>`,th?'สถานะข้อตกลงเปลี่ยนได้ตลอดเวลา ตรวจสอบก่อนอ้างอิงเสมอ':'Agreement status is time-sensitive. Re-check before citing.');
+<text x="30" y="321" font-size="9.5" fill="#383838">${th?'ACCF เป็นกรอบของสมาคมธุรกิจ ไม่ใช่อนุสัญญาอาเซียน และไม่ไล่หาความเป็นเอกฉันท์':'The ACCF is an industry framework, not an ASEAN treaty, and does not seek uniformity.'}</text>`,th?'สถานะข้อตกลงเปลี่ยนได้ตลอดเวลา ตรวจสอบก่อนอ้างอิงเสมอ':'Agreement status is time-sensitive. Re-check before citing.');
 
  // Regional issuance, drawn from the deployed market JSON.
  const bc=market.issuance.by_country.filter(r=>r.total>0).sort((a,b)=>b.total-a.total);

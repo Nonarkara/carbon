@@ -1,6 +1,7 @@
 import {clickControl,revealControl} from './browser-controls.mjs';
 import {chromium} from 'playwright';import assert from 'node:assert/strict';import {mkdir,writeFile} from 'node:fs/promises';
-const base=process.env.BASE_URL||'http://127.0.0.1:8788';await mkdir('test-results',{recursive:true});const b=await chromium.launch();const errors=[],failed=[];
+import {measurementTarget} from './lib/local-server.mjs';
+const base=(await measurementTarget()).base;await mkdir('test-results',{recursive:true});const b=await chromium.launch();const errors=[],failed=[];
 for(const lang of ['th','en'])for(const width of [1280,390]){
  const context=await b.newContext({viewport:{width,height:900}}),page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>failed.push({url:r.url(),error:r.failure()?.errorText}));
  const cdp=await context.newCDPSession(page);await cdp.send('Network.enable');await cdp.send('Network.emulateNetworkConditions',{offline:false,latency:100,downloadThroughput:1500000,uploadThroughput:750000});

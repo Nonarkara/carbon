@@ -1,7 +1,8 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
-const base=process.env.BASE_URL||'http://127.0.0.1:8788';
+import {measurementTarget} from './lib/local-server.mjs';
+const base=(await measurementTarget()).base;
 const browser=await chromium.launch();const page=await browser.newPage();const errors=[],measurements=[];
 page.on('pageerror',e=>errors.push(e.message));await mkdir('test-results/oct19',{recursive:true});
 // Use actual painted ancestor backgrounds, including transparent navigation buttons.
