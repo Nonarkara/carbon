@@ -1,9 +1,10 @@
 import {clickControl,revealControl} from './browser-controls.mjs';
 import {chromium} from 'playwright';import assert from 'node:assert/strict';
 import {measurementTarget} from './lib/local-server.mjs';
+import {gotoRetry} from './lib/browser-nav.mjs';
 const base=(await measurementTarget()).base;const b=await chromium.launch();const p=await b.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));
 for(const width of [1440,1280,390])for(const lang of ['th','en']){
- await p.setViewportSize({width,height:width===1280?720:900});await p.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
+ await p.setViewportSize({width,height:width===1280?720:900});await gotoRetry(p, `${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
  assert.equal(await p.locator('.brand-strip>img').count(),3);
  for(const img of await p.locator('.brand-strip img').all())assert.ok(await img.evaluate(e=>e.complete&&e.naturalWidth>0));
  assert.equal(await p.locator('.brand-strip').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)');

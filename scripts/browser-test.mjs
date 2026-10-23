@@ -3,12 +3,13 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {measurementTarget} from './lib/local-server.mjs';
+import {gotoRetry} from './lib/browser-nav.mjs';
 const base=(await measurementTarget()).base;
 await mkdir('test-results',{recursive:true});
 const browser=await chromium.launch({headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:1000}});const errors=[];
 page.on('pageerror',e=>errors.push(e.message));
-await page.goto(base+'/?lang=en');await page.locator('#provinceRows tr').first().waitFor({state:'attached'});
+await gotoRetry(page, base+'/?lang=en');await page.locator('#provinceRows tr').first().waitFor({state:'attached'});
 assert.match(await page.locator('.brand h1').innerText(),/^Carbona/);
 const markBox=await page.locator('.kabonna-mark').boundingBox();
 assert.ok(markBox.width<=48&&markBox.height<=48,`logo expanded to ${markBox.width}×${markBox.height}`);
@@ -94,12 +95,12 @@ for(const width of [1280,768,390,375]){
  if(width<=700){assert.ok(await page.locator('#kStock').isVisible());await page.waitForFunction(()=>/M/.test(document.querySelector('#kStock').textContent));await page.locator('.bottom-nav [data-tab=project]').click();await page.locator('#example').click();await page.locator('#boundaryInfo').waitFor({state:'visible'});await page.locator('.bottom-nav [data-tab=calculate]').click();await page.locator('[type=submit]').click();assert.match(await page.locator('#result').innerText(),/218\.86/);await page.locator('.bottom-nav [data-view=map]').click();assert.ok(await page.locator('#map').isVisible());}
  await page.screenshot({path:`test-results/viewport-${width}.png`,fullPage:true});
 }
-for(const lang of ['en','th']){await page.goto(base+`/guide-${lang}.html`);assert.equal(await page.locator('.doc-diagram').count(),3);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
+for(const lang of ['en','th']){await gotoRetry(page, base+`/guide-${lang}.html`);assert.equal(await page.locator('.doc-diagram').count(),3);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
 // Research opens separately, preserving browser-local project inputs.
 for(const width of [1280,768,375]){
  await page.setViewportSize({width,height:900});
  for(const lang of ['en','th']){
-  await page.goto(base+`/?lang=${lang}`);
+  await gotoRetry(page, base+`/?lang=${lang}`);
   if(width>1100)await page.locator('.advanced-tools').evaluate(e=>e.open=true);await page.locator(width<=1100?'.bottom-nav [data-tab=project]':'.lenses [data-tab=project]').click();await page.locator('#projectName').fill('Research preserves my project');
   // About tab: native TH/EN story, illustrations filled from the shipped ledger, research notebook one link away.
   await clickControl(page,'#aboutTab');await page.locator('#aboutBody h1').waitFor({state:'visible'});

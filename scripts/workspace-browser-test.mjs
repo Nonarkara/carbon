@@ -2,12 +2,13 @@ import {selectSeaView} from './browser-controls.mjs';
 import{chromium}from'playwright';
 import assert from'node:assert/strict';
 import {measurementTarget} from './lib/local-server.mjs';
+import {gotoRetry} from './lib/browser-nav.mjs';
 import{mkdir,writeFile}from'node:fs/promises';
 import{clickControl}from'./browser-controls.mjs';
 const base=(await measurementTarget()).base,b=await chromium.launch(),p=await b.newPage(),errors=[],checks=[];
 p.on('pageerror',e=>errors.push(e.message));await mkdir('test-results/workspace',{recursive:true});
 for(const lang of ['th','en'])for(const width of [320,390,768,1024,1440]){
- await p.setViewportSize({width,height:900});await p.goto(`${base}/sea.html?lang=${lang}`);await p.locator('body[data-ready]').first().waitFor();await p.evaluate(()=>document.fonts.ready);
+ await p.setViewportSize({width,height:900});await gotoRetry(p, `${base}/sea.html?lang=${lang}`);await p.locator('body[data-ready]').first().waitFor();await p.evaluate(()=>document.fonts.ready);
  const toolbar=await p.locator('.scope-tools').evaluate(e=>{const r=e.getBoundingClientRect(),items=[...e.children].map(e=>e.getBoundingClientRect());return{height:r.height,centres:items.map(b=>b.y+b.height/2)};});assert.ok(toolbar.height<=54,'toolbar wraps into multiple lines');assert.ok(Math.max(...toolbar.centres)-Math.min(...toolbar.centres)<2,'country, metric and view not aligned');
  const geometry=await p.evaluate(()=>{const box=s=>document.querySelector(s).getBoundingClientRect();return{bar:box('#workspaceBar').height,map:box('#seaMap').height,row:box('.workspace').height,evidence:box('#countryEvidence').height,mapColumn:box('.map-column').height,pageHeight:document.documentElement.scrollHeight,overflow:document.documentElement.scrollWidth-innerWidth};});
  assert.ok(geometry.bar<=56);assert.equal(geometry.overflow,0);assert.ok(geometry.pageHeight<=902,'regional map creates page scroll');if(width>850){assert.ok(Math.abs(geometry.evidence-geometry.mapColumn)<2);assert.ok(geometry.pageHeight<=902,'map view becomes a long page');assert.ok(geometry.map>=450);}
@@ -17,7 +18,7 @@ for(const lang of ['th','en'])for(const width of [320,390,768,1024,1440]){
  await p.locator('#countrySearch').fill('BRN');await p.locator('#countryRows button').click();assert.equal(await p.locator('#country').inputValue(),'BRN');assert.equal(await p.locator('.comparison').isVisible(),false);if(width<=850)assert.ok(await p.locator('#countryEvidence').isVisible());
  await selectSeaView(p,'research');assert.equal(await p.locator('#readingRoutes a').count(),9);await p.locator('#readingRoutes a').last().focus();assert.ok(await p.evaluate(()=>document.querySelector('#workspaceBar').getBoundingClientRect().top>=0));
  await selectSeaView(p,'map');if([390,1024,1440].includes(width))await p.screenshot({path:`test-results/workspace/sea-${lang}-${width}.png`});
- await p.goto(`${base}/?lang=${lang}`);await p.locator('#place optgroup[data-sea-route]').waitFor({state:'attached'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
+ await gotoRetry(p, `${base}/?lang=${lang}`);await p.locator('#place optgroup[data-sea-route]').waitFor({state:'attached'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
  await clickControl(p,'.advanced-tools>summary');await clickControl(p,'.lenses [data-tab=project]');await p.locator('#projectName').fill('Local project — retain me');
  await p.evaluate(()=>window.originalWorkspaceBar=document.querySelector('#workspaceBar'));
  await p.selectOption('#place','sea:BRN');const f=p.frameLocator('#regionalFrame');await f.locator('body[data-ready]').first().waitFor();assert.equal(await f.locator('#country').inputValue(),'BRN');assert.ok(await f.locator('header').isHidden());
@@ -30,7 +31,7 @@ for(const lang of ['th','en'])for(const width of [320,390,768,1024,1440]){
 // Simulate old cached bare asset URLs: current HTML must request content-versioned entries.
  await p.route('**/css/sea.css',r=>r.fulfill({contentType:'text/css',body:'/* obsolete toolbar layout */'}));
  await p.route('**/js/sea.js',r=>r.fulfill({contentType:'application/javascript',body:'throw new Error("obsolete entry module")'}));
- await p.goto(`${base}/sea.html?lang=th&country=BRN`);await p.locator('body[data-ready]').waitFor();
+ await gotoRetry(p, `${base}/sea.html?lang=th&country=BRN`);await p.locator('body[data-ready]').waitFor();
  assert.equal(await p.locator('#country').inputValue(),'BRN');
  const entries=await p.locator('link[rel=stylesheet],script[src]').evaluateAll(es=>es.map(e=>e.getAttribute('href')||e.getAttribute('src')));assert.ok(entries.every(s=>/\?v=[a-f0-9]{12}$/.test(s)),'unversioned page assets permit a mixed release');
  assert.equal(await p.locator('#seaView option[value=evidence]').textContent(),'หลักฐาน');

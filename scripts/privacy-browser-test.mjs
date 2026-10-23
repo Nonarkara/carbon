@@ -1,11 +1,12 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {measurementTarget} from './lib/local-server.mjs';
+import {gotoRetry} from './lib/browser-nav.mjs';
 const base=(await measurementTarget()).base;
 const b=await chromium.launch(),p=await b.newPage();
 const requests=[],errors=[];p.on('request',r=>requests.push({url:r.url(),method:r.method(),body:r.postData()||''}));p.on('pageerror',e=>errors.push(e.message));
 const marker='synthetic-privacy-audit-marker';
-await p.goto(`${base}/?lang=en`,{waitUntil:'domcontentloaded'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
+await gotoRetry(p, `${base}/?lang=en`,{waitUntil:'domcontentloaded'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
 await p.locator('.advanced-tools>summary').click();await p.locator('.lenses [data-tab=project]').click();
 await p.locator('#projectName').fill(marker);
 await p.locator('#boundaryFile').setInputFiles({name:marker+'.geojson',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({type:'Feature',properties:{name:marker},geometry:{type:'Polygon',coordinates:[[[100,14],[100.001,14],[100.001,14.001],[100,14.001],[100,14]]]}}))});

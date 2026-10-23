@@ -3,6 +3,7 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {measurementTarget} from './lib/local-server.mjs';
+import {gotoRetry} from './lib/browser-nav.mjs';
 const base=(await measurementTarget()).base;
 const browser=await chromium.launch();const page=await browser.newPage();
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -25,7 +26,7 @@ async function audit(){
 for(const lang of ['th','en'])for(const width of [375,1440]){
  await page.setViewportSize({width,height:900});
  for(const path of [`/?lang=${lang}`,`bible.html?lang=${lang}#forest-watch`,`guide-${lang}.html`,`research-${lang}.html`]){
-  await page.goto(new URL(path,base).href,{waitUntil:'domcontentloaded'});
+  await gotoRetry(page, new URL(path,base).href,{waitUntil:'domcontentloaded'});
   if(path.startsWith('/'))await revealControl(page,'#openForestWatch');const control=path.startsWith('/')?page.locator('#openForestWatch'):path.startsWith('bible')?page.locator('#clear'):page.locator('nav a').first();
   if(path.startsWith('/'))await page.locator('#kStock').filter({hasText:'M'}).waitFor();
   else if(path.startsWith('bible'))await page.locator('.illustration').waitFor();

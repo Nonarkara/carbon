@@ -8,6 +8,7 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {measurementTarget} from './lib/local-server.mjs';
+import {gotoRetry} from './lib/browser-nav.mjs';
 
 const base=(await measurementTarget()).base;
 const browser=await chromium.launch();
@@ -26,7 +27,7 @@ for(const lang of ['th','en']){
  for(const [id,count] of Object.entries(EXPECTED)){
   for(const width of [375,1440]){
    await page.setViewportSize({width,height:900});
-   await page.goto(`${base}/bible.html?lang=${lang}#${id}`);
+   await gotoRetry(page, `${base}/bible.html?lang=${lang}#${id}`);
    await page.locator('.prose').waitFor();
    // The credit figures live INSIDE the chapter body, beside the paragraph each one explains.
    // They used to sit in a .figure-stack block at the top of the article; that class no longer
@@ -184,7 +185,7 @@ for(const lang of ['th','en']){
 // to be readable on the page, not only present in the markup.
 for(const [lang,phrase] of [['en','Burning does not damage the ozone layer'],['th','การเผาไหม้ไม่ได้ทำลายชั้นโอโซน']]){
  await page.setViewportSize({width:1440,height:900});
- await page.goto(`${base}/bible.html?lang=${lang}#sea-what-is-a-credit`);
+ await gotoRetry(page, `${base}/bible.html?lang=${lang}#sea-what-is-a-credit`);
  await page.locator('figure.credit-figure').first().waitFor();
  const text=await page.locator('#article').innerText();
  assert.ok(text.includes(phrase),`${lang}: the ozone correction is not visible on the page`);

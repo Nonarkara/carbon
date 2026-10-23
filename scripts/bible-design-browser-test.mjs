@@ -2,12 +2,13 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {measurementTarget} from './lib/local-server.mjs';
+import {gotoRetry} from './lib/browser-nav.mjs';
 const base=(await measurementTarget()).base;
 const browser=await chromium.launch();const page=await browser.newPage({acceptDownloads:true});const errors=[];
 page.on('pageerror',e=>errors.push(e.message));await mkdir('test-results',{recursive:true});
 for(const lang of ['th','en'])for(const width of [375,1440]){
  await page.setViewportSize({width,height:1000});
- await page.goto(`${base}/bible.html?lang=${lang}#sme-worked`);await page.locator('.prose').waitFor();
+ await gotoRetry(page, `${base}/bible.html?lang=${lang}#sme-worked`);await page.locator('.prose').waitFor();
  assert.match(await page.locator('#count').textContent(),/68/);
  assert.ok((await page.locator('.prose').textContent()).includes('41.42'));
  assert.equal(await page.locator('.design-illustration svg').count(),1);

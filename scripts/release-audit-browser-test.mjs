@@ -2,6 +2,7 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {measurementTarget} from './lib/local-server.mjs';
+import {gotoRetry} from './lib/browser-nav.mjs';
 const base=(await measurementTarget()).base;
 const browser=await chromium.launch();const page=await browser.newPage();const errors=[],measurements=[];
 page.on('pageerror',e=>errors.push(e.message));await mkdir('test-results/oct19',{recursive:true});
@@ -18,13 +19,13 @@ async function checkNavContrast(){
  for(const {text,fg,bg} of colours){const a=luminance(fg),b=luminance(bg),ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);assert.ok(ratio>=4.5,`${text} contrast ${ratio.toFixed(2)}: ${base}`);}
 }
 for(const lang of ['th','en'])for(const width of [390,700,701,768,1024,1100]){
- await page.setViewportSize({width,height:900});await page.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});await page.locator('#kStock').filter({hasText:'M'}).waitFor();
+ await page.setViewportSize({width,height:900});await gotoRetry(page, `${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});await page.locator('#kStock').filter({hasText:'M'}).waitFor();
  await checkNavContrast();await page.locator('.more-nav summary').click();await checkNavContrast();await page.locator('.more-nav summary').click();
  await page.locator('.bottom-nav [data-tab=project]').click();await checkNavContrast();assert.equal(await page.locator('.bottom-nav button[aria-pressed=true]').count(),1);
  if(width===1024)await page.screenshot({path:`test-results/oct19/after-nav-${lang}-1024.png`});
 }
 for(const lang of ['th','en']){
- await page.setViewportSize({width:390,height:844});await page.goto(`${base}/sea.html?lang=${lang}`,{waitUntil:'domcontentloaded'});await page.locator('body[data-ready]').first().waitFor();
+ await page.setViewportSize({width:390,height:844});await gotoRetry(page, `${base}/sea.html?lang=${lang}`,{waitUntil:'domcontentloaded'});await page.locator('body[data-ready]').first().waitFor();
  for(const [iso,key,name] of [['SGP','Enter',lang==='th'?'สิงคโปร์':'Singapore'],['BRN',' ',lang==='th'?'บรูไน':'Brunei']]){
   const dot=page.locator(`[data-locator=${iso}]`);assert.equal(await dot.getAttribute('role'),'button');assert.match(await dot.getAttribute('aria-label'),new RegExp(name));await dot.focus();await page.keyboard.press(key);
   assert.equal(await page.locator('#country').inputValue(),iso);assert.equal(await dot.getAttribute('aria-pressed'),'true');assert.equal(await page.locator(`path[data-country=${iso}]`).getAttribute('aria-pressed'),'true');
@@ -37,14 +38,14 @@ for(const lang of ['th','en']){
  assert.ok((await page.locator('#seaMap').boundingBox()).height>=300);await page.screenshot({path:`test-results/oct19/after-sea-enlarged-${lang}.png`});
 }
 for(const lang of ['th','en'])for(const width of [1440,1024,390]){
- await page.setViewportSize({width,height:900});await page.goto(`${base}/bible.html?lang=${lang}#uncertainty-worked`,{waitUntil:'domcontentloaded'});await page.locator('.prose').waitFor();await page.evaluate(()=>document.fonts.ready);
+ await page.setViewportSize({width,height:900});await gotoRetry(page, `${base}/bible.html?lang=${lang}#uncertainty-worked`,{waitUntil:'domcontentloaded'});await page.locator('.prose').waitFor();await page.evaluate(()=>document.fonts.ready);
  await page.evaluate(()=>window.scrollTo(0,650));await page.waitForFunction(()=>Math.abs(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--reader-header'))-document.querySelector('header').getBoundingClientRect().height)<1);
  if(width>=1000){const rails=await page.evaluate(()=>({header:document.querySelector('header').getBoundingClientRect().bottom,index:document.querySelector('.index').getBoundingClientRect().top,evidence:document.querySelector('.evidence').getBoundingClientRect().top}));measurements.push({lang,width,...rails});assert.ok(rails.index>=rails.header-1,'Bible index under header');assert.ok(rails.evidence>=rails.header-1,'Bible sources under header');}
  await page.locator('#indexJump').click();assert.equal(await page.locator('#search').evaluate(e=>document.activeElement===e),true);
  await page.screenshot({path:`test-results/oct19/after-bible-${lang}-${width}.png`});
  if(width===1440){await page.addStyleTag({content:'header{padding-block:40px!important}'});await page.waitForFunction(()=>parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--reader-header'))>100);await page.evaluate(()=>window.scrollTo(0,650));const separated=await page.evaluate(()=>document.querySelector('.index').getBoundingClientRect().top>=document.querySelector('header').getBoundingClientRect().bottom-1);assert.ok(separated,'Bible rails did not follow taller header');}
 }
-for(const lang of ['th','en']){await page.goto(`${base}/guide-${lang}.html`,{waitUntil:'domcontentloaded'});
+for(const lang of ['th','en']){await gotoRetry(page, `${base}/guide-${lang}.html`,{waitUntil:'domcontentloaded'});
  // The screen map is a native disclosure now, so its content is only rendered once it is opened.
  for(const d of await page.locator('details.screen-map').all())await d.locator('summary').click();
  assert.match(await page.locator('.screen-guide').innerText(),lang==='th'?/เพิ่มเติม/:/More/);assert.match(await page.locator('#layers').innerText(),lang==='th'?/เพิ่มเติม → โลกและตลาด/:/More → World & markets/);}
