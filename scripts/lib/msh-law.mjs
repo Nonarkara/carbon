@@ -133,18 +133,52 @@ export const EMPTY_MIN_W=120;
 // and third reading priority" and "Repeated equal-sized blocks flatten hierarchy and make the
 // journey monotonous."
 //
-// A row of three or more sibling blocks that are the SAME size and carry the SAME heading size
+// A row of three or more sibling blocks that are the SAME size and carry the SAME label size
 // flattens the hierarchy: nothing in the row is first.
 //
 // This is the law's softest class, because a row of peers is legitimate when the peers really
 // ARE peers — a comparison table, a set of tabs, a row of peer citations. So the rule only fires
-// where the blocks are content blocks (they carry a heading AND body text) rather than list rows,
-// tabs or table rows, and where the row is long enough to establish a rhythm it then repeats.
+// where the blocks are content blocks (they carry a LABEL — a heading or a bold label — AND body
+// text) rather than table rows or tabs, and where the row is long enough to establish a rhythm
+// it then repeats.
 //
-// Measured on this project: the research page's six "pose" cards at 1024 are three rows of two
-// identical 226x359 blocks with the same 14px heading — a genuine equal-weight flattening of six
-// parallel explanations with no lead-in.
+// Measured on this project: the research page's six "pose" cards are two rows of three
+// identical 226x359 blocks (at 1024) with the same 14px label — a row of peers.
+//
+// A row of peers is a finding only when the peers should not be peers. The law carves out the
+// genuine peer set, so this rule needs to SEE a peer row before it can decide that one is
+// legitimate. The first version of this rule could not see them: it looked for a heading
+// (h1-h4) in each block, and these cards carry a bold label instead, so the row was skipped by
+// construction and the audit's "no equal-weight findings" said nothing about them either way.
+// Blindness is not a pass. The rule now reads a bold label as a label, and the genuine peer
+// sets are exempted BY NAME below, with their measurement recorded.
+//
+// The exemption is deliberately self-limiting. It holds only while the named element really
+// is an even peer set; if one card grows, or the grid strands one, the condition fails and the
+// rule speaks again. An exemption that cannot be revoked is a hole, not an exemption.
+//
+// The exemption is DATA, not code, because the collector is serialized into the browser and
+// cannot reach this module. A condition written as a function here would be invisible to the
+// rule that is supposed to apply it — the same blindness, one level up.
 export const EQUAL_MIN_BLOCKS=3;
+
+/**
+ * Genuine peer sets: a named element, the reason it is a peer set rather than a flattening,
+ * and the conditions under which the exemption stops applying.
+ *
+ * @type {{selector:string,reason:string,expect:{count?:number,equalHeights?:boolean}}[]}
+ */
+export const EQUAL_WEIGHT_EXEMPTIONS=[
+ {
+  selector:'.kabonna-poses',
+  reason:'The six poses of the character are six peers of ONE thing. The section asks the reader to understand all six, ' +
+   'and an order would be a fiction. Measured: 2 columns x 3 rows at 390 (173x333px), 3 x 2 at 1024 (226x378px), ' +
+   '3 x 2 at 1440 (255x395px) — six identical blocks, each with its own illustration, label and one-line meaning, ' +
+   'under a section heading. grid-auto-rows:1fr keeps the rows equal, so no card is taller than its peers and ' +
+   'the grid divides the count exactly at every width, so no card is stranded.',
+  expect:{count:6,equalHeights:true},
+ },
+];
 
 // --- Nested scroll areas -----------------------------------------------------
 //
@@ -299,7 +333,7 @@ export function chromeCost(doc=document){
  * Runs inside the page (it is serialised with toString() and evaluated), so it must be
  * self-contained — no imports, no closure variables.
  */
-export function collectLaw(root){
+export function collectLaw(root,exemptions){
  const scope=root||document;
  const out=[];
  // The two helpers below are inlined on purpose. This function is serialised with toString()
@@ -568,19 +602,36 @@ export function collectLaw(root){
    }
    for(const row of rows){
     if(row.items.length<3)continue;
-    // Only content blocks count. A list row, a tab or a table cell is a peer by construction
-    // and the law does not ask a comparison table to have a leader.
-    const heads=row.items.map(k=>k.querySelector('h1,h2,h3,h4'));
-    if(heads.some(h=>!h))continue;
+    // A block needs a LABEL to be comparable with its neighbours. A heading is one; a bold
+    // label is one too, and a peer set that uses <b> rather than <h3> is still a peer set.
+    // Skipping those rows is how the first version of this rule could not see the six pose
+    // cards at all — a peer row the rule was blind to is a peer row it cannot excuse either.
+    const labels=row.items.map(k=>k.querySelector('h1,h2,h3,h4')||k.querySelector('b,strong'));
+    if(labels.some(h=>!h))continue;
     if(!row.items.every(k=>k.querySelector('p,li,span,div')))continue;
     const boxes=row.items.map(k=>k.getBoundingClientRect());
     const hs=boxes.map(b=>b.height),ws=boxes.map(b=>b.width);
     if(Math.max(...hs)-Math.min(...hs)>4)continue;
     if(Math.max(...ws)-Math.min(...ws)>4)continue;
-    const fs=heads.map(h=>Math.round(parseFloat(getComputedStyle(h).fontSize)));
+    const fs=labels.map(h=>Math.round(parseFloat(getComputedStyle(h).fontSize)));
     if(new Set(fs).size!==1)continue;
+    // A genuine peer set is exempt BY NAME, with its measurement recorded in
+    // EQUAL_WEIGHT_EXEMPTIONS. The exemption is narrow and it can be revoked: it holds only
+    // while the named element is still an even peer set. The conditions are DATA because this
+    // function is evaluated inside the browser, where the module's exports do not exist.
+    const exempt=(exemptions||[]).find(ex=>{
+     if(!g.matches||!g.matches(ex.selector))return false;
+     const want=ex.expect||{};
+     if(want.count!==undefined&&kids.length!==want.count)return false;
+     if(want.equalHeights){
+      const heights=new Set(kids.map(k=>Math.round(k.getBoundingClientRect().height)));
+      if(heights.size!==1)return false;
+     }
+     return true;
+    });
+    if(exempt)continue;
     out.push({kind:'equal-weight',severity:'medium',el:desc(g),gap:row.items.length,
-     note:`${row.items.length} blocks of identical ${Math.round(ws[0])}x${Math.round(hs[0])}px with the same ${fs[0]}px heading — nothing in the row is first`});
+     note:`${row.items.length} blocks of identical ${Math.round(ws[0])}x${Math.round(hs[0])}px with the same ${fs[0]}px label — nothing in the row is first`});
    }
   }
  }

@@ -13,9 +13,13 @@
 // Run: node scripts/msh-table-proof.mjs
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
-import { collectLaw } from './lib/msh-law.mjs';
+import { collectLaw, EQUAL_WEIGHT_EXEMPTIONS } from './lib/msh-law.mjs';
+import { measurementTarget } from './lib/local-server.mjs';
 
-const base = process.env.BASE_URL || 'http://127.0.0.1:8801';
+// Start this project's own server when the caller has not named one: the proof must be
+// runnable as a single command, and it must measure this build and nothing else.
+const target = await measurementTarget();
+const base = target.base;
 // The two rules that caused the defect, as they were before the repair.
 const OLD_CSS = `
   .research table td{min-width:125px !important;}
@@ -25,7 +29,7 @@ const OLD_CSS = `
 const browser = await chromium.launch();
 
 async function measure(page) {
-  const law = await page.evaluate(`(${collectLaw.toString()})()`);
+  const law = await page.evaluate(`(${collectLaw.toString()})(null,${JSON.stringify(EQUAL_WEIGHT_EXEMPTIONS)})`);
   const geometry = await page.evaluate(() => {
     const isScroller = (e) => {
       const cs = getComputedStyle(e);
@@ -87,4 +91,7 @@ for (const path of ['/research-th.html', '/research-en.html']) {
 }
 
 await browser.close();
+// The measurement is done. Release the server this gate started, so the port is free and
+// nothing is left listening after the gate ends.
+await target.stop();
 console.log('PASS msh-table-proof: the shipped research tables have no nested scroll area and no unreachable content; restoring the old geometry makes the law instrument fire.');

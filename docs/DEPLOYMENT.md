@@ -8,11 +8,12 @@ Source / ซอร์ส: https://github.com/Nonarkara/carbon
 ## Release sequence / ขั้นตอนออกรุ่น
 
 1. `npm ci && npm run build && npm test`
-2. Start `npm run dev`, then `npm run test:browser`.
-3. Scan secrets with `gitleaks git --redact` and `gitleaks dir public --redact`; run `npm audit`.
-4. Commit source, tests and docs with an `Agent: codex` or appropriate attribution trailer; push to main.
-5. `npm run deploy` rebuilds using the committed Git SHA and uploads only `public/`.
-6. Inspect `/version.json`, security headers, TH/EN guides and `BASE_URL=https://carbon.nonarkara.org npm run test:browser`.
+2. `npm run test:spatial` — the law's instrument, as one command. It builds, starts this project's own server on a port it chooses, and measures that server. Never measure a layout against a server whose `/version.json` does not carry a commit: another project on port 8788 will otherwise be measured and reported as this one.
+3. `npm run test:browser:all` — every browser suite against the same kind of self-started server. For a single flow, `npm run test:browser` is enough.
+4. Scan secrets with `gitleaks git --redact` and `gitleaks dir public --redact`; run `npm audit`.
+5. Commit source, tests and docs with an `Agent: codex` or appropriate attribution trailer; push to main.
+6. `npm run deploy` rebuilds using the committed Git SHA, runs `npm test` and `npm run test:spatial`, then uploads only `public/`. A release cannot ship without the law passing.
+7. Inspect `/version.json`, security headers, TH/EN guides, then `BASE_URL=https://carbon.nonarkara.org npm run test:browser` and `npm run test:release` for exact deployed bytes.
 
 การ build หลัง commit ทำให้ version ตรงกับซอร์สที่เผยแพร่ ต้องตรวจรุ่นบน URL หลัก ไม่ใช้เพียงข้อความสำเร็จจาก Wrangler เป็นหลักฐาน ส่วน GitHub Actions ตรวจ build/test แต่ไม่ได้ deploy อัตโนมัติ
 

@@ -19,10 +19,14 @@
 import {chromium} from 'playwright';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {collectSpatial} from './lib/spatial-collector.mjs';
-import {collectLaw,chromeCost} from './lib/msh-law.mjs';
+import {collectLaw,chromeCost,EQUAL_WEIGHT_EXEMPTIONS} from './lib/msh-law.mjs';
 import {assertProjectServer} from './lib/server-identity.mjs';
+import {measurementTarget} from './lib/local-server.mjs';
 
-const base=process.env.BASE_URL||'http://127.0.0.1:8788';
+// No server named? Start this project's own, on a port this process chose. The audit must be
+// runnable as a single command and must measure this build and nothing else.
+const target=await measurementTarget();
+const base=target.base;
 const OUT='test-results/spatial';
 // Prove the server under measurement is this project before the audit starts. An audit of
 // another app's pages would produce findings about an interface that does not exist here.
@@ -59,7 +63,7 @@ async function measure(scopeSelector){
 // The law's own classes, measured on the same page. The chrome cost is RECORDED for every
 // viewport, as section 6 of the law requires, whether or not it fails.
 async function measureLaw(){
- const findings=await page.evaluate(`(${collectLaw.toString()})()`);
+ const findings=await page.evaluate(`(${collectLaw.toString()})(null,${JSON.stringify(EQUAL_WEIGHT_EXEMPTIONS)})`);
  const cost=await page.evaluate(`(${chromeCost.toString()})(document)`);
  return {findings,cost};
 }
@@ -265,4 +269,7 @@ if(errors.length)console.log('PAGE ERRORS:',[...new Set(errors)].slice(0,10));
 if(failed){console.error(`\n${failed} page(s) could not be measured — a clean audit that did not run is not a clean audit.`);process.exit(1);}
 if(errors.length){console.error('\nPage errors during the deep audit.');process.exit(1);}
 if(total&&process.env.SPATIAL_DEEP_REPORT_ONLY!=='1'){console.error(`\n${total} spatial hallucination(s) found in the content.`);process.exit(1);}
+// The measurement is done. Release the server this gate started, so the port is free and
+// nothing is left listening after the gate ends.
+await target.stop();
 console.log(`PASS deep spatial audit: ${report.length} pages measured at 390x844, 1024x768 and 1440x900, no unjustified gaps, orphan tracks, stranded controls, scattered actions, inflated controls, empty spacers, overlapping chrome or equal-weight blocks.`);

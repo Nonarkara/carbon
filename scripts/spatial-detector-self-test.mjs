@@ -7,9 +7,13 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {collectSpatial} from './lib/spatial-collector.mjs';
-import {collectLaw,chromeCost} from './lib/msh-law.mjs';
+import {collectLaw,chromeCost,EQUAL_WEIGHT_EXEMPTIONS} from './lib/msh-law.mjs';
+import {measurementTarget} from './lib/local-server.mjs';
 
-const base=process.env.BASE_URL||'http://127.0.0.1:8801';
+// Start this project's own server when the caller has not named one, so the falsifier is
+// runnable as a single command and can never measure a stranger's app on a shared port.
+const target=await measurementTarget();
+const base=target.base;
 const browser=await chromium.launch();
 const page=await browser.newPage();
 await page.setViewportSize({width:1280,height:900});
@@ -19,7 +23,7 @@ await page.locator('.prose').waitFor();
 const collect=()=>page.evaluate(`(${collectSpatial.toString()})()`);
 // The law's classes run through their own collector, which is a different instrument from the
 // geometric one. A detector that is never exercised is a detector that has never been trusted.
-const law=()=>page.evaluate(`(${collectLaw.toString()})()`);
+const law=()=>page.evaluate(`(${collectLaw.toString()})(null,${JSON.stringify(EQUAL_WEIGHT_EXEMPTIONS)})`);
 
 // --- 1. row-leftover: a short item beside a much taller sibling in a grid row.
 await page.evaluate(()=>{
@@ -213,6 +217,76 @@ foundLaw=await law();
 assert.ok(foundLaw.some(o=>o.kind==='equal-weight'),`equal-weight must be detected, got ${JSON.stringify(foundLaw)}`);
 await page.evaluate(()=>document.querySelector('#synthetic-equal')?.remove());
 
+// --- 9d-bis. equal-weight must also SEE a peer row whose label is bold rather than a heading.
+//
+// This is the class the rule used to be blind to. The research page's six pose cards carry a
+// <b> label, not an <h3>, so the old rule skipped the row by construction — and an audit that
+// cannot see a peer row can neither condemn it nor excuse it. The six pose cards are now
+// examined and exempted BY NAME, but only because the rule can see them.
+await page.evaluate(()=>{
+ const g=document.createElement('div');
+ g.id='synthetic-equal-bold';
+ g.style.cssText='display:grid;grid-template-columns:repeat(3,220px);gap:10px;width:700px';
+ g.innerHTML=[1,2,3].map(i=>`<div style="height:120px;background:#eee"><b>label ${i}</b><span>body text</span></div>`).join('');
+ document.body.prepend(g);
+});
+foundLaw=await law();
+assert.ok(foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('synthetic-equal-bold')),
+ `a peer row labelled with <b> must be detected, got ${JSON.stringify(foundLaw)}`);
+await page.evaluate(()=>document.querySelector('#synthetic-equal-bold')?.remove());
+
+// --- 9d-ter. The named exemption must hold for the pose list AND must be revocable.
+//
+// The pose cards are six peers of one thing, so they are exempt. But an exemption that cannot
+// be revoked is a hole, not an exemption: if one card grows, the peer set is no longer even,
+// and the rule must speak again. Both halves are proved here — on the real page, and on a
+// mutated copy of it.
+//
+// The pose list lives on the research page, so this part of the falsifier goes there and comes
+// back. It measures the real element, not a fixture that resembles it.
+await page.goto(`${base}/research-en.html`,{waitUntil:'domcontentloaded'});
+await page.locator('.kabonna-poses').waitFor();
+const poseExemption=await page.evaluate(()=>{
+ const ul=document.querySelector('.kabonna-poses');
+ if(!ul)return {missing:true};
+ const kids=[...ul.children];
+ return {
+  missing:false,
+  count:kids.length,
+  perRow:[...new Set(kids.map(k=>Math.round(k.getBoundingClientRect().top)))].length,
+  heights:[...new Set(kids.map(k=>Math.round(k.getBoundingClientRect().height)))],
+  labelSizes:[...new Set(kids.map(k=>Math.round(parseFloat(getComputedStyle(k.querySelector('b')).fontSize))))],
+ };
+});
+assert.ok(!poseExemption.missing,'the pose list must exist on the page the falsifier measures');
+assert.equal(poseExemption.count,6,'the pose list must hold the six poses the exemption names');
+assert.equal(poseExemption.heights.length,1,'the six poses must be one even peer set');
+assert.equal(poseExemption.labelSizes.length,1,'the six poses must carry one label size');
+foundLaw=await law();
+assert.ok(!foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
+ `the exempted pose list must not be reported, got ${JSON.stringify(foundLaw.filter(o=>o.el.includes('kabonna-poses')))}`);
+
+// Revoke it: make one card taller and the peer set is no longer even.
+await page.evaluate(()=>{
+ const ul=document.querySelector('.kabonna-poses');
+ ul.dataset.savedHeight=ul.children[0].style.height;
+ ul.children[0].style.height='+260px';
+});
+foundLaw=await law();
+assert.ok(foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
+ `the exemption must be revocable: a pose card that grows must be reported, got ${JSON.stringify(foundLaw.filter(o=>o.el.includes('kabonna-poses')))}`);
+await page.evaluate(()=>{
+ const ul=document.querySelector('.kabonna-poses');
+ if(ul&&ul.dataset.savedHeight!==undefined)ul.children[0].style.height=ul.dataset.savedHeight;
+});
+foundLaw=await law();
+assert.ok(!foundLaw.some(o=>o.kind==='equal-weight'&&o.el.includes('kabonna-poses')),
+ 'the exemption must apply again once the pose list is even again');
+
+// Back to the page the rest of the falsifier works on.
+await page.goto(`${base}/bible.html?lang=en#sea-overview`,{waitUntil:'domcontentloaded'});
+await page.locator('.prose').waitFor();
+
 // --- 9e. giant-top-bar: chrome that takes more than a quarter of the screen.
 await page.evaluate(()=>{
  const bar=document.createElement('div');
@@ -338,4 +412,7 @@ foundLaw=await law();
 assert.deepEqual(foundLaw,[],`the page must measure clean once the defects are removed, got ${JSON.stringify(foundLaw)}`);
 
 await browser.close();
-console.log('PASS spatial detector self-test: row-leftover, gap-outlier, accidental-wrap, empty-track and scoped measurement are all detected; a scattered toolbar is caught; a vertical dropdown menu is not; the law classes catch overlapping chrome, inflated controls, empty spacers, equal-weight blocks, a giant top bar, content cut off with no way to scroll it into view, and overflow moved sideways into a nested scroll area; a scrollable wide block, an inert pair of scroll containers and a nested panel that scrolls downward are not reported; the clean page measures clean.');
+// The measurement is done. Release the server this gate started, so the port is free and
+// nothing is left listening after the gate ends.
+await target.stop();
+console.log('PASS spatial detector self-test: row-leftover, gap-outlier, accidental-wrap, empty-track and scoped measurement are all detected; a scattered toolbar is caught; a vertical dropdown menu is not; the law classes catch overlapping chrome, inflated controls, empty spacers, equal-weight blocks (including a peer row labelled with bold rather than a heading), a giant top bar, content cut off with no way to scroll it into view, and overflow moved sideways into a nested scroll area; the named peer-set exemption holds for the six pose cards AND is revoked when one of them grows; a scrollable wide block, an inert pair of scroll containers and a nested panel that scrolls downward are not reported; the clean page measures clean.');

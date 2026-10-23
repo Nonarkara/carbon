@@ -16,11 +16,17 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {collectSpatial} from './lib/spatial-collector.mjs';
-import {collectLaw,chromeCost,LAW_VIEWPORTS,CHROME_LIMIT_PCT} from './lib/msh-law.mjs';
+import {collectLaw,chromeCost,LAW_VIEWPORTS,CHROME_LIMIT_PCT,EQUAL_WEIGHT_EXEMPTIONS} from './lib/msh-law.mjs';
 import {assertProjectServer} from './lib/server-identity.mjs';
+import {measurementTarget} from './lib/local-server.mjs';
 
-const base=process.env.BASE_URL||'http://127.0.0.1:8788';
 const OUT='test-results/spatial';
+
+// No server? Start this project's own, on a port this process chose. The gate must be
+// runnable as a single command on any machine, and must never measure whatever else happens
+// to hold the default port.
+const target=await measurementTarget();
+const base=target.base;
 
 // Before anything is measured: prove the server under the cursor is THIS project. A gate
 // pointed at another app on the same port reported a missing element as if it were a layout
@@ -71,7 +77,7 @@ for(const s of MATRIX){
   for(const o of offenders)findings.push({surface:s.name,width,...o});
 
   // The law's own classes: chrome cost and the five symptoms the geometry collector cannot see.
-  const law=await page.evaluate(`(${collectLaw.toString()})()`);
+  const law=await page.evaluate(`(${collectLaw.toString()})(null,${JSON.stringify(EQUAL_WEIGHT_EXEMPTIONS)})`);
   for(const o of law)findings.push({surface:s.name,width,...o});
 
   // Chrome cost is RECORDED for every viewport, as section 6 of the law requires, whether or not
@@ -196,4 +202,7 @@ if(findings.length){
  for(const f of findings)console.error(`  ${f.severity.toUpperCase().padEnd(6)} ${f.kind.padEnd(16)} ${f.surface}@${f.width} ${f.el} — ${f.note}`);
  assert.fail(`${findings.length} spatial hallucination(s) found`);
 }
+// The measurement is done. Release the server this gate started, so the port is free and
+// nothing is left listening after the gate ends.
+await target.stop();
 console.log(`PASS spatial gate: ${MATRIX.length} surfaces, ${MATRIX.reduce((a,s)=>a+s.widths.length,0)} viewports, no unjustified gaps, orphan tracks, stranded controls, scattered actions, inflated controls, empty spacers, overlapping chrome or equal-weight blocks.`);

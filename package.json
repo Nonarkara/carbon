@@ -11,11 +11,13 @@
     "build": "node scripts/build.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node scripts/browser-test.mjs",
-    "deploy": "npm run build && npm test && wrangler pages deploy public --project-name forest-carbon-thailand",
+    "test:browser:all": "node scripts/browser-suite.mjs",
+    "test:release": "node scripts/release-smoke.mjs",
+    "deploy": "node scripts/lib/assert-clean-tree.mjs && npm run build && npm test && npm run test:spatial -- --no-build && npm run test:deep && wrangler pages deploy public --project-name forest-carbon-thailand",
     "test:client": "node scripts/client-demo-test.mjs",
     "test:manual": "node scripts/manual-walkthrough.mjs",
     "test:design": "node scripts/design-review.mjs",
-    "test:spatial": "node scripts/check-table-wrappers.mjs && node scripts/spatial-gate.mjs && node scripts/spatial-detector-self-test.mjs && node scripts/msh-table-proof.mjs",
+    "test:spatial": "node scripts/spatial-suite.mjs",
     "test:deep": "node scripts/spatial-deep-probe.mjs"
   },
   "dependencies": {
