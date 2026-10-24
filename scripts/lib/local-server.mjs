@@ -87,7 +87,11 @@ async function startServerOnFreePort({cwd}) {
   });
 
   const base = `http://127.0.0.1:${port}`;
-  const deadline = Date.now() + 30000;
+  // The server is a small Node process, but a machine running several agents can take a
+  // long time to schedule it. A budget that is too tight does not measure the page, it
+  // measures the machine — and it fails a release for a condition that a slower start
+  // would have carried. Ninety seconds is patience, not slowness.
+  const deadline = Date.now() + 90000;
   let manifest = null;
   while (Date.now() < deadline) {
     if (exited) {
@@ -110,7 +114,7 @@ async function startServerOnFreePort({cwd}) {
   if (!manifest) {
     child.kill('SIGKILL');
     throw new Error(
-      `the local server did not publish a build manifest at ${base}/version.json within 30s. ` +
+      `the local server did not publish a build manifest at ${base}/version.json within 90s. ` +
       'Build the site first: npm run build'
     );
   }
