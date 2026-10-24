@@ -686,6 +686,46 @@ flowchart TD
 
 The ONI is context, not input. No ENSO phase enters the CSEQ arithmetic, the stock bands or the fire rows; a forecast is not an observation; and attributing one province's bad fire year to El Niño requires more than a correlation, because the same season carries land-management decisions inside it. The tool's role is narrower and more useful: date every quantity, show the burning season where it lives in the data, and let Forest Watch's 30-day alerts carry the recent, dated reality that an ENSO phase only partially explains.
 
+## 20 · The life of a credit: issuance, transfer, retirement — and the claim it carries
+
+Short answer: a credit is a registry entry with a serial number, a vintage and a status. Its life has four stations — issuance, holding and transfer, retirement, and the public claim — and only the retirement date tells you when the environmental argument was actually spent. Nothing in this tool performs any of these steps; sections 11–12 show one registry's issuance-side snapshot precisely so a reader can tell the stations apart when someone hands them a credit story.
+
+### The four stations
+
+**Issuance** is where units come into existence: a qualified party verifies measured change against an approved methodology, and the registry mints units carrying a vintage (the monitoring period) and serials. Issued is not the same as sold, and sold is not the same as used — the T-VER snapshot in this tool shows the gap plainly: 257 registered projects, 31 with credits certified at all. **Holding and transfer** move ownership between registry accounts; a transfer changes who owns the argument, not the atmosphere. Double-claiming risk lives here, which is why serials exist: one unit, one claim, ever. **Retirement** (or cancellation) marks a unit permanently used — a held unit is an asset, a retired unit is a spent one. **The claim** is what the retiree then says in public, and it is the station where the market's confusion concentrates.
+
+| Station | What changes | What must never change | Where a reader verifies |
+|---|---|---|---|
+| Issuance | Units come into existence | Methodology version, monitoring dates, vintage | Registry project page |
+| Transfer | Owner of record | Serial, vintage, status stays unspent | Registry holding records |
+| Retirement | Status: available → used, permanently | Serial, vintage, the period it was measured over | Registry retirement records |
+| Claim | A public statement attaches to the retirement | Scope and period of the claim must match the unit's | The claimant's report, audited against the registry |
+
+```mermaid
+flowchart LR
+ A["Monitoring period: measured, dated change"] --> B["Verification by a qualified party"]
+ B --> C["Issuance: units minted with serials and vintage"]
+ C --> D["Holding and transfer: ownership moves, atmosphere does not"]
+ D --> E["Retirement: the unit is permanently used"]
+ E --> F["The claim: what the retirement is said to mean"]
+```
+
+### Vintage, serials and the registries' own vocabulary
+
+A vintage names the monitoring period the tonnes were measured over; a 2020-vintage credit retired in 2026 argues about 2020, not 2026. A serial (registry–project–period–batch) makes one unit traceable and non-duplicable across its whole life. Registries publish what they will publish: some list retirements publicly, and some — including TGO for T-VER — do not publish per-project transfers and retirements at all, which this tool's registry notes say outright. Where retirement records are not public, a claim cannot be independently checked against the registry, and the honest response is to say so rather than to round the gap away.
+
+### Article 6, in one honest paragraph
+
+The Paris Agreement's Article 6 lets countries cooperate: 6.2 governs bilaterally traded internationally transferred mitigation outcomes (ITMOs), 6.4 defines a new central crediting mechanism, and both require **corresponding adjustments** so the selling country's inventory does not count the same tonnes its buyer claims — double counting between countries, not just between companies. Thailand's side of this machinery lives in its FREL and its BTR submissions, both referenced elsewhere in this notebook. The workbench displays none of it: Article 6 is context for reading national claims, not a calculation any map can perform.
+
+### The claim discipline
+
+A retirement is permanent; the claim built on it is a separate artefact with its own rules. Offsetting-style claims ("this product is carbon neutral") require the retirement to match the claimed scope and period, and must follow the claim language their framework allows — [ISO 14068-1:2023](https://www.iso.org/standard/43279.html) now governs carbon-neutrality claims and phases them toward net-zero transition claims, and the GHG Protocol is revising how market instruments interact with scope accounting. Contribution-style claims ("we funded the restoration of X hectares, expected to remove Y tonnes over Z years") are the more defensible shape: they describe a funding act, not a cancelled debt. Five questions audit any credit claim: which registry, which serial and vintage, retired or merely held, does the claimed scope and period match the unit, and who verified the underlying change. A claim that cannot answer all five is a story, not an accounting entry.
+
+### Where this tool stops
+
+Deliberately before all of it. The workbench screens landscapes with open data, computes supplied measurements under a named Thai method, and shows dated registry context — it issues, holds, transfers and retires nothing. The credit chapters (07, 11, 12 and this one) exist so that the distance between a satellite image and a spent serial number is never invisible to the person being asked to believe in it.
+
 ## Southeast Asia · an auditable regional extension
 
 Open the [11-country map](sea.html?lang=en) or the [regional Bible](bible.html?lang=en&group=region#sea-overview). Brunei, Cambodia, Indonesia, Lao PDR, Malaysia, Myanmar, Philippines, Singapore, Thailand, Timor-Leste and Viet Nam are included. The original Thai project workflow remains separate. The 17 new bilingual chapters cover six methods and eleven country research profiles.

@@ -118,8 +118,8 @@ for(const width of [1280,768,375]){
   const popupEvent=page.waitForEvent('popup');await page.locator('#researchLink').click();const research=await popupEvent;
   await research.waitForLoadState();
   assert.equal(await research.locator('html').getAttribute('lang'),lang);
-  assert.equal(await research.locator('.research-diagram').count(),10);
-  assert.equal(await research.locator('.research-toc a').count(),22);
+  assert.equal(await research.locator('.research-diagram').count(),11);
+  assert.equal(await research.locator('.research-toc a').count(),23);
   assert.equal(await research.locator('.kabonna-poses img').count(),6);
   assert.equal(await research.locator('.sysmap').count(),1);
   await research.locator('.research-toc a[href="#section-9"]').click();
