@@ -1,0 +1,86 @@
+{
+  "commit": "661ab09",
+  "base": "http://127.0.0.1:65423",
+  "rows": [
+    {
+      "lang": "th",
+      "width": 390,
+      "height": 844,
+      "top": 104,
+      "mapHeight": 629.46875,
+      "chrome": 104,
+      "overflow": 0,
+      "mapScroll": 0
+    },
+    {
+      "lang": "th",
+      "width": 1024,
+      "height": 768,
+      "top": 109,
+      "mapHeight": 575.265625,
+      "chrome": 109,
+      "overflow": 0,
+      "mapScroll": 0
+    },
+    {
+      "lang": "th",
+      "width": 1440,
+      "height": 900,
+      "top": 109,
+      "mapHeight": 707.265625,
+      "chrome": 109,
+      "overflow": 0,
+      "mapScroll": 0
+    },
+    {
+      "lang": "th",
+      "width": 390,
+      "height": 568,
+      "top": 104,
+      "mapHeight": 353.46875,
+      "chrome": 104,
+      "overflow": 0,
+      "mapScroll": 0
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "height": 844,
+      "top": 104,
+      "mapHeight": 613.53125,
+      "chrome": 104,
+      "overflow": 0,
+      "mapScroll": 0
+    },
+    {
+      "lang": "en",
+      "width": 1024,
+      "height": 768,
+      "top": 109,
+      "mapHeight": 575.265625,
+      "chrome": 109,
+      "overflow": 0,
+      "mapScroll": 0
+    },
+    {
+      "lang": "en",
+      "width": 1440,
+      "height": 900,
+      "top": 109,
+      "mapHeight": 707.265625,
+      "chrome": 109,
+      "overflow": 0,
+      "mapScroll": 0
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "height": 568,
+      "top": 104,
+      "mapHeight": 337.53125,
+      "chrome": 104,
+      "overflow": 0,
+      "mapScroll": 0
+    }
+  ]
+}

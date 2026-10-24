@@ -102,7 +102,7 @@ body[data-sea-view=evidence] .workspace{display:grid}
  body[data-sea-view=research]>footer{flex:none;padding:8px 16px}
  body[data-sea-view=research]>footer p{margin:4px 0;font-size:11px}
 }
-@media(max-width:850px){.workspace{overflow:auto}#seaMap{min-height:300px}}
+
 /* Country, metric and view occupy a single line at every screen width. */
 .scope-tools{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;padding:4px 12px}
 .scope-tools>label{flex:0 1 240px;max-width:none;min-width:0}
@@ -126,3 +126,10 @@ body[data-sea-view=evidence] .workspace{display:grid}
  .sea-views select{width:100%}
 }
 @media print{.scope-tools,.sea-views{display:none}body{height:auto;overflow:visible;padding:0;display:block}main{display:block}.workspace,body[data-embedded] .workspace{height:auto!important;overflow:visible}#countryEvidence{height:auto;overflow:visible}}
+
+/* Map metadata belongs with its legend, not in a third band of application chrome. */
+.boundary-note{flex:none;padding:0 12px;border-top:1px solid #ccc;font-size:11px}
+.boundary-note>summary{min-height:24px;padding:2px 0;font-size:11px;line-height:1.5}
+.boundary-note .map-note{padding:4px 0;max-width:75ch}
+.map-column>.data-status{flex:none;padding:2px 12px;background:white}
+@media(max-width:850px){.workspace{overflow:visible}.map-column{overflow:visible}}

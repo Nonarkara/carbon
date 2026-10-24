@@ -54,5 +54,5 @@ try{const responses=await Promise.all(['snapshot.json','countries.geojson'].map(
 }catch(error){document.body.dataset.failed='true';$('#status').textContent=lang==='th'?'โหลดข้อมูลภูมิภาคไม่ได้ กรุณาโหลดใหม่ เครื่องมือไทยยังเปิดได้':'Regional data unavailable. Reload or open the Thailand workbench.';$('#countryNumbers').textContent='—';for(const id of ['country','metric','fitRegion','exportJSON','exportCSV'])$('#'+id).disabled=true;}
 
 // Keep the map budget tied to the chrome actually rendered, including embedded mode.
-const measureChrome=()=>{const height=['header.top','.scope-tools','.data-status'].reduce((n,s)=>n+$(s).getBoundingClientRect().height,0);document.body.style.setProperty('--sea-chrome-height',height+'px');};
-const chromeObserver=new ResizeObserver(()=>{measureChrome();map.invalidateSize();});for(const s of ['header.top','.scope-tools','.data-status'])chromeObserver.observe($(s));
+const measureChrome=()=>{const height=['header.top','.scope-tools'].reduce((n,s)=>n+$(s).getBoundingClientRect().height,0);document.body.style.setProperty('--sea-chrome-height',height+'px');};
+const chromeObserver=new ResizeObserver(()=>{measureChrome();map.invalidateSize();});for(const s of ['header.top','.scope-tools'])chromeObserver.observe($(s));

@@ -33,6 +33,7 @@ const NO_BUILD = process.argv.includes('--no-build');
 const STEPS = [
   {name: 'table wrappers', script: 'scripts/check-table-wrappers.mjs'},
   {name: 'spatial gate', script: 'scripts/spatial-gate.mjs'},
+  {name: 'regional two-line header', script: 'scripts/sea-header-proof.mjs'},
   {name: 'detector self-test', script: 'scripts/spatial-detector-self-test.mjs'},
   {name: 'table proof', script: 'scripts/msh-table-proof.mjs'},
   ...(DEEP ? [{name: 'deep content audit', script: 'scripts/spatial-deep-probe.mjs'}] : []),
