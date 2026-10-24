@@ -58,7 +58,7 @@ Google Earth Engine is an option, not an assumed free production backend. Noncom
 
 ## Data.go.th extraction — actual results
 
-The CKAN API search `q=ป่าไม้`, paginated in stable ID order, returned **570 unique datasets and 2,111 resource records**. This is a keyword catalogue, not 570 usable carbon datasets. Resource formats include 688 CSV, 639 PDF, 324 XLSX and 35 SHP-labelled records. SHP components may each be counted as a resource. Raw responses and all resource URLs are saved locally.
+The CKAN API search `q=ป่าไม้`, paginated in stable ID order, returned **570 unique datasets and 2,111 resource records**. This is a keyword catalogue, not 570 usable carbon datasets. Resource formats include 688 CSV, 639 PDF, 324 XLSX and 35 SHP-labelled records. SHP components may each be counted as a resource. Catalogue responses and resource URLs are saved locally. Maintainer email addresses and telephone numbers are omitted from the committed copies; [data.go.th](https://data.go.th/) remains the source (`research/extracted/data-go-th-sources.json`, `scripts/ingest/data_go_th_catalogue.py`).
 
 Nine selected resource files downloaded successfully. Content inspection gives the following narrower usability assessment:
 

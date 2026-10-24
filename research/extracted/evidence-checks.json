@@ -38,50 +38,64 @@
       "path": "research/raw/data-go-th-search-000.json",
       "bytes": 1333133,
       "sha256": "65e60c372300fd26767ae151b1672e66ac31660f76774aa0bad84288c5b519c6",
-      "public_sha256": "b9c8c73dd40d5c86cf8f7be9e913032e1effc0a4a52bca22d9431b54d9e7629f",
-      "sanitized": true
+      "public_sha256": "502fb71d00570c8613cab1ef2adafa9cc29c4dcf9577786075a788b5d2c5c5ab",
+      "sanitized": true,
+      "public_bytes": 1330249,
+      "contacts_removed": true
     },
     {
       "path": "research/raw/data-go-th-sorted-000.json",
       "bytes": 2150529,
       "sha256": "73bab474597e1de09c4d530886adf21f986a941b068e2fc3faaa60c2640ab6f7",
-      "public_sha256": "428718a2d6e7f165f9745a91f34a7b2ae062f235fd0393ac9a4d08d16f633325",
-      "sanitized": true
+      "public_sha256": "63a5f4cc11a559724f88d232cc653b443acb8510cb4d4b5258600dfa4c5268e2",
+      "sanitized": true,
+      "public_bytes": 2147882,
+      "contacts_removed": true
     },
     {
       "path": "research/raw/data-go-th-sorted-100.json",
       "bytes": 1457086,
       "sha256": "413fbdaec1ba3f2654bc8f51d9817369b9f73f4c91f7bda00e1f769a9afe9322",
-      "public_sha256": "ac38957ca41947c2c05e952652bf0c022252d29cab82ef26296bdf705f0ea705",
-      "sanitized": true
+      "public_sha256": "cea2701b124e81cb67a2fb1216d4f0c0d1b26fa61640f9da3130420d071b3038",
+      "sanitized": true,
+      "public_bytes": 1454414,
+      "contacts_removed": true
     },
     {
       "path": "research/raw/data-go-th-sorted-200.json",
       "bytes": 1846726,
       "sha256": "25fd9602552545748029574b3bbdc774abbb57f369d5045e950915a698605161",
-      "public_sha256": "fcbf1f6fd94a895192e7eb3d7f2d59e5c57502fc9d86a23ec342a6bb9d7f543c",
-      "sanitized": true
+      "public_sha256": "0ff79e979bb9d73f2def883880215d83f1187f8c551fba4c38de6d9bb61f1567",
+      "sanitized": true,
+      "public_bytes": 1843707,
+      "contacts_removed": true
     },
     {
       "path": "research/raw/data-go-th-sorted-300.json",
       "bytes": 1311546,
       "sha256": "19c9b6783b230e8789d34df823a52a22596561ba339227de985f12193961354b",
-      "public_sha256": "c36e28cfadb570449400d07248f433697f1f473599870d0fe52ab1d9123994c7",
-      "sanitized": true
+      "public_sha256": "6b6bff536e450cf07446e47be98cba05f8f3be976787be6de4d9f5b7551afb01",
+      "sanitized": true,
+      "public_bytes": 1308857,
+      "contacts_removed": true
     },
     {
       "path": "research/raw/data-go-th-sorted-400.json",
       "bytes": 1129907,
       "sha256": "0826610bbdf320caee101926b0dfdaa169584e18c32705f6ffee3a44bd76922e",
-      "public_sha256": "e9d9823a01ad51fca427cf703340272b5a1e37c90a306d29eae42a3a644b1b98",
-      "sanitized": true
+      "public_sha256": "0a084a3666ff20e6b3e769399c880121238210e134dafd81f909a283b7cfe598",
+      "sanitized": true,
+      "public_bytes": 1125481,
+      "contacts_removed": true
     },
     {
       "path": "research/raw/data-go-th-sorted-500.json",
       "bytes": 1018831,
       "sha256": "6ac7be2441c03c5e290c0672989e681952be39ba8047f05bcf832430f61be919",
-      "public_sha256": "15aa9b90cf51c83c7a3fe1ae5391d6f353b97594512a32069f2e51ff67e85d88",
-      "sanitized": true
+      "public_sha256": "ddc2c5584616d6ffcbd6605057eda339fe2948a04ba617158962fcaeb0874270",
+      "sanitized": true,
+      "public_bytes": 1016860,
+      "contacts_removed": true
     },
     {
       "path": "research/raw/forest-area-2567.csv",
@@ -129,5 +143,5 @@
       "sha256": "2beefc13c7027aa99fb75e441a167f55cd41129c043d5e171b272b7b109eac9d"
     }
   ],
-  "redaction_note": "Before public release, upstream token patterns and API-key query values in catalogue metadata were removed. Original pre-redaction hashes are retained for provenance; public-file hashes below describe sanitized files."
+  "redaction_note": "Before public release, upstream token patterns and API-key query values in catalogue metadata were removed. Maintainer email addresses, author emails and telephone numbers from data.go.th are also omitted; data.go.th remains the credited source (see research/extracted/data-go-th-sources.json). Original pre-redaction hashes are retained for provenance; public-file hashes describe the sanitized files."
 }
