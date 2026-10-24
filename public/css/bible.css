@@ -29,3 +29,13 @@ header{position:sticky;top:0;z-index:20;flex-wrap:wrap}#indexJump{font-size:14px
 article,#reader-index,.prose h2,.prose h3{scroll-margin-top:calc(var(--reader-header,66px) + 16px)}
 @media(min-width:1000px){.index{top:var(--reader-header,66px);height:calc(100dvh - var(--reader-header,66px))}.evidence{top:var(--reader-header,66px);max-height:calc(100dvh - var(--reader-header,66px))}}
 @media print{.evidence{position:static;max-height:none}}
+
+/* The Bible header is three controls — back, index, language — and the labels differ by
+   language. The English one is the widest, so the band is derived from it: below 400px the
+   index button says what it does ("Contents") and the panel it opens holds the search
+   field. Above 400px both words fit on one row. The break is a decision, not the width
+   running out. */
+@media(max-width:400px){
+ header{gap:4px}
+ #indexJump .indexJump-wide{display:none}
+}

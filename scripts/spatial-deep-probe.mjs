@@ -23,6 +23,7 @@ import {collectLaw,chromeCost,EQUAL_WEIGHT_EXEMPTIONS} from './lib/msh-law.mjs';
 import {assertProjectServer} from './lib/server-identity.mjs';
 import {measurementTarget} from './lib/local-server.mjs';
 import {measureWithRecovery} from './lib/browser-resilience.mjs';
+import {openCollapsibles} from './lib/folds.mjs';
 
 // No server named? Start this project's own, on a port this process chose. The audit must be
 // runnable as a single command and must measure this build and nothing else.
@@ -116,6 +117,9 @@ async function runOnce(job){
   try{await page.waitForFunction(t=>document.querySelector('#article h1')?.textContent.trim()===t,job.expectTitle,{timeout:8000});}
   catch{report.push({...job,error:`chapter never rendered: ${job.expectTitle}`});return;}
  }
+ // A folded index is content the reader can reach, so it is content the audit must
+ // measure. The folds are opened before the page is measured.
+ if(job.path&&job.path.startsWith('research'))await openCollapsibles(page);
  await settle();
  if(job.act)await job.act();
  // Prove the page is in the state we think it is. A hidden view contributes zero-size rectangles

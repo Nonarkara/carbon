@@ -122,6 +122,10 @@ for(const width of [1280,768,375]){
   assert.equal(await research.locator('.research-toc a').count(),23);
   assert.equal(await research.locator('.kabonna-poses img').count(),6);
   assert.equal(await research.locator('.sysmap').count(),1);
+  // On a phone the contents is folded into one line. The reader opens it and then picks a
+  // chapter, so that is the path the test walks — not a click on something that is not there.
+  const tocFold=research.locator('.research-toc');
+  if(!(await tocFold.evaluate(el=>el.open)))await tocFold.locator('summary').click();
   await research.locator('.research-toc a[href="#section-9"]').click();
   const portrait=research.locator('.author-profile img');await portrait.scrollIntoViewIfNeeded();
   await portrait.evaluate(img=>img.decode());assert.ok(await portrait.evaluate(img=>img.naturalWidth>=400));

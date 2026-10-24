@@ -35,7 +35,7 @@ body:has(#reader-index) header{background:white;border-bottom:1px solid var(--in
 @media(max-width:800px){.manual-index{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;border:0;margin:6px 0 14px}.manual-index .manual-brand{width:70px;margin:0}.manual-contents{flex:1;min-width:180px}.manual-links{padding-bottom:8px}.manual-index .manual-open{margin:0;padding:6px 8px;font-size:12px}.manual nav,.research nav{gap:6px 10px}.manual-routes{display:grid;grid-template-columns:1fr;gap:4px}.manual-routes a{padding:2px 0}.manual-routes span{display:none}.screen-guide{font-size:12px}.screen-guide p{font-size:12px}.manual h1{font-size:28px}}
 /* Research is a readable paper with an author beside the opening argument. */
 .research-intro{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:0 28px;border:0;padding-bottom:12px;margin:16px 0 20px}
-.research-intro>*{grid-column:1;min-width:0}.research-intro .research-byline{grid-column:2;grid-row:1/span 8;align-self:start;font-size:13px;position:sticky;top:90px}
+.research-intro>*{grid-column:1;min-width:0}.research-intro .research-byline{grid-column:2;grid-row:1/span 8;align-self:start;font-size:13px;position:sticky;top:calc(var(--chrome) + 12px)}
 .research-byline .research-brand{width:150px!important;max-width:100%;height:auto;display:block;margin:0 0 16px}
 .research-byline .author-photo{width:100px;height:100px;object-fit:cover;display:block;margin:0 0 8px}
 .research-byline a{display:block;font-size:12px}.research .research-intro h1{font-size:34px;max-width:30ch;line-height:1.3}
@@ -66,7 +66,7 @@ body:has(#reader-index) header{background:white;border-bottom:1px solid var(--in
 /* Reading options have a tighter rhythm than tasks, figures and explanatory prose. */
 #readingPaths{gap:0}#readingPaths a{min-height:24px;padding:2px 0;font-size:13px;line-height:1.45}
 .manual-links>a{min-height:24px;padding:2px 0;font-size:13px;line-height:1.5}
-.research-toc a{padding:3px 0;font-size:13px;line-height:1.5}
+.research-toc a{padding:3px 0;font-size:13px;line-height:1.5}@media(max-width:700px){.research-toc a{padding:12px 0}}
 .chapter-toc a{min-height:24px;padding:2px 0;line-height:1.45}
 .evidence .source{padding:8px 0}
 .evidence .source b{font-size:13px;line-height:1.5}

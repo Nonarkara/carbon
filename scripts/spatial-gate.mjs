@@ -20,6 +20,7 @@ import {collectLaw,chromeCost,LAW_VIEWPORTS,CHROME_LIMIT_PCT,EQUAL_WEIGHT_EXEMPT
 import {assertProjectServer} from './lib/server-identity.mjs';
 import {measurementTarget} from './lib/local-server.mjs';
 import {measureWithRecovery} from './lib/browser-resilience.mjs';
+import {openCollapsibles, measureFolds} from './lib/folds.mjs';
 
 const OUT='test-results/spatial';
 
@@ -44,12 +45,17 @@ console.log(`measuring ${manifest.commit} at ${base}`);
 const MATRIX=[
  {name:'home',path:'?lang=th',ready:'#kStock',widths:[320,390,1024,1440]},
  {name:'sea',path:'sea.html?lang=th',ready:'body[data-ready]',widths:[320,390,1024,1440]},
- {name:'bible',path:'bible.html?lang=th#sea-overview',ready:'.prose',widths:[390,1024,1440]},
- {name:'bible-credits',path:'bible.html?lang=en#sea-what-is-a-credit',ready:'figure.credit-figure',widths:[390,1024,1440]},
+ {name:'bible',path:'bible.html?lang=th#sea-overview',ready:'.prose',widths:[320,390,1024,1440]},
+ {name:'bible-credits',path:'bible.html?lang=en#sea-what-is-a-credit',ready:'figure.credit-figure',widths:[320,390,1024,1440]},
  {name:'guide-th',path:'guide-th.html',ready:'.manual-routes',widths:[320,390,1024,1440]},
  {name:'guide-en',path:'guide-en.html',ready:'.manual-routes',widths:[320,390,1024,1440]},
  {name:'research-th',path:'research-th.html',ready:'.research-intro',widths:[320,390,1024,1440]},
  {name:'research-en',path:'research-en.html',ready:'.research-intro',widths:[320,390,1024,1440]},
+ // Every surface the site ships is measured. A page nobody measured is a page nobody knows
+ // the state of: the 404 a reader lands on after a dead link, the English workbench, and the
+ // Bible on the narrowest phone.
+ {name:'not-found',path:'404.html',ready:'h1',widths:[320,390,1024,1440]},
+ {name:'home-en',path:'?lang=en',ready:'#kStock',widths:[320,390,1024,1440]},
 ];
 // The law names the height for each width. The height at 1024 is recorded, as section 6 asks.
 const HEIGHT=width=>width<=390?844:(width<=1024?768:900);
@@ -84,6 +90,9 @@ async function measureSurface(s,width){
    }
   }
   if(!ready)assert.fail(`${s.name}@${width} never became ready: ${lastErr?.message}`);
+  // A fold that hides content must not hide it from the law. The folds are opened first,
+  // so the geometry measured is the geometry the reader reaches when they open it.
+  await openCollapsibles(page);
   await page.evaluate(()=>Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]));
   await page.waitForTimeout(80);
 
@@ -193,6 +202,14 @@ async function measureSurface(s,width){
    assert.ok(!credit.missing,`${s.name}@${width}: the map lost its attribution`);
    assert.ok(!credit.covered,`${s.name}@${width}: the fixed bottom nav covers the map attribution (attribution bottom ${credit.bottom}, nav top ${credit.navTop})`);
    assert.ok(credit.reachable,`${s.name}@${width}: the map attribution is not clickable`);
+  }
+
+  // A fold has to be one line. A fold that is three lines has put the navigation back
+  // where it started and the page is no better off than before the fold existed.
+  const folds=await measureFolds(page);
+  for(const f of folds){
+   assert.ok(f.foldedHeight<=96,`${s.name}@${width}: the folded ${f.id} takes ${f.foldedHeight}px (${f.lines} lines) — a fold must be one line`);
+   assert.ok(f.openHeight>=200,`${s.name}@${width}: the folded ${f.id} opens to ${f.openHeight}px — there is nothing behind it`);
   }
 
   // The research byline is a travelling rail, not a stranded block in an empty column.
