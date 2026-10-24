@@ -55,6 +55,7 @@ const MATRIX=[
  // the state of: the 404 a reader lands on after a dead link, the English workbench, and the
  // Bible on the narrowest phone.
  {name:'not-found',path:'404.html',ready:'h1',widths:[320,390,1024,1440]},
+ {name:'sea-en',path:'sea.html?lang=en',ready:'body[data-ready]',widths:[320,390,1024,1440]},
  {name:'home-en',path:'?lang=en',ready:'#kStock',widths:[320,390,1024,1440]},
 ];
 // The law names the height for each width. The height at 1024 is recorded, as section 6 asks.
