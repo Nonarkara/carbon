@@ -122,6 +122,15 @@ for(const width of [1280,768,375]){
   assert.equal(await research.locator('.research-toc a').count(),23);
   assert.equal(await research.locator('.kabonna-poses img').count(),6);
   assert.equal(await research.locator('.sysmap').count(),1);
+  // "Skip to article" has to skip the front matter. It used to land on the top of the
+  // introduction, which is the thing the reader was trying to skip past.
+  const skip=research.locator('.skip-link');
+  await skip.focus();
+  assert.ok(await skip.isVisible(),'the skip link must appear when it is focused');
+  await skip.press('Enter');
+  await research.waitForFunction(()=>location.hash==='#section-1');
+  const skipped=await research.evaluate(()=>Math.round(document.querySelector('#section-1').getBoundingClientRect().top));
+  assert.ok(skipped>=0&&skipped<200,`the skip link lands ${skipped}px from the top — it did not skip the front matter`);
   // On a phone the contents is folded into one line. The reader opens it and then picks a
   // chapter, so that is the path the test walks — not a click on something that is not there.
   const tocFold=research.locator('.research-toc');
