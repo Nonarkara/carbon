@@ -33,6 +33,36 @@ const fail = message => {
 
 const project = process.env.CLOUDFLARE_PROJECT || 'forest-carbon-thailand';
 const productionBranch = process.env.CLOUDFLARE_BRANCH || 'main';
+// The live surface the release must prove. It is deliberately NOT BASE_URL: that variable
+// points a gate at whatever server a caller chooses, and a release must be verified against the
+// surface its users reach.
+const liveBase = process.env.CLOUDFLARE_LIVE_URL || 'https://carbon.nonarkara.org';
+
+/**
+ * Wait for the edge to serve the commit that was just uploaded.
+ *
+ * An upload is not a release until the domain serves it, and the edge can take a moment to
+ * propagate a new deployment. The wait is generous on purpose: a slow edge is a condition to
+ * wait out, not a failure, and a tight budget here would fail releases that did ship.
+ */
+async function waitForLiveCommit(short, budgetMs = 180000) {
+  const deadline = Date.now() + budgetMs;
+  let served = null;
+  while (Date.now() < deadline) {
+    try {
+      const res = await fetch(`${liveBase}/version.json`, {signal: AbortSignal.timeout(5000)});
+      if (res.ok) {
+        const body = await res.json();
+        served = body?.commit || null;
+        if (served === short) return true;
+      }
+    } catch {
+      // The edge is not answering yet. Wait and look again.
+    }
+    await new Promise(r => setTimeout(r, 3000));
+  }
+  fail(`FAIL release: the live site still serves ${served || 'nothing'} after ${Math.round(budgetMs / 1000)}s; the upload was ${short}.`);
+}
 
 function step(name) {
   console.log(`\n--- ${name} ---`);
@@ -151,7 +181,16 @@ async function main() {
     ], {cwd: tree.dir, label: 'the upload'});
     if (code !== 0) fail('FAIL release: the upload failed');
 
-    console.log(`\nPASS release: ${commit.short} built, measured and uploaded to ${project} (${productionBranch}).`);
+    // 5. The live site must serve this commit and behave. An uploaded tree that the domain does
+    //    not serve is not a release, and a release nobody has opened is an unverified one. The
+    //    edge needs a moment to propagate, so wait for the commit, then walk the live pages.
+    step('live verification');
+    await waitForLiveCommit(commit.short);
+    console.log(`the live site serves ${commit.short}`);
+    const liveCode = await run('node', ['scripts/live-verify.mjs', liveBase], {cwd: tree.dir, label: 'the live verification'});
+    if (liveCode !== 0) fail(`FAIL release: the live site did not verify at ${liveBase}`);
+
+    console.log(`\nPASS release: ${commit.short} built, measured, uploaded to ${project} (${productionBranch}) and verified live at ${liveBase}.`);
   } finally {
     await tree.remove();
   }

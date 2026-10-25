@@ -3,9 +3,13 @@
 // A deploy that returns 200 is not a release. This opens the live regional workspace, walks
 // its views, checks that the country panel and the comparison table carry their units and
 // periods, and captures the screens a reader actually gets.
+//
+// Every wait here is for the thing the next assertion reads. A fixed pause is a guess about
+// the network; against a cold edge a guess is how a verification fails a site that is fine.
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,readFile} from 'node:fs/promises';
+import {gotoRetry} from './lib/browser-nav.mjs';
 
 const base=process.argv[2]||'https://carbon.nonarkara.org';
 const out='test-results/live';
@@ -19,8 +23,8 @@ page.on('pageerror',e=>errors.push(e.message));
 for(const lang of ['th','en']){
  for(const width of [390,1440]){
   await page.setViewportSize({width,height:width<=390?700:900});
-  await page.goto(`${base}/sea.html?lang=${lang}`);
-  await page.locator('body[data-ready]').first().waitFor({timeout:20000});
+  await gotoRetry(page,`${base}/sea.html?lang=${lang}`);
+  await page.locator('body[data-ready]').first().waitFor({timeout:30000});
 
   // Every view must open and must show its own content.
   for(const view of ['map','evidence','compare','research']){
@@ -30,8 +34,14 @@ for(const lang of ['th','en']){
     const sel=document.querySelector('#seaView');
     if(sel){sel.value=v;sel.dispatchEvent(new Event('change',{bubbles:true}));}
    },view);
-   await page.waitForTimeout(250);
-   assert.equal(await page.evaluate(()=>document.body.dataset.seaView),view,`${lang}@${width}: the ${view} view did not open`);
+   await page.waitForFunction(v=>document.body.dataset.seaView===v,view,{timeout:30000});
+  }
+
+  // One name per view: the phone selector and the desktop button must not drift apart.
+  const names=await page.evaluate(()=>{const out={};for(const o of document.querySelector('#seaView').options){const btn=document.querySelector(`button[data-sea-view="${o.value}"]`);out[o.value]={select:o.text,button:btn?btn.textContent:null};}return out;});
+  for(const [view,n] of Object.entries(names)){
+   if(n.button===null)continue;
+   assert.equal(n.select,n.button,`${lang}@${width}: the ${view} view is named "${n.select}" in the selector and "${n.button}" on the button`);
   }
 
   // The country panel must carry a unit and a dated source on every published number.
@@ -39,7 +49,7 @@ for(const lang of ['th','en']){
    const sel=document.querySelector('#seaView');
    sel.value='evidence';sel.dispatchEvent(new Event('change',{bubbles:true}));
   });
-  await page.waitForTimeout(250);
+  await page.waitForFunction(()=>document.body.dataset.seaView==='evidence'&&document.querySelectorAll('#countryNumbers div[data-number]').length>=9,null,{timeout:30000});
   const rows=page.locator('#countryNumbers div[data-number]');
   assert.ok(await rows.count()>=9,`${lang}@${width}: the country panel has ${await rows.count()} rows`);
   for(const row of await rows.all()){
@@ -51,7 +61,7 @@ for(const lang of ['th','en']){
    const sel=document.querySelector('#seaView');
    sel.value='compare';sel.dispatchEvent(new Event('change',{bubbles:true}));
   });
-  await page.waitForTimeout(250);
+  await page.waitForFunction(()=>document.body.dataset.seaView==='compare'&&document.querySelectorAll('#countryRows tr').length===11,null,{timeout:30000});
   assert.equal(await page.locator('#countryRows tr').count(),11,`${lang}@${width}: the comparison table is incomplete`);
   const head=await page.locator('#countryHead').innerText();
   for(const period of ['2000','2001–2025','2023'])assert.ok(head.includes(period),`${lang}@${width}: the table header lost the period ${period}`);
@@ -63,8 +73,8 @@ for(const lang of ['th','en']){
 // The credit chapter with the new atmospheric-layers figure.
 for(const lang of ['th','en']){
  await page.setViewportSize({width:1440,height:900});
- await page.goto(`${base}/bible.html?lang=${lang}#sea-what-is-a-credit`);
- await page.locator('figure.credit-figure').first().waitFor({timeout:20000});
+ await gotoRetry(page,`${base}/bible.html?lang=${lang}#sea-what-is-a-credit`);
+ await page.locator('figure.credit-figure').first().waitFor({timeout:30000});
  assert.equal(await page.locator('figure.credit-figure').count(),3,`${lang}: the credit chapter is missing a figure`);
  const text=await page.locator('#article').innerText();
  assert.ok(lang==='en'?text.includes('Burning does not damage the ozone layer'):text.includes('การเผาไหม้ไม่ได้ทำลายชั้นโอโซน'),`${lang}: the ozone correction is not on the page`);
@@ -74,9 +84,9 @@ for(const lang of ['th','en']){
 // The version receipt must name the commit that was deployed.
 const version=JSON.parse(await readFile(new URL('../public/version.json',import.meta.url),'utf8'));
 const live=await (await fetch(`${base}/version.json`)).json();
-assert.equal(live.commit,version.commit,`the live site serves ${live.commit}, the local build is ${version.commit}`);
+assert.equal(live.commit,version.commit,`the live site serves ${live.commit}, the local build is ${version.commit} — if the local build is stale, run npm run build before verifying`);
 assert.ok(live.builtAt, 'the live receipt must carry a build time');
 
 assert.deepEqual(errors,[],'page errors on the live site');
 await browser.close();
-console.log(`PASS live ${base}: commit ${live.commit}, both languages, both widths, all four regional views, the comparison periods, and the ozone correction.`);
+console.log(`PASS live ${base}: commit ${live.commit}, both languages, both widths, all four regional views under one name each, the comparison periods, and the ozone correction.`);

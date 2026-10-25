@@ -14,6 +14,7 @@
     "test:browser:all": "node scripts/browser-suite.mjs",
     "test:figures": "node scripts/shoot-figures.mjs",
     "test:release": "node scripts/release-smoke.mjs",
+    "test:live": "node scripts/live-verify.mjs",
     "deploy": "node scripts/release.mjs",
     "test:client": "node scripts/client-demo-test.mjs",
     "test:manual": "node scripts/manual-walkthrough.mjs",
