@@ -21,7 +21,14 @@ const mt=v=>new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(v/1e
 await page.waitForFunction(()=>document.querySelector('#kStock').textContent.includes('M'));
 assert.equal(await page.locator('#kStock').innerText(),mt(ledger.national.forest_agb_mg*F));
 assert.equal(await page.locator('#kRemove').innerText(),mt(ledger.national.gfw_removals_mg_co2/25));
-await page.waitForFunction(()=>document.querySelector('#calculationTrace').textContent.includes('national forest inventory'));assert.match(await page.locator('#ledger').textContent(),/National forest inventory \(FREL 2021[\s\S]*359 t\/ha/);
+await page.waitForFunction(()=>document.querySelector('#calculationTrace').textContent.includes('national forest inventory'));
+// The cross-check paragraph that carries "359 t/ha" is appended when the inventory data lands,
+// which is after the trace has already been painted. Waiting on the trace alone reads the panel
+// too early: on a local server the fetch is instant and the race never shows, while against a
+// live release the paragraph arrives a beat later and the suite fails on a page that is correct.
+// Wait for the content the assertion is about.
+await page.waitForFunction(()=>/359 t\/ha/.test(document.querySelector('#ledger').textContent||''),null,{timeout:30000});
+assert.match(await page.locator('#ledger').textContent(),/National forest inventory \(FREL 2021[\s\S]*359 t\/ha/);
 // Source labels on KPI hints travel from the manifest, not hardcoded strings.
 assert.equal(await page.locator('#kRemoveHint').textContent(),`GFW ${mf.datasets.gfw.version.split(' ')[0]} · ${mf.datasets.gfw.period}`);
 assert.ok((await page.locator('#kStockHint').textContent()).endsWith(`CCI ${mf.datasets.cci.version}`));
