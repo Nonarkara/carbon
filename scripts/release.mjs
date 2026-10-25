@@ -15,12 +15,9 @@
 //      worktree.
 //
 // Usage: npm run deploy
-import {execFile} from 'node:child_process';
-import {promisify} from 'node:util';
 import {resolve} from 'node:path';
 import {assertCleanTree, createPristineTree, assertBuiltTreeMatchesCommit, headCommit, repoRoot, treeState} from './lib/release-tree.mjs';
-
-const exec = promisify(execFile);
+import {run, INTERRUPTED} from './lib/release-run.mjs';
 const root = repoRoot();
 
 // A release that stops must still clean up after itself: the pristine worktree it exported
@@ -68,19 +65,6 @@ function step(name) {
   console.log(`\n--- ${name} ---`);
 }
 
-async function run(cmd, args, {cwd = root, label} = {}) {
-  try {
-    const {stdout, stderr} = await exec(cmd, args, {cwd, maxBuffer: 64 * 1024 * 1024});
-    if (stdout) process.stdout.write(stdout);
-    if (stderr) process.stderr.write(stderr);
-    return 0;
-  } catch (err) {
-    if (err.stdout) process.stdout.write(err.stdout);
-    if (err.stderr) process.stderr.write(err.stderr);
-    console.error(`\nFAIL release: ${label ?? `${cmd} ${args.join(' ')}`} failed`);
-    return err.code ?? 1;
-  }
-}
 
 /**
  * What the deep audit actually found, read from its own report.
@@ -131,10 +115,10 @@ async function main() {
     if (await run('npm', ['run', 'build'], {cwd: tree.dir, label: 'the build'}) !== 0) fail('FAIL release: the build failed');
 
     step('unit tests');
-    if (await run('npm', ['test'], {cwd: tree.dir, label: 'the unit tests'}) !== 0) fail('FAIL release: the unit tests failed');
+    if (await run('npm', ['test'], {cwd: tree.dir, label: 'the unit tests', retryOnceOn: INTERRUPTED}) !== 0) fail('FAIL release: the unit tests failed');
 
     step('law gates');
-    if (await run('npm', ['run', 'test:spatial', '--', '--no-build'], {cwd: tree.dir, label: 'the spatial law gates'}) !== 0) fail('FAIL release: the spatial law gates failed');
+    if (await run('npm', ['run', 'test:spatial', '--', '--no-build'], {cwd: tree.dir, label: 'the spatial law gates', retryOnceOn: INTERRUPTED}) !== 0) fail('FAIL release: the spatial law gates failed');
 
     step('deep content audit');
     // The audit fails in two different ways, and they must not be treated alike. A FINDING is
@@ -178,7 +162,7 @@ async function main() {
       '--commit-hash', commit.sha,
       '--commit-message', commit.subject,
       '--commit-dirty', String(dirty),
-    ], {cwd: tree.dir, label: 'the upload'});
+    ], {cwd: tree.dir, label: 'the upload', retryOnceOn: INTERRUPTED});
     if (code !== 0) fail('FAIL release: the upload failed');
 
     // 5. The live site must serve this commit and behave. An uploaded tree that the domain does
@@ -187,7 +171,7 @@ async function main() {
     step('live verification');
     await waitForLiveCommit(commit.short);
     console.log(`the live site serves ${commit.short}`);
-    const liveCode = await run('node', ['scripts/live-verify.mjs', liveBase], {cwd: tree.dir, label: 'the live verification'});
+    const liveCode = await run('node', ['scripts/live-verify.mjs', liveBase], {cwd: tree.dir, label: 'the live verification', retryOnceOn: INTERRUPTED});
     if (liveCode !== 0) fail(`FAIL release: the live site did not verify at ${liveBase}`);
 
     console.log(`\nPASS release: ${commit.short} built, measured, uploaded to ${project} (${productionBranch}) and verified live at ${liveBase}.`);
