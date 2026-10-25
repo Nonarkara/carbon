@@ -35,10 +35,11 @@ phrase". All four regional views — map, evidence, compare, research — measur
 without a way to scroll it into view. The law: 11 surfaces / 44 viewports PASS, deep content
 audit 546 pages PASS, unit tests 123/123, 16/16 browser suites, CI green.
 
-Remaining: the phone view selector says "ตาราง" / "Table" where the desktop button says
-"เทียบ 11 ประเทศ" / "Compare 11" — the full name stays on the desktop label, but a reader who
-changes device meets two names for one view. The reset still duplicates the country selector's
-first option ("ทั้ง 11 ประเทศ" / "All 11"); what it adds is the return to the map, so it is a
-shortcut rather than a distinct state. The regional proof writes its screenshots and report under
-test-results/ and measures the map view only; the other three views are measured by the audit
-above and by the browser suite, not by the law itself.
+Remaining: the phone view selector said "ตาราง" / "Table" where the desktop button said
+"เทียบ 11 ประเทศ" / "Compare 11" — a reader who changes device met two names for one view; that
+is fixed in the audit beside this one. The reset still duplicates the country selector's first
+option ("ทั้ง 11 ประเทศ" / "All 11"); what it adds is the return to the map, so it is a shortcut
+rather than a distinct state. The regional proof writes its screenshots and report under
+test-results/. An earlier version of this note claimed the law never measured the regional
+views at all: the deep audit does walk all four, in Thai at three widths. What it did not walk
+was the English views or the narrow widths, and that is now closed in the audit beside this one.

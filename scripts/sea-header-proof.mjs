@@ -1,4 +1,4 @@
-// The regional toolbar, measured at every width the site is read at.
+// The regional workspace, measured at every width the site is read at.
 //
 // A release gate that checks three widths and three controls proves only what it checked. The
 // defects this file now carries forward were all invisible to the previous version of it: the
@@ -6,6 +6,11 @@
 // truncated on the desktop widths it declared verified, and at 320px the country and view
 // selectors clipped the values they were showing. So every width is measured, in both
 // languages, and every label every control can display is measured against the space it has.
+//
+// The four regional views are measured here too. The deep audit walks them at three widths in
+// Thai; this walks all of them at every width in both languages, and asks the questions the
+// deep audit cannot ask — does a view push the page sideways, can its content be scrolled into
+// view, and is anything hidden without a way to reach it.
 import{chromium}from'playwright';
 import{selectSeaView}from'./browser-controls.mjs';
 import assert from'node:assert/strict';
@@ -15,6 +20,7 @@ import{measurementTarget}from'./lib/local-server.mjs';
 // The native arrow and the breathing room around a selected value.
 const ARROW=22;
 const WIDTHS=[[320,844],[360,740],[375,740],[390,844],[430,932],[600,900],[768,1024],[851,900],[1024,768],[1440,900],[390,568]];
+const VIEWS=['map','evidence','compare','research'];
 
 const target=await measurementTarget(),browser=await chromium.launch(),page=await browser.newPage(),rows=[];
 const manifest=await fetch(target.base+'/version.json').then(r=>r.json());assert.ok(manifest.commit);
@@ -33,6 +39,52 @@ try{for(const lang of ['th','en'])for(const [width,height]of WIDTHS){
  assert.ok(reset.need<=reset.box,`reset label ${reset.need}px does not fit its ${reset.box}px box at ${width}px`);
  // A shortened label must keep the whole phrase where a pointer or a screen reader can reach it.
  if(reset.text!==reset.title)assert.ok(reset.title.length>reset.text.length&&reset.aria===reset.title,`reset label "${reset.text}" loses its full phrase`);
+ // The same view must carry the same name on every screen. A reader who changes device meets
+ // one thing under two words, and the one word the phone can afford is the one that must win.
+ const names=await page.evaluate(()=>{const out={};for(const o of document.querySelector('#seaView').options){const btn=document.querySelector(`button[data-sea-view="${o.value}"]`);out[o.value]={select:o.text,button:btn?btn.textContent:null};}return out;});
+ for(const [view,n]of Object.entries(names)){
+  if(n.button===null)continue;
+  assert.equal(n.select,n.button,`the ${view} view is named "${n.select}" in the selector and "${n.button}" on the button`);
+ }
+ // Every view, at this width: nothing sideways, nothing hidden, nothing unreachable.
+ for(const view of VIEWS){
+  const btn=page.locator(`button[data-sea-view=${view}]`);
+  const canSwitch=(await btn.isVisible())||(await page.locator('#seaView').isVisible());
+  if(canSwitch)await selectSeaView(page,view);
+  await page.waitForTimeout(120);
+  const state=await page.evaluate(view=>{
+   const out={view,overflowX:document.documentElement.scrollWidth-window.innerWidth,hidden:[],unreachable:[],bleed:[]};
+   const visible=el=>{const b=el.getBoundingClientRect();return b.width>0&&b.height>0;};
+   // Content that exists but cannot be reached by scrolling.
+   for(const el of document.querySelectorAll('#countryEvidence,.table-scroll,.research-route,.comparison,.map-column,.workspace')){
+    if(!visible(el))continue;
+    const style=getComputedStyle(el),more=el.scrollHeight-el.clientHeight;
+    if(more<=2)continue;
+    if(style.overflowY==='hidden'||style.overflowY==='clip'){out.hidden.push(el.id||el.className);continue;}
+    const before=el.scrollTop;el.scrollTop=999999;
+    const end=el.scrollTop>=el.scrollHeight-el.clientHeight-2;el.scrollTop=before;
+    if(!end)out.unreachable.push(el.id||el.className);
+   }
+   // Anything painted outside the viewport without a frame that clips it. On a phone the body
+   // clips the page to the viewport, so this assertion has teeth only where the body does not
+   // clip; the phone's equivalent failure is content hidden without a way to scroll it, which
+   // the two assertions above cover.
+   for(const el of document.querySelectorAll('main *')){
+    if(!visible(el))continue;
+    if(getComputedStyle(el).position==='fixed')continue;
+    const b=el.getBoundingClientRect();
+    if(b.right<=window.innerWidth+1&&b.left>=-1)continue;
+    let framed=false;
+    for(let p=el.parentElement;p&&p!==document.body;p=p.parentElement){const ps=getComputedStyle(p);if(ps.overflowX!=='visible'||ps.overflowY!=='visible'){framed=true;break;}}
+    if(!framed)out.bleed.push(el.tagName.toLowerCase()+(el.id?'#'+el.id:''));
+   }
+   return out;
+  },view);
+  assert.equal(state.overflowX,0,`the ${view} view pushes the page sideways at ${width}px`);
+  assert.deepEqual(state.hidden,[],`the ${view} view hides content it cannot scroll at ${width}px`);
+  assert.deepEqual(state.unreachable,[],`the ${view} view has content that cannot be scrolled into view at ${width}px`);
+  assert.deepEqual(state.bleed,[],`the ${view} view paints outside the viewport at ${width}px`);
+ }
  await selectSeaView(page,'compare');
  // The comparison table scrolls in ONE place: the frame, never the table itself.
  const table=await page.evaluate(()=>{const t=document.querySelector('.comparison table'),f=document.querySelector('.table-scroll');if(!t||!f)return{missing:true};return{tableScroll:t.scrollWidth-t.clientWidth,frameScroll:f.scrollWidth-f.clientWidth,focusable:f.getAttribute('tabindex')==='0'};});

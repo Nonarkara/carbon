@@ -18,6 +18,7 @@
 // audit, a gate and a probe can never disagree about what counts as a spatial hallucination.
 import {chromium} from 'playwright';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
+import {gotoRetry} from './lib/browser-nav.mjs';
 import {collectSpatial} from './lib/spatial-collector.mjs';
 import {collectLaw,chromeCost,EQUAL_WEIGHT_EXEMPTIONS} from './lib/msh-law.mjs';
 import {assertProjectServer} from './lib/server-identity.mjs';
@@ -94,11 +95,15 @@ async function runOnce(job){
  // separates a transient stall from a page that will not load at all — and only the latter is a
  // finding. Without the retry a busy server produced "2 pages could not be measured" on a run
  // whose real result was zero findings.
+ //
+ // The budget is sixty seconds a try, not the twenty it used to be. The research page is
+ // 76,000 pixels tall and carries 28 tables; on a machine already running other agents' builds
+ // it can take half a minute to reach domcontentloaded. A budget that is too tight does not
+ // measure the page, it measures the machine — and it fails a release for a condition a slower
+ // machine would have carried. The rule is the same one the measurement server follows.
  let loaded=false,lastErr=null;
- for(let attempt=0;attempt<2&&!loaded;attempt++){
-  try{await page.goto(`${base}/${job.path}`,{waitUntil:'domcontentloaded',timeout:20000});loaded=true;}
-  catch(e){lastErr=e;if(attempt===0)await page.waitForTimeout(1500);}
- }
+ try{await gotoRetry(page,`${base}/${job.path}`,{waitUntil:'domcontentloaded',timeout:60000});loaded=true;}
+ catch(e){lastErr=e;}
  if(!loaded){report.push({...job,error:'goto failed: '+lastErr.message});return;}
  // The readiness wait is retried on the same terms as the navigation: a surface that is slow
  // because the machine is busy is not a surface with a layout defect, and a clean audit that
@@ -106,7 +111,7 @@ async function runOnce(job){
  // never renders.
  let ready=false;
  for(let attempt=0;attempt<2&&!ready;attempt++){
-  try{await page.locator(job.ready).first().waitFor({timeout:10000});ready=true;}
+  try{await page.locator(job.ready).first().waitFor({timeout:30000});ready=true;}
   catch{ if(attempt===0)await page.waitForTimeout(1000); }
  }
  if(!ready){report.push({...job,error:'ready selector never appeared: '+job.ready});return;}
@@ -175,12 +180,14 @@ for(const lang of ['th','en']){
 
 // --- 2. The Southeast Asia workspace: every view, at both a phone and a desktop width.
 // The views are switched with the visible control for that width — a button on desktop, the
-// select on a phone — so the measured page is the one a reader actually sees.
-for(const vp of VIEWPORTS){
+// select on a phone — so the measured page is the one a reader actually sees. Both languages:
+// the English labels are longer than the Thai ones, so an English view can break where the
+// Thai one does not.
+for(const lang of ['th','en'])for(const vp of VIEWPORTS){
  const width=vp.width;
  for(const view of SEA_VIEWS){
   await run({
-   kind:'sea-view',id:view,width,height:vp.height,path:'sea.html?lang=th',ready:'body[data-ready]',
+   kind:'sea-view',id:view,lang,width,height:vp.height,path:`sea.html?lang=${lang}`,ready:'body[data-ready]',
    expect:`document.body.dataset.seaView==='${view}'`,expectLabel:`the ${view} view must actually be open`,
    act:async()=>{
     await page.evaluate(v=>{
