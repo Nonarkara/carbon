@@ -18,6 +18,7 @@ const TARGETS = [
   'public/research-en.html',
   'public/guide-th.html',
   'public/guide-en.html',
+  'public/sea.html',
 ];
 
 let failed = 0;
@@ -34,7 +35,9 @@ for (const rel of TARGETS) {
   for (const m of html.matchAll(/<table\b[\s\S]*?<\/table>/g)) {
     tables += 1;
     const before = html.slice(0, m.index);
-    if (!/<div class="table-scroll">\s*$/.test(before)) unwrapped += 1;
+    // The frame may carry a role, a label and a tabindex of its own; the class is what makes
+    // it the one place a wide table is allowed to scroll.
+    if (!/<div class="table-scroll"[^>]*>\s*$/.test(before)) unwrapped += 1;
   }
   checked += 1;
   if (unwrapped > 0) {
