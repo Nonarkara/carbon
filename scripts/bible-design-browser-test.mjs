@@ -9,6 +9,9 @@ page.on('pageerror',e=>errors.push(e.message));await mkdir('test-results',{recur
 for(const lang of ['th','en'])for(const width of [375,1440]){
  await page.setViewportSize({width,height:1000});
  await gotoRetry(page, `${base}/bible.html?lang=${lang}#sme-worked`);await page.locator('.prose').waitFor();
+ // The chapter counter is written by the Bible's script when its data lands, not by the prose
+ // that is already on screen. Wait for the counter itself.
+ await page.waitForFunction(()=>/\d+\s*\/\s*\d+/.test(document.querySelector('#count')?.textContent||''),null,{timeout:30000});
  assert.match(await page.locator('#count').textContent(),/68/);
  assert.ok((await page.locator('.prose').textContent()).includes('41.42'));
  assert.equal(await page.locator('.design-illustration svg').count(),1);

@@ -20,8 +20,18 @@ now passes all sixteen against the live release, and the local run of all sixtee
 The live release was not defective at any point: its version manifest, its bytes and its content
 were verified separately and did not change.
 
-Remaining: the suite stops at its first failure, so only the first such race in each run is
-visible. The other fifteen suites have not been shown to be free of the same shape — a wait on
-one element and an assertion on another that is filled later. The fix here is the pattern to
-apply when the next one appears: wait for the content the assertion names, not for the paint of
-its neighbour.
+The same shape was then found and closed everywhere it could hide. Six assertions across five
+suites waited on one element and read another that a script fills later: the workbench's registry
+rows, the Bible's chapter counter in two suites, the forest-watch version line in the panel and
+in the Bible body, and the workbench's national figure beside a failed feed. Each now waits for
+the content it asserts on. One assertion was also worthless rather than racy — it checked a view
+label that the static markup already carried, so it would have passed before the script had run
+and could not have noticed the phone and the desktop naming a view differently; it now checks the
+comparison label on both surfaces, which is the thing that actually broke.
+
+Remaining: the suite stops at its first failure, so a race is only ever visible one at a time.
+The six above were found by reading every content assertion in every suite and asking, of each,
+whether the content it reads can be filled after the thing it waits for. That reading is now done
+for the sixteen suites, but the next suite written may repeat the mistake, and
+scripts/live-verify.mjs — the script that checks a live release after a deploy — has not been
+audited the same way.

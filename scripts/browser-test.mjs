@@ -79,7 +79,11 @@ const lj=JSON.parse(await readFile('test-results/ledger.json','utf8'));assert.eq
 await page.locator('.advanced-tools').evaluate(e=>e.open=true);await clickControl(page,'.lenses [data-tab=project]');
 await page.locator('#example').click();await page.locator('#boundaryInfo').waitFor({state:'visible'});
 // T-VER registry overlap check: appears below the boundary info with province name and project list.
-await page.locator('#registryCheck').waitFor({state:'visible'});assert.match(await page.locator('#registryCheck .tver-check').first().innerText(),/Chiang Mai|Bangkok|Saraburi|Kanchanaburi|Phuket|เชียงใหม่|กรุงเทพ|สระบุรี|กาญจนบุรี|ภูเก็ต/);
+await page.locator('#registryCheck').waitFor({state:'visible'});
+// The registry rows are filled from the T-VER file after the panel appears, so the panel being
+// visible says nothing about the rows being there. Read them once the first row carries text.
+await page.waitForFunction(()=>(document.querySelector('#registryCheck .tver-check')?.textContent||'').trim().length>0,null,{timeout:30000});
+assert.match(await page.locator('#registryCheck .tver-check').first().innerText(),/Chiang Mai|Bangkok|Saraburi|Kanchanaburi|Phuket|เชียงใหม่|กรุงเทพ|สระบุรี|กาญจนบุรี|ภูเก็ต/);
 await page.locator('.advanced-tools').evaluate(e=>e.open=true);await clickControl(page,'.lenses [data-tab=calculate]');await page.locator('[type=submit]').click();
 assert.match(await page.locator('#result').innerText(),/218\.86/);
 const downloaded=page.waitForEvent('download');await page.locator('#exportJSON').click();const dl=await downloaded;await dl.saveAs('test-results/export.json');const report=JSON.parse(await readFile('test-results/export.json','utf8'));assert.equal(report.status,'illustrative-unverified-estimate');assert.ok(Math.abs(report.result.net-218.8633333)<.00001);assert.equal(report.issuedCredits,null);

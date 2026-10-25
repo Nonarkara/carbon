@@ -34,6 +34,11 @@ for(const lang of ['th','en'])for(const width of [320,390,768,1024,1440]){
  await gotoRetry(p, `${base}/sea.html?lang=th&country=BRN`);await p.locator('body[data-ready]').waitFor();
  assert.equal(await p.locator('#country').inputValue(),'BRN');
  const entries=await p.locator('link[rel=stylesheet],script[src]').evaluateAll(es=>es.map(e=>e.getAttribute('href')||e.getAttribute('src')));assert.ok(entries.every(s=>/\?v=[a-f0-9]{12}$/.test(s)),'unversioned page assets permit a mixed release');
+ // Both view names are written by the script once the regional data lands; the static markup
+ // still carries the old labels, so checking one of them alone would pass before the script
+ // has run and would not notice the two surfaces disagreeing again.
  assert.equal(await p.locator('#seaView option[value=evidence]').textContent(),'หลักฐาน');
+ assert.equal(await p.locator('#seaView option[value=compare]').textContent(),'เทียบ');
+ assert.equal(await p.locator('button[data-sea-view=compare]').textContent(),'เทียบ');
  assert.ok(await p.locator('.scope-tools').evaluate(e=>e.getBoundingClientRect().height<=54));
  assert.deepEqual(errors,[]);await writeFile('test-results/workspace/summary.json',JSON.stringify({base,checks,errors},null,2));await b.close();console.log('PASS shared workspace: persistent thin bar, bounded views, compact table, country/metric/language and Thai inputs preserved.');
