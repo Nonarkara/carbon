@@ -32,6 +32,10 @@ Touch inputs receive 36px targets instead of the pointer's 28px. Text enlargemen
 - Existing spatial, deep-content, privacy, scientific conservation and exact-byte release gates remain required.
 - Independent review reproduced the defects, then verified the country width, keyboard selection, pan, measurement and CSP repairs. Two real map clicks after a Bangkok search produced a 6.84km distance without a page error.
 
+### Release audit correction
+
+The pristine release audit rejected 20 overlap findings in the all-disclosures-open phone state: the new search panel's viewport-fixed position covered other controls. That release was not uploaded. The panel now anchors absolutely to its search field, stays within the phone viewport at 320/390px, and workspace popovers use one native `details` name group so opening Search, Read or Layers closes the previous popup. The numerical and geometry detectors remain unchanged. The deep audit now opens all nonexclusive content disclosures and measures every workspace popup separately in both languages and three widths (24 additional states), rather than requiring an impossible state with all members of a native exclusive group open.
+
 ### Captures
 
 [390×844](compact-sea-390.png) · [1024×768](compact-sea-1024.png) · [1440×900](compact-sea-1440.png)

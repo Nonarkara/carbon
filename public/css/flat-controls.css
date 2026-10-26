@@ -41,7 +41,7 @@ body:has(#reader-index)>header .language button{font-size:13px;line-height:1.4}
 .manual nav a,.research nav a{min-height:var(--control-block);padding-block:2px;display:flex;align-items:center}
 @media(max-width:700px){.research-toc a{min-height:var(--control-block);padding-block:3px}}
 /* Place search is an on-demand field. It must not squeeze the geography value. */
-.workspace-bar .search{display:flex;align-items:center;gap:4px}
+.workspace-bar .search{position:relative;display:flex;align-items:center;gap:4px}
 .workspace-bar .search>select{flex:1;min-width:0}
 .workspace-bar .geocode-wrap{position:relative;display:block;flex:none;margin:0}
 .workspace-bar .geocode-wrap>summary{display:flex;align-items:center;justify-content:center;width:var(--control-block);min-height:var(--control-block);padding:2px;border:1px solid var(--ink);list-style:none}
@@ -54,5 +54,5 @@ body:has(#reader-index)>header .language button{font-size:13px;line-height:1.4}
 #geocodeStatus:empty{display:none}
 /* The evidence rail must follow the remaining map height, not the obsolete 190px header. */
 @media(min-width:1101px){.dashboard .rail{max-height:none}}
-@media(max-width:500px){.geocode-panel{position:fixed;left:8px;right:auto;top:var(--workspace-bar-height,43px);width:min(300px,calc(100vw - 16px));max-width:none}}
+@media(max-width:500px){.workspace-bar .geocode-wrap{position:static}.geocode-panel{position:absolute;left:0;right:auto;top:calc(100% + 4px);width:min(300px,calc(100vw - 48px));max-width:none}}
 body[data-region] .workspace-bar .geocode-wrap{display:none}

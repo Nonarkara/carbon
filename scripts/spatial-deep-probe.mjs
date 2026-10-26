@@ -232,8 +232,8 @@ for(const [path,label,ready] of [
   const width=vp.width;
   await run({
    kind:'open-page',id:'all-disclosures-open',lang:label,width,height:vp.height,path,ready,
-   expect:`(()=>{const d=[...document.querySelectorAll('details')];return d.length>0&&d.every(x=>x.open)})()`,
-   expectLabel:'every disclosure must be open before the page is measured',
+   expect:`(()=>{const d=[...document.querySelectorAll('details')],popups=d.filter(x=>x.name==='workspace-popover');return d.length>0&&d.filter(x=>x.name!=='workspace-popover').every(x=>x.open)&&(!popups.length||popups.filter(x=>x.open).length===1)})()`,
+   expectLabel:'content disclosures must be open, with one open member per exclusive popup group',
    act:async()=>{
     // Wait for the app's own data to land first: a panel that renders late replaces the nodes
     // the setup just opened, and the measurement would be of a page that is no longer there.
@@ -243,6 +243,18 @@ for(const [path,label,ready] of [
    },
   });
  }
+}
+
+// Workspace popups are mutually exclusive, so measure every reachable open state instead
+// of requiring a browser-impossible state with all members of one details-name group open.
+for(const lang of ['th','en'])for(const vp of VIEWPORTS){
+ const menus=['.geocode-wrap','.reference-menu','.map-tools',vp.width<=1100?'.more-nav':'.advanced-tools'];
+ for(const menu of menus)await run({
+  kind:'workspace-popup',id:menu.slice(1),lang,...vp,path:'?lang='+lang,ready:'#kStock',
+  expect:`(()=>{const d=document.querySelector('${menu}');return !!d?.open&&d.getBoundingClientRect().width>0})()`,
+  expectLabel:menu+' must be visible and open',
+  act:async()=>{await page.locator('#kStock').filter({hasText:'M'}).waitFor();await page.locator(menu+'>summary').click();},
+ });
 }
 
 // --- 5. The research pages: the two-column layout and the sections inside it.

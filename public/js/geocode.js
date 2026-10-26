@@ -9,7 +9,8 @@ export function initGeocode({map:m,t:t_,fmt:fmt_,getLang:getLang_}){
   buildUI();wire();
 }
 function buildUI(){
-  const wrap=document.createElement('details');wrap.className='geocode-wrap';
+  const wrap=document.createElement('details');wrap.className='geocode-wrap';wrap.name='workspace-popover';
+  for(const menu of document.querySelectorAll('.reference-menu,.map-tools,.advanced-tools,.more-nav'))menu.name='workspace-popover';
   wrap.innerHTML=`
     <summary aria-label="${t('searchPlace')}" title="${t('searchPlace')}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15 15 6 6" stroke="currentColor" stroke-width="2"/></svg></summary><div class="geocode-panel">
     <label class="sr" for="geocodeSearch">${t('searchPlace')}</label>

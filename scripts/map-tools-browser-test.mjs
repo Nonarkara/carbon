@@ -21,6 +21,9 @@ try{
   assert.ok(noOverlap,'measure button covers the carbon legend');
   await page.locator('.geocode-wrap>summary').click();
   assert.ok(await page.locator('.geocode-panel').evaluate(e=>{const r=e.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth;}),'search popup bleeds beyond the viewport');
+  assert.equal(await page.locator('.geocode-panel').evaluate(e=>getComputedStyle(e).position),'absolute','search is detached from its field');
+  await page.locator('.reference-menu>summary').click();assert.equal(await page.locator('.geocode-wrap').getAttribute('open'),null,'two workspace popovers remain open');
+  await page.locator('.geocode-wrap>summary').click();assert.equal(await page.locator('.reference-menu').getAttribute('open'),null);
   const input=page.locator('#geocodeSearch');await input.fill('Bangkok');
   await page.getByRole('option',{name:'Bangkok · Thailand',exact:true}).waitFor();await input.press('Tab');await page.waitForTimeout(200);assert.equal(await page.locator('.geocode-item').evaluate(e=>e===document.activeElement),true,'search result loses keyboard focus');await page.keyboard.press('Enter');
   await page.locator('.leaflet-popup-content').filter({hasText:'Bangkok'}).waitFor();
