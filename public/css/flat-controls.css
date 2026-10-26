@@ -10,3 +10,49 @@ button:disabled,[aria-disabled=true]{cursor:not-allowed}
 .leaflet-popup-content-wrapper,.leaflet-popup-tip,.leaflet-tooltip{border-radius:0!important}
 
 .leaflet-bar{border-radius:0!important}
+
+/* Chrome is an instrument strip, not a second hero. Keep text size; remove idle padding.
+   Pointer targets stay >=28px, above the 24px minimum; coarse inputs get 36px. */
+:root{--control-block:28px;--chrome-pad:2px}
+@media(pointer:coarse){:root{--control-block:36px}}
+.workspace-bar{min-height:0;padding-block:var(--chrome-pad);gap:4px 8px}
+.workspace-bar .brand img{width:24px;height:24px;flex-basis:24px}
+.workspace-bar .brand h1,.dashboard .workspace-bar .brand h1{font-size:20px}
+.workspace-bar :is(select,button,.reference-menu>summary),
+.dashboard .workspace-bar :is(select,button,.reference-menu>summary){height:auto;min-height:var(--control-block);padding-block:2px;line-height:1.4}
+.workspace-bar .reference-menu>div{padding:3px}
+.workspace-bar .reference-menu a{min-height:var(--control-block);padding:3px 6px;line-height:1.5}
+.scope-tools{padding-block:var(--chrome-pad)}
+.scope-tools select,.scope-tools>#fitRegion,.scope-tools .sea-views button{height:auto;min-height:var(--control-block);padding-block:2px;line-height:1.4}
+@media(max-width:700px){.workspace-bar{grid-template-columns:24px minmax(0,1fr) auto;min-height:0;padding-block:var(--chrome-pad)}}
+/* Secondary actions and disclosures: one line of text plus a small hit area. */
+.dashboard .top .quick-tools{padding-block:3px}
+.dashboard .quick-tools>.btn,.dashboard .map-tools>summary,.dashboard .advanced-tools>summary{min-height:var(--control-block);padding-block:3px}
+.dashboard .advanced-tools{bottom:3px}
+.dashboard .lenses button,.dashboard .layer-panel :is(select,input,button){min-height:var(--control-block);padding-block:3px}
+.dashboard .draw-prompt{padding:5px 8px;line-height:1.5}
+.dashboard #ledgerDetails>summary{padding-block:4px}
+body:has(#reader-index)>header{padding-block:2px;gap:6px}
+body:has(#reader-index)>header img{width:24px;height:24px}
+body:has(#reader-index)>header :is(a,button){min-height:var(--control-block);padding-block:2px}
+body:has(#reader-index)>header .language button{font-size:13px;line-height:1.4}
+.reader-tools button,.chapter-outline>summary,.manual-contents>summary,.screen-map>summary{min-height:var(--control-block);padding-block:3px}
+.manual nav,.research nav{padding-block:2px}
+.manual nav a,.research nav a{min-height:var(--control-block);padding-block:2px;display:flex;align-items:center}
+@media(max-width:700px){.research-toc a{min-height:var(--control-block);padding-block:3px}}
+/* Place search is an on-demand field. It must not squeeze the geography value. */
+.workspace-bar .search{display:flex;align-items:center;gap:4px}
+.workspace-bar .search>select{flex:1;min-width:0}
+.workspace-bar .geocode-wrap{position:relative;display:block;flex:none;margin:0}
+.workspace-bar .geocode-wrap>summary{display:flex;align-items:center;justify-content:center;width:var(--control-block);min-height:var(--control-block);padding:2px;border:1px solid var(--ink);list-style:none}
+.workspace-bar .geocode-wrap>summary::-webkit-details-marker{display:none}
+.geocode-panel{position:absolute;right:0;top:100%;width:260px;max-width:calc(100vw - 24px);padding:6px;background:white;border:1px solid var(--ink);z-index:1600}
+.geocode-wrap .geocode-panel input#geocodeSearch{width:100%;min-height:var(--control-block);height:auto;margin:0;padding:3px 6px;font-size:13px;line-height:1.4}
+.geocode-wrap .geocode-panel #geocodeResults{position:static;max-height:240px;overflow:auto;border:0}
+
+.geocode-privacy,#geocodeStatus{font-size:11px;line-height:1.45;margin:4px 0}
+#geocodeStatus:empty{display:none}
+/* The evidence rail must follow the remaining map height, not the obsolete 190px header. */
+@media(min-width:1101px){.dashboard .rail{max-height:none}}
+@media(max-width:500px){.geocode-panel{position:fixed;left:8px;right:auto;top:var(--workspace-bar-height,43px);width:min(300px,calc(100vw - 16px));max-width:none}}
+body[data-region] .workspace-bar .geocode-wrap{display:none}

@@ -38,7 +38,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       fetch('data/ledger/nfi-check.json').then(r=>r.ok?r.json():null).then(n=>{S.nfi=n;if(S.src)render();}).catch(()=>{});
       data.provinces.forEach(p=>byCode.set(p.pcode,p));byCode.set('TH',data.national);
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
-        onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
+        onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&!map.getContainer().classList.contains('measuring')&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
       fillPlaces();select({kind:'national',code:'TH'},false,false);setOverlay('stock');applyMetricLabels();
       return registry.ready;
     });

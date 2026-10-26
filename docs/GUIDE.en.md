@@ -213,3 +213,9 @@ Success checkpoint: the province name changes and its own alert area appears. Op
 A shared chapter link opens at the explanation. Use **Search / contents** in the reader header to return to the index; choose another chapter to resume reading. Your language, query and category remain intact. Start with **Choose the decision before the number**, then use the worked uncertainty and evidence-pack chapters before handing results to a reviewer.
 
 On the workbench, **Read** groups Research and the manual. **Layers & Watch** groups vegetation, aerosols, layers and Forest Watch. On phones/tablets the bottom bar is the single assessment navigation. Scroll the measurement strip horizontally to inspect every dated quantity. Partner marks, installation and ISO scope remain inside Research.
+
+### Place search and map measurement
+
+The magnifying-glass button beside geography opens place search. The text you type there goes to Photon / OpenStreetMap; project files stay in your browser. Tab or the arrow keys reach a result, Enter opens it, and Escape closes search. A search locates a place; it does not supply carbon inputs. If the service is unavailable, the field says so and the province selector remains usable.
+
+The measurement button sits above map zoom controls. Activate it, click vertices on the map, then choose **Done**; **Clear** removes the current measurement. Area uses 1 rai = 1,600 m². These approximate map measurements are for orientation, not cadastral area or a carbon-credit calculation.

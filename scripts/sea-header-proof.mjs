@@ -28,7 +28,12 @@ await mkdir('test-results/sea-header',{recursive:true});
 try{for(const lang of ['th','en'])for(const [width,height]of WIDTHS){
  await page.setViewportSize({width,height});await page.goto(`${target.base}/sea.html?lang=${lang}&country=BRN`);await page.locator('body[data-ready]').waitFor();await page.evaluate(()=>document.fonts.ready);
  const r=await page.evaluate(()=>{const box=s=>document.querySelector(s).getBoundingClientRect();return{top:box('#seaMap').top,mapHeight:box('#seaMap').height,chrome:box('header.top').height+box('.scope-tools').height,overflow:document.documentElement.scrollWidth-innerWidth,mapScroll:document.querySelector('.workspace').scrollHeight-document.querySelector('.workspace').clientHeight};});
- assert.ok(r.top<=110,'more than two toolbar lines above map');assert.ok(r.mapHeight>=300,'hero map displaced');assert.equal(r.overflow,0);assert.ok(r.mapScroll<=2,'unnecessary nested map scroll');
+ assert.ok(r.top<=72,'compact regional chrome exceeds its 72px pointer budget');assert.ok(r.mapHeight>=300,'hero map displaced');assert.equal(r.overflow,0);assert.ok(r.mapScroll<=2,'unnecessary nested map scroll');
+ if(lang==='th'&&width===390&&height===844){
+  const old=await page.addStyleTag({content:'.workspace-bar{min-height:51px!important}.scope-tools select,.scope-tools>#fitRegion{min-height:44px!important}'});
+  assert.ok(await page.locator('#seaMap').evaluate(e=>e.getBoundingClientRect().top)>72,'the chrome budget failed to detect the old oversized layout');
+  await old.evaluate(e=>e.remove());
+ }
  const control=await page.evaluate(()=>{const a=document.querySelector('#country').getBoundingClientRect(),b=document.querySelector('#fitRegion').getBoundingClientRect();return{aligned:Math.abs(a.top-b.top)<2&&Math.abs(a.height-b.height)<2,inToolbar:!!document.querySelector('.scope-tools>#fitRegion')};});assert.ok(control.aligned&&control.inToolbar,'region reset is not on the country row');
  // Every label every selector can show, at every width, in both languages.
  const clipped=await page.locator('#country,#metric,#seaView').evaluateAll((es,arrow)=>es.flatMap(e=>{if(e.clientWidth<=0)return[];const c=document.createElement('canvas').getContext('2d');c.font=getComputedStyle(e).font;return[...e.options].filter(o=>c.measureText(o.text).width+arrow>e.clientWidth).map(o=>e.id+': '+o.text);}),ARROW);
@@ -92,4 +97,13 @@ try{for(const lang of ['th','en'])for(const [width,height]of WIDTHS){
  await page.locator('#fitRegion').click();assert.equal(await page.locator('body').getAttribute('data-sea-view'),'map');assert.equal(await page.locator('#country').inputValue(),'SEA');assert.match(await page.locator('#metric').getAttribute('title'),/2023/);assert.match(await page.locator('#mapLegend').innerText(),/2023/);
  await page.locator('.boundary-note>summary').click();assert.ok(await page.locator('#geometryNote').isVisible());await page.locator('.boundary-note>summary').click();
  await page.screenshot({path:`test-results/sea-header/${lang}-${width}-${height}.png`});rows.push({lang,width,height,reset:reset.text,...r});
-}await writeFile('test-results/sea-header/report.json',JSON.stringify({commit:manifest.commit,base:target.base,rows},null,2));console.log(JSON.stringify(rows));}finally{await browser.close();await target.stop();}
+}
+// A touch screen gets a larger target without resurrecting the old padded two-band shell.
+for(const lang of ['th','en']){
+ const context=await browser.newContext({hasTouch:true,viewport:{width:390,height:844}}),touch=await context.newPage();
+ await touch.goto(`${target.base}/sea.html?lang=${lang}`,{waitUntil:'domcontentloaded'});await touch.locator('body[data-ready]').waitFor();
+ assert.ok(await touch.locator('#seaMap').evaluate(e=>e.getBoundingClientRect().top)<=88,'touch chrome exceeds its 88px budget');
+ for(const id of ['country','metric','seaView','fitRegion'])assert.ok((await touch.locator('#'+id).boundingBox()).height>=36,'touch target shrank below 36px');
+ await context.close();
+}
+await writeFile('test-results/sea-header/report.json',JSON.stringify({commit:manifest.commit,base:target.base,rows},null,2));console.log(JSON.stringify(rows));}finally{await browser.close();await target.stop();}

@@ -11,26 +11,33 @@ export function initMeasure({map:m,t:t_,getLang:g_}){
   buildUI();
 }
 function buildUI(){
-  ctrl=L.control({position:'topright'});
+  ctrl=L.control({position:'bottomright'});
   ctrl.onAdd=()=>{
     const div=L.DomUtil.create('div','measure-ctrl');
     div.innerHTML=`
       <button type="button" id="measureBtn" class="btn ghost" aria-pressed="false" title="${tFn('measure')}">${tFn('measure')}</button>
       <div id="measurePanel" class="measure-panel" hidden>
-        <button type="button" id="measureDone" class="btn small ghost" title="${tFn('measureDistance')}">${tFn('measureDistance')}</button>
-        <button type="button" id="measureClear" class="btn small ghost" title="clear">${tFn('measureArea')}</button>
+        <button type="button" id="measureDone" class="btn small ghost" title="${tFn('measureFinish')}">${tFn('measureFinish')}</button>
+        <button type="button" id="measureClear" class="btn small ghost" title="${tFn('measureClear')}">${tFn('measureClear')}</button>
         <div id="measureReadout" class="measure-readout">—</div>
       </div>`;
+    L.DomEvent.disableClickPropagation(div);
+    L.DomEvent.disableScrollPropagation(div);
     return div;
   };
   ctrl.addTo(map);
   btn=document.getElementById('measureBtn');
   const done=document.getElementById('measureDone');const clear=document.getElementById('measureClear');const readout=document.getElementById('measureReadout');
+  document.addEventListener('langchange',()=>{
+    btn.textContent=tFn('measure');btn.title=tFn('measure');done.textContent=done.title=tFn('measureFinish');clear.textContent=clear.title=tFn('measureClear');
+    const distance=pts.reduce((sum,p,i)=>i?sum+haversine(pts[i-1].lat,pts[i-1].lng,p.lat,p.lng):0,0);
+    updateReadout(distance,pts.length>=3?sphericalArea(pts):0);
+  });
   btn.onclick=()=>toggle();
   done.onclick=()=>{endMeasure();};
   clear.onclick=()=>{reset();};
   map.on('click',onClick);
-  map.on('dragend',()=>{if(active)popup.setLatLng(pts[pts.length-1]||map.getCenter());});
+  map.on('dragend',()=>{if(active)popup?.setLatLng(pts[pts.length-1]||map.getCenter());});
 }
 function toggle(){
   active=!active;btn.setAttribute('aria-pressed',String(active));
@@ -38,10 +45,10 @@ function toggle(){
   if(active){map.getContainer().classList.add('measuring');btn.classList.add('btn-pressed');panel.hidden=false;reset();map.getContainer().style.cursor='crosshair';}
   else{endMeasure();map.getContainer().classList.remove('measuring');btn.classList.remove('btn-pressed');panel.hidden=true;map.getContainer().style.cursor='';}
 }
-function reset(){pts=[];clearLayers();popup.close();updateReadout();}
+function reset(){pts=[];clearLayers();popup?.close();updateReadout();}
 function endMeasure(){active=false;btn.setAttribute('aria-pressed','false');const panel=document.getElementById('measurePanel');panel.hidden=true;map.getContainer().classList.remove('measuring');btn.classList.remove('btn-pressed');map.getContainer().style.cursor='';popup?.close();}
 function clearLayers(){if(line){map.removeLayer(line);line=null;}if(poly){map.removeLayer(poly);poly=null;}}
-function onClick(e){pts.push(e.latlng);update();}
+function onClick(e){if(!active)return;pts.push(e.latlng);update();}
 function update(){
   popup=popup||L.popup();
   clearLayers();
@@ -89,7 +96,7 @@ function formatDist(m){
   return `${fmt(m,0)} m`;
 }
 function formatArea(m2){
-  if(m2>=4000)return `${fmt(m2/4000,2)} ${t('measureHa')}`; // 1 rai = 4000 m²
+  if(m2>=1600)return `${fmt(m2/1600,2)} ${t('measureHa')}`; // 1 rai = 1600 m²
   return `${fmt(m2,0)} ${t('measureSqm')}`;
 }
 

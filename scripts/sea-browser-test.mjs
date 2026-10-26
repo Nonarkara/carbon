@@ -16,7 +16,7 @@ for(const lang of ['th','en'])for(const width of [320,370,375,700,701,768,1440])
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'page overflow '+lang+width);
  assert.ok(await page.locator('#seaMap').evaluate(e=>e.getBoundingClientRect().height)>=300);
  await page.evaluate(()=>document.fonts.ready);
- for(const id of ['country','metric','fitRegion']){assert.ok(await page.locator('#'+id).isVisible());assert.ok((await page.locator('#'+id).boundingBox()).height>=44,`touch height ${id}`);}
+ for(const id of ['country','metric','fitRegion']){assert.ok(await page.locator('#'+id).isVisible());assert.ok((await page.locator('#'+id).boundingBox()).height>=28,`pointer target height ${id}`);}
  assert.match(await page.locator('#snapshotDate').textContent(),/\d{4}-\d{2}-\d{2}/);
  const layout=await page.evaluate(()=>{const m=document.querySelector('#seaMap').getBoundingClientRect();return {mapTop:m.top,mapHeight:m.height,headerHeight:document.querySelector('header').getBoundingClientRect().height,visibleMap:Math.min(m.bottom,innerHeight)-m.top};});
  layouts.push({lang,width,...layout});

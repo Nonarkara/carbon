@@ -10,6 +10,7 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,readFile} from 'node:fs/promises';
 import {gotoRetry} from './lib/browser-nav.mjs';
+import {clickControl} from './browser-controls.mjs';
 
 const base=process.argv[2]||'https://carbon.nonarkara.org';
 const out='test-results/live';
@@ -81,6 +82,58 @@ for(const lang of ['th','en']){
  await page.locator('figure.credit-figure').nth(1).screenshot({path:`${out}/credit-layers-${lang}.png`});
 }
 
+// The national workbench must compute and export, not merely paint its map.
+for(const lang of ['th','en'])for(const width of [390,1440]){
+ await page.setViewportSize({width,height:900});
+ await gotoRetry(page,`${base}/?lang=${lang}`);
+ await page.locator('#kStock').filter({hasText:'M'}).waitFor({timeout:30000});
+ if(lang==='th'&&width===390){
+  const headers=await fetch(base+'/').then(r=>r.headers.get('content-security-policy'));
+  assert.ok(headers?.includes("connect-src 'self' https://photon.komoot.io;"),'live policy blocks place search');
+  await page.locator('.geocode-wrap>summary').click();await page.locator('#geocodeSearch').fill('Bangkok');
+  await page.waitForFunction(()=>document.querySelectorAll('.geocode-item').length>0||/ค้นหาไม่ได้|Search unavailable/.test(document.querySelector('#geocodeStatus').textContent),null,{timeout:15000});
+  if(await page.locator('.geocode-item').count()){
+   await page.locator('.geocode-item').first().click();await page.locator('.leaflet-popup-content').waitFor();
+  }
+  await page.locator('#geocodeSearch').press('Escape');
+ }
+ await page.locator('#place').selectOption('TH50');
+ await page.waitForFunction(()=>/Chiang Mai|เชียงใหม่/.test(document.querySelector('#selectionName').textContent));
+ await clickControl(page,'.advanced-tools>summary');
+ await clickControl(page,'.lenses [data-tab=project]');
+ await page.locator('#example').click();
+ await page.locator('#boundaryInfo').waitFor({state:'visible'});
+ await clickControl(page,'.advanced-tools>summary');
+ await clickControl(page,'.lenses [data-tab=calculate]');
+ await page.locator('[type=submit]').click();
+ await page.waitForFunction(()=>/218\.86/.test(document.querySelector('#result').textContent));
+ const download=page.waitForEvent('download');
+ await page.locator('#exportJSON').click();
+ const receipt=await download;
+ assert.ok(receipt.suggestedFilename().endsWith('.json'));
+ const exported=JSON.parse(await readFile(await receipt.path(),'utf8'));
+ assert.ok(Math.abs(exported.result?.net-218.86)<0.01,'export does not match the displayed example result');
+ assert.equal(exported.status,'illustrative-unverified-estimate');assert.equal(exported.issuedCredits,null);
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${lang}@${width}: national overflow`);
+ await page.screenshot({path:`${out}/national-calculation-${lang}-${width}.png`});
+ // Both static reading surfaces must contain the working anchors and author/diagram assets.
+ for(const kind of ['guide','research']){
+  await gotoRetry(page,`${base}/${kind}-${lang}.html`);
+  const selector=kind==='guide'?'.manual-routes':'.research-intro';
+  await page.locator(selector).waitFor();
+  const broken=await page.locator('a[href^="#"]').evaluateAll(links=>links.map(a=>a.getAttribute('href')).filter(h=>h.length>1&&!document.getElementById(decodeURIComponent(h.slice(1)))));
+  assert.deepEqual(broken,[],`${kind}-${lang}: broken local anchors`);
+  if(kind==='research'){
+   const portrait=page.locator('.author-photo');
+   await portrait.evaluate(img=>img.decode());
+   assert.ok(await portrait.evaluate(img=>img.naturalWidth>0),'research portrait missing');
+   assert.ok(await page.locator('.sysmap,.research-diagram').count()>0,'research diagrams missing');
+  }else assert.ok(await page.locator('.screen-guide').count()>0,'guide screen diagram missing');
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${kind}-${lang}@${width}: overflow`);
+  await page.screenshot({path:`${out}/${kind}-${lang}-${width}.png`});
+ }
+}
+
 // The version receipt must name the commit that was deployed.
 const version=JSON.parse(await readFile(new URL('../public/version.json',import.meta.url),'utf8'));
 const live=await (await fetch(`${base}/version.json`)).json();
@@ -89,4 +142,4 @@ assert.ok(live.builtAt, 'the live receipt must carry a build time');
 
 assert.deepEqual(errors,[],'page errors on the live site');
 await browser.close();
-console.log(`PASS live ${base}: commit ${live.commit}, both languages, both widths, all four regional views under one name each, the comparison periods, and the ozone correction.`);
+console.log(`PASS live ${base}: commit ${live.commit}, both languages, both widths, all four regional views under one name each, the comparison periods, the ozone correction, national calculation/export, bilingual guides and research.`);

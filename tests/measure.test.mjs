@@ -27,3 +27,8 @@ test('formatArea renders rai and square metres',()=>{
   assert.ok(formatArea(5000).includes('ไร่')||formatArea(5000).includes('rai'));
   assert.ok(formatArea(100).includes('ตร.ม.')||formatArea(100).includes('sq m'));
 });
+
+test('rai conversion uses 1600 square metres per rai',()=>{
+ assert.match(formatArea(1600),/^1(?:[.,]00)? /);
+ assert.match(formatArea(4000),/^2[.,]50? /);
+});

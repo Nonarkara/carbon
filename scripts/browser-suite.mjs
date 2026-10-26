@@ -24,6 +24,7 @@ const NO_BUILD = process.argv.includes('--no-build');
 // The suites, in the order CI ran them. Every one of these exercises a real reader path.
 const SUITES = [
   ['browser flows', 'scripts/browser-test.mjs'],
+  ['map tools', 'scripts/map-tools-browser-test.mjs'],
   ['client demo', 'scripts/client-demo-test.mjs'],
   ['manual walkthrough', 'scripts/manual-walkthrough.mjs'],
   ['privacy', 'scripts/privacy-browser-test.mjs'],
