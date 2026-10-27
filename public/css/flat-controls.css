@@ -65,3 +65,5 @@ body[data-region] .workspace-bar .geocode-wrap{display:none}
  body.dashboard[data-view=map]:not([data-region]):not([data-about]) .leaflet-bottom{bottom:0}
  body.dashboard[data-view=map]:not([data-region]):not([data-about]) .map-caption{bottom:24px}
 }
+/* A map tool needs its own opaque surface over both dark and satellite tiles. */
+.dashboard .measure-ctrl .btn{min-height:var(--control-block);padding:3px 6px;background:white;color:var(--ink);border:1px solid var(--ink);line-height:1.4}

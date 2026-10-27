@@ -20,7 +20,7 @@ Touch inputs receive 36px targets instead of the pointer's 28px. Text enlargemen
 - Photon search was blocked by production CSP, used unsupported `lang=th`, and read coordinates from properties instead of GeoJSON geometry. The policy now permits only the specific Photon origin; Thai uses the service's `default` language. An actual upstream probe returned 400 for `th` and 200 for `default`.
 - Search could replace a newer query with a slow older response. A request revision prevents that. Failure and empty results have visible statuses. The disclosure states that place queries go to Photon; project files stay local.
 - Moving keyboard focus to a search result hid that result. Focus now remains inside the disclosure until the user leaves it; Tab, arrows, Enter and Escape work.
-- Measurement covered the carbon legend. It now shares Leaflet's bottom-right control stack, above zoom.
+- Measurement covered the carbon legend. It now shares Leaflet's bottom-right control stack, above zoom, with an opaque white surface so the label is readable over dark and satellite tiles. It uses the same compact pointer/touch target policy as the other tools.
 - Measurement captured clicks while inactive, crashed when enabled or panned before its first point, and could trigger province navigation while measuring. Guards and propagation handling keep these modes separate.
 - Area conversion incorrectly used 4,000m² per rai. It now uses 1,600m², with numerical regression assertions. These approximate map measurements remain orientation tools.
 

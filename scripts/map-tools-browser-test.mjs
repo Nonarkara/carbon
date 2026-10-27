@@ -19,6 +19,8 @@ try{
   assert.ok(fit.have>=fit.need,'place search clips the geography selector');
   const noOverlap=await page.evaluate(()=>{const a=document.querySelector('#measureBtn').getBoundingClientRect(),b=document.querySelector('#overlayLegend').getBoundingClientRect();return a.right<=b.left||a.left>=b.right||a.bottom<=b.top||a.top>=b.bottom;});
   assert.ok(noOverlap,'measure button covers the carbon legend');
+  const paint=await page.locator('#measureBtn').evaluate(e=>({bg:getComputedStyle(e).backgroundColor,height:e.getBoundingClientRect().height,target:parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--control-block'))}));
+  assert.equal(paint.bg,'rgb(255, 255, 255)','measurement disappears into dark map tiles');assert.ok(paint.height<=paint.target+1,'measurement has excessive vertical padding');
   await page.locator('.geocode-wrap>summary').click();
   assert.ok(await page.locator('.geocode-panel').evaluate(e=>{const r=e.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth;}),'search popup bleeds beyond the viewport');
   assert.equal(await page.locator('.geocode-panel').evaluate(e=>getComputedStyle(e).position),'absolute','search is detached from its field');
