@@ -19,6 +19,15 @@ for(const lang of ['th','en'])for(const width of [320,390,768,1024,1440]){
  await selectSeaView(p,'research');assert.equal(await p.locator('#readingRoutes a').count(),9);await p.locator('#readingRoutes a').last().focus();assert.ok(await p.evaluate(()=>document.querySelector('#workspaceBar').getBoundingClientRect().top>=0));
  await selectSeaView(p,'map');if([390,1024,1440].includes(width))await p.screenshot({path:`test-results/workspace/sea-${lang}-${width}.png`});
  await gotoRetry(p, `${base}/?lang=${lang}`);await p.locator('#place optgroup[data-sea-route]').waitFor({state:'attached'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
+ await p.evaluate(()=>document.fonts.ready);
+ if(width<=1100){
+  const gap=()=>p.evaluate(()=>document.querySelector('.bottom-nav').getBoundingClientRect().top-document.querySelector('.map-wrap').getBoundingClientRect().bottom);
+  assert.ok(Math.abs(await gap())<=1,'the national map leaves unused room above navigation');
+  if(width===390&&lang==='th'){
+   const old=await p.addStyleTag({content:'.dashboard .stage .map-wrap{height:calc(100dvh - 290px)!important}'});
+   assert.ok(await gap()>2,'the geometry check misses the obsolete fixed map height');await old.evaluate(e=>e.remove());
+  }
+ }
  await clickControl(p,'.advanced-tools>summary');await clickControl(p,'.lenses [data-tab=project]');await p.locator('#projectName').fill('Local project — retain me');
  await p.evaluate(()=>window.originalWorkspaceBar=document.querySelector('#workspaceBar'));
  await p.selectOption('#place','sea:BRN');const f=p.frameLocator('#regionalFrame');await f.locator('body[data-ready]').first().waitFor();assert.equal(await f.locator('#country').inputValue(),'BRN');assert.ok(await f.locator('header').isHidden());
@@ -27,6 +36,15 @@ for(const lang of ['th','en'])for(const width of [320,390,768,1024,1440]){
  assert.equal(await f.locator('body').getAttribute('data-sea-view'),'compare');assert.equal(await f.locator('#countrySearch').inputValue(),'Singapore');assert.equal(await f.locator('#metric').inputValue(),'carbon_stock_t_c');assert.equal(await f.locator('#country').inputValue(),'BRN');
  await p.selectOption('#place','TH');assert.ok(await p.locator('#regionalView').isHidden());await clickControl(p,'.advanced-tools>summary');await clickControl(p,'.lenses [data-tab=project]');assert.equal(await p.locator('#projectName').inputValue(),'Local project — retain me');
  checks.push({lang,width,...geometry,rows});
+}
+// The minimum map height may require a short phone to scroll; its credit and controls
+// still have to be reachable above fixed navigation, rather than clipped inside the body.
+for(const lang of ['th','en']){
+ await p.setViewportSize({width:320,height:568});await gotoRetry(p,`${base}/?lang=${lang}`);await p.locator('#kStock').filter({hasText:'M'}).waitFor();await p.evaluate(()=>document.fonts.ready);
+ await p.evaluate(()=>window.scrollTo(0,10000));
+ const short=await p.evaluate(()=>{const a=document.querySelector('.leaflet-control-attribution').getBoundingClientRect(),n=document.querySelector('.bottom-nav').getBoundingClientRect();return{creditBottom:a.bottom,navTop:n.top,scroll:scrollY,map:document.querySelector('.map-wrap').getBoundingClientRect().height,overflow:document.documentElement.scrollWidth-innerWidth};});
+ assert.ok(short.map>=340);assert.ok(short.scroll>0,'short phone cannot scroll the minimum map into view');assert.ok(short.creditBottom<=short.navTop+1,'map attribution is hidden behind navigation');assert.equal(short.overflow,0);
+ await p.setViewportSize({width:390,height:844});await p.evaluate(()=>window.scrollTo(0,0));await p.waitForFunction(()=>Math.abs(document.querySelector('.bottom-nav').getBoundingClientRect().top-document.querySelector('.map-wrap').getBoundingClientRect().bottom)<=1);
 }
 // Simulate old cached bare asset URLs: current HTML must request content-versioned entries.
  await p.route('**/css/sea.css',r=>r.fulfill({contentType:'text/css',body:'/* obsolete toolbar layout */'}));

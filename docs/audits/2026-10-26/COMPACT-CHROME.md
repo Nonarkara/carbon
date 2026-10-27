@@ -36,8 +36,14 @@ Touch inputs receive 36px targets instead of the pointer's 28px. Text enlargemen
 
 The pristine release audit rejected 20 overlap findings in the all-disclosures-open phone state: the new search panel's viewport-fixed position covered other controls. That release was not uploaded. The panel now anchors absolutely to its search field, stays within the phone viewport at 320/390px, and workspace popovers use one native `details` name group so opening Search, Read or Layers closes the previous popup. The numerical and geometry detectors remain unchanged. The deep audit now opens all nonexclusive content disclosures and measures every workspace popup separately in both languages and three widths (24 additional states), rather than requiring an impossible state with all members of a native exclusive group open.
 
+### Map room after compacting chrome
+
+A live recheck on 27 October found Thailand's old fixed map height left a 23.81px strip above navigation at 390×844 in Thai (7.81px in English). The map now fills the actual remaining viewport in a three-row grid. Its controls and attribution no longer reserve the bottom navigation's height twice. A container-size observer refreshes Leaflet only when dimensions change, without panning. The workspace gate measures the map/navigation join and proves restoring the old height fails it. Small viewports keep the existing 340px minimum and allow document scrolling rather than clipping the map or data.
+
 ### Captures
 
-[390×844](compact-sea-390.png) · [1024×768](compact-sea-1024.png) · [1440×900](compact-sea-1440.png)
+Thailand: [390×844](compact-thailand-390.png) · [1024×768](compact-thailand-1024.png) · [1440×900](compact-thailand-1440.png)
+
+Southeast Asia: [390×844](compact-sea-390.png) · [1024×768](compact-sea-1024.png) · [1440×900](compact-sea-1440.png)
 
 These checks establish the named layouts and interactions. They do not certify upstream uptime, cadastral accuracy or issued credits.

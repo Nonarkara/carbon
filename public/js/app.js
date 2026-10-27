@@ -16,6 +16,14 @@ const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>
  const provName=r=>getLang()==='th'?r.province_th:PROVINCE_EN[r.province_th]||r.province_th;
  const state={tab:'carbon',boundary:null,boundaryFile:null,plots:null,plotFile:null,rows:null,result:null,input:null,sample:false,plotUsed:false,sources:[],province:[],version:'0.1.0'};
 const map=L.map('map',{zoomControl:false,minZoom:5,maxZoom:18}).setView([13.3,101],5.7);
+// Data and language can change chrome height without a window resize. Resize the map
+// only when its actual container changes; ordinary HUD updates must not pan the view.
+let observedMapSize='';
+new ResizeObserver(([entry])=>{
+ const {width,height}=entry.contentRect,key=`${width}:${height}`;
+ if(key===observedMapSize)return;observedMapSize=key;
+ if(width>0&&height>0)map.invalidateSize({pan:false});
+}).observe(map.getContainer());
 L.control.zoom({position:'bottomright'}).addTo(map);
 const tiles={dark:L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}),sat:L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'Esri, Maxar, Earthstar Geographics'})};
 tiles.dark.addTo(map);let drawn=null;
