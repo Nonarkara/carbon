@@ -16,6 +16,7 @@ import{selectSeaView}from'./browser-controls.mjs';
 import assert from'node:assert/strict';
 import{mkdir,writeFile}from'node:fs/promises';
 import{measurementTarget}from'./lib/local-server.mjs';
+import{gotoRetry}from'./lib/browser-nav.mjs';
 
 // The native arrow and the breathing room around a selected value.
 const ARROW=22;
@@ -23,10 +24,17 @@ const WIDTHS=[[320,844],[360,740],[375,740],[390,844],[430,932],[600,900],[768,1
 const VIEWS=['map','evidence','compare','research'];
 
 const target=await measurementTarget(),browser=await chromium.launch(),page=await browser.newPage(),rows=[];
+// This gate measures the geometry of a page it just loaded, so it needs a page that arrived.
+// A busy machine starves the renderer, and a starved renderer answers a DOM question late
+// enough to look like a missing element: the gate once failed here with "waiting for
+// locator('#fitRegion')" on a page whose HTML carries that button in its first line, and the
+// same command passed 44 seconds later on a calmer box. A slow machine is a condition to wait
+// out, not a defect of the interface, and the assertions below are unchanged by the budget.
+await page.setDefaultTimeout(60000);
 const manifest=await fetch(target.base+'/version.json').then(r=>r.json());assert.ok(manifest.commit);
 await mkdir('test-results/sea-header',{recursive:true});
 try{for(const lang of ['th','en'])for(const [width,height]of WIDTHS){
- await page.setViewportSize({width,height});await page.goto(`${target.base}/sea.html?lang=${lang}&country=BRN`);await page.locator('body[data-ready]').waitFor();await page.evaluate(()=>document.fonts.ready);
+ await page.setViewportSize({width,height});await gotoRetry(page,`${target.base}/sea.html?lang=${lang}&country=BRN`,{waitUntil:'domcontentloaded',timeout:60000});await page.locator('body[data-ready]').waitFor({timeout:60000});await page.evaluate(()=>document.fonts.ready);
  const r=await page.evaluate(()=>{const box=s=>document.querySelector(s).getBoundingClientRect();return{top:box('#seaMap').top,mapHeight:box('#seaMap').height,chrome:box('header.top').height+box('.scope-tools').height,overflow:document.documentElement.scrollWidth-innerWidth,mapScroll:document.querySelector('.workspace').scrollHeight-document.querySelector('.workspace').clientHeight};});
  assert.ok(r.top<=72,'compact regional chrome exceeds its 72px pointer budget');assert.ok(r.mapHeight>=300,'hero map displaced');assert.equal(r.overflow,0);assert.ok(r.mapScroll<=2,'unnecessary nested map scroll');
  if(lang==='th'&&width===390&&height===844){
