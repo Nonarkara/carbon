@@ -36,6 +36,9 @@ const STEPS = [
   {name: 'regional two-line header', script: 'scripts/sea-header-proof.mjs'},
   {name: 'detector self-test', script: 'scripts/spatial-detector-self-test.mjs'},
   {name: 'table proof', script: 'scripts/msh-table-proof.mjs'},
+  {name: 'navigation falsifier', script: 'scripts/browser-nav-falsifier.mjs'},
+  {name: 'live surface falsifier', script: 'scripts/live-surface-falsifier.mjs'},
+  {name: 'capability claims', script: 'scripts/capability-claims.mjs'},
   ...(DEEP ? [{name: 'deep content audit', script: 'scripts/spatial-deep-probe.mjs'}] : []),
 ];
 
@@ -90,22 +93,34 @@ if (target.commit) {
   }
 }
 
-let failed = null;
+// Every gate runs, even after one fails, and every verdict is kept.
+//
+// The runner used to stop at the first failure, so a build with three spatial problems cost
+// three fix cycles and the owner was shown one complaint at a time. The law says: when you find
+// SH, massacre it — and a massacre is the whole census in one pass. The instrument that
+// measures the site has to obey the same rule, or it cannot say how much is left.
+//
+// The gates are independent — each is its own process against the same server — so running the
+// rest after a failure costs time and loses nothing. The verdict is still a single one: the
+// suite exits non-zero if any gate failed.
+const verdicts = [];
 try {
   for (const step of STEPS) {
     console.log(`\n--- ${step.name} ---`);
     const code = await run(step.script, target.base);
-    if (code !== 0) {
-      failed = step.name;
-      break;
-    }
+    verdicts.push({name: step.name, ok: code === 0});
   }
 } finally {
   await target.stop();
 }
 
-if (failed) {
-  console.error(`\nFAIL spatial suite: ${failed}`);
+const failed = verdicts.filter(v => !v.ok);
+if (failed.length) {
+  console.error(`\n--- verdict ---`);
+  for (const v of verdicts) console.error(`  ${v.ok ? 'ok  ' : 'FAIL'}  ${v.name}`);
+  console.error(
+    `\nFAIL spatial suite: ${failed.length} of ${verdicts.length} gates failed — ${failed.map(v => v.name).join(', ')}.`
+  );
   process.exit(1);
 }
 console.log('\nPASS spatial suite: every gate in the law ran against this build.');

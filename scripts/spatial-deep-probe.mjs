@@ -57,10 +57,10 @@ let measured=0;
 
 // A browser can die mid-audit — most often because the machine ran out of memory while other
 // work was running. That is not a layout finding, and it must not be allowed to look like one
-// or to end the audit: the audit is 546 pages long, and a single dead page would otherwise
-// discard every page after it. So the browser is relaunched and the page is measured again.
-// If it dies twice, the page is recorded as unmeasurable, and an unmeasured page fails the
-// audit — a clean audit that did not run is not a clean audit. The rule lives in
+// or to end the audit: the audit is hundreds of pages long, and a single dead page would
+// otherwise discard every page after it. So the browser is relaunched and the page is measured
+// again. If it dies twice, the page is recorded as unmeasurable, and an unmeasured page fails
+// the audit — a clean audit that did not run is not a clean audit. The rule lives in
 // scripts/lib/browser-resilience.mjs and is tested there.
 async function relaunch(){
  try{await browser.close();}catch{}
@@ -153,7 +153,7 @@ async function runOnce(job){
 
 async function run(job){
  // A long audit accumulates memory in the browser. Refreshing the browser every hundred
- // pages costs one launch and removes the drift that ends a run on page 300 of 546.
+ // pages costs one launch and removes the drift that ends a run a third of the way through.
  if(measured%100===0&&measured>0){
   try{await relaunch();}catch{/* a browser that will not restart is caught by the recovery below */}
  }

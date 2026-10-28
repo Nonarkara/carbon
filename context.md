@@ -126,3 +126,32 @@ SEA Map/Compare/Research are separate views; phones add Evidence. Desktop map an
 ### One-line regional toolbar · 21 October 2026
 
 Country, metric and view are one flex row. Phones use native #seaView; desktop retains direct buttons. selectSeaView in scripts/browser-controls.mjs follows the visible control in browser tests. Do not restore the separate bottom navigation or allow view controls to wrap. Map budget is measured via --sea-chrome-height. scripts/version-assets.mjs pins HTML CSS/entry-JS refs to content SHA prefixes; run npm run build before tests and publishing. New public-assets tests check byte/hash agreement; workspace regression simulates obsolete bare assets and measures the row (<=54px). Preserve accessible labels and all views.
+
+## The law's instrument grew a census · 22–27 October 2026
+
+Twenty-two to twenty-seven October was the law's instrument, not the site. The workbench's five tab panels were measured and the missing-value rule locked; the credit figures were interleaved so the chapters read in order; place search, measurement, urban detail and shareable map state were added. On the twenty-fourth the law was let into the content: the deep audit grew to 582 pages and 558 of them walk the English regional views, the research notebooks gained footprint, climate and El Niño chapters in both languages, and every table was given ONE scroll area — the `.table-scroll` frame — with `scripts/msh-table-proof.mjs` proving the old geometry cannot come back.
+
+Three of those commits changed how a release is made, and the rules stand:
+
+- **A release is the commit it names, byte for byte.** `npm run deploy` exports HEAD into a pristine worktree (`scripts/release.mjs`, `scripts/lib/release-tree.mjs`) and builds, tests and measures the law THERE. Never build a release from a shared working tree: a concurrent write between the clean check and the build ships one agent's uncommitted file under another agent's commit name.
+- **A release ends at the surface its users reach.** The live verification (`scripts/live-verify.mjs`) opens the deployed site after the upload and waits for the edge to serve the commit. An interrupted release is told from a failed one (`scripts/lib/release-run.mjs`): an interruption is retried, a failure is not.
+- **A slow page is not a broken page.** `scripts/lib/browser-nav.mjs` retries a navigation that timed out and lets every other failure through. This is the rule every suite uses, and it has its own falsifier now — see below.
+
+On the twenty-fifth and twenty-sixth the regional toolbar was given the room its labels need (eleven widths, both languages, every option of every selector), the comparison view was given ONE name at every width ("เทียบ" / "Compare" — the phone selector said "Table" while the desktop button said "Compare 11"), the shared chrome was compacted and the place search and measurement repaired, and every assertion that waited on one element and read another was changed to wait for the content it reads. On the twenty-seventh the national map was given the space the chrome had been taking, and the measurement controls were made legible over the map tiles.
+
+The audits for that work are in `docs/audits/2026-10-25/`, `docs/audits/2026-10-26/` and `docs/audits/2026-10-28/`. The one open item they left behind was the live proof reading one width per breakpoint; the code now reads three.
+
+## The capability matrix, measured · 28 October 2026
+
+The product publishes what it can do: the Bible says how many chapters it holds, the guide says the same number, the About page says how many provinces and how many T-VER records it carries, the research notebook says how many chapters it has, and `docs/SHIP_READINESS.md` states the same figures in prose. Those numbers had drifted — the readiness document said 65 chapters and 80 source entries while the shipped Bible held 68 and 87 — and nothing checked them.
+
+`scripts/capability-claims.mjs` now reads each published figure out of the page or document that prints it, reads the truth out of the data the site ships, and fails when the two disagree. It runs in `npm run test:spatial`, so a release cannot ship with a capability matrix that no longer describes the product. It is written against the DATA and never against a literal: a gate that hardcoded "68 chapters" would keep passing while the product grew underneath it, and would start failing — falsely, with a message that reads like a broken site — the day somebody added a chapter.
+
+The same rule now governs the live surfaces. `scripts/lib/live-surfaces.mjs` is the ONE copy of the assertions, shared by the live verification and the falsifier that proves they can fail. Every published number is compared with the corpus fetched from the site being verified — the Bible's counter against `data/bible.json`, the guide's stated corpus against the same file, the About view's registry count against `data/tgo/tver-forestry.json` — so a surface that states a number the site does not hold cannot pass. `scripts/live-surface-falsifier.mjs` breaks those on purpose, including by serving a corpus the site no longer holds, and requires the shipped assertion to catch each one.
+
+Two rules about the instrument itself, both learned the hard way:
+
+- **A gate that cannot fail is worse than no gate, because it is trusted.** `scripts/browser-nav-falsifier.mjs` exists because `gotoRetry` had never once done the thing it was written for: the pattern that classifies a timeout was a regular expression CALLED as a function, so the helper never retried anything and every navigation failure was reported as "LOOKS_LIKE_A_TIMEOUT is not a function" instead of its cause. Twenty suites imported it. A branch that is never taken is a branch nobody has tested.
+- **A massacre is the whole census, not a sample.** `scripts/spatial-suite.mjs` and `scripts/browser-suite.mjs` used to stop at the first failure, which cost one fix cycle per defect. They now run every gate and list every verdict. The release still refuses to upload unless every gate passed.
+
+Preserve: the exact Malaysia visual reference; stock, monitoring-period estimates and issued credits kept separate; browser-local user files; the ledger regenerated only through `scripts/ingest/build_ledger.py`; `tests/ledger.test.mjs` conservation green; source periods and quality labels travelling into display and exports.

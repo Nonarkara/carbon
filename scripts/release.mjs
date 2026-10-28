@@ -114,11 +114,24 @@ async function main() {
     step('build');
     if (await run('npm', ['run', 'build'], {cwd: tree.dir, label: 'the build'}) !== 0) fail('FAIL release: the build failed');
 
+    // The measurement phases all run, and every one of them reports.
+    //
+    // The release used to stop at the first phase that failed. That made a broken build cost
+    // one fix cycle per defect: the owner was shown one complaint, fixed it, and was then
+    // shown the next complaint. The law this project works under says the opposite — when you
+    // find spatial hallucination, massacre it, and a massacre is the whole census in one pass.
+    // The instrument that measures the site now reports its own census; the release reports
+    // the census of the phases.
+    //
+    // Nothing is uploaded unless every phase passed. The upload is still the last thing that
+    // happens, and it still only happens on a clean run.
+    const verdicts = [];
+
     step('unit tests');
-    if (await run('npm', ['test'], {cwd: tree.dir, label: 'the unit tests', retryOnceOn: INTERRUPTED}) !== 0) fail('FAIL release: the unit tests failed');
+    verdicts.push({name: 'the unit tests', ok: await run('npm', ['test'], {cwd: tree.dir, label: 'the unit tests', retryOnceOn: INTERRUPTED}) === 0});
 
     step('law gates');
-    if (await run('npm', ['run', 'test:spatial', '--', '--no-build'], {cwd: tree.dir, label: 'the spatial law gates', retryOnceOn: INTERRUPTED}) !== 0) fail('FAIL release: the spatial law gates failed');
+    verdicts.push({name: 'the spatial law gates', ok: await run('npm', ['run', 'test:spatial', '--', '--no-build'], {cwd: tree.dir, label: 'the spatial law gates', retryOnceOn: INTERRUPTED}) === 0});
 
     step('deep content audit');
     // The audit fails in two different ways, and they must not be treated alike. A FINDING is
@@ -127,19 +140,29 @@ async function main() {
     // browser would not start — and that is worth one more attempt, because a release must
     // not be refused for a condition that a second run will not have. If the second run also
     // cannot measure, the release fails: an audit that did not run is not a clean audit.
-    let auditOk=false;
-    for(let attempt=1;attempt<=2&&!auditOk;attempt++){
-      if(attempt>1)console.log('\n(retrying the deep content audit — the first run could not measure, not the site being wrong)');
-      const code=await run('npm',['run','test:deep'],{cwd:tree.dir,label:'the deep content audit'});
-      auditOk=code===0;
-      if(auditOk)break;
-      const verdict=await readAuditVerdict(tree.dir);
-      if(verdict.findings>0){
-        fail(`FAIL release: the audit found ${verdict.findings} spatial hallucination(s) in the content. That is the site, not the instrument — it is not retried.`);
+    let auditOk = false;
+    let auditReason = 'the deep content audit did not run';
+    for (let attempt = 1; attempt <= 2 && !auditOk; attempt++) {
+      if (attempt > 1) console.log('\n(retrying the deep content audit — the first run could not measure, not the site being wrong)');
+      const code = await run('npm', ['run', 'test:deep'], {cwd: tree.dir, label: 'the deep content audit'});
+      auditOk = code === 0;
+      if (auditOk) break;
+      const verdict = await readAuditVerdict(tree.dir);
+      if (verdict.findings > 0) {
+        auditReason = `the deep content audit found ${verdict.findings} spatial hallucination(s) in the content — that is the site, not the instrument, so it is not retried`;
+        break;
       }
-      if(attempt===2){
-        fail(`FAIL release: ${verdict.unmeasurable} page(s) could not be measured after two attempts.`);
-      }
+      auditReason = verdict.unmeasurable < 0
+        ? 'the deep content audit did not write a report, so nothing was measured'
+        : `${verdict.unmeasurable} page(s) could not be measured`;
+    }
+    verdicts.push({name: 'the deep content audit', ok: auditOk, reason: auditReason});
+
+    const failed = verdicts.filter(v => !v.ok);
+    if (failed.length) {
+      console.error('\n--- verdict ---');
+      for (const v of verdicts) console.error(`  ${v.ok ? 'ok  ' : 'FAIL'}  ${v.name}${v.ok ? '' : ` — ${v.reason ?? 'the phase failed'}`}`);
+      fail(`FAIL release: ${failed.length} of ${verdicts.length} measurement phases failed — ${failed.map(v => v.name).join(', ')}. Nothing was uploaded.`);
     }
 
     // 3. The built tree must still be the commit.

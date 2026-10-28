@@ -71,22 +71,36 @@ const target = await measurementTarget();
 if (!target.commit) await assertProjectServer(target.base);
 console.log(`measuring ${target.commit ? `build ${target.commit}` : target.base} at ${target.base}`);
 
-let failed = null;
+// Every suite runs, even after one fails, and every verdict is kept.
+//
+// The runner used to stop at the first failure. That made a broken build cost one fix cycle
+// per defect: the owner was shown one suite's complaint, fixed it, and was then shown the
+// next suite's complaint, and so on — seventeen rounds for seventeen suites. The law the
+// project works under says the opposite: when you find spatial hallucination, massacre it, and
+// massacre means the whole census in one pass, not a sample. The instrument that measures the
+// site has to obey the same rule, or it cannot tell the owner how much is left.
+//
+// The suites are independent — each is its own process against the same server — so running
+// the rest after a failure costs time and loses nothing. The verdict is still a single one:
+// the suite exits non-zero if any suite failed.
+const verdicts = [];
 try {
   for (const [name, script] of SUITES) {
     console.log(`\n--- ${name} ---`);
     const code = await run(script, target.base);
-    if (code !== 0) {
-      failed = name;
-      break;
-    }
+    verdicts.push({name, ok: code === 0});
   }
 } finally {
   await target.stop();
 }
 
-if (failed) {
-  console.error(`\nFAIL browser suite: ${failed}`);
+const failed = verdicts.filter(v => !v.ok);
+if (failed.length) {
+  console.error(`\n--- verdict ---`);
+  for (const v of verdicts) console.error(`  ${v.ok ? 'ok  ' : 'FAIL'}  ${v.name}`);
+  console.error(
+    `\nFAIL browser suite: ${failed.length} of ${verdicts.length} suites failed — ${failed.map(v => v.name).join(', ')}.`
+  );
   process.exit(1);
 }
 console.log(`\nPASS browser suite: ${SUITES.length} suites ran against this build.`);
