@@ -19,7 +19,7 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {gotoRetry} from './lib/browser-nav.mjs';
-import {SURFACES,assertNoSidewaysScroll,openSurface,NAV} from './lib/live-surfaces.mjs';
+import {SURFACES,assertNoSidewaysScroll,openSurface,proveSurface,NAV} from './lib/live-surfaces.mjs';
 
 const base=process.argv[2]||'https://carbon.nonarkara.org';
 const out='test-results/live';
@@ -38,7 +38,7 @@ for(const lang of ['th','en']){
   await page.setViewportSize({width,height});
   for(const surface of SURFACES){
    await openSurface(page,base,surface,lang);
-   await surface.prove(page,lang,width);
+   await proveSurface(page,surface,lang,width);
    await assertNoSidewaysScroll(page,lang,width,surface.name);
    const shot=`${out}/${surface.name.replace(/\s+/g,'-')}-${lang}-${width}.png`;
    await page.screenshot({path:shot,fullPage:false});

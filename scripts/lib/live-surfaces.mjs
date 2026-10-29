@@ -75,6 +75,47 @@ export async function fetchJson(page, path) {
 }
 
 /**
+ * Prove a surface, once more if the page was slow.
+ *
+ * A cold load can render later than the waits inside `prove` allow: a first page after a
+ * deploy comes off a cold edge, and a machine busy with other work schedules a browser
+ * late. That is a network or machine condition, not a defect of the site, and the rule this
+ * project already follows is "a slow page is not a broken page".
+ *
+ * The retry is deliberately narrow:
+ *
+ *   - It fires only on a TIMEOUT. An assertion failure is the signal that a surface is
+ *     wrong, and it is never retried, so a broken page cannot be retried into a passing one.
+ *   - It fires once, so a page that is genuinely hung still fails — twice as slowly.
+ *   - `prove` is IDEMPOTENT rather than read-only: it selects the same province, runs the
+ *     same illustrative example and takes the same export, so running it twice checks the
+ *     same thing twice.
+ *
+ * The live verification and the falsifier both come through here, so the falsifier proves
+ * the code that actually ships rather than a variant of it.
+ *
+ * @param {import('playwright').Page} page the page
+ * @param {object} surface one entry of SURFACES
+ * @param {string} lang the language
+ * @param {number} width the viewport width
+ * @param {{attempts?:number, retryDelay?:number}} [options]
+ */
+export async function proveSurface(page, surface, lang, width, {attempts = 2, retryDelay = 800} = {}) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      return await surface.prove(page, lang, width);
+    } catch (err) {
+      if (!err || err.name !== 'TimeoutError') throw err;
+      lastError = err;
+      if (attempt === attempts) break;
+      await new Promise(resolve => setTimeout(resolve, retryDelay));
+    }
+  }
+  throw lastError;
+}
+
+/**
  * The page must not scroll sideways.
  *
  * A surface that is wider than the viewport is the oldest and most common way a layout

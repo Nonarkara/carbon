@@ -25,7 +25,7 @@
 //   BASE_URL=https://carbon.nonarkara.org node scripts/live-surface-falsifier.mjs
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-import {SURFACES,assertNoSidewaysScroll,openSurface} from './lib/live-surfaces.mjs';
+import {SURFACES,assertNoSidewaysScroll,openSurface,proveSurface} from './lib/live-surfaces.mjs';
 import {measurementTarget} from './lib/local-server.mjs';
 
 const target=await measurementTarget();
@@ -128,28 +128,10 @@ async function arm(mode){
  await page.evaluate(m=>window.__armDefect(m),mode);
 }
 
-// A slow page is not a broken page — the same principle as gotoRetry. The baseline prove
-// waits for content that may render late on a cold first load; retry it once so a transient
-// render timeout does not masquerade as a site defect and hide whether the defects below
-// are actually caught. prove() is a read-only DOM check, so re-running it is safe.
-async function proveRetry(page, surface, lang, width){
- let lastError;
- for(let attempt=1; attempt<=2; attempt++){
-  try{ return await surface.prove(page, lang, width); }
-  catch(err){
-   if(!(err && err.name === 'TimeoutError')) throw err;
-   lastError=err;
-   if(attempt===2) break;
-   await new Promise(r=>setTimeout(r,800));
-  }
- }
- throw lastError;
-}
-
 // --- The baseline. Every case below is only meaningful if the surface is green to begin with.
 for(const surface of SURFACES){
  await open(surface,'th',1440);
- await proveRetry(page, surface, 'th', 1440);
+ await proveSurface(page, surface, 'th', 1440);
  console.log(`  ok  baseline: ${surface.name} passes before it is broken`);
 }
 
@@ -269,7 +251,7 @@ for(const c of CASES){
  await arm(c.mode);
  let caught=null;
  try{
-  await surface.prove(page,'th',1440);
+  await proveSurface(page,surface,'th',1440);
  }catch(err){
   caught=err;
  }
@@ -323,7 +305,7 @@ for(const c of PRE_ARMED_CASES){
  if(surface.settle)await surface.settle(page,'th',1440);
  let caught=null;
  try{
-  await surface.prove(page,'th',1440);
+  await proveSurface(page,surface,'th',1440);
  }catch(err){
   caught=err;
  }
@@ -372,7 +354,7 @@ for(const c of DATA_CASES){
  doctor={path:c.path,mutate:c.mutate};
  let caught=null;
  try{
-  await surface.prove(page,'th',1440);
+  await proveSurface(page,surface,'th',1440);
  }catch(err){
   caught=err;
  }finally{
