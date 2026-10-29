@@ -129,5 +129,16 @@ pass against this build.
 
 Verified: the law runs as one command. Every gate is green and the census is reported.
 
-Remaining: the live proof of the released bytes is not yet re-run against this build; it runs
-as part of the release, and the receipt is written to `test-results/live/live-report.json`.
+Verified: the release. Commit 36eabc4 was exported into a pristine tree, built there, measured
+there — 129 unit tests, all eight law gates, and the 582-page content audit with no finding and
+no unmeasured page — uploaded, and then verified live: six published surfaces in both languages
+at 390, 1024 and 1440, thirty-six surface openings, the 404 page, the comparison periods and the
+ozone correction. The receipt is `test-results/live/live-report.json` beside thirty-six
+screenshots. `npm run test:release` then confirmed the deployed bytes, the headers, the private
+paths and the feed envelopes against the same build.
+
+Remaining: nothing in this audit. The boundaries that were never in scope are unchanged and
+still stated where they were stated: independent first-time-user testing, field validation, real
+project eligibility, physical-device installation and a formal accessibility audit remain
+unverified, because they require suitable participants, evidence and authority rather than
+software.
