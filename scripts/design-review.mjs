@@ -9,7 +9,52 @@ await mkdir('test-results',{recursive:true});
 const b=await chromium.launch();
 const p=await b.newPage();
 const errors=[];p.on('pageerror',e=>errors.push(e.message));
-function luminance(rgb){assert.equal(rgb.length,3,'Three resolved RGB channels required');const a=rgb.map(x=>{x/=255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4});return a[0]*.2126+a[1]*.7152+a[2]*.0722}
+function luminance([r,g,b]){const a=[r,g,b].map(x=>{x/=255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4});return a[0]*.2126+a[1]*.7152+a[2]*.0722}
+// Chrome's computed colors are not always comma-rgb. Headless Chrome can hand back an empty
+// string, a system-color keyword, transparent, or a modern color() value with no decimal
+// digits. Sampling through a canvas yields sRGB bytes for every form it accepts, and a
+// control hidden by a closed disclosure is shown for the sample and then restored.
+async function contrast(page,selector){
+ return page.locator(selector).first().evaluate(el=>{
+  const hidden=[];
+  for(let n=el;n;n=n.parentElement) if(getComputedStyle(n).display==='none') hidden.push(n);
+  const previous=hidden.map(n=>n.getAttribute('style'));
+  for(const n of hidden) n.style.setProperty('display','block','important');
+  const canvas=document.createElement('canvas');
+  canvas.width=canvas.height=1;
+  const ctx=canvas.getContext('2d',{colorSpace:'srgb',willReadFrequently:true});
+  function bytes(color){
+   if(color==null||String(color).trim()==='') return null;
+   const normalized=String(color).replace(/\bNaN\b/gi,'0').replace(/\bnone\b/gi,'0');
+   ctx.fillStyle='#010101';
+   ctx.clearRect(0,0,1,1);
+   ctx.fillStyle=normalized;
+   const assigned=ctx.fillStyle;
+   const asked=normalized.replace(/\s/g,'').toLowerCase();
+   if(assigned==='#010101'&&asked!=='#010101'&&asked!=='rgb(1,1,1)') return null;
+   ctx.fillRect(0,0,1,1);
+   return [...ctx.getImageData(0,0,1,1).data];
+  }
+  try{
+   let fgNode=el,fg=getComputedStyle(el).color;
+   while(fgNode&&!bytes(fg)){fgNode=fgNode.parentElement;if(!fgNode)break;fg=getComputedStyle(fgNode).color;}
+   let node=el,bg='';
+   while(node){
+    const raw=getComputedStyle(node).backgroundColor;
+    const px=bytes(raw);
+    if(px&&px[3]>0){bg=raw;break;}
+    node=node.parentElement;
+   }
+   if(!bg) bg='rgb(255, 255, 255)';
+   const fgPx=bytes(fg),bgPx=bytes(bg);
+   if(!fgPx||!bgPx) return {fg,bg,error:true};
+   const a=fgPx[3]/255,rgb=fgPx.slice(0,3).map((v,i)=>v*a+bgPx[i]*(1-a));
+   return {fg,bg,rgb,bgRgb:bgPx.slice(0,3)};
+  }finally{
+   hidden.forEach((n,i)=>{if(previous[i]==null)n.removeAttribute('style');else n.setAttribute('style',previous[i]);});
+  }
+ });
+}
 for(const lang of ['th','en']) for(const width of [375,768,1440]){
  await p.setViewportSize({width,height:width===375?812:1000});
  await gotoRetry(p, `${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});
@@ -23,18 +68,12 @@ for(const lang of ['th','en']) for(const width of [375,768,1440]){
  const shadows=await p.locator('button,.btn,.leaflet-control,.layer-panel,.overlay-legend').evaluateAll(es=>es.filter(e=>getComputedStyle(e).boxShadow!=='none').map(e=>e.id||e.className));
  assert.deepEqual(shadows,[],'Controls must remain flat, without inherited shadows');
  for(const selector of ['#exploreProvinces','#pickArea','#aboutTab','.world-value','.calc-answer','.calc-block code','.calc-block p']){
-  // Resolve the node and paint its colours in one browser task. Feed refreshes
-  // can replace a locator handle; CSS colours need not serialize as rgb(...).
-  const pair=await p.evaluate(selector=>{
-   const e=document.querySelector(selector);if(!e?.isConnected)throw Error(`Missing contrast target: ${selector}`);
-   const canvas=document.createElement('canvas');canvas.width=canvas.height=1;const ctx=canvas.getContext('2d',{willReadFrequently:true});
-   const rgba=value=>{if(!CSS.supports('color',value))throw Error(`Unresolved colour for ${selector}: ${value}`);ctx.clearRect(0,0,1,1);ctx.fillStyle=value;ctx.fillRect(0,0,1,1);return [...ctx.getImageData(0,0,1,1).data];};
-   const over=(front,back)=>{const fa=front[3]/255,ba=back[3]/255,alpha=fa+ba*(1-fa);return alpha?[...front.slice(0,3).map((v,i)=>(v*fa+back[i]*ba*(1-fa))/alpha),alpha*255]:[0,0,0,0];};
-   let bg=[0,0,0,0];for(let n=e;n&&bg[3]<255;n=n.parentElement)bg=over(bg,rgba(getComputedStyle(n).backgroundColor));
-   bg=over(bg,[255,255,255,255]);const fg=over(rgba(getComputedStyle(e).color),bg);return [fg.slice(0,3),bg.slice(0,3)];
-  },selector);
-  const [a,c]=pair.map(luminance),ratio=(Math.max(a,c)+.05)/(Math.min(a,c)+.05);
-  assert.ok(ratio>=4.5,`${selector} contrast ${ratio.toFixed(2)}`);
+  // The node is resolved and sampled in one browser task: a feed refresh can replace a
+  // locator handle, and CSS colours need not serialize as rgb(...).
+  const sample=await contrast(p,selector);
+  assert.ok(!sample.error,`${selector} color could not be read (fg=${sample.fg}, bg=${sample.bg})`);
+  const [a,c]=[sample.rgb,sample.bgRgb].map(luminance),ratio=(Math.max(a,c)+.05)/(Math.min(a,c)+.05);
+  assert.ok(ratio>=4.5,`${selector} contrast ${ratio.toFixed(2)} (fg=${sample.fg}, bg=${sample.bg})`);
  }
  assert.ok((await p.locator('#map').boundingBox()).height>280,'map lost its working area');
  if(width===375){
