@@ -128,10 +128,28 @@ async function arm(mode){
  await page.evaluate(m=>window.__armDefect(m),mode);
 }
 
+// A slow page is not a broken page — the same principle as gotoRetry. The baseline prove
+// waits for content that may render late on a cold first load; retry it once so a transient
+// render timeout does not masquerade as a site defect and hide whether the defects below
+// are actually caught. prove() is a read-only DOM check, so re-running it is safe.
+async function proveRetry(page, surface, lang, width){
+ let lastError;
+ for(let attempt=1; attempt<=2; attempt++){
+  try{ return await surface.prove(page, lang, width); }
+  catch(err){
+   if(!(err && err.name === 'TimeoutError')) throw err;
+   lastError=err;
+   if(attempt===2) break;
+   await new Promise(r=>setTimeout(r,800));
+  }
+ }
+ throw lastError;
+}
+
 // --- The baseline. Every case below is only meaningful if the surface is green to begin with.
 for(const surface of SURFACES){
  await open(surface,'th',1440);
- await surface.prove(page,'th',1440);
+ await proveRetry(page, surface, 'th', 1440);
  console.log(`  ok  baseline: ${surface.name} passes before it is broken`);
 }
 
