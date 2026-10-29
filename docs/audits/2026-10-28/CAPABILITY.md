@@ -142,3 +142,36 @@ still stated where they were stated: independent first-time-user testing, field 
 project eligibility, physical-device installation and a formal accessibility audit remain
 unverified, because they require suitable participants, evidence and authority rather than
 software.
+
+---
+
+## 29 October 2026 — the cold load, and where the retry belongs
+
+Found: the falsifier's baseline could die before it proved anything. `surface.prove()` waits for
+content that can render late, and a transient `TimeoutError` on a cold first load aborted the
+whole baseline before a single defect case ran — so the falsifier could not report whether the
+twenty-seven defects are actually caught. A retry on timeout fixes it, and after the fix the
+falsifier is stable: five consecutive runs, twenty-seven defects caught in each.
+
+Found: the retry was in the wrong layer. The live verification faces the same cold-start
+exposure and had no protection at all: it runs against a cold edge immediately after a deploy,
+which is precisely the condition `gotoRetry` was written for, and a spurious timeout there fails
+a release for a condition the site did not cause. The falsifier was also proving a *variant* of
+what ships, because it retried where the verification did not.
+
+Found, and a correction to the record: the change described `prove()` as "a read-only DOM check".
+It is not. It selects a province, runs the illustrative example and takes an export. Re-running it
+is safe because it is **idempotent** — it checks the same thing twice — not because it changes
+nothing.
+
+Changed: `proveSurface()` now lives in `scripts/lib/live-surfaces.mjs`, and both the live
+verification and the falsifier come through it, so the falsifier proves the code that actually
+ships. The retry stays narrow: it fires only on a timeout, once. An assertion failure is the
+signal that a surface is wrong and is never retried, so a broken page cannot be retried into a
+passing one; a page that is genuinely hung still fails, twice as slowly. The one defect that
+legitimately times out — the research notebook's skip link — already expects a timeout.
+
+Verified: every gate of the law passes with the shared retry, and the falsifier still catches
+twenty-seven defects with the shipped assertions.
+
+Remaining: none.
