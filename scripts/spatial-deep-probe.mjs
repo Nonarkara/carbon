@@ -25,6 +25,7 @@ import {assertProjectServer} from './lib/server-identity.mjs';
 import {measurementTarget} from './lib/local-server.mjs';
 import {measureWithRecovery} from './lib/browser-resilience.mjs';
 import {openCollapsibles} from './lib/folds.mjs';
+import {revealControl} from './browser-controls.mjs';
 
 // No server named? Start this project's own, on a port this process chose. The audit must be
 // runnable as a single command and must measure this build and nothing else.
@@ -253,7 +254,7 @@ for(const lang of ['th','en'])for(const vp of VIEWPORTS){
   kind:'workspace-popup',id:menu.slice(1),lang,...vp,path:'?lang='+lang,ready:'#kStock',
   expect:`(()=>{const d=document.querySelector('${menu}');return !!d?.open&&d.getBoundingClientRect().width>0})()`,
   expectLabel:menu+' must be visible and open',
-  act:async()=>{await page.locator('#kStock').filter({hasText:'M'}).waitFor();await page.locator(menu+'>summary').click();},
+  act:async()=>{await page.locator('#kStock').filter({hasText:'M'}).waitFor();await revealControl(page,menu+'>summary');await page.locator(menu+'>summary').click();},
  });
 }
 
