@@ -48,3 +48,14 @@ body.dashboard[data-region]{display:block;overflow:hidden;height:100dvh;min-heig
 body[data-embedded]>header.top{display:none}
 .workspace-bar .langs{flex-shrink:0}
 .workspace-bar .langs button,.dashboard .workspace-bar .langs button{width:auto;flex:1;white-space:nowrap}
+
+/* The narrowest phones cannot hold the brand, the place selector, the map's tools, Read and
+   the language pair in one row at their comfortable sizes. The place selector has to show the
+   place — it says which place every number belongs to — so the space comes out of the controls
+   that have slack: the language pair's padding and the gaps between the bar's groups. */
+@media(max-width:380px){
+ .dashboard .workspace-bar .langs button{width:28px;min-width:28px;padding:0}
+ .dashboard .workspace-bar .search>select{padding-left:2px;padding-right:2px}
+ .dashboard .workspace-bar .top-right{gap:4px}
+ .dashboard .workspace-bar .brand img{width:20px;height:20px;flex-basis:20px}
+}

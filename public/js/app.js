@@ -15,7 +15,7 @@ const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>
  const PROVINCE_EN={'สระบุรี':'Saraburi','กาญจนบุรี':'Kanchanaburi'};
  const provName=r=>getLang()==='th'?r.province_th:PROVINCE_EN[r.province_th]||r.province_th;
  const state={tab:'carbon',boundary:null,boundaryFile:null,plots:null,plotFile:null,rows:null,result:null,input:null,sample:false,plotUsed:false,sources:[],province:[],version:'0.1.0'};
-const map=L.map('map',{zoomControl:false,minZoom:5,maxZoom:18}).setView([13.3,101],5.7);
+const map=L.map('map',{zoomControl:false,minZoom:5,maxZoom:18,zoomSnap:.25}).setView([13.3,101],5.7);
 // Data and language can change chrome height without a window resize. Resize the map
 // only when its actual container changes; ordinary HUD updates must not pan the view.
 let observedMapSize='';
@@ -88,7 +88,7 @@ document.querySelectorAll('[data-tab]').forEach(e=>e.addEventListener('click',()
 document.querySelector('.bottom-nav [data-view=map]').onclick=()=>{document.body.dataset.view='map';setNav();map.invalidateSize();};
 document.querySelectorAll('[data-lang]').forEach(e=>e.onclick=()=>{setLang(e.dataset.lang);$('#panelTitle').textContent=t(state.tab);summary();fields();renderResult();renderPlots();renderSources();landscape.render();world.render();$('#standardsLink').href=`research-${getLang()}.html#standards`;if(document.body.dataset.about)about.show().catch(err=>error(err));message('');document.querySelectorAll('.flow span').forEach((el,i)=>el.textContent=(getLang()==='th'?['ดาวเทียม + แปลงสำรวจ','แบบจำลองมวลชีวภาพ','ตรวจสอบด้วยแปลงอิสระ','รับรองวิธี + ทวนสอบ']:['Satellite + plots','Biomass model','Independent validation','Method approval + verification'])[i]);});
 $('#base').onchange=()=>{Object.values(tiles).forEach(l=>map.removeLayer(l));tiles[$('#base').value].addTo(map);document.body.dataset.basemap=$('#base').value;$('#tileStatus').textContent='';};
-$('#fit').onclick=()=>{if(drawn)map.fitBounds(drawn.getBounds(),{padding:[30,30]});else map.setView([13.3,101],5.7);};
+$('#fit').onclick=()=>{if(drawn)map.fitBounds(drawn.getBounds(),{padding:[30,30]});else landscape.fitThailand();};
 $('#example').onclick=async()=>{const button=$('#example'),submit=$('#calculationForm [type=submit]');button.disabled=true;submit.disabled=true;button.textContent=getLang()==='th'?'กำลังโหลดตัวอย่าง…':'Loading example…';try{await example();}catch(e){error(e);}finally{button.disabled=false;submit.disabled=false;button.textContent=t('example');}};
 $('#reset').onclick=()=>{state.boundary=null;state.boundaryFile=null;state.sample=false;clearPlots();invalidate();if(drawn){map.removeLayer(drawn);drawn=null;}$('#calculationForm').reset();$('#projectName').value='';$('#boundaryFile').value='';$('#equationConfirmed').checked=false;fields();summary();map.setView([13.3,101],5.7);message(t('resetDone'));};
 $('#boundaryFile').onchange=async e=>{try{const f=await readFile(e.target.files[0]),b=validateBoundary(JSON.parse(f.text));clearPlots();state.boundary=b;state.boundaryFile={name:f.name,sha256:f.sha256,tier:'user-import',importedAt:new Date().toISOString()};invalidate();redrawBoundary();summary();message(t('boundaryReady'));}catch(err){error(err);}finally{e.target.value='';}};
@@ -136,7 +136,26 @@ window.addEventListener('resize',()=>map.invalidateSize());
 document.querySelector('.reference-menu').addEventListener('click',e=>{if(e.target.closest('a'))document.querySelector('.reference-menu').open=false;});
 // Reserve the actual navigation height when text enlargement wraps its rows.
 new ResizeObserver(([entry])=>document.body.style.setProperty('--nav-space',`${entry.target.getBoundingClientRect().height+8}px`)).observe(document.querySelector('.bottom-nav'));
-document.addEventListener('click',e=>{for(const menu of document.querySelectorAll('.map-tools,.reference-menu,.more-nav'))if(!menu.contains(e.target))menu.open=false;});
+
+// The phone header is ONE band. The map's tools were a second row of three buttons under
+// the bar, which pushed the map a third of the way down the screen for furniture the reader
+// opens once. On the phone they drop from the bar as a panel instead.
+const mapChromeToggle=document.querySelector('#mapChromeToggle');
+const setMapChrome=open=>{
+ if(!mapChromeToggle)return;
+ mapChromeToggle.setAttribute('aria-expanded',String(open));
+ document.querySelector('header.top').classList.toggle('map-chrome-open',open);
+};
+if(mapChromeToggle){
+ mapChromeToggle.addEventListener('click',()=>setMapChrome(mapChromeToggle.getAttribute('aria-expanded')!=='true'));
+ // Escape closes it and returns the focus to the control that opened it.
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&mapChromeToggle.getAttribute('aria-expanded')==='true'){setMapChrome(false);mapChromeToggle.focus({preventScroll:true});}});
+}
+
+document.addEventListener('click',e=>{
+ for(const menu of document.querySelectorAll('.map-tools,.reference-menu,.more-nav'))if(!menu.contains(e.target))menu.open=false;
+ if(mapChromeToggle&&!e.target.closest('#mapChromePanel,#mapChromeToggle'))setMapChrome(false);
+});
 
 document.querySelector('.map-tools').addEventListener('click',e=>{const button=e.target.closest('button');if(button){document.querySelector('.map-tools').open=false;(button.id==='openForestWatch'?$('#tabBody'):button.id==='moreLayers'?$('#base'):$('#map')).focus({preventScroll:true});}});
 document.querySelector('.more-nav').addEventListener('click',e=>{if(e.target.closest('button'))(document.body.dataset.view==='world'?$('#worldRail'):$('#tabBody')).focus({preventScroll:true});});

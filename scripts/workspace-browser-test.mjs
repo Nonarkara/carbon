@@ -25,7 +25,7 @@ for(const lang of ['th','en'])for(const width of [320,390,768,1024,1440]){
   assert.ok(Math.abs(await gap())<=1,'the national map leaves unused room above navigation');
   if(width===390&&lang==='th'){
    const old=await p.addStyleTag({content:'.dashboard .stage .map-wrap{height:calc(100dvh - 290px)!important}'});
-   assert.ok(await gap()>2,'the geometry check misses the obsolete fixed map height');await old.evaluate(e=>e.remove());
+   assert.ok(Math.abs(await gap())>2,'the geometry check misses the obsolete fixed map height');await old.evaluate(e=>e.remove());
   }
  }
  await clickControl(p,'.advanced-tools>summary');await clickControl(p,'.lenses [data-tab=project]');await p.locator('#projectName').fill('Local project — retain me');
@@ -43,7 +43,13 @@ for(const lang of ['th','en']){
  await p.setViewportSize({width:320,height:568});await gotoRetry(p,`${base}/?lang=${lang}`);await p.locator('#kStock').filter({hasText:'M'}).waitFor();await p.evaluate(()=>document.fonts.ready);
  await p.evaluate(()=>window.scrollTo(0,10000));
  const short=await p.evaluate(()=>{const a=document.querySelector('.leaflet-control-attribution').getBoundingClientRect(),n=document.querySelector('.bottom-nav').getBoundingClientRect();return{creditBottom:a.bottom,navTop:n.top,scroll:scrollY,map:document.querySelector('.map-wrap').getBoundingClientRect().height,overflow:document.documentElement.scrollWidth-innerWidth};});
- assert.ok(short.map>=340);assert.ok(short.scroll>0,'short phone cannot scroll the minimum map into view');assert.ok(short.creditBottom<=short.navTop+1,'map attribution is hidden behind navigation');assert.equal(short.overflow,0);
+ assert.ok(short.map>=340);
+ // The map's credit must not sit behind the fixed navigation with no way to reach it. The
+ // page no longer needs to scroll on a short phone — the header is one band, so the map's
+ // minimum height still fits above the navigation — and that is the better outcome. If the
+ // map ever grows past that, the credit check below is what catches it.
+ assert.ok(short.creditBottom<=short.navTop+1,'map attribution is hidden behind navigation');
+ assert.equal(short.overflow,0);
  await p.setViewportSize({width:390,height:844});await p.evaluate(()=>window.scrollTo(0,0));await p.waitForFunction(()=>Math.abs(document.querySelector('.bottom-nav').getBoundingClientRect().top-document.querySelector('.map-wrap').getBoundingClientRect().bottom)<=1);
 }
 // Simulate old cached bare asset URLs: current HTML must request content-versioned entries.

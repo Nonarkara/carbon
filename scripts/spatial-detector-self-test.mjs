@@ -421,6 +421,30 @@ foundLaw=await law();
 assert.ok(foundLaw.some(o=>o.kind==='nested-scroll'),`nested-scroll must be detected, got ${JSON.stringify(foundLaw)}`);
 await page.evaluate(()=>document.querySelector('#synthetic-frame')?.remove());
 
+// --- 9i-bis. The same defect with no outer scroller: a strip that scrolls sideways straight in
+// the page. The phone's figure strip did this — four figures, two off-screen — and 9i's walk
+// up to a second scroller never reached it. A wide table's own `.table-scroll` frame is the
+// one sanctioned sideways box, and stays unreported.
+await page.evaluate(()=>{
+ const strip=document.createElement('div');
+ strip.id='synthetic-strip';
+ strip.style.cssText='position:fixed;left:20px;top:300px;width:300px;height:40px;overflow:auto;display:flex;background:#fff;z-index:1';
+ strip.innerHTML='<div style="flex:0 0 200px">one</div><div style="flex:0 0 200px">two</div><div style="flex:0 0 200px">three</div>';
+ document.body.append(strip);
+});
+foundLaw=await law();
+assert.ok(foundLaw.some(o=>o.kind==='nested-scroll'&&/synthetic-strip/.test(o.el)),`a sideways strip in the page must be detected, got ${JSON.stringify(foundLaw)}`);
+await page.evaluate(()=>{const e=document.querySelector('#synthetic-strip');e.className='table-scroll';});
+foundLaw=await law();
+assert.ok(!foundLaw.some(o=>o.kind==='nested-scroll'),`a wide table's own .table-scroll frame is sanctioned, got ${JSON.stringify(foundLaw)}`);
+await page.evaluate(()=>{const e=document.querySelector('#synthetic-strip');e.className='';const h=document.createElement('p');h.className='diagram-scroll-hint';h.textContent='scroll sideways';e.before(h);});
+foundLaw=await law();
+assert.ok(!foundLaw.some(o=>o.kind==='nested-scroll'),`a sideways frame announced by a visible hint is sanctioned, got ${JSON.stringify(foundLaw)}`);
+await page.evaluate(()=>{document.querySelector('.diagram-scroll-hint').hidden=true;});
+foundLaw=await law();
+assert.ok(foundLaw.some(o=>o.kind==='nested-scroll'),`a hidden hint announces nothing, got ${JSON.stringify(foundLaw)}`);
+await page.evaluate(()=>{document.querySelector('#synthetic-strip')?.remove();document.querySelector('.diagram-scroll-hint')?.remove();});
+
 // --- 9j. A pair of scroll containers where NEITHER scrolls is not a defect. The SEA page has
 // one: a workspace with an inner panel, both overflow:auto, both with nothing to scroll.
 // Reporting that would be reporting a CSS detail the reader never meets.

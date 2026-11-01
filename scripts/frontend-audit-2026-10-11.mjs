@@ -1,3 +1,4 @@
+import {clickControl} from './browser-controls.mjs';
 // Read-only evidence capture for the 11 October 2026 frontend audit. No application changes.
 import {chromium} from 'playwright';
 import {mkdir,writeFile} from 'node:fs/promises';
@@ -27,10 +28,10 @@ for(const lang of ['th','en'])for(const [width,height] of [[375,667],[375,812],[
 }
 for(const lang of ['th','en']){
  await page.setViewportSize({width:375,height:812});await page.goto(`${base}/?lang=${lang}`);await page.locator('#kStock').filter({hasText:'M'}).waitFor();
- await page.locator('#pickArea').click();await page.screenshot({path:`${dir}/draw-${lang}-375.png`});cases.push({lang,state:'draw',...await measure()});
- await page.locator('#exploreProvinces').click();await page.locator('.province-row').first().waitFor();await page.screenshot({path:`${dir}/provinces-${lang}-375.png`});cases.push({lang,state:'provinces',...await measure()});
+ await clickControl(page,'#pickArea');await page.screenshot({path:`${dir}/draw-${lang}-375.png`});cases.push({lang,state:'draw',...await measure()});
+ await clickControl(page,'#exploreProvinces');await page.locator('.province-row').first().waitFor();await page.screenshot({path:`${dir}/provinces-${lang}-375.png`});cases.push({lang,state:'provinces',...await measure()});
  await page.locator('.province-row').first().click();await page.screenshot({path:`${dir}/province-selected-${lang}-375.png`});cases.push({lang,state:'province-selected',...await measure()});
- await page.locator('#moreLayers').click();await page.locator('.layer-panel').waitFor({state:'visible'});await page.screenshot({path:`${dir}/layers-${lang}-375.png`});cases.push({lang,state:'layers',...await measure()});
+ await clickControl(page,'#moreLayers');await page.locator('.layer-panel').waitFor({state:'visible'});await page.screenshot({path:`${dir}/layers-${lang}-375.png`});cases.push({lang,state:'layers',...await measure()});
  await page.locator('#aboutTab').click();await page.locator('#aboutBody').waitFor({state:'visible'});await page.screenshot({path:`${dir}/research-${lang}-375.png`});cases.push({lang,state:'research',...await measure()});
 }
 await writeFile(`${dir}/metrics.json`,JSON.stringify({base,date:'2026-10-11',cases,errors},null,2));await browser.close();console.log('Saved audit evidence',dir,'page errors',errors.length);

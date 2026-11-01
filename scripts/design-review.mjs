@@ -82,7 +82,7 @@ for(const lang of ['th','en']) for(const width of [375,768,1440]){
   await p.locator('.bottom-nav [data-view=map]').click();
  }
  await p.screenshot({path:`test-results/design-${lang}-${width}.png`});
- await p.locator('#exploreProvinces').click();await p.locator('.province-row').first().waitFor();
+ await clickControl(p,'#exploreProvinces');await p.locator('.province-row').first().waitFor();
  assert.equal(await p.locator('.province-row').count(),77);
  await p.locator('.province-row').first().click();
  await clickControl(p,'#aboutTab');await p.locator('.research-person').waitFor();

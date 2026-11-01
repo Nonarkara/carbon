@@ -107,3 +107,100 @@ Per `docs/audits/2026-10-29/MERGED-WORK.md` and confirmed by this instrument: ph
 | Remaining | (1) Different agent to sign §3 D verdict (PASS/REVISE/BLOCK). (2) Ship flow for the phone redesign: test → commit with agent trailer → push → `npm run deploy` → verify live `/version.json` → `npm run test:release`. (3) Non-Slop scanner run when network/tooling available. |
 
 **Note:** this audit measured the working tree (phone redesign included), which is ahead of the deployed `37b10f8`. The live site's own last-reported state was fully green (129/129 unit tests, 17/17 browser suites, spatial gate, deep audit 582 pages/0 findings).
+
+---
+
+## Second walk — builder ≠ auditor (2026-11-01, Claude Opus 5.5, then an independent reviewer agent)
+
+The first record above was instrument-only and unsigned. This walk rendered every surface at
+390×844, 1024×768 and 1440×900 in Thai and English, plus 844×390, and looked at the pixels.
+
+**Found:**
+- **The phone hid half the headline.** The four figures sat in a strip that scrolled sideways: at
+  390 px, forest absorption and forest emission (the pair this map exists to show) were
+  off-screen with nothing saying so. The instrument reported 0 findings.
+- **Why the instrument missed it.** The nested-scroll rule only fired when the sideways box sat
+  inside a second scroller. A strip straight in the page was invisible to it.
+- **What the stronger rule found.** Once the rule counted any sideways box in the page, it found
+  20 more:
+  - Credit diagrams in the Bible. Each carries a visible "scroll the diagram" hint, so these
+    are legitimate.
+  - The guide's code blocks, 176–246 px over at phone widths.
+  - The research contents panel, 5–8 px over. A rotated ▸ glyph overflowed its box once the
+    panel opened.
+- **The legend covered Chiang Rai on the phone.** The map opened on a fixed centre and zoom, so
+  the legend sat on the country's most forested corner.
+- **The independent reviewer returned REVISE.** It measured these:
+  - The phone Carbon tab repeated the active tab's name in a 45 px black band that named a map
+    not on screen.
+  - Thai line breaking split "ขอบ|ล่าง–บน".
+  - 404.html scrolled 1.08 screens with almost nothing on it.
+  - sea.html printed its boundary label in both languages and drew Leaflet's 2 px zoom radius.
+  - The empty second header row at 1440, and the 844×390 scroll. Both are listed under
+    Remaining.
+
+**Changed:**
+- **Figures:** two by two on phone, a plain four-column grid elsewhere. No sideways scroller at
+  any width. The area unit drops to body size so the figure stays on one line.
+- **Map framing:** Thailand is framed from its bounds, clear of the legend (`fitThailand`,
+  `zoomSnap .25`).
+- **The law instrument:**
+  - A sideways box straight in the page is now a `nested-scroll` finding.
+  - Sanctioned: a wide table's own `.table-scroll` frame, or a frame announced by a visible
+    `.diagram-scroll-hint`.
+  - The self-test proves the rule fires, the sanction holds, and a hidden hint revokes it.
+- **Reading pages:** the guide's code blocks wrap. The contents ▸/▾ now swaps glyphs instead of
+  rotating.
+- **Phone panels:** the title band is visually hidden for phone layouts and kept for screen
+  readers.
+- **Small fixes:**
+  - Thai word joiners in "ขอบล่าง–บน".
+  - 404 uses `box-sizing:border-box`.
+  - The SEA boundary label is per language, and its zoom buttons are square.
+  - Thai `lang` tags on the guide's language link and the 404 heading.
+- **The Axiom mark:** now `loading="lazy"`. Its exact bytes stay pinned. The client test now
+  accepts a lazy mark once its file resolves to a real image.
+- **Workspace test:** its map-height mutation proof now accepts a miss in either direction.
+
+**Verified:**
+- 131 unit tests pass.
+- The spatial suite passes: 8 gates, 11 surfaces, 44 viewports.
+- All 17 browser suites pass.
+- Non-Slop on `public/` still says SLOP (8 points), from two P1 flags, both kept on purpose:
+  - `Plus Jakarta Sans` is declared in the preserved Malaysia reference and never loads or
+    renders. All six surfaces render Jost and Prompt, checked on `document.fonts`.
+  - `#fff8d6` + `#9c4a1a` is an issued-badge fill on the same line as a flux-legend swatch,
+    not a palette.
+
+**Kept on purpose:**
+- **Bottom-nav segments filling the width:** the tab-bar affordance, 56 px including the safe
+  area.
+- **Tools panel rows:** full-width menu rows. The open panel overlays the figures while open,
+  and Escape or a tap closes it.
+- **The Bible results list:** a listbox that scrolls in place, cut at the bottom as its cue.
+- **844×390:** the map keeps its 340 px floor and the page scrolls. A one-screen 179 px map was
+  tried, and its caption, legend and measure button piled on top of each other.
+- **The Bible's original photos:** lazy-loaded at their original bytes, because the register
+  pins "None; original downloaded bytes".
+
+**Remaining:**
+- **Desktop header at ≥1101 px:** row 2 is about 60% empty, and the T-VER tools sit about
+  880 px from the map tools.
+  - Fixing it means one band, with the tools moved into the shared `#workspaceBar`. That
+    collides with the bar's tested ≤38 px budget and the `--workspace-bar-height` observer.
+  - The spatial gate does not see this row. It passes because the T-VER tools are absolutely
+    positioned and the row hides its emptiness in `padding-right:205px`.
+  - Both versions tried this pass were flagged correctly: flex-wrap as an accidental wrap,
+    grid as an 891 px empty track.
+- **Map share at 1440 is 48.8%.** Both rails scroll vertically inside the page, which the law
+  allows as reading surfaces.
+- **sea.html at 390:** the 11 countries fill about 36% of the map height.
+- **Not verified:** a real iOS device, enlarged text, dark mode.
+
+**Round 2 (independent reviewer, revised tree):**
+- **Confirmed fixed:** the Carbon-tab band (an accessible H2 remains), 404 height (equal to the viewport at all three widths), the SEA label and radius, the research contents panel at 320 and 390, and the guide code blocks.
+- **No new defects** at 390, 1024 or 1440 in either language.
+- **Two points re-raised, both kept on purpose:**
+  - The Tools panel rows are full width, as above.
+  - The Thai stock note now takes three lines. The KPI row grows 18 px and the map takes 64.1% of the phone screen instead of 66.2%. Keeping "ขอบล่าง–บน" whole is worth one line; the two-line version only fit by breaking the word.
+- **Status:** the round produced no new confirmed defect, so the loop stops here (CLAUDE.md §16.3). The reviewer's verdict is REVISE because of the items under Remaining above; nothing outside that list stands in the way of release.

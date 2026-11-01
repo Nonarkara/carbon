@@ -6,7 +6,8 @@ const base=(await measurementTarget()).base;const b=await chromium.launch();cons
 for(const width of [1440,1280,390])for(const lang of ['th','en']){
  await p.setViewportSize({width,height:width===1280?720:900});await gotoRetry(p, `${base}/?lang=${lang}`,{waitUntil:'domcontentloaded'});await p.locator('#kStock').filter({hasText:'M'}).waitFor();
  assert.equal(await p.locator('.brand-strip>img').count(),3);
- for(const img of await p.locator('.brand-strip img').all())assert.ok(await img.evaluate(e=>e.complete&&e.naturalWidth>0));
+ // A lazy mark below the fold has not loaded yet by design; it must still resolve to a real image.
+ for(const img of await p.locator('.brand-strip img').all())assert.ok(await img.evaluate(e=>e.loading==='lazy'?fetch(e.src).then(r=>r.ok&&/^image\//.test(r.headers.get('content-type')||'')):e.complete&&e.naturalWidth>0));
  assert.equal(await p.locator('.brand-strip').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(255, 255, 255)');
  assert.equal(await p.locator('#standardsLink').getAttribute('href'),`research-${lang}.html#standards`);
  if(width===1280){await clickControl(p,'.advanced-tools>summary');await clickControl(p,'.lenses [data-tab=project]');await p.locator('#example').click();assert.equal(await p.locator('.advanced-tools').getAttribute('open'),null);}

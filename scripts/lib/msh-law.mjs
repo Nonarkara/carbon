@@ -758,7 +758,21 @@ export function collectLaw(root,exemptions){
     if(isScroller(p)){frame=p;break;}
     p=p.parentElement;
    }
-   if(!frame)continue;
+   // No scrolling ancestor: the document is the frame. A box that scrolls sideways straight in
+   // the page is the same defect with one less wrapper — the phone's figure strip hid forest
+   // absorption and emission off-screen this way and the rule never looked, because it only
+   // walked up to a second scroller. Sanctioned: a wide table's own `.table-scroll`
+   // (scripts/lib/table-wrap.mjs), and a frame that says it continues — a visible
+   // `.diagram-scroll-hint` right before it, as the Bible's credit diagrams carry.
+   if(!frame){
+    const hint=s.e.previousElementSibling;
+    const announced=hint?.matches('.diagram-scroll-hint')&&hint.getClientRects().length>0;
+    if(s.e.matches('.table-scroll')||announced||reported.has(s.e))continue;
+    reported.add(s.e);
+    out.push({kind:'nested-scroll',severity:'high',el:desc(s.e),gap:horizontalRange(s.e),
+     note:`${desc(s.e)} scrolls ${horizontalRange(s.e)}px sideways inside the page, which is read top to bottom — the overflow sits off-screen in a box with nothing to say it continues`});
+    continue;
+   }
    const key=s.e;
    if(reported.has(key))continue;
    reported.add(key);

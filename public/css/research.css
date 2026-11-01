@@ -39,8 +39,8 @@ body.guide.research{max-width:1200px;padding:0 32px;--chrome:43px}
  .research-toc,.research-parts{border-top:1px solid var(--rule-strong)}
  .research-toc summary,.research-parts summary{display:flex;align-items:center;gap:10px;list-style:none;cursor:pointer;padding:14px 0;font:600 15px/1.4 var(--font)}
  .research-toc summary::-webkit-details-marker,.research-parts summary::-webkit-details-marker{display:none}
- .research-toc summary:after,.research-parts summary:after{content:"\25B8";margin-left:auto;color:var(--ink-mid);transition:transform .15s}
- .research-toc[open] summary:after,.research-parts[open] summary:after{transform:rotate(90deg)}
+ .research-toc summary:after,.research-parts summary:after{content:"\25B8";margin-left:auto;color:var(--ink-mid)}
+ .research-toc[open] summary:after,.research-parts[open] summary:after{content:"\25BE"}
  .research-toc ol{padding-top:4px}
  .research-toc p{display:none}
  .research-toc a{padding:12px 0}

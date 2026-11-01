@@ -39,7 +39,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       data.provinces.forEach(p=>byCode.set(p.pcode,p));byCode.set('TH',data.national);
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
         onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&!map.getContainer().classList.contains('measuring')&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
-      fillPlaces();select({kind:'national',code:'TH'},false,false);setOverlay('stock');applyMetricLabels();
+      fillPlaces();select({kind:'national',code:'TH'},false,false);setOverlay('stock');fitThailand();applyMetricLabels();
       return registry.ready;
     });
 
@@ -63,7 +63,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     styleProvinces();
     if(sel.kind==='province'||sel.kind==='national'){
       S.src=byCode.get(sel.code);$('#place').value=sel.code;
-      if(fit){if(sel.kind==='national')map.setView([13.3,101],5.7);else S.layer.eachLayer(l=>{if(l.feature.properties.pcode===sel.code)map.fitBounds(l.getBounds(),{padding:[30,30]});});}
+      if(fit){if(sel.kind==='national')fitThailand();else S.layer.eachLayer(l=>{if(l.feature.properties.pcode===sel.code)map.fitBounds(l.getBounds(),{padding:[30,30]});});}
     }else{
       $('#place').value='box';S.src=null;$('#calculationTrace').textContent=t('loading');$('#ledger').replaceChildren();$('#kStock').textContent=t('loading');$('#kRemove').textContent=$('#kEmit').textContent='—';
       const grid=await loadGrid(),{totals,cells}=sumSelection(grid,sel.box?{box:sel.box}:{polygons:sel.polygons});
@@ -80,12 +80,20 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   const num=(v,d=0)=>v==null?'—':fmt(v,d);
   const big=v=>v==null?'—':Math.abs(v)>=1e6?`${fmt(v/1e6,2)} M`:fmt(v,0);
 
+  // Frame Thailand in the part of the map no instrument covers. A fixed centre and zoom put the
+  // legend on Chiang Rai on a phone: the country's most forested corner, under its own key.
+  function fitThailand(){
+    const m=map.getContainer().getBoundingClientRect(),box=q=>{const e=document.querySelector(q);return e?.getClientRects().length?e.getBoundingClientRect():null};
+    // ponytail: only the legend is cleared; the caption sits over the Andaman Sea at this framing.
+    const k=box('.overlay-legend');
+    map.fitBounds([[5.6,97.3],[20.5,105.7]],{paddingTopLeft:[8,k?Math.max(8,k.bottom-m.top+8):8],paddingBottomRight:[8,8],animate:false});
+  }
   function render(){
     if(!S.src)return;
     const s=S.src;S.rows=rowsFor();const r=id=>S.rows.find(x=>x.id===id);
     if(onState)onState({kind:S.sel.kind,code:S.sel.code,box:S.sel.box,polygons:S.sel.polygons,geojson:S.sel.geojson});
     const stock=r('stock_forest'),rem=r('forest_removals'),em=r('forest_emissions');
-    $('#kArea').textContent=`${big(s.area_ha)} ${t('ha')}`;
+    $('#kArea').replaceChildren(`${big(s.area_ha)} `,Object.assign(document.createElement('span'),{className:'unit',textContent:t('ha')}));
     $('#kAreaHint').textContent=s.cells!=null?t('boxHint').replace('{c}',fmt(s.cells)):t('forestShare').replace('{f}',fmt(100*s.forest_area_ha/s.area_ha,1));
     $('#kStock').textContent=stock?.tooCoarse?'—':big(stock?.value);
     const pct=b=>fmt(100*(b[1]-stock.value)/stock.value,b[1]-stock.value<.01*stock.value?2:0);
@@ -277,5 +285,5 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const body=S.rows.map(r=>[r.id,r.value??'',r.unit,r.dataset.name,r.dataset.version||'',r.dataset.year||r.dataset.period||'',r.central?.[0]??'',r.central?.[1]??'',r.conservative?.[0]??'',r.conservative?.[1]??'',r.optimistic?.[0]??'',r.optimistic?.[1]??'',r.unavailable||(r.tooCoarse?'below-dataset-resolution':'')]);
     download('carbon-ledger.csv','﻿'+[head,...body].map(x=>x.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n'),'text/csv;charset=utf-8');};
 
-  return {ready,select,render:()=>{if(S.data){fillPlaces();render();if(S.overlayKind)setOverlay(S.overlayKind);}if(S.atmos)$('#atmosNote').textContent=t(ATMOS[$('#atmos').value].note);},invalidate:()=>{},setDigestBars:fn=>{digestBars=fn;if(S.data)render();}};
+  return {ready,select,fitThailand,render:()=>{if(S.data){fillPlaces();render();if(S.overlayKind)setOverlay(S.overlayKind);}if(S.atmos)$('#atmosNote').textContent=t(ATMOS[$('#atmos').value].note);},invalidate:()=>{},setDigestBars:fn=>{digestBars=fn;if(S.data)render();}};
 }

@@ -147,3 +147,5 @@ body[data-sea-view=evidence] .workspace{display:grid}
  .scope-tools select{padding:4px 2px}
 }
 @media(max-width:360px){.scope-tools{gap:3px}}
+/* Leaflet draws its zoom buttons with a 2px radius; the house rule is square. */
+.leaflet-bar,.leaflet-bar a{border-radius:0!important}
