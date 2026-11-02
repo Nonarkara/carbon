@@ -14,8 +14,14 @@ function luminance([r,g,b]){const a=[r,g,b].map(x=>{x/=255;return x<=.04045?x/12
 // string, a system-color keyword, transparent, or a modern color() value with no decimal
 // digits. Sampling through a canvas yields sRGB bytes for every form it accepts, and a
 // control hidden by a closed disclosure is shown for the sample and then restored.
+//
+// The world figures are replaced when /api/global returns. A locator handle resolved before
+// that replacement is already detached by the time the sample runs, and getComputedStyle on a
+// detached node is an empty string. The query and the sample have to be the same page turn.
 async function contrast(page,selector){
- return page.locator(selector).first().evaluate(el=>{
+ const read=()=>page.evaluate(selector=>{
+  const el=document.querySelector(selector);
+  if(!el||!el.isConnected) return {fg:'',bg:'',error:true};
   const hidden=[];
   for(let n=el;n;n=n.parentElement) if(getComputedStyle(n).display==='none') hidden.push(n);
   const previous=hidden.map(n=>n.getAttribute('style'));
@@ -53,7 +59,14 @@ async function contrast(page,selector){
   }finally{
    hidden.forEach((n,i)=>{if(previous[i]==null)n.removeAttribute('style');else n.setAttribute('style',previous[i]);});
   }
- });
+ },selector);
+ let sample={fg:'',bg:'',error:true};
+ for(let attempt=0;attempt<4&&sample.error;attempt++){
+  await page.locator(selector).first().waitFor({state:'attached',timeout:10000});
+  sample=await read();
+  if(sample.error) await page.waitForTimeout(150);
+ }
+ return sample;
 }
 for(const lang of ['th','en']) for(const width of [375,768,1440]){
  await p.setViewportSize({width,height:width===375?812:1000});
@@ -68,8 +81,6 @@ for(const lang of ['th','en']) for(const width of [375,768,1440]){
  const shadows=await p.locator('button,.btn,.leaflet-control,.layer-panel,.overlay-legend').evaluateAll(es=>es.filter(e=>getComputedStyle(e).boxShadow!=='none').map(e=>e.id||e.className));
  assert.deepEqual(shadows,[],'Controls must remain flat, without inherited shadows');
  for(const selector of ['#exploreProvinces','#pickArea','#aboutTab','.world-value','.calc-answer','.calc-block code','.calc-block p']){
-  // The node is resolved and sampled in one browser task: a feed refresh can replace a
-  // locator handle, and CSS colours need not serialize as rgb(...).
   const sample=await contrast(p,selector);
   assert.ok(!sample.error,`${selector} color could not be read (fg=${sample.fg}, bg=${sample.bg})`);
   const [a,c]=[sample.rgb,sample.bgRgb].map(luminance),ratio=(Math.max(a,c)+.05)/(Math.min(a,c)+.05);
