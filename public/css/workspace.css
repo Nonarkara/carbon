@@ -52,8 +52,13 @@ body[data-embedded]>header.top{display:none}
 /* The narrowest phones cannot hold the brand, the place selector, the map's tools, Read and
    the language pair in one row at their comfortable sizes. The place selector has to show the
    place — it says which place every number belongs to — so the space comes out of the controls
-   that have slack: the language pair's padding and the gaps between the bar's groups. */
+   that have slack: the language pair's padding and the gaps between the bar's groups.
+   The mark itself is drawn at 20px here. The phone grid track is a fixed 24px, so shrinking
+   the image alone left a 4px empty cell and the place-search button kept those pixels. On a
+   coarse pointer that button is 36px, and at 320px the geography value ("ประเทศไทย") was then
+   1px short of its own text. The track has to follow the mark, or the search clips the place. */
 @media(max-width:380px){
+ .dashboard .workspace-bar{grid-template-columns:20px minmax(0,1fr) auto}
  .dashboard .workspace-bar .langs button{width:28px;min-width:28px;padding:0}
  .dashboard .workspace-bar .search>select{padding-left:2px;padding-right:2px}
  .dashboard .workspace-bar .top-right{gap:4px}
