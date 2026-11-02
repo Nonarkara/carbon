@@ -42,7 +42,9 @@ body.dashboard{font-size:1rem}
     says which place the numbers belong to, and it is not allowed to be clipped for the sake
     of a label. The control keeps its accessible name and draws itself as a stack of layers. */
  @media(max-width:380px){
-  .dashboard .map-chrome-toggle{font-size:0;min-width:40px;padding:0 6px}
+  /* A fixed 40px slot around a 16px glyph kept width the label had already given up.
+     The touch target stays the control block; the extra width belongs to the place. */
+  .dashboard .map-chrome-toggle{font-size:0;min-width:var(--control-block);padding:0 6px}
   .dashboard .map-chrome-toggle::before{content:'';display:block;width:16px;height:12px;background:linear-gradient(currentColor 0 0) 0 0/16px 3px no-repeat,linear-gradient(currentColor 0 0) 0 4px/16px 3px no-repeat,linear-gradient(currentColor 0 0) 0 8px/16px 3px no-repeat}
   /* The place selector has to show the place. The space it needs comes out of the controls
      that have slack in it — the language pair's padding, the gaps between the bar's groups
