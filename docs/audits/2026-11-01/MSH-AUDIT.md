@@ -204,3 +204,48 @@ The first record above was instrument-only and unsigned. This walk rendered ever
   - The Tools panel rows are full width, as above.
   - The Thai stock note now takes three lines. The KPI row grows 18 px and the map takes 64.1% of the phone screen instead of 66.2%. Keeping "ขอบล่าง–บน" whole is worth one line; the two-line version only fit by breaking the word.
 - **Status:** the round produced no new confirmed defect, so the loop stops here (CLAUDE.md §16.3). The reviewer's verdict is REVISE because of the items under Remaining above; nothing outside that list stands in the way of release.
+
+---
+
+## Third pass — the desktop band (2026-11-04, opencode)
+
+The Remaining list's largest item, fixed by owner decision. The two desktop defects shared one
+root: the header was two rows, and the second row did not earn its pixels.
+
+**Found (measured on live `a8061bf` at 1440×900, TH):**
+- Row 2 (`.quick-tools`) held 377 px of controls in a 1440 px row — **26% fill, 42 px tall** —
+  and hid its emptiness in `padding-right:205px`. The spatial gate could not see it.
+- The assessment switcher (`.advanced-tools`, the only desktop path to the five tabs — the
+  rail's `.tabs` band is a title, not a switcher) floated at the viewport's bottom-right
+  corner, **~880 px from the map tools it belongs beside** (B8 scattered actions).
+- Map share 48.8%, under the law's 60% floor.
+
+**Changed (`public/css/ship.css` only):**
+- ONE band at ≥1101 px: `body.dashboard>.top` becomes flex; `.quick-tools` becomes
+  `display:contents`, so its three controls (`#exploreProvinces`, `#pickArea`, Layers & Watch)
+  join the bar as items; `.advanced-tools` leaves its absolute corner and sits beside them
+  (B8). Controls size to the design system's `--control-block` (28 px fine pointer) — a dense
+  text group, so MSH wins over the 44 px rule. The place selector gives up no width.
+- The 205 px padding hack and the dead two-row grid areas are gone.
+- **The gate now sees the band**: `scripts/spatial-gate.mjs` asserts at ≥1101 px that the
+  header is ≤48 px, its children share one band, and all four controls survived (B14). The
+  row cannot silently return.
+
+**Verified (probe on the built tree, TH+EN):**
+- Header **43 px at 1101 / 1280 / 1440** in both languages (was 115 px when first attempted
+  block-ly, ~85 px as two rows). No horizontal overflow anywhere. Zero page errors.
+- In-band positions at 1101 (TH): Explore x603, Select area x719, Layers x819, T-VER x926 —
+  the switcher is now **107 px** from the layers tools, not 880.
+- Map share: **51.1%** at 1440 (was 48.8%), 45.7% at 1280, 39.5% at 1101. Map top 131 (was 164).
+- Phone and tablet byte-identical behaviour: header 35 px, panel closed, KPI grid without
+  sideways scroll, map share 65% at 390 — the ≤1100 cascade was re-checked after the fix.
+- 131/131 unit tests (hash-pinning gate caught a stale build mid-pass, as designed);
+  spatial gate PASS incl. the new band assertion; 17/17 browser suites.
+
+**Remaining (supersedes the desktop-header item above):**
+- **Map share at 1440 is 51.1%, still under the 60% floor.** The header lever is spent; the
+  rest lives in the stage columns (230 px world rail + 350 px assessment rail). Reaching the
+  floor needs a map ≈1000 px wide — e.g. 180/320 rails ≈ 58%, and the floor needs more. That
+  is a composition decision, not a header fix.
+- sea.html at 390: the 11 countries fill about 36% of the map height (unchanged).
+- Not verified: a real iOS device, enlarged text, dark mode (unchanged).

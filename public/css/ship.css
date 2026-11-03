@@ -1,7 +1,6 @@
 /* Operational shell: three reading roles, native flow on constrained screens. */
 body.dashboard{font-size:1rem}
 .dashboard{--text-body:1rem;--text-meta:.857rem;--text-display:1.714rem}
-.dashboard .top{grid-template-areas:"brand search right" "quick quick quick";padding:8px 16px;gap:8px 16px}
 .dashboard .top-right{min-width:0;gap:8px}.dashboard .brand{max-height:none;overflow:visible}.dashboard .brand h1{font-size:var(--text-display);white-space:normal}.dashboard .country{font-size:var(--text-meta)}
 .dashboard .reference-menu,.dashboard .map-tools{position:relative;min-width:0;z-index:1300}
 .dashboard summary{cursor:pointer}.dashboard .reference-menu>summary,.dashboard .map-tools>summary{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;border:1px solid var(--ink);font-size:var(--text-body);background:white}
@@ -11,7 +10,11 @@ body.dashboard{font-size:1rem}
 .dashboard .langs button{height:auto;min-width:44px;min-height:44px;font-size:var(--text-body)}
 .dashboard .search select{height:auto;min-height:44px;font-size:var(--text-body)}
 .dashboard .map-chrome-toggle{display:none}
-.dashboard .quick-tools{display:flex;flex-wrap:wrap;margin:0 -16px;padding:6px 205px 6px 16px;gap:8px}
+/* The map's tools are ONE set of controls. On the phone they drop from the bar as a panel
+   (below, max-width:1100px). On the desktop they become items of the bar itself:
+   display:contents dissolves the wrapper so its buttons join the band — the second row, which
+   was 26% full and hid its emptiness in 205px of padding, is gone. */
+.dashboard .quick-tools{display:contents}
 .dashboard .quick-tools>.btn{font-size:var(--text-body);min-height:44px;padding:8px 12px;flex:0 1 auto}
 .dashboard #startMap{display:none}.dashboard .kpis .unit{font-size:var(--text-body);font-weight:400;letter-spacing:0}.dashboard .kpis{overflow:visible}.dashboard .kpis dt,.dashboard .kpis small{font-size:var(--text-meta);line-height:1.5}.dashboard .kpis dd{font-size:var(--text-display);min-height:0;line-height:1.4}
 .dashboard .hint,.dashboard .privacy,.dashboard .calc-block p,.dashboard .calc-block code,.dashboard .province-row small,.dashboard .feed-tier,.dashboard .world-item p,.dashboard .world-item>small,.dashboard .world-item a,.dashboard .map-caption span{font-size:var(--text-meta)!important;line-height:1.6}
@@ -22,6 +25,19 @@ body.dashboard{font-size:1rem}
 .dashboard .foot .brand-strip{background:white;margin-bottom:12px}.dashboard .foot .release-note{display:block;margin-bottom:8px}
 .dashboard .about-inner{min-height:0}.dashboard .about-links{flex-wrap:wrap}
 @media(min-width:1101px){body.dashboard{height:100dvh;min-height:640px;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden}.dashboard .stage{grid-template-columns:230px minmax(320px,1fr) 350px}.dashboard .bottom-nav{display:none}.dashboard .rail,.dashboard .map-wrap,.dashboard .world-rail{height:100%;min-height:0}.dashboard .map-wrap{display:block}.dashboard .rail{display:flex}.dashboard[data-about] .about{height:100%;overflow:auto}}
+/* ONE band on the desktop too. The assessment switcher used to float at the viewport's
+   bottom-right corner, roughly 880px from the map tools it belongs beside; the bar now holds
+   everything. The bar's controls are a dense text group, so they keep label-plus-padding
+   boxes at the design system's own --control-block (28px fine pointer) — MSH wins over the
+   44px rule for dense groups. The place selector is never the control that gives up width. */
+@media(min-width:1101px){
+ body.dashboard>.top{display:flex;align-items:center;gap:8px 12px;padding:6px 16px;position:relative;z-index:1300;border-bottom:1px solid var(--ink)}
+ .dashboard .workspace-bar{flex:1 1 auto;min-width:0;min-height:0;border-bottom:0;padding-block:0}
+ .dashboard .workspace-bar .search{min-width:160px}
+ .dashboard .quick-tools>.btn,.dashboard .quick-tools .map-tools>summary{font-size:var(--text-meta);padding:2px 10px;white-space:nowrap}
+ .dashboard .top>.advanced-tools{order:2;position:relative;right:auto;bottom:auto;flex:0 0 auto;z-index:1300;font-size:var(--text-meta)}
+ .dashboard .top>.advanced-tools>summary{font-size:var(--text-meta);padding:2px 10px;white-space:nowrap}
+}
 
 .dashboard .reference-menu #guideLink{display:flex}
 @media(max-width:1100px){

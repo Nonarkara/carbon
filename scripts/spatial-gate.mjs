@@ -205,6 +205,24 @@ async function measureSurface(s,width){
    assert.ok(credit.reachable,`${s.name}@${width}: the map attribution is not clickable`);
   }
 
+  // The desktop header is ONE band. The map's tools were a second row that sat 26% full, and
+  // the assessment switcher floated at the viewport's bottom corner, roughly 880px from the
+  // tools it belongs beside. One band, or the row comes back.
+  if(s.name==='home'&&width>=1101){
+   const band=await page.evaluate(()=>{
+    const t=document.querySelector('header.top');
+    const boxes=[...t.children].map(c=>c.getBoundingClientRect()).filter(r=>r.width>1&&r.height>1);
+    const tops=boxes.map(r=>r.top);
+    return {h:Math.round(t.getBoundingClientRect().height),
+     aligned:boxes.length>0&&(Math.max(...tops)-Math.min(...tops))<=4};
+   });
+   assert.ok(band.h<=48,`${s.name}@${width}: desktop header is ${band.h}px — the map's tools must share ONE band with the bar`);
+   assert.ok(band.aligned,`${s.name}@${width}: desktop header children do not sit on one band`);
+   for(const sel of ['#exploreProvinces','#pickArea','.map-tools>summary','.advanced-tools>summary']){
+    assert.ok(await page.locator(sel).isVisible(),`${s.name}@${width}: ${sel} lost from the desktop band`);
+   }
+  }
+
   // A fold has to be one line. A fold that is three lines has put the navigation back
   // where it started and the page is no better off than before the fold existed.
   const folds=await measureFolds(page);
