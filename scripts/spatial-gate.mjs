@@ -43,7 +43,7 @@ console.log(`measuring ${manifest.commit} at ${base}`);
 // and skipped 1024 entirely, so the width where the layout actually changes was the one width
 // nobody measured. 320 and 768 are kept as extra coverage — a narrower phone is still a phone.
 const MATRIX=[
- {name:'home',path:'?lang=th',ready:'#kStock',widths:[320,390,1024,1440]},
+ {name:'home',path:'?lang=th',ready:'#kStock',widths:[320,390,1024,1101,1280,1440]},
  {name:'sea',path:'sea.html?lang=th',ready:'body[data-ready]',widths:[320,390,1024,1440]},
  {name:'bible',path:'bible.html?lang=th#sea-overview',ready:'.prose',widths:[320,390,1024,1440]},
  {name:'bible-credits',path:'bible.html?lang=en#sea-what-is-a-credit',ready:'figure.credit-figure',widths:[320,390,1024,1440]},
@@ -56,7 +56,7 @@ const MATRIX=[
  // Bible on the narrowest phone.
  {name:'not-found',path:'404.html',ready:'h1',widths:[320,390,1024,1440]},
  {name:'sea-en',path:'sea.html?lang=en',ready:'body[data-ready]',widths:[320,390,1024,1440]},
- {name:'home-en',path:'?lang=en',ready:'#kStock',widths:[320,390,1024,1440]},
+ {name:'home-en',path:'?lang=en',ready:'#kStock',widths:[320,390,1024,1101,1280,1440]},
 ];
 // The law names the height for each width. The height at 1024 is recorded, as section 6 asks.
 const HEIGHT=width=>width<=390?844:(width<=1024?768:900);
@@ -221,6 +221,23 @@ async function measureSurface(s,width){
    for(const sel of ['#exploreProvinces','#pickArea','.map-tools>summary','.advanced-tools>summary']){
     assert.ok(await page.locator(sel).isVisible(),`${s.name}@${width}: ${sel} lost from the desktop band`);
    }
+   // One line is not enough: at 1101px the band was one line with the place selector slid 20-33px
+   // under Read, and the gate passed it. Nothing in the band may overlap, and no label may spill.
+   const crowd=await page.evaluate(()=>{
+    const items=['.brand','.search','.top-right','#exploreProvinces','#pickArea','.map-tools','#worldToggle','.advanced-tools']
+     .map(q=>[q,document.querySelector(q)?.getBoundingClientRect()]).filter(([,r])=>r&&r.width>0);
+    const overlaps=[];
+    for(let i=0;i<items.length;i++)for(let j=i+1;j<items.length;j++){const a=items[i][1],b=items[j][1];
+     const x=Math.min(a.right,b.right)-Math.max(a.left,b.left),y=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
+     if(x>.5&&y>.5)overlaps.push(`${items[i][0]}×${items[j][0]} ${Math.round(x)}px`);}
+    const spills=[...document.querySelectorAll('header.top button,header.top summary')].filter(e=>e.offsetParent&&e.scrollWidth>e.clientWidth+1).map(e=>e.id||e.textContent.trim().slice(0,20));
+    const m=document.querySelector('#map').getBoundingClientRect();
+    return {overlaps,spills,share:m.width*(Math.min(m.bottom,innerHeight)-m.top)/(innerWidth*innerHeight)};
+   });
+   assert.deepEqual(crowd.overlaps,[],`${s.name}@${width}: desktop band controls overlap`);
+   assert.deepEqual(crowd.spills,[],`${s.name}@${width}: a band label spills out of its box`);
+   // MSH B9: on a map product the map holds at least 60% of the 1440x900 first screen.
+   if(width===1440)assert.ok(crowd.share>=.6,`${s.name}@${width}: the map holds ${(crowd.share*100).toFixed(1)}% of the first screen; the law asks 60%`);
   }
 
   // A fold has to be one line. A fold that is three lines has put the navigation back

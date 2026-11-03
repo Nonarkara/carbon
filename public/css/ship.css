@@ -34,12 +34,30 @@ body.dashboard{font-size:1rem}
  body.dashboard>.top{display:flex;align-items:center;gap:8px 12px;padding:6px 16px;position:relative;z-index:1300;border-bottom:1px solid var(--ink)}
  .dashboard .workspace-bar{flex:1 1 auto;min-width:0;min-height:0;border-bottom:0;padding-block:0}
  .dashboard .workspace-bar .search{min-width:160px}
+ /* The brand column sizes to the mark and wordmark; a fixed 140px floor made the selector slide under Read at 1101px. */
+ .dashboard .workspace-bar{grid-template-columns:max-content minmax(160px,380px) max-content;justify-content:start}
  .dashboard .quick-tools>.btn,.dashboard .quick-tools .map-tools>summary{font-size:var(--text-meta);padding:2px 10px;white-space:nowrap}
  .dashboard .top>.advanced-tools{order:2;position:relative;right:auto;bottom:auto;flex:0 0 auto;z-index:1300;font-size:var(--text-meta)}
  .dashboard .top>.advanced-tools>summary{font-size:var(--text-meta);padding:2px 10px;white-space:nowrap}
 }
 
 .dashboard .reference-menu #guideLink{display:flex}
+/* The world feeds are context for the selection, not its readout. Shown by default they took 230px from
+   the map and held it to 51% of a 1440x900 screen; the law asks 60%. They open as the left column on request. */
+.dashboard .world-toggle{display:none}
+@media(min-width:1101px){
+ .dashboard .world-toggle{display:inline-flex;align-items:center}
+ .dashboard .world-toggle[aria-expanded=true]{background:var(--signal)}
+ body.dashboard:not([data-world-open]) .stage{grid-template-columns:minmax(320px,1fr) 350px}
+ body.dashboard:not([data-world-open]) .stage>.world-rail{display:none}
+ /* The figures' edges land on the columns below them: the last figure sits over the selection rail. */
+ body.dashboard .kpis{grid-template-columns:repeat(3,minmax(0,1fr)) 350px}
+ body.dashboard[data-world-open] .kpis{grid-template-columns:230px repeat(2,minmax(0,1fr)) 350px}
+}
+/* Between 1101 and 1279px one band cannot hold the wordmark, the place selector and every tool: the
+   bar's grid columns overran each other (the selector slid under Read). The mark carries identity there;
+   the heading text stays for screen readers. */
+@media(min-width:1101px) and (max-width:1279px){.dashboard .brand h1{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}body.dashboard>.top{column-gap:6px;padding-inline:12px}.dashboard .workspace-bar{column-gap:6px}.dashboard .quick-tools>.btn,.dashboard .quick-tools .map-tools>summary,.dashboard .top>.advanced-tools>summary{padding-inline:6px}}
 @media(max-width:1100px){
  body.dashboard{height:auto;min-height:100dvh;display:block;overflow:auto;padding-bottom:var(--nav-space,64px)}
  .dashboard .top{display:flex;flex-wrap:wrap;align-items:center;padding:0 12px;gap:0;position:relative}

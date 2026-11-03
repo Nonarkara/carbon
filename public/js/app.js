@@ -129,6 +129,9 @@ $('#showUrban').onclick=()=>{const on=!urbanShown();urbanToggle(on);$('#showUrba
 setLang(getLang());$('#standardsLink').href=`research-${getLang()}.html#standards`;fields();summary();
 document.querySelectorAll('.flow span').forEach((el,i)=>el.textContent=(getLang()==='th'?['ดาวเทียม + แปลงสำรวจ','แบบจำลองมวลชีวภาพ','ตรวจสอบด้วยแปลงอิสระ','รับรองวิธี + ทวนสอบ']:['Satellite + plots','Biomass model','Independent validation','Method approval + verification'])[i]);
 Promise.all([fetch('data/source-catalog.json').then(r=>{if(!r.ok)throw Error('source catalog');return r.json();}),fetch('data/province-forest-area.json').then(r=>{if(!r.ok)throw Error('province data');return r.json();}),fetch('version.json').then(r=>r.json())]).then(([s,p,v])=>{state.sources=s;state.province=p;state.version=v.commit;$('#version').textContent=v.commit;renderSources();}).catch(err=>error(err));
+// Desktop: the world feeds are context, not the selection's readout. They open as the left column on
+// request, so the map keeps the first screen (MSH B9: map >= 60% of 1440x900).
+$('#worldToggle').onclick=()=>{const open=!('worldOpen' in document.body.dataset);if(open)document.body.dataset.worldOpen='';else delete document.body.dataset.worldOpen;$('#worldToggle').setAttribute('aria-expanded',String(open));map.invalidateSize();};
 $('#worldMobile').onclick=()=>{document.querySelector('.more-nav').open=false;delete document.body.dataset.about;$('#about').hidden=true;$('#aboutTab').setAttribute('aria-pressed','false');document.body.dataset.view='world';setNav();};
 window.addEventListener('resize',()=>map.invalidateSize());
 

@@ -33,6 +33,8 @@ assert.match(await page.locator('#ledger').textContent(),/National forest invent
 assert.equal(await page.locator('#kRemoveHint').textContent(),`GFW ${mf.datasets.gfw.version.split(' ')[0]} · ${mf.datasets.gfw.period}`);
 assert.ok((await page.locator('#kStockHint').textContent()).endsWith(`CCI ${mf.datasets.cci.version}`));
 // Non's Digest renders in the world rail with dated items and trends; the per-feed bible reading link stays.
+// Desktop opens the world feeds on request; open them the way a reader would.
+if(await page.locator('#worldToggle').isVisible())await page.locator('#worldToggle').click();
 await page.waitForSelector('.digest-news .digest-item');
 assert.ok(await page.locator('.digest-trends .digest-trend').first().isVisible(),'digest trends render');
 assert.ok((await page.locator('#worldFeeds .world-item a[href*=bible]').count())>=1,'per-feed bible reading link');
