@@ -249,3 +249,38 @@ root: the header was two rows, and the second row did not earn its pixels.
   is a composition decision, not a header fix.
 - sea.html at 390: the 11 countries fill about 36% of the map height (unchanged).
 - Not verified: a real iOS device, enlarged text, dark mode (unchanged).
+
+---
+
+## Fourth pass — independent check of GLM's one band, then MSH B9 (2026-11-04, Claude Opus 5.5)
+
+GLM built the one-band header (`f9ed5cd`, `97cea7d`). This pass measured it independently on the live site. It found `97cea7d` deployed but never pushed, and pushed it.
+
+**Found:**
+- **The band holds at 1440, but not at 1101.** At 1440 it is one line, 43 px high. At 1101 px the place selector slid under Read by 20 px in Thai and 33 px in English.
+  - The cause was the bar's fixed 140 px brand floor, inside a band that had no room for it.
+  - The gate missed it twice over. It only measured the home page at 1440, and its new band check asked "one line?", never "do the controls overlap?".
+- **The map held 51.1% of 1440×900 (MSH B9 asks for 60%).** The header was already 43 px, so height was not the limit. The width was: the world rail (230 px) plus the selection rail (350 px).
+
+**Changed:**
+- **World feeds:** global CO₂, grid carbon and carbon prices are context, not the selection's readout. On desktop they now open as the left column on request, from "World & markets" in the band, the same thing phones reach through More → World. With them closed, the map holds 64.7% of 1440×900.
+- **Figure strip:** its edges now land on the stage columns, with the last figure over the selection rail.
+- **Bar columns:** both end columns size to their content (`max-content`), so neither the brand nor the Read/language group can be squeezed into its neighbour.
+- **Narrow desktops (1101–1279 px):** the band spacing tightens, and the wordmark is hidden visually. The CT mark stays on screen, and the heading stays for screen readers.
+- **The gate:**
+  - It measures the home page at 1101 and 1280 as well.
+  - It asserts that no band controls overlap, that no band label spills out of its box, and that the map holds at least 60% at 1440.
+  - Proven able to fail: with the old bar columns put back, it fails at 1101 with "desktop band controls overlap".
+- **The browser flow test** opens World & markets before reading the news digest, the way a reader would.
+
+**Verified:**
+- Deployed as `9ebed7f`, and the release smoke test matches the live bytes.
+- 131 unit tests pass.
+- The spatial suite passes: 8 gates, 48 viewports, plus the 582-page deep audit inside the deploy.
+- All 17 browser suites pass.
+
+**Remaining:**
+- **Map share between 1101 and 1279 px** is 56.9–60.6%, below the 60% asked of the 1440 screen. The law names 1440 and 390.
+- **sea.html on a phone:** the 11 countries fill about 36% of the map height.
+- **Not verified:** a real iOS device, enlarged text, dark mode.
+- **Needs an independent auditor:** this pass changed the layout, so a second agent should walk 1440, 1024 and 390.
