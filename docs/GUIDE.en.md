@@ -3,7 +3,7 @@
 ## Explore Southeast Asia
 
 1. In the workbench’s area selector, choose **Southeast Asia → All 11 countries** or a country. The regional view opens beneath the same header and preserves Thai project inputs in memory. Choose Thailand in the same selector to return. Reloading still clears unsaved inputs. [Open it directly](sea.html?lang=en).
-2. Choose **Country** and a **Map metric**. **Whole region** shares the country/metric row and returns to the regional map. Use **Map**, **Compare 11** and **Research** to change views. On phones, the compact **View** selector switches between these views; **Evidence** opens the selected country’s numbers, equations, sources and exports. On desktop this evidence stays beside the map and scrolls independently. Open **Read** for methods; the header geography selector returns to Thailand. Read each quantity with its source and period. Forest cover and CO₂ are 2023 statistics; GFW fluxes are annual averages over 2001–2025.
+2. Choose **Country** and a **Map metric**. **Whole region** shares the country/metric row and returns to the regional map. Use **Map**, **Compare 11** and **Research** to change views. On phones and tablets up to 1100px, the compact **View** selector switches between these views; **Evidence** opens the selected country’s numbers, equations, sources and exports. On wider screens this evidence stays beside the map and scrolls independently. Open **Read** for methods; the header geography selector returns to Thailand. Read each quantity with its source and period. Forest cover and CO₂ are 2023 statistics; GFW fluxes are annual averages over 2001–2025.
 3. Choose **Compare 11**, search the table by Thai/English name or ISO code, then select a country to return to its map and evidence. Positive GFW net means a modelled source, negative a sink. Grey means missing data, never zero.
 4. Expand **Sources and reuse rights**; open **Country research** for the assumptions and next evidence to collect. Export **JSON** for full provenance or **CSV** for the selected figures.
 5. For measured Thai project inputs, return to the original workbench. This regional view has no parcel carbon calculator, regional credit issuance or corporate inventory submission.
@@ -37,7 +37,7 @@ The carbon map opens first. It answers a landscape question from published satel
 2. **Read the four headline figures.** Selected area; forest carbon stock (tCO₂e, ESA CCI Biomass v7.0, 2020, forest defined by JAXA FNF 2020) with its 95% range; forest removals and forest emissions per year (Global Forest Watch flux v1.4.3, average of 2001–2025).
 3. **Read the ledger in the rail.** Stock and absorption first, then emission: forest loss (GFW), all landscape fire (GFED5.1, 2013–2022 mean, with a monthly chart and land-type shares) and fossil-fuel CO₂ from all sectors (ODIAC2025, 2024). Provinces add cross-checks from Climate TRACE 2024; the national view adds Thailand's BTR1 inventory for 2022.
 4. **Never add the rows together.** Each row has its own dataset, year and method. GFW's own net (emissions − removals) is the only net shown; a negative value means a net sink.
-5. **Layers.** *Data layers* shows forest carbon density, the JAXA forest map, or province net flux. *Atmosphere* shows NASA GIBS images of aerosol, fire detections, carbon monoxide or column CO₂ for a chosen date. These are concentrations or detections, not emissions, and never produce numbers.
+5. **Layers.** On phones, open **Layers** in the top bar, then **Layers & Watch**. *Data layers* shows forest carbon density, the JAXA forest map, or province net flux. *Atmosphere* shows NASA GIBS images of aerosol, fire detections, carbon monoxide or column CO₂ for a chosen date. These are concentrations or detections, not emissions, and never produce numbers.
 6. **Export.** *Export JSON* saves the rows with dataset versions, conversion factors and the conservation check; *Export CSV* saves the rows with both uncertainty ranges.
 
 Limits you will see on screen: a box counts Thai land only; datasets coarser than a box are greyed out (fire 28 km; stock and fossil selections 2.8 km in this deployment); GFW flux inside a drawn box is marked *not ingested* because its 30 m grids need an API key. **Read → About** opens an illustrated explanation inside the app, without losing your inputs. The [research notebook, section 06](research-en.html#section-6) gives every method, source and check in full.
@@ -151,14 +151,15 @@ Open `http://127.0.0.1:8788`. The server serves **only public/**, never raw rese
 
 ```bash
 npx playwright install chromium
-npm run test:browser
+npm run test:browser:all
+npm run test:spatial
 npx wrangler login
 npm run deploy
 ```
 
-For browser tests against a deployment: `BASE_URL=https://forest-carbon-thailand.pages.dev npm run test:browser`. Use the existing Cloudflare Pages project `forest-carbon-thailand`; upload `public/`. `wrangler.toml` records that path. Deployment uses Direct Upload, so a GitHub push alone does **not** publish a new version. Run the deployment command after commit/push, then verify `/version.json`, the UI and exports on the public URL. The release ID is the Git commit present when building.
+For browser tests against a deployment: `BASE_URL=https://forest-carbon-thailand.pages.dev npm run test:browser:all`. Use the existing Cloudflare Pages project `forest-carbon-thailand`; upload `public/`. `wrangler.toml` records that path. Deployment uses Direct Upload, so a GitHub push alone does **not** publish a new version. Run the deployment command after commit/push, then verify `/version.json`, the UI and exports on the public URL. The release ID is the Git commit present when building.
 
-CI checks build and accounting/import tests. Dependency updates are proposed by Dependabot. Keep tokens in environment variables or platform secrets; never put them in the browser or repository. `public/_headers` contains the security policy. Adding an external service requires updating that policy and the privacy documentation deliberately.
+CI checks the build, accounting/import tests, every browser suite, spatial gates and Python ingest dependency compatibility. Dependency updates are proposed by Dependabot. Keep tokens in environment variables or platform secrets; never put them in the browser or repository. `public/_headers` contains the security policy. Adding an external service requires updating that policy and the privacy documentation deliberately.
 
 ## 8. Repository architecture
 
@@ -219,3 +220,5 @@ On the workbench, **Read** groups Research and the manual. **Layers & Watch** gr
 The magnifying-glass button beside geography opens place search. The text you type there goes to Photon / OpenStreetMap; project files stay in your browser. Tab or the arrow keys reach a result, Enter opens it, and Escape closes search. A search locates a place; it does not supply carbon inputs. If the service is unavailable, the field says so and the province selector remains usable.
 
 The measurement button sits above map zoom controls. Activate it, click vertices on the map, then choose **Done**; **Clear** removes the current measurement. Area uses 1 rai = 1,600 m². These approximate map measurements are for orientation, not cadastral area or a carbon-credit calculation.
+
+The assessment CSV repeats its evidence source, method version, factors and uncertainty/issuance status beside each numeric row. An unavailable optional registry snapshot does not block calculation or export; its screening context is explicitly marked unavailable. Regional CSVs retain each quantity’s display/storage units and observation period.

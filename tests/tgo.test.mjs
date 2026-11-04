@@ -4,10 +4,32 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {issuedProjectCount} from '../public/js/registry.js';
+import {issuedProjectCount,initRegistry} from '../public/js/registry.js';
 
 const d=JSON.parse(readFileSync('public/data/tgo/tver-forestry.json','utf8'));
 const close=(a,b,rel=1e-5)=>assert.ok(Math.abs(a-b)<=rel*Math.max(Math.abs(a),Math.abs(b),1),`${a} vs ${b}`);
+
+test('Unavailable registry cannot block local assessment export or masquerade as no province matches',async()=>{
+ const original=globalThis.fetch;
+ const boundary={type:'Polygon',coordinates:[[[100,14],[100.1,14],[100.1,14.1],[100,14.1],[100,14]]]};
+ try{
+  globalThis.fetch=async()=>{throw Error('offline registry');};
+  const registry=initRegistry({t:k=>k,fmt:v=>String(v),getLang:()=> 'en'});
+  assert.equal(registry.contextFor(boundary).status,'unavailable','still-loading registry is unavailable too');
+  await assert.rejects(registry.ready,/offline registry/);
+  assert.equal(registry.provincesOf(boundary),null);
+  const context=registry.contextFor(boundary);
+  assert.equal(context.provinces,null);assert.equal(context.status,'unavailable');
+  assert.equal(context.notParcelOverlap,true);assert.equal(context.snapshotDate,null);
+  assert.doesNotThrow(()=>JSON.stringify({tverRegistryContext:context}));
+  globalThis.fetch=async path=>({ok:true,json:async()=>path.includes('tver-forestry')?d:{type:'FeatureCollection',features:[]}});
+  const loaded=initRegistry({t:k=>k,fmt:v=>String(v),getLang:()=> 'en'});
+  await loaded.ready;
+  const checked=loaded.contextFor(boundary);
+  assert.equal(checked.status,'province-context');assert.deepEqual(checked.provinces,[]);
+  assert.equal(checked.snapshotDate,d.snapshot);assert.equal(checked.source,d.source.registry);
+ }finally{globalThis.fetch=original;}
+});
 
 test('snapshot covers FOR&AGR projects with a snapshot timestamp and source links',()=>{
   assert.equal(d.schemaVersion,1);

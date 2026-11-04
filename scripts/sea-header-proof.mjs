@@ -20,7 +20,7 @@ import{gotoRetry}from'./lib/browser-nav.mjs';
 
 // The native arrow and the breathing room around a selected value.
 const ARROW=22;
-const WIDTHS=[[320,844],[360,740],[375,740],[390,844],[430,932],[600,900],[768,1024],[851,900],[1024,768],[1440,900],[390,568]];
+const WIDTHS=[[320,844],[360,740],[375,740],[390,844],[430,932],[600,900],[768,1024],[851,900],[1024,768],[1100,768],[1101,768],[1440,900],[390,568]];
 const VIEWS=['map','evidence','compare','research'];
 
 const target=await measurementTarget(),browser=await chromium.launch(),page=await browser.newPage(),rows=[];
@@ -37,6 +37,14 @@ try{for(const lang of ['th','en'])for(const [width,height]of WIDTHS){
  await page.setViewportSize({width,height});await gotoRetry(page,`${target.base}/sea.html?lang=${lang}&country=BRN`,{waitUntil:'domcontentloaded',timeout:60000});await page.locator('body[data-ready]').waitFor({timeout:60000});await page.evaluate(()=>document.fonts.ready);
  const r=await page.evaluate(()=>{const box=s=>document.querySelector(s).getBoundingClientRect();return{top:box('#seaMap').top,mapHeight:box('#seaMap').height,chrome:box('header.top').height+box('.scope-tools').height,overflow:document.documentElement.scrollWidth-innerWidth,mapScroll:document.querySelector('.workspace').scrollHeight-document.querySelector('.workspace').clientHeight};});
  assert.ok(r.top<=72,'compact regional chrome exceeds its 72px pointer budget');assert.ok(r.mapHeight>=300,'hero map displaced');assert.equal(r.overflow,0);assert.ok(r.mapScroll<=2,'unnecessary nested map scroll');
+ const share=await page.locator('#seaMap').evaluate(e=>{const r=e.getBoundingClientRect();return r.width*r.height/(innerWidth*innerHeight);});
+ assert.ok(share>=.6,`${lang}@${width}: regional map occupies only ${(share*100).toFixed(1)}% of the first screen`);
+ if(lang==='th'&&width===1440){
+  const old=await page.addStyleTag({content:'.workspace{grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr)!important}'});
+  const oldShare=await page.locator('#seaMap').evaluate(e=>{const r=e.getBoundingClientRect();return r.width*r.height/(innerWidth*innerHeight);});
+  assert.ok(oldShare<.6,'the map-share gate failed to reject the old oversized evidence rail');
+  await old.evaluate(e=>e.remove());
+ }
  if(lang==='th'&&width===390&&height===844){
   const old=await page.addStyleTag({content:'.workspace-bar{min-height:51px!important}.scope-tools select,.scope-tools>#fitRegion{min-height:44px!important}'});
   assert.ok(await page.locator('#seaMap').evaluate(e=>e.getBoundingClientRect().top)>72,'the chrome budget failed to detect the old oversized layout');

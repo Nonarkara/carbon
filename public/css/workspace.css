@@ -54,6 +54,7 @@ body[data-embedded]>header.top{display:none}
    place — it says which place every number belongs to — so the space comes out of the controls
    that have slack: the language pair's padding and the gaps between the bar's groups. */
 @media(max-width:380px){
+ .dashboard .workspace-bar{grid-template-columns:20px minmax(0,1fr) auto}
  .dashboard .workspace-bar .langs button{width:28px;min-width:28px;padding:0}
  .dashboard .workspace-bar .search>select{padding-left:2px;padding-right:2px}
  .dashboard .workspace-bar .top-right{gap:4px}

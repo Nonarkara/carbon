@@ -17,8 +17,9 @@
 // Usage: npm run deploy
 import {resolve} from 'node:path';
 import {assertCleanTree, createPristineTree, assertBuiltTreeMatchesCommit, headCommit, repoRoot, treeState} from './lib/release-tree.mjs';
-import {run, INTERRUPTED} from './lib/release-run.mjs';
+import {run as runCommand, INTERRUPTED, localReleaseEnv} from './lib/release-run.mjs';
 const root = repoRoot();
+const run = (command, args, options) => runCommand(command, args, {...options, env: localReleaseEnv()});
 
 // A release that stops must still clean up after itself: the pristine worktree it exported
 // lives in the repository's worktree list and in the temporary directory. process.exit() would
@@ -129,6 +130,9 @@ async function main() {
 
     step('unit tests');
     verdicts.push({name: 'the unit tests', ok: await run('npm', ['test'], {cwd: tree.dir, label: 'the unit tests', retryOnceOn: INTERRUPTED}) === 0});
+
+    step('browser flows');
+    verdicts.push({name: 'the browser suites', ok: await run('npm', ['run', 'test:browser:all', '--', '--no-build'], {cwd: tree.dir, label: 'the browser suites', retryOnceOn: INTERRUPTED}) === 0});
 
     step('law gates');
     verdicts.push({name: 'the spatial law gates', ok: await run('npm', ['run', 'test:spatial', '--', '--no-build'], {cwd: tree.dir, label: 'the spatial law gates', retryOnceOn: INTERRUPTED}) === 0});

@@ -97,4 +97,7 @@ test('the release names the production branch explicitly', async () => {
   const script = await readFile(new URL('../scripts/release.mjs', import.meta.url), 'utf8');
   assert.match(script, /'--branch', productionBranch/, 'the upload must name the production branch');
   assert.match(script, /assertBuiltTreeMatchesCommit/, 'the release must check the built tree against the commit');
+  assert.match(script, /verdicts\.push\(\{name: 'the browser suites', ok: await run\('npm', \['run', 'test:browser:all', '--', '--no-build'\]/, 'the release must count the full browser suite as a blocking verdict');
+  assert.ok(script.indexOf("step('browser flows')") < script.indexOf("step('upload')"), 'browser interactions must be checked before publication');
+  assert.match(script, /runCommand\(command, args, \{\.\.\.options, env: localReleaseEnv\(\)\}\)/, 'every release command must use an environment without an inherited BASE_URL');
 });

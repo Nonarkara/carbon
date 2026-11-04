@@ -87,6 +87,7 @@ ${nat?`<p class="hint">${esc(t('tverNationNote').replace('{m}',D.multi.projects)
     return [pipeline,family,sizes,devs,tl].join('');
   }
   function provincesOf(geojson){
+    if(!geo)return null; // Unavailable context is not a completed check with zero matches.
     const pts=probePoints(geojson);
     return geo.features.filter(f=>{const fp=polygonsOf(f);return pts.some(([x,y])=>polygonContains(fp,x,y));}).map(f=>f.properties);
   }
@@ -102,6 +103,13 @@ ${nat?`<p class="hint">${esc(t('tverNationNote').replace('{m}',D.multi.projects)
     const stats=list.length?`<p class="tver-overlap-stats">${esc(t('tverOverlapStats').replace('{p}',names).replace('{exp}',n0(totExp)).replace('{iss}',n0(totIss)).replace('{issN}',n0(withIssCount)))}</p>`:'';
     return `<div class="tver-check"><h3>${esc(t('tverCheckTitle'))}</h3><p>${esc(t('tverCheckText').replace('{p}',names).replace('{n}',list.length))}</p>${stats}${source()}${list.length?listHTML(list,4):''}<p class="hint tver-rule">${esc(t('tverRuleNotice'))}</p><p class="hint">${esc(t('tverCheckLimit'))}</p></div>`;
   }
+  function contextFor(geojson){
+    const provinces=provincesOf(geojson);
+    return {status:provinces===null?'unavailable':'province-context',
+      provinces:provinces===null?null:provinces.map(p=>({pcode:p.pcode,name_th:p.name_th,name_en:p.name_en})),
+      snapshotDate:D?.snapshot||null,source:D?.source?.registry||null,purpose:'double-counting-screening',
+      notParcelOverlap:true};
+  }
   const byProvince=pc=>D?D.provinces[pc]:null;
-  return {ready,section,overlapHTML,byProvince,data:()=>D,provincesOf};
+  return {ready,section,overlapHTML,byProvince,data:()=>D,provincesOf,contextFor};
 }

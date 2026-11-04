@@ -1,0 +1,206 @@
+[
+  {
+    "commit": "573bc31",
+    "lang": "th",
+    "width": 390,
+    "height": 844,
+    "share": 0.7884700829383886,
+    "overflow": 0,
+    "evidenceWidth": 0,
+    "errors": []
+  },
+  {
+    "commit": "573bc31",
+    "lang": "th",
+    "width": 1024,
+    "height": 768,
+    "share": 0.8011271158854166,
+    "overflow": 0,
+    "evidenceWidth": 0,
+    "errors": []
+  },
+  {
+    "commit": "573bc31",
+    "lang": "th",
+    "width": 1100,
+    "height": 900,
+    "share": 0.8302951388888888,
+    "overflow": 0,
+    "evidenceWidth": 0,
+    "errors": []
+  },
+  {
+    "commit": "573bc31",
+    "lang": "th",
+    "width": 1101,
+    "height": 900,
+    "share": 0.6311178602726215,
+    "overflow": 0,
+    "evidenceWidth": 264.234375,
+    "errors": []
+  },
+  {
+    "commit": "573bc31",
+    "lang": "th",
+    "width": 1440,
+    "height": 900,
+    "share": 0.6312949930826823,
+    "overflow": 0,
+    "evidenceWidth": 345.59375,
+    "errors": []
+  },
+  {
+    "commit": "573bc31",
+    "lang": "en",
+    "width": 390,
+    "height": 844,
+    "share": 0.769586789099526,
+    "overflow": 0,
+    "evidenceWidth": 0,
+    "errors": []
+  },
+  {
+    "commit": "573bc31",
+    "lang": "en",
+    "width": 1024,
+    "height": 768,
+    "share": 0.8011271158854166,
+    "overflow": 0,
+    "evidenceWidth": 0,
+    "errors": []
+  },
+  {
+    "commit": "573bc31",
+    "lang": "en",
+    "width": 1100,
+    "height": 900,
+    "share": 0.8302951388888888,
+    "overflow": 0,
+    "evidenceWidth": 0,
+    "errors": []
+  },
+  {
+    "commit": "573bc31",
+    "lang": "en",
+    "width": 1101,
+    "height": 900,
+    "share": 0.6311178602726215,
+    "overflow": 0,
+    "evidenceWidth": 264.234375,
+    "errors": []
+  },
+  {
+    "commit": "573bc31",
+    "lang": "en",
+    "width": 1440,
+    "height": 900,
+    "share": 0.6312949930826823,
+    "overflow": 0,
+    "evidenceWidth": 345.59375,
+    "errors": []
+  },
+  {
+    "commit": "573bc31",
+    "lang": "th",
+    "width": 390,
+    "height": 844,
+    "notebook": true,
+    "imgs": [
+      400,
+      400,
+      400,
+      400,
+      400,
+      400
+    ],
+    "overflow": 0,
+    "greet": "ทัก\nมือเปิด เชิญเข้ามา น้องนนท์ต้อนรับผู้อ่านในสมุดวิจัย ส่วนใบไม้ CT ยังคงเป็นเครื่องหมายของระบบ",
+    "enlargedOverflow": 0
+  },
+  {
+    "commit": "573bc31",
+    "lang": "th",
+    "width": 1024,
+    "height": 768,
+    "notebook": true,
+    "imgs": [
+      400,
+      400,
+      400,
+      400,
+      400,
+      400
+    ],
+    "overflow": 0,
+    "greet": "ทัก\nมือเปิด เชิญเข้ามา น้องนนท์ต้อนรับผู้อ่านในสมุดวิจัย ส่วนใบไม้ CT ยังคงเป็นเครื่องหมายของระบบ"
+  },
+  {
+    "commit": "573bc31",
+    "lang": "th",
+    "width": 1440,
+    "height": 900,
+    "notebook": true,
+    "imgs": [
+      400,
+      400,
+      400,
+      400,
+      400,
+      400
+    ],
+    "overflow": 0,
+    "greet": "ทัก\nมือเปิด เชิญเข้ามา น้องนนท์ต้อนรับผู้อ่านในสมุดวิจัย ส่วนใบไม้ CT ยังคงเป็นเครื่องหมายของระบบ"
+  },
+  {
+    "commit": "573bc31",
+    "lang": "en",
+    "width": 390,
+    "height": 844,
+    "notebook": true,
+    "imgs": [
+      400,
+      400,
+      400,
+      400,
+      400,
+      400
+    ],
+    "overflow": 0,
+    "greet": "Greet\nOpen hands welcome the reader. Nong Non introduces the notebook; the CT leaf remains the product mark.",
+    "enlargedOverflow": 0
+  },
+  {
+    "commit": "573bc31",
+    "lang": "en",
+    "width": 1024,
+    "height": 768,
+    "notebook": true,
+    "imgs": [
+      400,
+      400,
+      400,
+      400,
+      400,
+      400
+    ],
+    "overflow": 0,
+    "greet": "Greet\nOpen hands welcome the reader. Nong Non introduces the notebook; the CT leaf remains the product mark."
+  },
+  {
+    "commit": "573bc31",
+    "lang": "en",
+    "width": 1440,
+    "height": 900,
+    "notebook": true,
+    "imgs": [
+      400,
+      400,
+      400,
+      400,
+      400,
+      400
+    ],
+    "overflow": 0,
+    "greet": "Greet\nOpen hands welcome the reader. Nong Non introduces the notebook; the CT leaf remains the product mark."
+  }
+]

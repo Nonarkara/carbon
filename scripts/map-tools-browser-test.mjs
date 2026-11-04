@@ -16,7 +16,7 @@ try{
   await page.locator('#kStock').filter({hasText:'M'}).waitFor();await page.evaluate(()=>document.fonts.ready);
   assert.ok(await page.locator('#workspaceBar').evaluate(e=>e.getBoundingClientRect().height)<= (touch?46:38),'national header exceeds its content budget');
   const fit=await page.locator('#place').evaluate(el=>{const c=document.createElement('canvas').getContext('2d');c.font=getComputedStyle(el).font;return{have:el.clientWidth,need:c.measureText(el.selectedOptions[0].text).width+22};});
-  assert.ok(fit.have>=fit.need,'place search clips the geography selector');
+  assert.ok(fit.have>=fit.need,`${lang}@${width} ${touch?'touch':'pointer'}: place search clips the geography selector (${fit.have}px available, ${fit.need}px needed)`);
   const noOverlap=await page.evaluate(()=>{const a=document.querySelector('#measureBtn').getBoundingClientRect(),b=document.querySelector('#overlayLegend').getBoundingClientRect();return a.right<=b.left||a.left>=b.right||a.bottom<=b.top||a.top>=b.bottom;});
   assert.ok(noOverlap,'measure button covers the carbon legend');
   const paint=await page.locator('#measureBtn').evaluate(e=>({bg:getComputedStyle(e).backgroundColor,height:e.getBoundingClientRect().height,target:parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--control-block'))}));

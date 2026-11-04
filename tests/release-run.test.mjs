@@ -9,7 +9,17 @@ import assert from 'node:assert/strict';
 import {readFileSync, existsSync, rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {run, INTERRUPTED} from '../scripts/lib/release-run.mjs';
+import {run, INTERRUPTED, localReleaseEnv} from '../scripts/lib/release-run.mjs';
+
+test('release children cannot measure an inherited BASE_URL instead of their pristine tree', async () => {
+  const inherited = {...process.env, BASE_URL:'https://old-release.invalid', CARBON_ENV_PROBE:'retained'};
+  const code = await run(process.execPath, ['-e', `
+    require('node:assert/strict').equal(process.env.BASE_URL, undefined);
+    require('node:assert/strict').equal(process.env.CARBON_ENV_PROBE, 'retained');
+  `], {env:localReleaseEnv(inherited)});
+  assert.equal(code, 0);
+  assert.equal(inherited.BASE_URL, 'https://old-release.invalid', 'sanitizing a child must not mutate the caller');
+});
 
 // A child that counts its own attempts, so the test can prove how many times it was tried.
 const counting = (marker, behaviour) => `

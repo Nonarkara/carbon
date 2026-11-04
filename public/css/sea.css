@@ -1,6 +1,6 @@
 @font-face{font-family:PlexThai;src:url('../vendor/fonts/ibm-plex-sans-thai-thai-400-normal.woff2');font-weight:400;font-display:swap}@font-face{font-family:PlexThai;src:url('../vendor/fonts/ibm-plex-sans-thai-thai-600-normal.woff2');font-weight:600 900;font-display:swap}
 :root{--ink:#161616;--blue:#1643c5;--yellow:#ffdf00;--red:#bd251b;--rule:#ccc}*{box-sizing:border-box}body{margin:0;font:14px/1.65 PlexThai,Arial,sans-serif;background:white;color:var(--ink)}a{color:var(--blue);text-underline-offset:3px}button,input,select,summary{font:inherit;color:inherit}button,select,input{background:white;border:1px solid var(--ink);padding:8px;min-height:44px}button,select,summary{cursor:pointer}button[aria-pressed=true]{background:var(--ink);color:white}button:hover,a:hover{background:#fff3a6}a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,.table-scroll:focus-visible{outline:3px solid var(--red);outline-offset:3px}.skip{position:absolute;top:-100px;background:white;z-index:2000}.skip:focus{top:4px}header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 16px;border-bottom:2px solid var(--ink)}.identity{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink)}.identity b{font-size:24px}.identity span{border-left:1px solid var(--ink);padding-left:12px}header nav{display:flex;align-items:center;gap:8px}header nav a{padding:8px}header button{min-width:44px}main{max-width:1600px;margin:auto}.scope-tools{display:flex;gap:12px;align-items:end;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--ink)}label span{display:block;font-size:12px;font-weight:600}.scope-tools label{flex:1;max-width:350px}.scope-tools select{width:100%}#fitRegion{background:var(--yellow)}#snapshotDate{font-size:12px;align-self:center}#status{padding:6px 16px;margin:0;font-size:12px;background:#f0f0ee}.workspace{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(330px,1fr);border-bottom:2px solid var(--ink)}.map-column{min-width:0;border-right:1px solid var(--ink)}#seaMap{height:510px;background:#e9ece7}.map-legend{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;padding:8px 16px;border-top:1px solid var(--ink);font-size:12px}.map-legend i{display:inline-block;width:15px;height:15px;border:1px solid var(--ink);vertical-align:middle;margin-right:4px}.map-note{margin:0;padding:6px 16px;font-size:12px;color:#444}article{padding:14px 20px;min-width:0}article h1{font-size:24px;line-height:1.35;margin:0 0 8px}#scopeNote,#limits{font-size:12px}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;border-top:1px solid var(--rule);padding:8px 0}dt{font-size:14px}dd{font-size:24px;font-variant-numeric:tabular-nums;font-weight:600;margin:0;line-height:1.4}dl small{grid-column:1/-1;font-size:12px;color:#444}.metric-unit{display:block;font-size:12px;font-weight:400}#calculation{border-left:3px solid var(--blue);background:#f0f0ee;padding:10px 12px;font-size:12px}#calculation code{display:block;font:14px/1.7 PlexThai,Arial,sans-serif;overflow-wrap:anywhere}#history{margin:12px 0}#history svg{width:100%;height:100px;display:block}#history figcaption{font-size:12px}.reader-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}.reader-actions>a{margin-right:auto}summary{padding:8px 0;min-height:44px}.source{padding:8px 0;border-top:1px solid var(--rule);font-size:12px;overflow-wrap:anywhere}.source b,.source a{display:block}.comparison,.research-route{padding:16px}.table-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}h2{font-size:24px;margin:0}.table-heading input{width:260px;max-width:100%}.comparison p{font-size:12px}.table-scroll{overflow:auto;border:1px solid var(--ink)}table{width:100%;border-collapse:collapse;min-width:1120px}th,td{text-align:right;padding:10px;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}th{background:var(--ink);color:white;font-size:12px;vertical-align:bottom}th:first-child,td:first-child{text-align:left}td:first-child button{border:0;color:var(--blue);text-decoration:underline;text-align:left;background:transparent;padding:4px 0}tr[aria-selected=true]{background:#fff3a6}td small{display:block;font-size:12px}#noCountries{padding:12px;background:#fff3a6}#readingRoutes{display:flex;gap:8px 20px;flex-wrap:wrap}#readingRoutes a{padding:8px 0}.research-route{border-top:2px solid var(--ink)}footer{padding:12px 16px;border-top:1px solid var(--ink);font-size:12px}.partners{display:flex;align-items:center;gap:18px;background:white}.partners>img{width:52px;height:32px;object-fit:contain}.partners span{display:flex;align-items:center;gap:6px;font-size:18px;font-weight:600}.partners span img{width:24px;height:24px;object-fit:contain}#version{float:right}.leaflet-bar{border-radius:0!important;box-shadow:none!important}.leaflet-bar a{min-width:44px;min-height:44px;line-height:44px!important}.country-point{background:var(--yellow);border:2px solid var(--ink);width:14px;height:14px}body[data-failed] #seaMap{height:280px}
-@media(max-width:850px){header{flex-wrap:wrap}.identity span{font-size:12px}.workspace{grid-template-columns:1fr}.map-column{border-right:0;border-bottom:1px solid var(--ink)}#seaMap{height:440px}article{padding:14px 16px}.scope-tools{gap:8px}.scope-tools label{max-width:none}#snapshotDate{flex-basis:100%}}
+@media(max-width:1100px){header{flex-wrap:wrap}.identity span{font-size:12px}.workspace{grid-template-columns:1fr}.map-column{border-right:0;border-bottom:1px solid var(--ink)}#seaMap{height:440px}article{padding:14px 16px}.scope-tools{gap:8px}.scope-tools label{max-width:none}#snapshotDate{flex-basis:100%}}
 @media(max-width:500px){header{padding:8px 12px;gap:4px}header nav{width:100%;justify-content:space-between;gap:4px}header nav a{padding:8px 0;font-size:12px}.identity span{padding-left:8px}.identity b{font-size:24px}.scope-tools{padding:8px 12px}.scope-tools label{flex:1 1 140px}.scope-tools button{min-height:44px}#seaMap{height:340px}.table-heading label,.table-heading input{width:100%}dd{font-size:24px}.map-note{font-size:12px}.partners{gap:12px}}
 @media print{header nav,.scope-tools,#status,.reader-actions,.leaflet-control,.table-heading label,#readingRoutes{display:none}.workspace{display:block}#seaMap{height:330px}.map-column{border:0}.table-scroll{overflow:visible}table{min-width:0;font-size:10px}th,td{padding:5px}article,figure{break-inside:avoid}}
 /* Map-first screen budget: keep navigation in one row and reset on the map. */
@@ -16,7 +16,7 @@ header nav a{display:block;padding:10px 12px;font-size:14px}
 .data-status{display:flex;flex-wrap:wrap;align-items:center;gap:0 12px;padding:2px 12px;background:#f0f0ee;font-size:11px;line-height:1.45}
 #status{padding:0;font-size:inherit;line-height:inherit}#snapshotDate{flex-basis:auto;font-size:inherit;line-height:inherit}
 .map-column{position:relative}#fitRegion{position:absolute;top:10px;right:10px;z-index:800;min-height:44px;padding:6px 10px;font-size:12px}
-@media(min-width:851px){.scope-tools{grid-template-columns:minmax(0,350px) minmax(0,350px)}.identity{display:flex}.identity span{font-size:14px;border-left:1px solid var(--ink);padding-left:8px}}
+@media(min-width:1101px){.scope-tools{grid-template-columns:minmax(0,350px) minmax(0,350px)}.identity{display:flex}.identity span{font-size:14px;border-left:1px solid var(--ink);padding-left:8px}}
 @media(max-width:500px){.scope-tools{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}.scope-tools select{font-size:12px}}
 @media(max-width:360px){header{padding-inline:8px;gap:4px}.identity{column-gap:4px;grid-template-columns:26px auto}.identity img{width:26px;height:26px}.identity b{font-size:18px}.identity span{font-size:10px}header button{padding:4px;min-width:40px}.read-menu summary{padding:6px}.scope-tools,.data-status{padding-inline:8px}}
 @media print{.read-menu,#fitRegion,.data-status{display:none}}
@@ -39,8 +39,8 @@ header nav a{display:block;padding:10px 12px;font-size:14px}
 @media(max-width:700px){#readingRoutes{grid-template-columns:1fr}}
 /* The map and evidence share a viewport; long evidence cannot stretch the map row. */
 main{max-width:none}
-@media(min-width:851px){
- .workspace{height:clamp(420px,calc(100dvh - 146px),920px);grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);align-items:stretch}
+@media(min-width:1101px){
+ .workspace{height:clamp(420px,calc(100dvh - 146px),920px);grid-template-columns:minmax(0,1fr) min(350px,24vw);align-items:stretch}
  .map-column{display:flex;flex-direction:column;min-height:0}
  #seaMap{flex:1;min-height:260px;height:auto}
  #countryEvidence{height:100%;overflow:auto;overscroll-behavior-y:contain;scrollbar-gutter:stable;padding:12px 16px}
@@ -57,7 +57,7 @@ main{max-width:none}
 #scopeNote{margin:4px 0 8px;line-height:1.5}#limits{line-height:1.5;max-width:65ch}
 #countryNumbers>div{padding:5px 0}#countryNumbers dd{font-size:22px}
 #scopeName{display:none}
-@media(max-width:850px){
+@media(max-width:1100px){
  #countryEvidence{padding:12px 16px}
  #countryNumbers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
  #countryNumbers>div{display:flex;flex-direction:column;align-items:stretch;gap:2px;min-width:0;padding:6px 0}
@@ -66,17 +66,17 @@ main{max-width:none}
 }
 body[data-embedded]>header{display:none}
 body[data-embedded] .workspace{height:clamp(420px,calc(100dvh - 90px),920px)}
-@media(max-width:850px){body[data-embedded] .workspace{height:auto}}
+@media(max-width:1100px){body[data-embedded] .workspace{height:auto}}
 /* Secondary datasets are views, not another kilometre below the working map. */
 .sea-views{display:flex;gap:4px;align-items:center}
 .sea-views button{min-height:36px;padding:4px 10px;font-size:13px;line-height:1.4;white-space:nowrap}
 .sea-views button[aria-pressed=true]{background:#ffdf00;color:var(--ink)}
 body:not([data-sea-view=map]) .workspace,body:not([data-sea-view=compare]) .comparison,body:not([data-sea-view=research]) .research-route,body:not([data-sea-view=research])>footer{display:none}
-@media(min-width:851px){
+@media(min-width:1101px){
  .scope-tools{grid-template-columns:minmax(0,260px) minmax(0,320px) auto;justify-content:start}
  body[data-sea-view=compare] .table-scroll{max-height:calc(100dvh - 260px)}
 }
-@media(max-width:850px){
+@media(max-width:1100px){
  body{padding-bottom:48px}
  .sea-views{position:fixed;bottom:0;left:0;right:0;z-index:1400;background:#161616;gap:0;padding-bottom:env(safe-area-inset-bottom)}
  .sea-views button{flex:1;min-height:44px;border:0;background:transparent;color:white}
@@ -84,8 +84,8 @@ body:not([data-sea-view=map]) .workspace,body:not([data-sea-view=compare]) .comp
 }
 @media print{.sea-views{display:none}body .workspace,body .comparison,body .research-route,body>footer{display:block!important}.workspace,#countryEvidence{height:auto;overflow:visible}.table-scroll{max-height:none!important}body{padding-bottom:0}}
 body[data-sea-view=evidence] .workspace{display:grid}
-@media(min-width:851px){.sea-views [data-sea-view=evidence]{display:none}}
-@media(max-width:850px){
+@media(min-width:1101px){.sea-views [data-sea-view=evidence]{display:none}}
+@media(max-width:1100px){
  body{height:100dvh;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding-bottom:44px}
  body>header{flex:none}
  main{flex:1;min-height:0;display:flex;flex-direction:column;width:100%}
@@ -114,10 +114,10 @@ body[data-sea-view=evidence] .workspace{display:grid}
 .scope-tools select{min-height:44px;height:44px;font-size:13px}
 .sea-views{position:static;display:flex;flex:none;gap:4px;background:transparent;padding:0}
 .sea-views .view-select{display:none}
-@media(min-width:851px){
+@media(min-width:1101px){
  .workspace,body[data-embedded] .workspace{height:max(420px,calc(100dvh - var(--sea-chrome-height,128px)))}
 }
-@media(max-width:850px){
+@media(max-width:1100px){
  body{padding-bottom:0}
  .scope-tools{padding:4px 8px;gap:4px}
  .scope-tools>label:first-child{flex:1 1 95px}
@@ -135,10 +135,10 @@ body[data-sea-view=evidence] .workspace{display:grid}
 .boundary-note>summary{min-height:24px;padding:2px 0;font-size:11px;line-height:1.5}
 .boundary-note .map-note{padding:4px 0;max-width:75ch}
 .map-column>.data-status{flex:none;padding:2px 12px;background:white}
-@media(max-width:850px){.workspace{overflow:visible}.map-column{overflow:visible}}
+@media(max-width:1100px){.workspace{overflow:visible}.map-column{overflow:visible}}
 /* Reset is a geography action, beside country selection rather than over the map. */
 .scope-tools>#fitRegion{position:static;flex:none;min-height:44px;height:auto;padding:4px 8px;margin:0;font-size:12px;line-height:1.3;white-space:nowrap}
-@media(max-width:850px){
+@media(max-width:1100px){
  /* Four controls on one phone row, each wide enough for the longest label it carries:
     country 86px, metric 88px, view 71px, and the reset on the width of its own word. */
  .scope-tools{display:grid;grid-template-columns:minmax(86px,1fr) minmax(88px,1.2fr) minmax(71px,.9fr) max-content;gap:4px}

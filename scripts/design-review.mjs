@@ -15,7 +15,9 @@ function luminance([r,g,b]){const a=[r,g,b].map(x=>{x/=255;return x<=.04045?x/12
 // digits. Sampling through a canvas yields sRGB bytes for every form it accepts, and a
 // control hidden by a closed disclosure is shown for the sample and then restored.
 async function contrast(page,selector){
- return page.locator(selector).first().evaluate(el=>{
+ const read=()=>page.evaluate(selector=>{
+  const el=document.querySelector(selector);
+  if(!el||!el.isConnected) return {fg:'',bg:'',error:true};
   const hidden=[];
   for(let n=el;n;n=n.parentElement) if(getComputedStyle(n).display==='none') hidden.push(n);
   const previous=hidden.map(n=>n.getAttribute('style'));
@@ -53,7 +55,14 @@ async function contrast(page,selector){
   }finally{
    hidden.forEach((n,i)=>{if(previous[i]==null)n.removeAttribute('style');else n.setAttribute('style',previous[i]);});
   }
- });
+ },selector);
+ let sample={fg:'',bg:'',error:true};
+ for(let attempt=0;attempt<4&&sample.error;attempt++){
+  await page.locator(selector).first().waitFor({state:'attached',timeout:10000});
+  sample=await read();
+  if(sample.error) await page.waitForTimeout(150);
+ }
+ return sample;
 }
 for(const lang of ['th','en']) for(const width of [375,768,1440]){
  await p.setViewportSize({width,height:width===375?812:1000});

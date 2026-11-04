@@ -493,9 +493,9 @@ The official product name is **Carbona**, or **คาร์บอนนะ** in 
 
 The softness is also the claim the product is willing to make. An estimate is not a credit. A name that already sounds like it is checking with you — “carbon, yeah?” — is harder to mistake for a stamp.
 
-### The name is a hedge you can hear
+### Why a round face belongs in a square interface
 
-Faces with a large head, large eyes and a small body are what Lorenz called the baby schema. Glocker and colleagues manipulated those features in infant photographs and found that they raised both rated cuteness and the reported wish to look after the infant ([Glocker et al., 2009](https://doi.org/10.1111/j.1439-0310.2008.01603.x)). Applying that to a drawn mascot is an extrapolation, not a result of the study. The hope is that a round face in a browser tab is easier to find again than another navy square. Nittono and colleagues found that looking at cute images can make the next small task more careful, and can narrow attention ([Nittono et al., 2012](https://doi.org/10.1371/journal.pone.0046362)). That is a reason to hope someone looks closely. It is not a reason to believe the arithmetic got better. A face cannot check a tonne. The carefulness still has to be in the sources, the factors and the tests.
+Faces with a large head, large eyes and a small body are what Lorenz called the baby schema. Glocker and colleagues manipulated those features in infant photographs and found that they raised both rated cuteness and the reported wish to look after the infant ([Glocker et al., 2009](https://doi.org/10.1111/j.1439-0310.2008.01603.x)). Applying that to a drawn mascot is an extrapolation, not a result of the study. The hope is that a familiar face helps readers return to an explanation. That navigation benefit has not been tested here. Nittono and colleagues found that looking at cute images can make the next small task more careful, and can narrow attention ([Nittono et al., 2012](https://doi.org/10.1371/journal.pone.0046362)). That is a reason to hope someone looks closely. It is not a reason to believe the arithmetic got better. A face cannot check a tonne. The carefulness still has to be in the sources, the factors and the tests.
 
 So the mascot is allowed to be round, and almost nothing else is. The map, the rules, the tables and the three props the character holds — the viewing square, the plot flag, the stop palm — stay square, in the same paper, navy and yellow as the rest of the screen. One leaf is forest green, from the stock map. The other is yellow, the only accent. Curves are the exception that makes the face work. They stop at the face.
 
@@ -504,7 +504,7 @@ So the mascot is allowed to be round, and almost nothing else is. The map, the r
 The same character, so the face stays one memory. The pose changes, so the face can carry a job without being pasted onto a result.
 
 <ul class="kabonna-poses">
-<li><img src="images/nong-non/pose-greet.png" alt="Nong Non waving" width="400" height="480"><b>Greet</b><span>The mark. Open hands, come closer. The earlier logo exploration.</span></li>
+<li><img src="images/nong-non/pose-greet.png" alt="Nong Non waving" width="400" height="480"><b>Greet</b><span>Open hands welcome the reader. Nong Non introduces the notebook; the CT leaf remains the product mark.</span></li>
 <li><img src="images/nong-non/pose-look.png" alt="Nong Non looking at the square beside him" width="400" height="480"><b>Look</b><span>A square, the drawn box and the satellite cell. Looking is not a verdict.</span></li>
 <li><img src="images/nong-non/pose-both.png" alt="Nong Non holding a leaf and a plume apart" width="400" height="480"><b>Both</b><span>A leaf in one hand, a plume in the other, with a gap. Absorption and emission are shown together and never added.</span></li>
 <li><img src="images/nong-non/pose-measure.png" alt="Nong Non planting a small flag" width="400" height="480"><b>Measure</b><span>A flag in a small square plot. Field evidence, not a guess from the portrait.</span></li>

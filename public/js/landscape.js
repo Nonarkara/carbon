@@ -28,9 +28,13 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     o[0].textContent=`${t('metricFossil')} · ${ds.odiac.year}`;
     o[1].textContent=`${t('metricStock')} · ${ds.cci.year}`;
     o[2].textContent=getLang()==='th'?`${t('metricNet')} · เฉลี่ย ${ds.gfw.period}`:`${t('metricNet')} · ${ds.gfw.period} mean`;
-    o[3].textContent=`${t('tverMetric')} · ${registry?.data()?.snapshot?.slice(0,4)||''}`.trim();};
+    o[3].textContent=`${t('tverMetric')} · ${registry?.data()?.snapshot?.slice(0,4)||(getLang()==='th'?'ยังไม่มีข้อมูล':'unavailable')}`.trim();o[3].disabled=!registry.data();
+    const overlay=document.querySelector('input[name=overlay][value=tver]');if(overlay)overlay.disabled=!registry.data();};
 
   const registry=initRegistry({t,fmt,getLang});
+  // Optional context must never reject the landscape's operating readiness. Attach now,
+  // before the independently fetched ledger finishes, to avoid an unhandled rejection.
+  const registryReady=registry.ready.catch(()=>null);
   const ready=Promise.all(['manifest.json','provinces.json','provinces.geojson'].map(f=>fetch('data/ledger/'+f).then(r=>{if(!r.ok)throw Error('ledger:'+f);return r.json();})))
     .then(([manifest,data,geo])=>{
       S.manifest=manifest;S.data=data;
@@ -40,7 +44,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
         onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&!map.getContainer().classList.contains('measuring')&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
       fillPlaces();select({kind:'national',code:'TH'},false,false);setOverlay('stock');fitThailand();applyMetricLabels();
-      return registry.ready;
+      registryReady.then(()=>{applyMetricLabels();if(S.src)render();});
     });
 
   function fillPlaces(){
@@ -203,7 +207,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   function renderProvinces(){
     const metric=$('#provinceMetric').value,ds=S.manifest.datasets;
     const isTver=metric==='tver';
-    const value=isTver?(p)=>registry.data()?.provinces?.[p.pcode]?.projects||0
+    const value=isTver?(p)=>registry.data()?.provinces?.[p.pcode]?.projects??null
       :metric==='stock'?p=>p.forest_agb_mg*S.manifest.conversion.agb_to_co2e
       :metric==='net'?p=>p.gfw_net_mg_co2e/ds.gfw.years
       :p=>p.fossil_c_t*44/12;
@@ -212,7 +216,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       :metric==='stock'?`CCI + JAXA · ${ds.cci.year}`
       :metric==='net'?`GFW · ${ds.gfw.period}`
       :`${ds.odiac.version} · ${ds.odiac.year}`;
-    const fmtVal=isTver?v=>fmt(v,0):v=>fmt(v/1e6,2)+' M';
+    const fmtVal=isTver?v=>v===null?'—':fmt(v,0):v=>fmt(v/1e6,2)+' M';
     $('#provinceRanking').innerHTML=[...S.data.provinces].sort((a,b)=>value(b)-value(a)).map(p=>`<button class="province-row" data-province="${p.pcode}"><span>${esc(placeName(p))}</span><b>${fmtVal(value(p))}</b><small>${unit} · ${source} · ${esc(t('globalRef'))}</small></button>`).join('');
     $('#provinceRanking').querySelectorAll('button').forEach(b=>b.onclick=()=>select({kind:'province',code:b.dataset.province}));
   }
@@ -229,7 +233,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   // One place decides province styling: selection outline plus, when chosen, the flux choropleth.
   function styleProvinces(){
     if(!S.layer)return;
-    const flux=S.overlayKind==='flux',tver=S.overlayKind==='tver',years=S.manifest.datasets.gfw.years;
+    const flux=S.overlayKind==='flux',tver=S.overlayKind==='tver'&&!!registry.data(),years=S.manifest.datasets.gfw.years;
     S.layer.setStyle(f=>{
       const sel=f.properties.pcode===S.sel?.code,p=byCode.get(f.properties.pcode);
       const vflux=p.gfw_net_mg_co2e/p.area_ha/years;
@@ -240,6 +244,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     });
   }
   function setOverlay(kind){
+    if(kind==='tver'&&!registry.data()){message(getLang()==='th'?'ข้อมูลทะเบียน T-VER ยังไม่พร้อม ใช้ชั้นข้อมูลอื่นได้':'T-VER registry context is unavailable. Other map layers remain usable.');const previous=document.querySelector(`input[name=overlay][value="${S.overlayKind||''}"]`);if(previous)previous.checked=true;return;}
     S.overlayKind=kind;
     if(S.overlay){map.removeLayer(S.overlay);S.overlay=null;}
     styleProvinces();

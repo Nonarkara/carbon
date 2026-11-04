@@ -83,3 +83,6 @@ body:has(#reader-index) header{background:white;border-bottom:1px solid var(--in
 .diagram-transcript li{margin:2px 0}
 @media(min-width:1200px){.credit-diagram-scroll svg{min-width:840px}}
 @media print{.credit-diagram-scroll{overflow:visible}.credit-diagram-scroll svg{min-width:0}.diagram-scroll-hint{display:none}}
+
+/* Source identifiers and paths stay legible when readers enlarge text. */
+.research article code,.research article a{overflow-wrap:anywhere}

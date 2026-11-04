@@ -22,4 +22,17 @@ for(const lang of ['th','en'])for(const width of [375,768,1440]){
  assert.equal(await p.locator('.research-toc a').count(),23);
  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Research overflows');
 }
+for(const lang of ['th','en']){
+ await p.setViewportSize({width:390,height:844});
+ await gotoRetry(p, `${base}/research-${lang}.html#section-13`,{waitUntil:'domcontentloaded'});
+ await p.evaluate(()=>document.fonts.ready);
+ await p.evaluate(()=>{
+  const sizes=[...document.querySelectorAll('body *')].map(e=>[e,parseFloat(getComputedStyle(e).fontSize)]);
+  for(const [e,size] of sizes)e.style.fontSize=(size*2)+'px';
+ });
+ assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${lang}: research identifiers bleed at 200% text`);
+ const old=await p.addStyleTag({content:'.research article code,.research article a{overflow-wrap:normal!important}'});
+ assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),'enlarged-text gate must reject the old unwrapped identifiers');
+ await old.evaluate(e=>e.remove());
+}
 assert.deepEqual(errors,[]);await b.close();console.log('Academic reader: TH/EN 375/768/1440, diagrams, tables, search, no overflow or page errors.');

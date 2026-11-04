@@ -16,19 +16,26 @@ const exec = promisify(execFile);
 // What Node's test runner prints when it is stopped by a signal rather than by a failing test.
 export const INTERRUPTED = /Interrupted while running/;
 
+// Pre-upload gates must measure the pristine tree, never an inherited live/test URL.
+export function localReleaseEnv(env = process.env) {
+  const local = {...env};
+  delete local.BASE_URL;
+  return local;
+}
+
 /**
  * Run a command, printing its output and returning its exit code.
  *
  * @param {string} cmd
  * @param {string[]} args
- * @param {{cwd?:string, label?:string, retryOnceOn?:RegExp|null, maxBuffer?:number}} [options]
+ * @param {{cwd?:string, label?:string, retryOnceOn?:RegExp|null, maxBuffer?:number, env?:NodeJS.ProcessEnv}} [options]
  * @returns {Promise<number>} the exit code, 0 for success
  */
-export async function run(cmd, args, {cwd = process.cwd(), label, retryOnceOn = null, maxBuffer = 64 * 1024 * 1024} = {}) {
+export async function run(cmd, args, {cwd = process.cwd(), label, retryOnceOn = null, maxBuffer = 64 * 1024 * 1024, env = process.env} = {}) {
   const name = label ?? `${cmd} ${args.join(' ')}`;
   for (let attempt = 1; attempt <= (retryOnceOn ? 2 : 1); attempt++) {
     try {
-      const {stdout, stderr} = await exec(cmd, args, {cwd, maxBuffer});
+      const {stdout, stderr} = await exec(cmd, args, {cwd, maxBuffer, env});
       if (stdout) process.stdout.write(stdout);
       if (stderr) process.stderr.write(stderr);
       return 0;

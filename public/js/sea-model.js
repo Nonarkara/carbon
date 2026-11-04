@@ -28,10 +28,28 @@ peat_stock_t_c:{en:'Peatland carbon stock · Gt C · 2000 reference year',th:'�
 // Metrics that are shown in the evidence panel and the comparison table but are NOT map metrics.
 // Mangrove uses its own extent flag, so a choropleth of it would invite adding it to a forest number.
 // It still needs a display unit, so it lives here rather than in the map metric table.
-export const SEA_DISPLAY={mangrove_stock_t_c:{en:'Mangrove carbon · Gt C · 2000 reference year',th:'คาร์บอนชายเลน · Gt C · ปีฐานอ้างอิง 2000',unit:'Gt C',scale:1e9,dec:2},forest_km2:{en:'Forest area · km² · 2023',th:'พื้นที่ป่า · km² · 2023',unit:'km²',scale:1,dec:1}};
+export const SEA_DISPLAY={forest_removals_t_yr:{en:'Forest removals · MtCO₂/yr · 2001–2025 mean',th:'ป่าดูดกลับ · ล้านตันCO₂/ปี · เฉลี่ย 2001–2025',unit:'MtCO₂/yr',scale:1e6,dec:2},mangrove_stock_t_c:{en:'Mangrove carbon · Gt C · 2000 reference year',th:'คาร์บอนชายเลน · Gt C · ปีฐานอ้างอิง 2000',unit:'Gt C',scale:1e9,dec:2},forest_km2:{en:'Forest area · km² · 2023',th:'พื้นที่ป่า · km² · 2023',unit:'km²',scale:1,dec:1}};
 // The display metadata of any metric a reader can be shown, whether or not it can be mapped.
 export function metricDisplay(m){return SEA_METRICS[m]||SEA_DISPLAY[m]||null;}
 // Convert a stored value into the displayed unit. Returns null unchanged so a missing value is never
 // rendered as 0, and -Infinity (the net-flux lower bin edge) survives for the legend.
 export function scaleValue(v,m){const M=metricDisplay(m);return v===null||!Number.isFinite(v)||!M?v:v/M.scale;}
 export function metricClass(value,metric){if(value===null||!Number.isFinite(value))return -1;const steps=SEA_METRICS[metric]?.steps;if(!steps)return -1;let bin=0;steps.forEach((step,i)=>{if(value>=step)bin=i;});return bin;}
+
+// Explicit storage units prevent dimensionless percentages and megatonnes from inheriting a tonne label.
+export const SEA_EXPORT_FIELDS={forest_km2:['forest','km²'],forest_pct:['cover','%'],co2_mt:['co2','Mt CO₂/yr'],forest_emissions_t_yr:['gfw','t CO₂e/yr'],forest_removals_t_yr:['gfw','t CO₂/yr'],forest_net_t_yr:['gfw','t CO₂e/yr'],carbon_stock_t_c:['gfw-layers','t carbon','2000 reference year'],tree_cover_loss_ha:['gfw-layers','ha','2001–2025 cumulative'],peat_stock_t_c:['gfw-peat','t carbon','2000 reference year'],mangrove_stock_t_c:['gfw-mangrove','t carbon','2000 reference year']};
+export function seaExportRows(data,country){
+ return [['country','metric','value','unit','storedUnit','period','dataset','version','slice','status','retrievedAt','sourceURL','notCredits','notCorporateFootprint','notParcelEstimate'],
+  ...Object.entries(SEA_EXPORT_FIELDS).map(([key,[source,storedUnit,period]])=>{
+   const s=data.sources[source],m=metricDisplay(key),value=country[key];
+   return [country.iso3,key,value===null?'':value/m.scale,m.unit,storedUnit,period||s.period,s.name,s.version,s.slice||'all',value===null?'missing; not zero':'screening; not credits',data.retrievedAt,s.url,true,true,true];
+  })];
+}
+
+export function seaSourcePeriod(data,sourceKey,language='en'){
+ const supplied=data.sources[sourceKey]?.period;
+ if(supplied)return supplied;
+ const periods=[...new Set(Object.values(SEA_EXPORT_FIELDS).filter(([key])=>key===sourceKey).map(([, ,period])=>period).filter(Boolean))];
+ if(!periods.length)return language==='th'?'แหล่งข้อมูลไม่ได้ระบุช่วงเวลา':'Period not supplied';
+ return periods.map(p=>language==='th'&&p==='2000 reference year'?'ปีฐานอ้างอิง 2000':p).join('; ');
+}

@@ -25,6 +25,7 @@ const NO_BUILD = process.argv.includes('--no-build');
 const SUITES = [
   ['browser flows', 'scripts/browser-test.mjs'],
   ['map tools', 'scripts/map-tools-browser-test.mjs'],
+  ['export resilience', 'scripts/export-browser-test.mjs'],
   ['client demo', 'scripts/client-demo-test.mjs'],
   ['manual walkthrough', 'scripts/manual-walkthrough.mjs'],
   ['privacy', 'scripts/privacy-browser-test.mjs'],
