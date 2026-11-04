@@ -52,6 +52,7 @@ export function collectSpatial(root){
  const csOf=e=>{let v=styleCache.get(e);if(!v){v=getComputedStyle(e);styleCache.set(e,v);}return v;};
  const shown=e=>{
   if(!(e instanceof Element))return false;
+  if(e.checkVisibility&&!e.checkVisibility())return false;
   const cs=csOf(e);
   if(cs.display==='none'||cs.visibility==='hidden'||+cs.opacity===0)return false;
   if(cs.position==='fixed')return false;

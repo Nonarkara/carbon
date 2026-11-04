@@ -189,7 +189,7 @@ for(const lang of ['th','en'])for(const vp of VIEWPORTS){
  for(const view of SEA_VIEWS){
   await run({
    kind:'sea-view',id:view,lang,width,height:vp.height,path:`sea.html?lang=${lang}`,ready:'body[data-ready]',
-   expect:`document.body.dataset.seaView==='${view}'`,expectLabel:`the ${view} view must actually be open`,
+   expect:`document.body.dataset.seaView==='${view}'${view==='evidence'?"&&[...document.querySelectorAll('#countryEvidence details')].every(d=>d.open)":''}`,expectLabel:`the ${view} view must actually be open, including its source disclosure when reading evidence`,
    act:async()=>{
     await page.evaluate(v=>{
      const btn=document.querySelector(`button[data-sea-view="${v}"]`);
@@ -197,6 +197,7 @@ for(const lang of ['th','en'])for(const vp of VIEWPORTS){
      const sel=document.querySelector('#seaView');
      if(sel){sel.value=v;sel.dispatchEvent(new Event('change',{bubbles:true}));}
     },view);
+    if(view==='evidence')await page.locator('#countryEvidence details').evaluateAll(es=>es.forEach(e=>e.open=true));
     await page.waitForTimeout(180);
    },
   });

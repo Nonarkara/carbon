@@ -487,6 +487,31 @@ await page.evaluate(()=>document.querySelector('#synthetic-vertical-frame')?.rem
 foundLaw=await law();
 assert.deepEqual(foundLaw,[],`the page must measure clean once the defects are removed, got ${JSON.stringify(foundLaw)}`);
 
+// --- 10. A closed native disclosure can retain boxes for text it does not paint.
+const folded=await browser.newPage({viewport:{width:1024,height:768}});
+await folded.goto(`${base}/sea.html?lang=th`,{waitUntil:'domcontentloaded'});
+await folded.locator('body[data-ready]').waitFor();await folded.evaluate(()=>document.fonts.ready);
+await folded.selectOption('#seaView','evidence');await folded.waitForTimeout(180);
+const foldLaw=()=>folded.evaluate(`(${collectLaw.toString()})(null,${JSON.stringify(EQUAL_WEIGHT_EXEMPTIONS)})`);
+assert.equal(await folded.locator('#countryEvidence details').evaluate(e=>e.open),false);
+assert.equal(await folded.locator('.source>b').first().evaluate(e=>e.checkVisibility()),false);
+assert.deepEqual(await foldLaw(),[],'closed disclosure text is not painted and cannot be lost to clipping');
+// Remove only the visibility guard: the exact old detector must reproduce the original failure.
+const oldCollector=collectLaw.toString().replaceAll('if(e.checkVisibility&&!e.checkVisibility())return false;','');
+const phantom=await folded.evaluate(`(${oldCollector})(null,${JSON.stringify(EQUAL_WEIGHT_EXEMPTIONS)})`);
+assert.ok(phantom.some(o=>o.kind==='unreachable-content'),'old detector must reproduce the hidden-source false positive');
+await folded.locator('#countryEvidence details>summary').click();
+for(const source of await folded.locator('.source>b').all()){
+ await source.scrollIntoViewIfNeeded();
+ assert.equal(await source.evaluate(e=>e.checkVisibility()),true);
+ const r=await source.boundingBox(),frame=await folded.locator('#countryEvidence').boundingBox();
+ assert.ok(r.y>=frame.y-1&&r.y+r.height<=frame.y+frame.height+1,'open source heading cannot be scrolled into view');
+}
+assert.deepEqual(await foldLaw(),[],'open source content remains reachable by scrolling');
+await folded.locator('#countryEvidence').evaluate(e=>{e.style.height='120px';e.style.overflow='hidden';e.scrollTop=0;});
+assert.ok((await foldLaw()).some(o=>o.kind==='unreachable-content'),'actually clipped open evidence must still be reported');
+await folded.close();
+
 await browser.close();
 // The measurement is done. Release the server this gate started, so the port is free and
 // nothing is left listening after the gate ends.

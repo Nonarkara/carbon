@@ -279,6 +279,8 @@ export function chromeCost(doc=document){
  const vw=window.innerWidth;
  const visible=e=>{
   if(!(e instanceof Element))return false;
+  // Closed native disclosures can retain layout boxes without painting their content.
+  if(e.checkVisibility&&!e.checkVisibility())return false;
   const cs=getComputedStyle(e);
   if(cs.display==='none'||cs.visibility==='hidden'||+cs.opacity===0)return false;
   const r=e.getBoundingClientRect();
@@ -400,6 +402,8 @@ export function collectLaw(root,exemptions){
  };
  const visible=e=>{
   if(!(e instanceof Element))return false;
+  // Closed native disclosures can retain layout boxes without painting their content.
+  if(e.checkVisibility&&!e.checkVisibility())return false;
   const cs=getComputedStyle(e);
   if(cs.display==='none'||cs.visibility==='hidden'||+cs.opacity===0)return false;
   const r=e.getBoundingClientRect();
