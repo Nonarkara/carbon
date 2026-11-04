@@ -481,7 +481,7 @@ Further views TGO may want — retirements by project, vintages, corresponding-a
 
 ## 13 · Why the name is คาร์บอนนะ
 
-Brand update · 2 October 2026: the owner supplied the CT leaf identity now used in the header, browser icon and mobile web app. The following mascot discussion records the earlier identity exploration; its six teaching poses remain available. The interface now follows the owner’s Bauhaus direction.
+Brand update · 2 October 2026: the owner supplied the CT leaf identity now used in the header, browser icon and mobile web app. Character update · 4 November 2026: the six teaching poses are now **Nong Non** (น้องนนท์) — the initiator himself as a boy, drawn from his own childhood photographs. A person's own face is the one likeness this project can ship without borrowing one. The face keeps every property the section below cites: large head, large eyes, small body, square props, the same navy and the same two accents. The earlier round-creature exploration stays on disk under `images/kabonna/`.
 
 The official product name is **Carbona**, or **คาร์บอนนะ** in Thai, from 21 October 2026. The name, the mark and the six poses are soft on purpose. Softness is how a person who is not a carbon accountant finds the tab, says the name, and stays. It is not how a tonne is calculated. The ledger, the sources and the uncertainty stay in the square record. The face never sits on a number.
 
@@ -493,7 +493,7 @@ The official product name is **Carbona**, or **คาร์บอนนะ** in 
 
 The softness is also the claim the product is willing to make. An estimate is not a credit. A name that already sounds like it is checking with you — “carbon, yeah?” — is harder to mistake for a stamp.
 
-### Why a round face, in a square interface
+### The name is a hedge you can hear
 
 Faces with a large head, large eyes and a small body are what Lorenz called the baby schema. Glocker and colleagues manipulated those features in infant photographs and found that they raised both rated cuteness and the reported wish to look after the infant ([Glocker et al., 2009](https://doi.org/10.1111/j.1439-0310.2008.01603.x)). Applying that to a drawn mascot is an extrapolation, not a result of the study. The hope is that a round face in a browser tab is easier to find again than another navy square. Nittono and colleagues found that looking at cute images can make the next small task more careful, and can narrow attention ([Nittono et al., 2012](https://doi.org/10.1371/journal.pone.0046362)). That is a reason to hope someone looks closely. It is not a reason to believe the arithmetic got better. A face cannot check a tonne. The carefulness still has to be in the sources, the factors and the tests.
 
@@ -504,15 +504,15 @@ So the mascot is allowed to be round, and almost nothing else is. The map, the r
 The same character, so the face stays one memory. The pose changes, so the face can carry a job without being pasted onto a result.
 
 <ul class="kabonna-poses">
-<li><img src="images/kabonna/pose-greet.svg" alt="คาร์บอนนะ waving"><b>Greet</b><span>The mark. Open hands, come closer. The earlier logo exploration.</span></li>
-<li><img src="images/kabonna/pose-look.svg" alt="คาร์บอนนะ looking through a square"><b>Look</b><span>A square, the drawn box and the satellite cell. Looking is not a verdict.</span></li>
-<li><img src="images/kabonna/pose-both.svg" alt="คาร์บอนนะ holding a leaf and a plume apart"><b>Both</b><span>A leaf in one hand, a plume in the other, with a gap. Absorption and emission are shown together and never added.</span></li>
-<li><img src="images/kabonna/pose-measure.svg" alt="คาร์บอนนะ planting a small flag"><b>Measure</b><span>A flag in a small square plot. Field evidence, not a guess from the portrait.</span></li>
-<li><img src="images/kabonna/pose-wonder.svg" alt="คาร์บอนนะ with a hand to the cheek"><b>Wonder</b><span>Eyes up, mouth open. The uncertain part stays visible. Not knowing is a pose, not a hole to be filled with a zero.</span></li>
-<li><img src="images/kabonna/pose-stop.svg" alt="คาร์บอนนะ holding up a yellow square palm"><b>Stop</b><span>Palm forward. The cute layer ends before a credit. Issued units are not this character's job.</span></li>
+<li><img src="images/nong-non/pose-greet.png" alt="Nong Non waving" width="400" height="480"><b>Greet</b><span>The mark. Open hands, come closer. The earlier logo exploration.</span></li>
+<li><img src="images/nong-non/pose-look.png" alt="Nong Non looking at the square beside him" width="400" height="480"><b>Look</b><span>A square, the drawn box and the satellite cell. Looking is not a verdict.</span></li>
+<li><img src="images/nong-non/pose-both.png" alt="Nong Non holding a leaf and a plume apart" width="400" height="480"><b>Both</b><span>A leaf in one hand, a plume in the other, with a gap. Absorption and emission are shown together and never added.</span></li>
+<li><img src="images/nong-non/pose-measure.png" alt="Nong Non planting a small flag" width="400" height="480"><b>Measure</b><span>A flag in a small square plot. Field evidence, not a guess from the portrait.</span></li>
+<li><img src="images/nong-non/pose-wonder.png" alt="Nong Non puzzled, mouth open" width="400" height="480"><b>Wonder</b><span>Eyes up, mouth open. The uncertain part stays visible. Not knowing is a pose, not a hole to be filled with a zero.</span></li>
+<li><img src="images/nong-non/pose-stop.png" alt="Nong Non holding up a yellow square" width="400" height="480"><b>Stop</b><span>Palm forward. The cute layer ends before a credit. Issued units are not this character's job.</span></li>
 </ul>
 
-Greet is the only pose in the header and the tab icon, so the public face is an invitation. Look, Both, Measure and Wonder are the work: see the area, keep the two sides apart, ask for a plot, and leave the uncertainty on the screen. Stop is the limit of the whole idea. Cuteness that crosses into the credit line would spend the trust the baby schema borrowed. The character can wave. It cannot certify.
+Greet is the only pose that keeps the product's name line live across both notebooks — the header itself has carried the owner's CT-leaf mark since 2 October, so the public face on screen is the leaf, not a boy. Look, Both, Measure and Wonder are the work: see the area, keep the two sides apart, ask for a plot, and leave the uncertainty on the screen. Stop is the limit of the whole idea. Cuteness that crosses into the credit line would spend the trust the baby schema borrowed. The boy can wave. He cannot certify.
 
 [Global data sources, cadence and fallback rules / แหล่งข้อมูลโลกและรอบการอัปเดต](https://github.com/Nonarkara/carbon/blob/main/docs/WORLD_DATA.md).
 

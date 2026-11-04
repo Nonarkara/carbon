@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240">
+  <!-- Nong Non — Wonder. Eyes up, mouth open. Not knowing is a pose, not a hole to fill with zero. -->
+  <ellipse cx="100" cy="224" rx="42" ry="7" fill="#1b2140" opacity=".12"/>
+  <path d="M84 184 L84 206" stroke="#1b2140" stroke-width="9" stroke-linecap="round"/>
+  <path d="M116 184 L116 206" stroke="#1b2140" stroke-width="9" stroke-linecap="round"/>
+  <ellipse cx="82" cy="214" rx="13" ry="6" fill="#1b2140"/>
+  <ellipse cx="118" cy="214" rx="13" ry="6" fill="#1b2140"/>
+  <path d="M75 164 L125 164 L128 184 L107 184 L103 173 L97 173 L93 184 L72 184 Z" fill="#1b2140"/>
+  <rect x="95" y="114" width="10" height="14" fill="#efc493"/>
+  <path d="M80 136 C66 144 60 156 62 168" fill="none" stroke="#1b2140" stroke-width="9" stroke-linecap="round"/>
+  <path d="M120 136 C136 130 140 116 132 106" fill="none" stroke="#1b2140" stroke-width="9" stroke-linecap="round"/>
+  <path d="M100 124 C84 124 76 131 74 142 L73 166 Q100 173 127 166 L126 142 C124 131 116 124 100 124 Z" fill="#e2e0d8" stroke="#1b2140" stroke-width="4"/>
+  <path d="M90 126 L100 137 L110 126 L106 124 L100 132 L94 124 Z" fill="#f6f4ec"/>
+  <path d="M100 136 L94 143 L100 162 L106 143 Z" fill="#1b2140"/>
+  <circle cx="130" cy="104" r="6.5" fill="#efc493" stroke="#1b2140" stroke-width="3"/>
+  <circle cx="62" cy="169" r="6.5" fill="#efc493" stroke="#1b2140" stroke-width="3"/>
+  <circle cx="64" cy="92" r="5" fill="#efc493" stroke="#1b2140" stroke-width="3"/>
+  <circle cx="136" cy="92" r="5" fill="#efc493" stroke="#1b2140" stroke-width="3"/>
+  <circle cx="100" cy="86" r="34" fill="#efc493" stroke="#1b2140" stroke-width="4"/>
+  <path d="M66 90 C62 44 138 44 134 90 L134 76 L118 76 L115 70 L103 75 L97 75 L94 69 L82 76 L66 76 Z" fill="#1b2140"/>
+  <circle cx="84" cy="90" r="4.5" fill="#ffcc00" opacity=".9"/>
+  <circle cx="84" cy="88.5" r="5.5" fill="#1b2140"/>
+  <circle cx="85.5" cy="85.5" r="1.8" fill="#ffcc00"/>
+  <circle cx="116" cy="90" r="4.5" fill="#ffcc00" opacity=".9"/>
+  <circle cx="116" cy="88.5" r="5.5" fill="#1b2140"/>
+  <circle cx="117.5" cy="85.5" r="1.8" fill="#ffcc00"/>
+  <ellipse cx="100" cy="107" rx="6" ry="7.5" fill="#1b2140"/>
+</svg>

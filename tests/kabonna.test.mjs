@@ -22,17 +22,32 @@ test('the historical six poses and original mark remain available',()=>{
   for(const name of poses){
     const svg=readFileSync(`public/images/kabonna/${name}.svg`,'utf8');
     assert.match(svg,/viewBox="0 0 200 240"/,name);
-    assert.match(svg,/fill="#ffcc00"/,name);
-    assert.match(svg,/fill="#5f9e48"/,name);
+    assert.match(svg,/fill="#1b2140"/,name);
   }
 });
 
-test('both research notebooks explain the name and show every pose',()=>{
+test('both research notebooks explain the name',()=>{
   for(const lang of ['en','th']){
     const doc=readFileSync(`docs/RESEARCH.${lang}.md`,'utf8');
     assert.match(doc,/^## 13 · /m);
     assert.match(doc,/Glocker et al\., 2009/);
     assert.match(doc,/Nittono et al\., 2012/);
-    for(const name of poses)assert.match(doc,new RegExp(`images/kabonna/${name}\\.svg`));
+  }
+});
+
+test('Nong Non carries the six teaching poses in both notebooks',()=>{
+  for(const lang of ['en','th']){
+    const doc=readFileSync(`docs/RESEARCH.${lang}.md`,'utf8');
+    assert.match(doc,/Nong Non|น้องนนท์/);
+    for(const name of poses)assert.match(doc,new RegExp(`images/nong-non/${name}\\.png`));
+  }
+  for(const name of poses){
+    const svg=readFileSync(`public/images/nong-non/${name}.svg`,'utf8');
+    assert.match(svg,/viewBox="0 0 200 240"/,name);
+    // The house invariants: one navy ink in every pose; the yellow accent in every pose
+    // except the cream-props Wonder; the green leaf only where a pose holds one (Both).
+    assert.match(svg,/fill="#1b2140"/,name);
+    if(name!=='pose-wonder')assert.match(svg,/fill="#ffcc00"/,name);
+    if(name==='pose-both')assert.match(svg,/fill="#5f9e48"/,name);
   }
 });
