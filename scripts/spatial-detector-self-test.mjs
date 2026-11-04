@@ -497,9 +497,17 @@ assert.equal(await folded.locator('#countryEvidence details').evaluate(e=>e.open
 assert.equal(await folded.locator('.source>b').first().evaluate(e=>e.checkVisibility()),false);
 assert.deepEqual(await foldLaw(),[],'closed disclosure text is not painted and cannot be lost to clipping');
 // Remove only the visibility guard: the exact old detector must reproduce the original failure.
+// Some engines discard these hidden boxes. Model the retained rectangle observed on macOS
+// so that Linux also tests the defect, without depending on its layout-cache policy.
+await folded.locator('.source>b').first().evaluate(e=>{
+ const frame=document.querySelector('#countryEvidence').getBoundingClientRect();
+ e.getBoundingClientRect=()=>new DOMRect(frame.left+16,frame.bottom-2,frame.width-32,20);
+});
 const oldCollector=collectLaw.toString().replaceAll('if(e.checkVisibility&&!e.checkVisibility())return false;','');
 const phantom=await folded.evaluate(`(${oldCollector})(null,${JSON.stringify(EQUAL_WEIGHT_EXEMPTIONS)})`);
 assert.ok(phantom.some(o=>o.kind==='unreachable-content'),'old detector must reproduce the hidden-source false positive');
+assert.deepEqual(await foldLaw(),[],'native visibility must win even when a closed descendant retains a box');
+await folded.locator('.source>b').first().evaluate(e=>delete e.getBoundingClientRect);
 await folded.locator('#countryEvidence details>summary').click();
 for(const source of await folded.locator('.source>b').all()){
  await source.scrollIntoViewIfNeeded();
