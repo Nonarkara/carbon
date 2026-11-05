@@ -48,6 +48,16 @@ The falsifier also caught its author: it was written expecting the narrow band t
 Verified: the law runs as one command and every gate passes; 136 unit tests pass; eighteen
 browser suites pass; the 582-page deep audit holds.
 
+Closing a carry-forward: the regional map on a phone. The 1 November audit left "the 11
+countries fill about 36% of the map height" open on sea.html at 390. Measured on the shipped
+page: the map is 390×665 and the eleven countries' drawn geometry spans 278×444 of it — 71.3%
+of the width and 66.7% of the height. The map is already framed to fit all eleven, and
+`scripts/sea-header-proof.mjs` holds it to 60% of the first screen at all thirteen widths with
+its own falsifier for the old oversized rail. The remaining third is the ink inside that frame:
+the region is wide and archipelagic, so the land is scattered across sea. Zooming further would
+cut countries off the screen. It is the subject's geography, not wasted layout, and it is not a
+defect to fix.
+
 Remaining: the composition boundary at 1101–1279 is stated, not removed — the map and the
 assessment rail want the same pixels at the narrowest desktop, and the rail wins because it is
 earned. Still unverified, and not verifiable here: a real iOS device, enlarged text on every
