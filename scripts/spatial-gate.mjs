@@ -236,8 +236,23 @@ async function measureSurface(s,width){
    });
    assert.deepEqual(crowd.overlaps,[],`${s.name}@${width}: desktop band controls overlap`);
    assert.deepEqual(crowd.spills,[],`${s.name}@${width}: a band label spills out of its box`);
-   // MSH B9: on a map product the map holds at least 60% of the 1440x900 first screen.
-   if(width===1440)assert.ok(crowd.share>=.6,`${s.name}@${width}: the map holds ${(crowd.share*100).toFixed(1)}% of the first screen; the law asks 60%`);
+   // MSH B9: on a map product the map holds at least 60% of the first screen.
+   //
+   // Between 1101 and 1279 the map shares the screen with the assessment rail, and the floor is
+   // 55% there. That is not a softer law: the map cannot be given 60% at 1101 without breaking
+   // something the law protects. Narrowing the rail to 300px was tried and measured, and the
+   // law caught it immediately — the rail's action strip broke onto two lines (accidental-wrap
+   // and scattered-actions). The assessment rail is earned working surface, so the map gives up
+   // the space instead. The number is still judged, so a regression here cannot pass quietly.
+   const floor=(width>=1101&&width<=1279)?.55:.6;
+   assert.ok(crowd.share>=floor,`${s.name}@${width}: the map holds ${(crowd.share*100).toFixed(1)}% of the first screen; the law asks ${(floor*100).toFixed(0)}% here`);
+  }
+
+  // The phone's first screen belongs to the map too. The law names 390 and 1440; both are
+  // judged here, so the number cannot drift at one width while the other is checked.
+  if(s.name==='home'&&(width===320||width===390)){
+   const share=await page.evaluate(()=>{const m=document.querySelector('#map').getBoundingClientRect();return m.width*(Math.min(m.bottom,innerHeight)-Math.max(m.top,0))/(innerWidth*innerHeight);});
+   assert.ok(share>=.6,`${s.name}@${width}: the map holds ${(share*100).toFixed(1)}% of the first screen; the law asks 60%`);
   }
 
   // A fold has to be one line. A fold that is three lines has put the navigation back
