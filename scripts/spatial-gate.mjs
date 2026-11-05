@@ -21,6 +21,7 @@ import {assertProjectServer} from './lib/server-identity.mjs';
 import {measurementTarget} from './lib/local-server.mjs';
 import {measureWithRecovery} from './lib/browser-resilience.mjs';
 import {openCollapsibles, measureFolds} from './lib/folds.mjs';
+import {mapShare, checkMapShare} from './lib/map-share.mjs';
 
 const OUT='test-results/spatial';
 
@@ -231,21 +232,15 @@ async function measureSurface(s,width){
      const x=Math.min(a.right,b.right)-Math.max(a.left,b.left),y=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
      if(x>.5&&y>.5)overlaps.push(`${items[i][0]}×${items[j][0]} ${Math.round(x)}px`);}
     const spills=[...document.querySelectorAll('header.top button,header.top summary')].filter(e=>e.offsetParent&&e.scrollWidth>e.clientWidth+1).map(e=>e.id||e.textContent.trim().slice(0,20));
-    const m=document.querySelector('#map').getBoundingClientRect();
-    return {overlaps,spills,share:m.width*(Math.min(m.bottom,innerHeight)-m.top)/(innerWidth*innerHeight)};
+    return {overlaps,spills};
    });
    assert.deepEqual(crowd.overlaps,[],`${s.name}@${width}: desktop band controls overlap`);
    assert.deepEqual(crowd.spills,[],`${s.name}@${width}: a band label spills out of its box`);
-   // MSH B9: on a map product the map holds at least 60% of the first screen.
-   //
-   // Between 1101 and 1279 the map shares the screen with the assessment rail, and the floor is
-   // 55% there. That is not a softer law: the map cannot be given 60% at 1101 without breaking
-   // something the law protects. Narrowing the rail to 300px was tried and measured, and the
-   // law caught it immediately — the rail's action strip broke onto two lines (accidental-wrap
-   // and scattered-actions). The assessment rail is earned working surface, so the map gives up
-   // the space instead. The number is still judged, so a regression here cannot pass quietly.
-   const floor=(width>=1101&&width<=1279)?.55:.6;
-   assert.ok(crowd.share>=floor,`${s.name}@${width}: the map holds ${(crowd.share*100).toFixed(1)}% of the first screen; the law asks ${(floor*100).toFixed(0)}% here`);
+   // MSH B9: on a map product the map holds at least 60% of the first screen. The floor and the
+   // check live in scripts/lib/map-share.mjs, where scripts/map-share-falsifier.mjs can prove
+   // the check fires.
+   const share=await page.evaluate(`(${mapShare.toString()})(document)`);
+   checkMapShare(share,width,`${s.name}@${width}`);
   }
 
   // The phone's first screen belongs to the map too. The law names 390 and 1440; both are

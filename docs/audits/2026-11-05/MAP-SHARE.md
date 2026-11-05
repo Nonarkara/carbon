@@ -34,6 +34,17 @@ and the assessment rail cannot both have the screen, and the rail is the one the
 The number is still binding. A regression at any measured width now fails the gate, and the
 message names the width and the share.
 
+Changed, because a check that has never failed is a check nobody has to keep: the share, the
+floor and the check now live together in `scripts/lib/map-share.mjs`, and
+`scripts/map-share-falsifier.mjs` drives them against the real page. It measures the shipped
+layout (56.9% at 1101) and confirms it clears the floor; it then widens the assessment rail
+until the map holds 30.4% and confirms the check throws; and it pins the floor — 60% at the
+widths the law names, 55% only across 1101–1279. It is wired into `npm run test:spatial`.
+
+The falsifier also caught its author: it was written expecting the narrow band to include
+1280, and the floor function disagreed. The band ends at 1279, where the measured share is
+60.7% and the law's 60% applies.
+
 Verified: the law runs as one command and every gate passes; 136 unit tests pass; eighteen
 browser suites pass; the 582-page deep audit holds.
 

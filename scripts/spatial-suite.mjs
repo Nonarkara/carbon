@@ -38,6 +38,7 @@ const STEPS = [
   {name: 'table proof', script: 'scripts/msh-table-proof.mjs'},
   {name: 'navigation falsifier', script: 'scripts/browser-nav-falsifier.mjs'},
   {name: 'live surface falsifier', script: 'scripts/live-surface-falsifier.mjs'},
+  {name: 'map share falsifier', script: 'scripts/map-share-falsifier.mjs'},
   {name: 'capability claims', script: 'scripts/capability-claims.mjs'},
   ...(DEEP ? [{name: 'deep content audit', script: 'scripts/spatial-deep-probe.mjs'}] : []),
 ];
