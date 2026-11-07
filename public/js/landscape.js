@@ -3,6 +3,7 @@ import {renderForestWatch,watchRecord,validWatch} from './forest-watch.js';
 import {readGrid,sumSelection,ledgerRows,polygonsOf,boxSideKm,bboxOf} from './ledger.js';
 
 import {renderCalculations} from './selection-view.js';
+import {lossHTML} from './loss-view.js';
 import {initRegistry} from './registry.js';
 const TVER_CLASSES=[[0,'#f3efe0'],[1,'#d9c98f'],[2,'#b89b3c'],[5,'#7a6200'],[10,'#3d3100']];
 // Non's Digest surfaces a moving-bar block on the carbon map when the digest module is wired in.
@@ -40,6 +41,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       S.manifest=manifest;S.data=data;
       // National forest-inventory check (optional file): shown beside the map figure, never applied to it.
       fetch('data/ledger/nfi-check.json').then(r=>r.ok?r.json():null).then(n=>{S.nfi=n;if(S.src)render();}).catch(()=>{});
+      fetch('data/gfw/loss-years.json').then(r=>r.ok?r.json():null).then(d=>{S.loss=d;if(S.src)render();}).catch(()=>{});
       data.provinces.forEach(p=>byCode.set(p.pcode,p));byCode.set('TH',data.national);
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
         onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&!map.getContainer().classList.contains('measuring')&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
@@ -115,7 +117,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     if(S.sel.kind==='national'){const bars=digestBars();if(bars)$('#ledger').insertAdjacentHTML('beforeend',bars);}
     $('#selectionName').textContent=S.sel.kind==='province'||S.sel.kind==='national'?placeName(s):getLang()==='th'?'พื้นที่ที่เลือก':'Selected area';
     $('#mapLabel').textContent=$('#selectionName').textContent;
-    $('#calculationTrace').innerHTML=renderCalculations({src:s,rows:S.rows,datasets:S.manifest.datasets,conv:S.manifest.conversion,t,fmt,esc,getLang,nfi:S.nfi});
+    $('#calculationTrace').innerHTML=renderCalculations({src:s,rows:S.rows,datasets:S.manifest.datasets,conv:S.manifest.conversion,t,fmt,esc,getLang,nfi:S.nfi})+(s.area_ha?lossHTML({data:S.loss,code:S.sel.kind==='national'?'TH':S.sel.kind==='province'?S.sel.code:null,lang:getLang(),fmt,esc}):'');
     if(!$('#provinceBrowser').hidden)renderProvinces();
   }
 

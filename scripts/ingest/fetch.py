@@ -21,6 +21,17 @@ GFW_SQL = ('select adm1, sum("gfw_full_extent_gross_removals__Mg_CO2") as remova
 GFW_AREA_SQL = ("select adm1, sum(area__ha) as area_ha from data where iso='THA' "
                 'and umd_tree_cover_density_2000__threshold=0 group by adm1 order by adm1')
 GFW = 'https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql='
+# Yearly tree cover loss by province (same flux-model version, same tcd30 + model-extent filter as the summary).
+# Q1 carries the plantation/driver split, Q2 the primary-forest/protected-area split; both sum to the same totals.
+GFW_CHANGE = 'https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_change/v20260327/download/csv?sql='
+_LOSS_SUM = ('sum(umd_tree_cover_loss__ha) as loss_ha, sum("gfw_full_extent_gross_emissions_biomass_soil__Mg_CO2e") as emissions_mg_co2e '
+             "from data where iso='THA' and is__flux_model_extent = true and umd_tree_cover_density_2000__threshold=30 ")
+GFW_LOSS_DRIVERS = ('select adm1, umd_tree_cover_loss__year as year, gfw_plantation_flux_model__type as plantation, '
+                    'wri_google_tree_cover_loss_drivers__driver as driver, ' + _LOSS_SUM +
+                    'group by adm1, umd_tree_cover_loss__year, gfw_plantation_flux_model__type, wri_google_tree_cover_loss_drivers__driver')
+GFW_LOSS_PLACES = ('select adm1, umd_tree_cover_loss__year as year, gfw_plantation_flux_model__type as plantation, '
+                   'is__umd_regional_primary_forest_2001 as primary_forest, wdpa_protected_areas__iucn_cat as wdpa, ' + _LOSS_SUM +
+                   'group by adm1, umd_tree_cover_loss__year, gfw_plantation_flux_model__type, is__umd_regional_primary_forest_2001, wdpa_protected_areas__iucn_cat')
 
 def targets():
     t = {}
@@ -58,6 +69,8 @@ def targets():
                                                   '89a09f13-7b83-458a-9531-4f2418613065/download/tha_admin_boundaries.geojson.zip')
     t['gfw/carbonflux_adm1_tha_tcd30.csv'] = GFW + urllib.parse.quote(GFW_SQL)
     t['gfw/carbonflux_adm1_tha_area.csv'] = GFW + urllib.parse.quote(GFW_AREA_SQL)
+    t['gfw/loss_adm1_tha_drivers.csv'] = GFW_CHANGE + urllib.parse.quote(GFW_LOSS_DRIVERS)
+    t['gfw/loss_adm1_tha_places.csv'] = GFW_CHANGE + urllib.parse.quote(GFW_LOSS_PLACES)
     # Climate TRACE v7 forestry-and-land-use subsectors per GADM 4.1 province (THA.1_1 … THA.77_1), 2024.
     for i in range(1, 78):
         t[f'climatetrace/THA.{i}_1-2024.json'] = (f'{CT}?year=2024&gas=co2e_100yr&sectors=forestry-and-land-use&gadmId=THA.{i}_1')

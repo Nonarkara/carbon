@@ -244,6 +244,22 @@ Directly, plume by plume, satellites can turn XCO₂ into an emission only for l
 
 Sources: GFW row, sum of the 77 province summaries divided by 25 (equal to GFW's own country table); GFW emissions include methane and nitrous oxide. BTR1 rows, Table 2-184, page 2-241, million tonnes; removals and emissions are CO₂, and the sector net also includes 0.27 Mt of methane and nitrous oxide from biomass burning. Most of Thailand's reported land sink sits in cropland remaining cropland, not forest. A satellite forest model and a national inventory also define "forest" and "anthropogenic" differently. Global bookkeeping models and national inventories differ by about 6.7 GtCO₂ per year for similar definitional reasons ([Grassi et al. 2023](https://essd.copernicus.org/articles/15/1093/2023/)). The carbon map shows both and chooses neither.
 
+### Tree cover lost, year by year
+
+The flux figures above are 25-year totals. What a province usually asks is different: are we losing forest, how fast, and why? GFW publishes the same flux model year by year (`carbonflux_adm1_change` v20260327), with the same filter the ledger uses (tree cover ≥ 30% in 2000, inside the model extent). `scripts/ingest/build_loss.py` cooks it into one series per province and for Thailand, shown under the carbon figures when a province or the whole country is selected.
+
+The first split matters most. Tree cover loss is not deforestation: rubber, eucalyptus and oil palm are cut and replanted, and the loss map counts that harvest. GFW's plantation map separates it. Of the 2.80 million ha of tree cover lost in 2001–2025, 0.99 million ha fell inside mapped plantations and 1.81 million ha outside them. The rest of the series is built on the loss outside plantations:
+
+| Quantity | Thailand, 2001–2025 | Source field |
+|---|---|---|
+| Loss outside plantations | 1,812,331 ha | `gfw_plantation_flux_model__type = Not applicable` |
+| … in primary forest (2001) | 116,033 ha | `is__umd_regional_primary_forest_2001` |
+| … in a protected area | 226,953 ha | `wdpa_protected_areas__iucn_cat` (any category) |
+| Loss inside plantations | 990,377 ha | other plantation types |
+| Main driver outside plantations | Permanent agriculture, 80% | WRI/Google dominant driver, one class per 1 km cell |
+
+Three checks run on every build and in `tests/loss.test.mjs`: outside + inside plantations equals all loss in every province and year; the provinces add up to Thailand; and the 25-year emissions from the yearly table equal the summary table the ledger already ships, within 0.5%. Two limits stay visible beside the chart. The map records loss and not regrowth, so these are gross figures. And a driver is the dominant one in a 1 km cell, not a cause traced for each hectare. A drawn box has no yearly series, because GFW publishes it by province.
+
 ### Checks performed
 
 Run on 26 September 2026:

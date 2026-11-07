@@ -133,3 +133,10 @@ body.dashboard{font-size:1rem}
 .dashboard .world-heading .btn{color:var(--ink)}.dashboard .world-item a{color:var(--ink)}.dashboard .world-item svg{color:var(--ink)}
 .dashboard #exploreProvinces{background:var(--structure);color:white;border-color:var(--structure)}
 .dashboard .tab-body>.btn,.dashboard .tab-body .actions>.btn{width:auto;flex:0 1 auto}
+/* Tree cover lost each year: ink for loss outside plantations, a pale tone for plantation harvest. No new accent. */
+.loss-figure{margin:8px 0}.loss-chart{display:block;width:100%;height:96px}.loss-chart line{stroke:var(--rule-strong);stroke-width:1;vector-effect:non-scaling-stroke}
+.loss-natural{fill:var(--ink)}.loss-plantation{fill:#cfccc2}
+.loss-axis{display:flex;justify-content:space-between;font-size:var(--text-meta);color:var(--ink-mid)}
+.loss-figure figcaption{font-size:var(--text-meta);color:var(--ink-mid);margin-top:4px}
+.loss-key{display:inline-block;width:10px;height:10px;margin:0 4px 0 0;vertical-align:-1px}.loss-key-natural{background:var(--ink)}.loss-key-plantation{background:#cfccc2;margin-left:10px}
+.loss-facts{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;margin:8px 0;font-size:var(--text-meta)}.loss-facts dt{color:var(--ink-mid)}.loss-facts dd{margin:0;font-family:var(--num);text-align:right}

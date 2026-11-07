@@ -50,6 +50,7 @@ Province assignment uses only the `จ.` / `จังหวัด` markers in TG
 | ESA CCI Biomass v7.0 (2020), DOI 10.5285/6429d1aafe1e43b9b414e4a5a7f8b903 | ESA CCI data policy: free use with acknowledgement and DOI citation | Santoro, M.; Cartus, O. — ESA Climate Change Initiative (Biomass_cci) |
 | JAXA ALOS-2 PALSAR-2 Forest/Non-Forest v2.1.0 (2020) | [JAXA Terms of Use of Research Data](https://earth.jaxa.jp/policy/en.html): use, modification and redistribution with credit; notify JAXA before commercial use | ©JAXA / EORC — "The original data used for this product have been supplied by JAXA's PALSAR-2 FNF" |
 | Global Forest Watch forest carbon flux v1.4.3 (data-api v20260327) | CC BY 4.0 | Harris et al. 2021, Nature Climate Change; Gibbs et al. 2025, Earth System Science Data; Global Forest Watch / WRI |
+| GFW yearly tree cover loss by province (carbonflux_adm1_change v20260327: UMD loss, GFW plantation map, UMD primary forest, WDPA, WRI/Google loss drivers) | CC BY 4.0 | Hansen et al. 2013, Science; Turubanova et al. 2018; Sims et al. 2025 (drivers); Global Forest Watch / WRI; WDPA via GFW
 | GFED5.1, DOI 10.5281/zenodo.16794692 | CC BY 4.0 | van der Werf, Chen et al., Global Fire Emissions Database |
 | ODIAC2025, DOI 10.17595/20170411.001 | CC BY 4.0 | Oda, T. and Maksyutov, S., NIES |
 | Thailand subnational boundaries (COD-AB v01) | CC BY-IGO | Royal Thai Survey Department, via OCHA / HDX |
