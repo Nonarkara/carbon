@@ -7,7 +7,7 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {collectSpatial} from './lib/spatial-collector.mjs';
-import {collectLaw,chromeCost,EQUAL_WEIGHT_EXEMPTIONS} from './lib/msh-law.mjs';
+import {collectLaw,chromeCost,EQUAL_WEIGHT_EXEMPTIONS,collectPanelFit,PANEL_LIMITS} from './lib/msh-law.mjs';
 import {measurementTarget} from './lib/local-server.mjs';
 
 // Start this project's own server when the caller has not named one, so the falsifier is
@@ -522,6 +522,17 @@ assert.deepEqual(await foldLaw(),[],'open source content remains reachable by sc
 await folded.locator('#countryEvidence').evaluate(e=>{e.style.height='120px';e.style.overflow='hidden';e.scrollTop=0;});
 assert.ok((await foldLaw()).some(o=>o.kind==='unreachable-content'),'actually clipped open evidence must still be reported');
 await folded.close();
+
+// --- The open-panel instrument: the three failures of the shipped province ranking, each alone and then repaired.
+const panel=await browser.newPage();await panel.setViewportSize({width:1024,height:768});
+await panel.setContent(`<div id="p" style="width:999px;font:14px sans-serif"><select id="s" style="width:100%"><option>Short label</option></select><p id="t" style="margin:0">${'A long explanatory sentence about what this ranking measures. '.repeat(5)}</p><button class="r" style="display:grid;grid-template-columns:minmax(0,1fr) auto;width:100%"><span>Krabi</span><b>1.84%</b></button></div>`);
+const panelFit=()=>panel.evaluate(`(${collectPanelFit.toString()})('#p','.r',${JSON.stringify(PANEL_LIMITS)})`);
+let fitFound=await panelFit();
+for(const kind of ['stretched-control','unmeasured-prose','split-pair'])assert.ok(fitFound.some(o=>o.kind===kind),`${kind} must be detected, got ${JSON.stringify(fitFound)}`);
+await panel.evaluate(()=>{document.querySelector('#s').style.width='max-content';document.querySelector('#t').style.maxWidth='65ch';document.querySelector('.r').style.width='280px';});
+assert.deepEqual(await panelFit(),[],'the repaired panel must measure clean');
+assert.ok((await panel.evaluate(`(${collectPanelFit.toString()})('#missing','.r',${JSON.stringify(PANEL_LIMITS)})`))[0].kind==='panel-missing','a panel that is not there must not pass as clean');
+await panel.close();
 
 await browser.close();
 // The measurement is done. Release the server this gate started, so the port is free and

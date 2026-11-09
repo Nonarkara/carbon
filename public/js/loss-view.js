@@ -51,7 +51,7 @@ export function lossHTML({data,code,lang,fmt,esc}){
  const drv=f.topDriver?`${driverName(f.topDriver[0],lang)} · ${fmt(100*f.topDriver[1],0)}%`:'—';
  const label=`${c.title}: ${c.natural} ${ha(f.natural)}, ${c.plantation} ${ha(f.plantation)}, ${y[0]}–${y[y.length-1]}`;
  return `<section class="calc-block loss-block" data-calculation="loss"><h3>${esc(c.title)}</h3>
-<div class="calc-answer">${fmt(f.recent,0)} <small>${lang==='th'?'เฮกตาร์/ปี':'ha/yr'}</small></div><p>${esc(c.recent)}${f.rate==null?'':` · ${fmt(f.rate,2)}% ${esc(c.ofCover)}`} · ${esc(c.prior)}: ${esc(ha(f.prior))}</p>
+<div class="calc-answer">${fmt(f.recent,0)} <small>${lang==='th'?'เฮกตาร์/ปี':'ha/yr'}</small></div><p>${esc(c.recent)}${f.rate==null?'':` · ${f.rate.toFixed(2)}% ${esc(c.ofCover)}`} · ${esc(c.prior)}: ${esc(ha(f.prior))}</p>
 <figure class="loss-figure" role="img" aria-label="${esc(label)}">${lossChart(series,y)}<figcaption><span class="loss-key loss-key-natural"></span>${esc(c.natural)} <span class="loss-key loss-key-plantation"></span>${esc(c.plantation)}</figcaption></figure>
 <dl class="loss-facts"><dt>${esc(c.natural)} · ${esc(c.total)}</dt><dd>${esc(ha(f.natural))}</dd><dt>${esc(c.primary)}</dt><dd>${esc(ha(f.primary))}</dd><dt>${esc(c.protected)}</dt><dd>${esc(ha(f.protected))}</dd><dt>${esc(c.plantationShort)} · ${esc(c.total)}</dt><dd>${esc(ha(f.plantation))}</dd><dt>${esc(c.peak)}</dt><dd>${f.peakYear} · ${esc(ha(f.peakHa))}</dd><dt>${esc(c.driver)}</dt><dd>${esc(drv)}</dd><dt>${esc(c.emissions)} · ${f.latestYear}</dt><dd>${fmt(f.emissionsLatest,0)} tCO₂e</dd></dl>
 <p>${esc(c.note)}</p><p>${esc(data.meta.dataset)} ${esc(data.meta.version)} · ${esc(data.meta.filters)} · CC BY 4.0</p>

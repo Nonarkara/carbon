@@ -788,3 +788,20 @@ export function collectLaw(root,exemptions){
 
  return out;
 }
+
+// The geometry of an opened panel. The law's other collectors run on the page as it loads, so the
+// province ranking shipped past them with a 999px select, 999px prose and a name 740px from its
+// number: the panel was never open when anything measured. Runs in the page; self-contained.
+export const PANEL_LIMITS={controlRatio:2,proseEm:40,proseMinChars:100,pairGapPx:360};
+export function collectPanelFit(scope,rowSelector,L){
+ const root=document.querySelector(scope);if(!root)return [{kind:'panel-missing',severity:'high',el:scope,gap:0,note:'the panel to measure is not on the page'}];
+ const out=[],shown=e=>e.getClientRects().length>0,ctx=document.createElement('canvas').getContext('2d');
+ const textWidth=(e,t)=>{const c=getComputedStyle(e);ctx.font=`${c.fontWeight} ${c.fontSize} ${c.fontFamily}`;return ctx.measureText(t).width;};
+ for(const s of root.querySelectorAll('select')){if(!shown(s))continue;const need=textWidth(s,s.selectedOptions[0]?.text||'')+48,w=s.getBoundingClientRect().width;
+  if(w>need*L.controlRatio)out.push({kind:'stretched-control',severity:'high',el:s.id||'select',gap:Math.round(w-need),note:`select is ${Math.round(w)}px for ${Math.round(need)}px of label`});}
+ for(const p of root.querySelectorAll('p,.hint')){if(!shown(p)||p.textContent.trim().length<L.proseMinChars)continue;const c=getComputedStyle(p),em=p.getBoundingClientRect().width/parseFloat(c.fontSize);
+  if(em>L.proseEm)out.push({kind:'unmeasured-prose',severity:'high',el:p.className||p.tagName,gap:Math.round(em),note:`prose runs ${Math.round(em)}em wide, past ${L.proseEm}em`});}
+ for(const row of root.querySelectorAll(rowSelector)){if(!shown(row))continue;const [a,b]=row.children;if(!a||!b)continue;const r=document.createRange();r.selectNodeContents(a);const gap=b.getBoundingClientRect().left-r.getBoundingClientRect().right;
+  if(gap>L.pairGapPx){out.push({kind:'split-pair',severity:'high',el:rowSelector,gap:Math.round(gap),note:`a row's label and value sit ${Math.round(gap)}px apart`});break;}}
+ return out;
+}

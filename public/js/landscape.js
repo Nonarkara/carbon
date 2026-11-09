@@ -68,6 +68,8 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   async function select(sel,fit=true,user=true){
     const revision=++selectionRevision;if(user)onSelect();S.sel=sel;$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;if(S.shape){map.removeLayer(S.shape);S.shape=null;}
     styleProvinces();
+    // At tablet width the map stays beside the panel, so the view changes before the fit, or the fit frames the wrong size.
+    if(user&&innerWidth>=768&&innerWidth<=1100&&sel.kind!=='national'){document.body.dataset.view='rail';document.querySelectorAll('.bottom-nav button').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.tab==='carbon')));map.invalidateSize();}
     if(sel.kind==='province'||sel.kind==='national'){
       S.src=byCode.get(sel.code);$('#place').value=sel.code;
       if(fit){if(sel.kind==='national')fitThailand();else S.layer.eachLayer(l=>{if(l.feature.properties.pcode===sel.code)map.fitBounds(l.getBounds(),{padding:[30,30]});});}
@@ -212,8 +214,8 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const isTver=metric==='tver',isLoss=metric==='loss';
     const lossOf=p=>lossFigures(S.loss.provinces[p.pcode],S.loss.meta.years);
     if(isLoss){const lang=getLang(),rows=S.data.provinces.map(p=>[p,lossOf(p)]).sort((a,b)=>b[1].rate-a[1].rate);
-      const trend=f=>f.prior?`${f.recent>=f.prior?'+':'−'}${fmt(Math.abs(100*(f.recent-f.prior)/f.prior),0)}%`:'—';
-      $('#provinceRanking').innerHTML=`<p class="hint">${esc(t('lossRankNote'))}</p>`+rows.map(([p,f])=>`<button class="province-row" data-province="${p.pcode}"><span>${esc(placeName(p))}</span><b>${fmt(f.rate,2)}%</b><small>${fmt(f.recent,0)} ${esc(t('ha'))}/${lang==='th'?'ปี':'yr'} · ${trend(f)} ${esc(t('lossVsPrior'))} · ${esc(driverName(f.topDriver[0],lang))} ${fmt(100*f.topDriver[1],0)}%</small></button>`).join('');
+      const trend=f=>f.prior?`${f.recent>=f.prior?'▲':'▼'}${fmt(Math.abs(100*(f.recent-f.prior)/f.prior),0)}%`:'—';
+      $('#provinceRanking').innerHTML=`<p class="hint">${esc(t('lossRankNote'))}</p>`+rows.map(([p,f])=>`<button class="province-row" data-province="${p.pcode}"><span>${esc(placeName(p))}</span><b>${f.rate.toFixed(2)}%</b><small>${fmt(f.recent,0)} ${lang==='th'?'เฮกตาร์/ปี':'ha/yr'} · ${trend(f)} · ${esc(driverName(f.topDriver[0],lang))} ${fmt(100*f.topDriver[1],0)}%</small></button>`).join('');
       $('#provinceRanking').querySelectorAll('button').forEach(b=>b.onclick=()=>select({kind:'province',code:b.dataset.province}));return;}
     const value=isTver?(p)=>registry.data()?.provinces?.[p.pcode]?.projects??null
       :metric==='stock'?p=>p.forest_agb_mg*S.manifest.conversion.agb_to_co2e
@@ -230,7 +232,9 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   }
   $('#openForestWatch').onclick=()=>Promise.all([ready,watchReady]).then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;document.body.dataset.view='rail';$('#ledgerDetails').open=true;($('#ledger .forest-watch')||$('#ledger .watch-status'))?.scrollIntoView({block:'start'});});
   const showOverlay=kind=>{document.querySelector(`input[name=overlay][value=${kind}]`).checked=true;setOverlay(kind);};
-  const openRanking=(metric,overlay)=>ready.then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=false;document.body.dataset.provinces='open';document.body.dataset.view='rail';if(metric)$('#provinceMetric').value=metric;renderProvinces();showOverlay(overlay);$('#tabBody').scrollTop=0;});
+  const openRanking=(metric,overlay)=>ready.then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=false;document.body.dataset.provinces='open';document.body.dataset.view='rail';document.querySelectorAll('.bottom-nav button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tab==='carbon')));if(metric)$('#provinceMetric').value=metric;renderProvinces();showOverlay(overlay);$('#tabBody').scrollTop=0;
+    // On a tablet the map returns beside the list; Leaflet measured it while it was hidden.
+    if(innerWidth<=1100&&map.getContainer().clientWidth){map.invalidateSize();if(S.sel?.kind==='national')fitThailand();}});
   $('#exploreProvinces').onclick=()=>openRanking(null,'flux');
   $('#calculationTrace').addEventListener('click',e=>{if(e.target.closest('[data-loss-rank]'))openRanking('loss','loss');});
   $('#provinceMetric').onchange=()=>{renderProvinces();if($('#provinceMetric').value==='loss')showOverlay('loss');};document.addEventListener('langchange',applyMetricLabels);

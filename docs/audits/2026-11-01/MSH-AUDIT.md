@@ -284,3 +284,21 @@ GLM built the one-band header (`f9ed5cd`, `97cea7d`). This pass measured it inde
 - **sea.html on a phone:** the 11 countries fill about 36% of the map height.
 - **Not verified:** a real iOS device, enlarged text, dark mode.
 - **Needs an independent auditor:** this pass changed the layout, so a second agent should walk 1440, 1024 and 390.
+
+## Province ranking at tablet width (9 November 2026)
+
+Found by the owner on the live page, after every gate had passed it. The gates only measured pages as they load, and the ranking is a panel that has to be opened.
+
+| 1024 × 768, measured | Before | After |
+|---|---|---|
+| Measure select | 999 × 44 px | fits its label, 315 px in a 340 px panel |
+| Explanatory prose | 999 px wide, about 150 characters a line | 315 px |
+| Name to value | about 740 px apart | adjacent |
+| One province row | 73 px | 49 px |
+| Length of the view | 7.9 screens | 1 screen, list scrolls in its panel |
+| Map beside the ranking | none (hidden) | 58% of the screen |
+| Provinces on the first screen | 6 | 9 |
+
+Also massacred: the four national KPI tiles above a list that does not use them, the close button stranded under 77 rows, "1%" beside "1.84%", and the bottom nav lit on Map while the panel was showing.
+
+New guard: `collectPanelFit` in `scripts/lib/msh-law.mjs`, run by the spatial gate on the opened ranking in Thai and English at 390, 768, 1024, 1101 and 1440, and proved able to fail in `scripts/spatial-detector-self-test.mjs`. Every right-hand panel now keeps the map beside it from 768 to 1100 px.

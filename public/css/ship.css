@@ -141,3 +141,20 @@ body.dashboard{font-size:1rem}
 .loss-key{display:inline-block;width:10px;height:10px;margin:0 4px 0 0;vertical-align:-1px}.loss-key-natural{background:var(--ink)}.loss-key-plantation{background:#cfccc2;margin-left:10px}
 .loss-facts{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;margin:8px 0;font-size:var(--text-meta)}.loss-facts dt{color:var(--ink-mid)}.loss-facts dd{margin:0;font-family:var(--num);text-align:right}
 .loss-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+/* The ranking was the first expansion: a full-width select, full-width prose and name and number 740px apart cost 7.9 screens at 1024. */
+.province-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.province-head h2{margin:0}
+#provinceBrowser .field select{width:max-content;max-width:100%}
+#provinceRanking{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));column-gap:16px}
+#provinceRanking .hint{grid-column:1/-1;max-width:65ch;margin:0 0 4px}
+.dashboard .province-row{padding:5px 4px;row-gap:0;align-content:center}
+.dashboard .province-row:nth-child(even):not(:hover):not(:focus-visible){background:transparent}
+/* The ranking is read against the map and the national KPI band says nothing about it, so the band gives way. */
+@media(max-width:1100px){.dashboard[data-provinces=open] .kpis,.dashboard[data-provinces=open] .verdict{display:none}}
+/* A tablet is a small desktop, not a stretched phone: the panel keeps its reading width and the map stays beside it. */
+@media(min-width:768px) and (max-width:1100px){
+ body.dashboard[data-view=rail]:not([data-about]){display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+ .dashboard[data-view=rail]:not([data-about]) .stage{display:grid;grid-template-columns:minmax(0,1fr) 340px;flex:1;min-height:0}
+ .dashboard[data-view=rail]:not([data-about]) .stage .map-wrap{display:block;height:100%;min-height:0}
+ .dashboard[data-view=rail]:not([data-about]) .stage .rail{height:100%;min-height:0;overflow:hidden}
+ .dashboard[data-view=rail]:not([data-about]) .tab-body{height:100%;overflow:auto}
+}

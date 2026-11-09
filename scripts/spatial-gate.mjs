@@ -16,7 +16,7 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {collectSpatial} from './lib/spatial-collector.mjs';
-import {collectLaw,chromeCost,LAW_VIEWPORTS,CHROME_LIMIT_PCT,EQUAL_WEIGHT_EXEMPTIONS} from './lib/msh-law.mjs';
+import {collectLaw,chromeCost,LAW_VIEWPORTS,CHROME_LIMIT_PCT,EQUAL_WEIGHT_EXEMPTIONS,collectPanelFit,PANEL_LIMITS} from './lib/msh-law.mjs';
 import {assertProjectServer} from './lib/server-identity.mjs';
 import {measurementTarget} from './lib/local-server.mjs';
 import {measureWithRecovery} from './lib/browser-resilience.mjs';
@@ -287,6 +287,30 @@ for(const s of MATRIX){
    record:(job,err)=>assert.fail(`the browser died twice measuring ${job.surface}@${job.width}: the surface could not be measured (${err.message})`),
   });
  }
+}
+// Panels are measured open. A gate that only measures the page as it loads never sees them.
+for(const lang of ['th','en'])for(const width of [390,768,1024,1101,1440]){
+ const height=HEIGHT(width),at=`ranking-${lang}`;
+ await page.setViewportSize({width,height});
+ await page.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded',timeout:20000});
+ await page.locator('#kStock').first().waitFor({timeout:10000});
+ await page.waitForFunction(()=>{const o=document.querySelector('#provinceMetric option[value=loss]');return o&&!o.disabled;},{timeout:10000});
+ await page.evaluate(()=>document.querySelector('#exploreProvinces').click());
+ await page.locator('.province-row').first().waitFor({timeout:10000});
+ await page.locator('#provinceMetric').selectOption('loss');
+ await page.waitForFunction(()=>document.querySelector('.province-row b')?.textContent.includes('%'));
+ await page.waitForTimeout(120);
+ for(const o of await page.evaluate(`(${collectPanelFit.toString()})('#provinceBrowser','.province-row',${JSON.stringify(PANEL_LIMITS)})`))findings.push({surface:at,width,...o});
+ const fit=await page.evaluate(()=>{
+  const nav=document.querySelector('.bottom-nav'),bottom=nav&&nav.getClientRects().length?nav.getBoundingClientRect().top:innerHeight;
+  const map=document.querySelector('#map').getBoundingClientRect();
+  return {rows:[...document.querySelectorAll('.province-row')].filter(e=>{const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<=bottom;}).length,
+   page:document.documentElement.scrollHeight,vh:innerHeight,mapShare:map.width*map.height/(innerWidth*innerHeight)};
+ });
+ if(fit.rows<6)findings.push({surface:at,width,kind:'task-below-fold',severity:'high',el:'.province-row',gap:fit.rows,note:`only ${fit.rows} provinces on the first screen`});
+ if(width>=768&&fit.page>fit.vh+1)findings.push({surface:at,width,kind:'page-scroll',severity:'high',el:'html',gap:fit.page-fit.vh,note:`a map-and-list view runs ${fit.page}px on a ${fit.vh}px screen`});
+ if(width>=768&&fit.mapShare<.45)findings.push({surface:at,width,kind:'map-buried',severity:'high',el:'#map',gap:Math.round(fit.mapShare*100),note:`the map behind the ranking holds ${Math.round(fit.mapShare*100)}% of the screen`});
+ console.log(`ranking ${lang}@${width}: ${fit.rows} rows on the first screen, page ${(fit.page/fit.vh).toFixed(2)} screens, map ${Math.round(fit.mapShare*100)}%`);
 }
 await browser.close();
 assert.deepEqual(errors,[],'page errors during the spatial gate');
