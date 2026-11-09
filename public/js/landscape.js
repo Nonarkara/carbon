@@ -3,7 +3,7 @@ import {renderForestWatch,watchRecord,validWatch} from './forest-watch.js';
 import {readGrid,sumSelection,ledgerRows,polygonsOf,boxSideKm,bboxOf} from './ledger.js';
 
 import {renderCalculations} from './selection-view.js';
-import {lossHTML} from './loss-view.js';
+import {lossHTML,lossFigures,driverName} from './loss-view.js';
 import {initRegistry} from './registry.js';
 const TVER_CLASSES=[[0,'#f3efe0'],[1,'#d9c98f'],[2,'#b89b3c'],[5,'#7a6200'],[10,'#3d3100']];
 // Non's Digest surfaces a moving-bar block on the carbon map when the digest module is wired in.
@@ -17,19 +17,21 @@ const ATMOS={
   fire:{wms:'VIIRS_NOAA20_Thermal_Anomalies_375m_All',lag:2,note:'fireDetNote'},
 };
 const FLUX_CLASSES=[[-Infinity,'#1f5f4a'],[-1,'#5e9480'],[-.25,'#d9d6cc'],[.25,'#d39a6a'],[1,'#9c4a1a']]; // diverging, neutral midpoint
+const LOSS_CLASSES=[[0,'#f3efe0'],[.1,'#e3c89a'],[.25,'#cf9a5f'],[.5,'#a8602a'],[1,'#6a3210']]; // % of tree cover outside plantations lost per year
 const GROUP_ORDER=['forest','savanna_shrub_grass','cropland','deforestation','peat','other'];
 
 export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,onSelect=()=>{},onState}){
   const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const S={data:null,manifest:null,grid:null,gridPromise:null,sel:null,src:null,rows:[],layer:null,shape:null,overlay:null,atmos:null,drawing:false};
   const byCode=new Map();let watchData=null,watchStatus='loading';
-  const watchReady=fetch('data/gfw/watch.json').then(r=>{if(!r.ok)throw Error('watch');return r.json();}).then(d=>{if(!validWatch(d))throw Error('watch:invalid');watchData=d;watchStatus='ready';if(S.src)render();}).catch(()=>{watchStatus='unavailable';if(S.src)render();});let suppressMapClickUntil=0;let selectionRevision=0;
+  const watchReady=fetch('data/gfw/watch.json').then(r=>{if(!r.ok)throw Error('watch');return r.json();}).then(d=>{if(!validWatch(d))throw Error('watch:invalid');watchData=d;watchStatus='ready';if(S.src)render();}).catch(()=>{watchStatus='unavailable';if(S.src)render();});const lossReady=fetch('data/gfw/loss-years.json').then(r=>r.ok?r.json():null).catch(()=>null).then(d=>{S.loss=d;applyMetricLabels();if(S.src)render();});let suppressMapClickUntil=0;let selectionRevision=0;
   const applyMetricLabels=()=>{const ds=S.manifest?.datasets;if(!ds)return;
     const o=$('#provinceMetric').options;
     o[0].textContent=`${t('metricFossil')} · ${ds.odiac.year}`;
     o[1].textContent=`${t('metricStock')} · ${ds.cci.year}`;
     o[2].textContent=getLang()==='th'?`${t('metricNet')} · เฉลี่ย ${ds.gfw.period}`:`${t('metricNet')} · ${ds.gfw.period} mean`;
     o[3].textContent=`${t('tverMetric')} · ${registry?.data()?.snapshot?.slice(0,4)||(getLang()==='th'?'ยังไม่มีข้อมูล':'unavailable')}`.trim();o[3].disabled=!registry.data();
+    o[4].textContent=`${t('metricLoss')} · ${S.loss?.meta.years.at(-5)}–${S.loss?.meta.years.at(-1)}`;o[4].disabled=!S.loss;document.querySelector('input[name=overlay][value=loss]').disabled=!S.loss;
     const overlay=document.querySelector('input[name=overlay][value=tver]');if(overlay)overlay.disabled=!registry.data();};
 
   const registry=initRegistry({t,fmt,getLang});
@@ -41,7 +43,6 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       S.manifest=manifest;S.data=data;
       // National forest-inventory check (optional file): shown beside the map figure, never applied to it.
       fetch('data/ledger/nfi-check.json').then(r=>r.ok?r.json():null).then(n=>{S.nfi=n;if(S.src)render();}).catch(()=>{});
-      fetch('data/gfw/loss-years.json').then(r=>r.ok?r.json():null).then(d=>{S.loss=d;if(S.src)render();}).catch(()=>{});
       data.provinces.forEach(p=>byCode.set(p.pcode,p));byCode.set('TH',data.national);
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
         onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&!map.getContainer().classList.contains('measuring')&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
@@ -208,7 +209,12 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   $('#showAerosol').onclick=()=>{showMap();document.body.dataset.layers='open';$('#layerMore').open=true;$('#atmos').value=$('#atmos').value==='aod'?'':'aod';$('#atmosDate').value='';setAtmos();};
   function renderProvinces(){
     const metric=$('#provinceMetric').value,ds=S.manifest.datasets;
-    const isTver=metric==='tver';
+    const isTver=metric==='tver',isLoss=metric==='loss';
+    const lossOf=p=>lossFigures(S.loss.provinces[p.pcode],S.loss.meta.years);
+    if(isLoss){const lang=getLang(),rows=S.data.provinces.map(p=>[p,lossOf(p)]).sort((a,b)=>b[1].rate-a[1].rate);
+      const trend=f=>f.prior?`${f.recent>=f.prior?'+':'−'}${fmt(Math.abs(100*(f.recent-f.prior)/f.prior),0)}%`:'—';
+      $('#provinceRanking').innerHTML=`<p class="hint">${esc(t('lossRankNote'))}</p>`+rows.map(([p,f])=>`<button class="province-row" data-province="${p.pcode}"><span>${esc(placeName(p))}</span><b>${fmt(f.rate,2)}%</b><small>${fmt(f.recent,0)} ${esc(t('ha'))}/${lang==='th'?'ปี':'yr'} · ${trend(f)} ${esc(t('lossVsPrior'))} · ${esc(driverName(f.topDriver[0],lang))} ${fmt(100*f.topDriver[1],0)}%</small></button>`).join('');
+      $('#provinceRanking').querySelectorAll('button').forEach(b=>b.onclick=()=>select({kind:'province',code:b.dataset.province}));return;}
     const value=isTver?(p)=>registry.data()?.provinces?.[p.pcode]?.projects??null
       :metric==='stock'?p=>p.forest_agb_mg*S.manifest.conversion.agb_to_co2e
       :metric==='net'?p=>p.gfw_net_mg_co2e/ds.gfw.years
@@ -223,8 +229,11 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#provinceRanking').querySelectorAll('button').forEach(b=>b.onclick=()=>select({kind:'province',code:b.dataset.province}));
   }
   $('#openForestWatch').onclick=()=>Promise.all([ready,watchReady]).then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;document.body.dataset.view='rail';$('#ledgerDetails').open=true;($('#ledger .forest-watch')||$('#ledger .watch-status'))?.scrollIntoView({block:'start'});});
-  $('#exploreProvinces').onclick=()=>ready.then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=false;document.body.dataset.provinces='open';document.body.dataset.view='rail';renderProvinces();document.querySelector('input[name=overlay][value=flux]').checked=true;setOverlay('flux');$('#tabBody').scrollTop=0;});
-  $('#provinceMetric').onchange=renderProvinces;document.addEventListener('langchange',applyMetricLabels);
+  const showOverlay=kind=>{document.querySelector(`input[name=overlay][value=${kind}]`).checked=true;setOverlay(kind);};
+  const openRanking=(metric,overlay)=>ready.then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=false;document.body.dataset.provinces='open';document.body.dataset.view='rail';if(metric)$('#provinceMetric').value=metric;renderProvinces();showOverlay(overlay);$('#tabBody').scrollTop=0;});
+  $('#exploreProvinces').onclick=()=>openRanking(null,'flux');
+  $('#calculationTrace').addEventListener('click',e=>{if(e.target.closest('[data-loss-rank]'))openRanking('loss','loss');});
+  $('#provinceMetric').onchange=()=>{renderProvinces();if($('#provinceMetric').value==='loss')showOverlay('loss');};document.addEventListener('langchange',applyMetricLabels);
   $('#closeProvinces').onclick=()=>{$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;};
   $('#nationalView').onclick=()=>select({kind:'national',code:'TH'});
   $('#useBoundary').onclick=()=>{const b=getBoundary();if(!b){message(t('noBoundaryYet'));return;}const polygons=polygonsOf(b.geojson);select({kind:'boundary',polygons,geojson:b.geojson,box:null}).then(()=>map.fitBounds(S.shape.getBounds(),{padding:[30,30]})).catch(err=>message(String(err.message||err)));};
@@ -235,14 +244,15 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   // One place decides province styling: selection outline plus, when chosen, the flux choropleth.
   function styleProvinces(){
     if(!S.layer)return;
-    const flux=S.overlayKind==='flux',tver=S.overlayKind==='tver'&&!!registry.data(),years=S.manifest.datasets.gfw.years;
+    const flux=S.overlayKind==='flux',tver=S.overlayKind==='tver'&&!!registry.data(),loss=S.overlayKind==='loss'&&!!S.loss,years=S.manifest.datasets.gfw.years;
     S.layer.setStyle(f=>{
       const sel=f.properties.pcode===S.sel?.code,p=byCode.get(f.properties.pcode);
       const vflux=p.gfw_net_mg_co2e/p.area_ha/years;
       const vTver=(registry.data()?.provinces?.[f.properties.pcode]?.projects)||0;
-      const fillColor=tver?[...TVER_CLASSES].reverse().find(([lo])=>vTver>=lo)[1]:flux?[...FLUX_CLASSES].reverse().find(([lo])=>vflux>=lo)[1]:undefined;
-      return {color:sel?'#ffcc00':(flux||tver)?'#1b2140':'#f6f4ec',weight:sel?3:.6,opacity:sel?1:(flux||tver)?.6:.45,
-        fillOpacity:(flux||tver)?.75:0,fillColor};
+      const vLoss=loss?lossFigures(S.loss.provinces[f.properties.pcode],S.loss.meta.years).rate:0;
+      const fillColor=loss?[...LOSS_CLASSES].reverse().find(([lo])=>vLoss>=lo)[1]:tver?[...TVER_CLASSES].reverse().find(([lo])=>vTver>=lo)[1]:flux?[...FLUX_CLASSES].reverse().find(([lo])=>vflux>=lo)[1]:undefined;
+      return {color:sel?'#ffcc00':(flux||tver||loss)?'#1b2140':'#f6f4ec',weight:sel?3:.6,opacity:sel?1:(flux||tver||loss)?.6:.45,
+        fillOpacity:(flux||tver||loss)?.75:0,fillColor};
     });
   }
   function setOverlay(kind){
@@ -257,10 +267,12 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       legend(swatches([['#1f5f4a','< −1'],['#5e9480','−1…−0.25'],['#d9d6cc','±0.25'],['#d39a6a','0.25…1'],['#9c4a1a','> 1']],t('legendFlux')));
     }else if(kind==='tver'){
       legend(swatches([['#f3efe0','0'],['#d9c98f','1'],['#b89b3c','2'],['#7a6200','5'],['#3d3100','10+']],t('legendTver')));
+    }else if(kind==='loss'){
+      legend(swatches([['#f3efe0','<0.1'],['#e3c89a','0.1–0.25'],['#cf9a5f','0.25–0.5'],['#a8602a','0.5–1'],['#6a3210','≥1']],t('legendLoss')));
     }else legend('');
   }
   const swatches=(items,title)=>`<b>${esc(title)}</b>`+items.map(([c,l])=>`<span><i style="background:${c}"></i>${esc(l)}</span>`).join('');
-  document.querySelectorAll('input[name=overlay]').forEach(i=>i.addEventListener('change',()=>ready.then(()=>setOverlay(i.value))));
+  document.querySelectorAll('input[name=overlay]').forEach(i=>i.addEventListener('change',()=>Promise.all([ready,lossReady]).then(()=>setOverlay(i.value))));
 
   const iso=d=>d.toISOString().slice(0,10);
   function setAtmos(){

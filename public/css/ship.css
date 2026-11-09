@@ -140,3 +140,4 @@ body.dashboard{font-size:1rem}
 .loss-figure figcaption{font-size:var(--text-meta);color:var(--ink-mid);margin-top:4px}
 .loss-key{display:inline-block;width:10px;height:10px;margin:0 4px 0 0;vertical-align:-1px}.loss-key-natural{background:var(--ink)}.loss-key-plantation{background:#cfccc2;margin-left:10px}
 .loss-facts{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;margin:8px 0;font-size:var(--text-meta)}.loss-facts dt{color:var(--ink-mid)}.loss-facts dd{margin:0;font-family:var(--num);text-align:right}
+.loss-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}

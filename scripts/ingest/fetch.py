@@ -33,6 +33,11 @@ GFW_LOSS_PLACES = ('select adm1, umd_tree_cover_loss__year as year, gfw_plantati
                    'is__umd_regional_primary_forest_2001 as primary_forest, wdpa_protected_areas__iucn_cat as wdpa, ' + _LOSS_SUM +
                    'group by adm1, umd_tree_cover_loss__year, gfw_plantation_flux_model__type, is__umd_regional_primary_forest_2001, wdpa_protected_areas__iucn_cat')
 
+# Tree cover in 2000, inside and outside GFW's plantation map: the denominator of the province loss rate.
+GFW_TREE_COVER = ('select adm1, gfw_plantation_flux_model__type as plantation, sum(umd_tree_cover_extent_2000__ha) as extent_ha '
+                  "from data where iso='THA' and is__flux_model_extent = true and umd_tree_cover_density_2000__threshold=30 "
+                  'group by adm1, gfw_plantation_flux_model__type')
+
 def targets():
     t = {}
     for tile in ['N10E090', 'N10E100', 'N20E090', 'N20E100', 'N30E090', 'N30E100']:
@@ -44,6 +49,12 @@ def targets():
         for var in ['AGB', 'AGB_SD']:
             name = f'{tile}_ESACCI-BIOMASS-L4-AGB{"_SD" if var == "AGB_SD" else ""}-MERGED-100m-2017-fv7.0.tif'
             t[f'cci2017/{name}'] = CCI.replace('/2020/', '/2017/') + name
+    # The other epochs of the CCI v7 yearly series (2015–2024), for the province stock series (scripts/ingest/build_stock_years.py).
+    for year in (2015, 2016, 2018, 2019, 2021, 2022, 2023, 2024):
+        for tile in ['N10E090', 'N10E100', 'N20E090', 'N20E100', 'N30E090', 'N30E100']:
+            for var in ['AGB', 'AGB_SD']:
+                name = f'{tile}_ESACCI-BIOMASS-L4-AGB{"_SD" if var == "AGB_SD" else ""}-MERGED-100m-{year}-fv7.0.tif'
+                t[f'cci_years/{year}/{name}'] = CCI.replace('/2020/', f'/{year}/') + name
     # JAXA FNF 2017, paired with CCI 2017 for the national forest-inventory check (scripts/ingest/nfi_check.py)
     for lon in range(97, 106):
         for lat in range(5, 21):
@@ -71,6 +82,7 @@ def targets():
     t['gfw/carbonflux_adm1_tha_area.csv'] = GFW + urllib.parse.quote(GFW_AREA_SQL)
     t['gfw/loss_adm1_tha_drivers.csv'] = GFW_CHANGE + urllib.parse.quote(GFW_LOSS_DRIVERS)
     t['gfw/loss_adm1_tha_places.csv'] = GFW_CHANGE + urllib.parse.quote(GFW_LOSS_PLACES)
+    t['gfw/tree_cover_adm1_tha_2000.csv'] = GFW + urllib.parse.quote(GFW_TREE_COVER)
     # Climate TRACE v7 forestry-and-land-use subsectors per GADM 4.1 province (THA.1_1 … THA.77_1), 2024.
     for i in range(1, 78):
         t[f'climatetrace/THA.{i}_1-2024.json'] = (f'{CT}?year=2024&gas=co2e_100yr&sectors=forestry-and-land-use&gadmId=THA.{i}_1')

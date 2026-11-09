@@ -35,3 +35,17 @@ test('loss view: the figures on screen are sums and shares of the series',()=>{
  assert.ok(html.includes(fmt(f.natural)));assert.ok(html.includes('not deforestation'));
  assert.ok(lossHTML({data,code:null,lang:'th',fmt,esc}).includes('เลือกจังหวัด'),'a drawn box says why it has no series');
 });
+test('loss rate: the denominator rebuilds the ledger’s extent, and the rate is the series over it',()=>{
+ for(const p of ledger){const c=data.provinces[p.pcode];close(c.tree_cover_natural_ha+c.tree_cover_plantation_ha,p.gfw_extent_ha,.005,1);
+  assert.ok(c.tree_cover_natural_ha>0);
+  const f=lossFigures(c,data.meta.years);close(f.rate,100*sum(c.natural_ha.slice(20))/5/c.tree_cover_natural_ha);close(f.prior,sum(c.natural_ha.slice(15,20))/5);}
+ for(const k of ['tree_cover_natural_ha','tree_cover_plantation_ha'])close(sum(Object.values(data.provinces).map(p=>p[k])),data.national[k],1e-6,.05*78);
+});
+test('loss CSV: every province-year, the same numbers as the JSON, and each row names its source',()=>{
+ const text=readFileSync('public/data/gfw/loss-years.csv','utf8');assert.equal(text[0],'\ufeff','Excel needs the BOM for Thai names');
+ const parse=l=>l.match(/("([^"]|"")*"|[^,]*)(,|$)/g).map(x=>x.replace(/,$/,'').replace(/^"|"$/g,''));
+ const [head,...rows]=text.slice(1).trim().split(/\r?\n/).map(parse),at=n=>head.indexOf(n);assert.equal(rows.length,78*25);
+ for(const r of rows){const s=r[0]==='TH'?data.national:data.provinces[r[0]],i=data.meta.years.indexOf(+r[at('year')]);
+  for(const [col,k] of [['tree_cover_lost_ha','loss_ha'],['outside_plantations_ha','natural_ha'],['inside_plantations_ha','plantation_ha'],['outside_in_primary_forest_ha','primary_ha'],['outside_in_protected_areas_ha','protected_ha'],['emissions_tco2e','emissions'],['emissions_outside_plantations_tco2e','natural_emissions']])assert.equal(+r[at(col)],s[k][i]);
+  assert.ok(r[at('source')].includes('v20260327')&&r[at('source')].includes('not deforestation'));}
+});

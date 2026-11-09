@@ -57,6 +57,10 @@ const topTver=Object.entries(tver.provinces).sort((a,b)=>b[1].projects-a[1].proj
 assert.ok((await rankSource()).includes('TGO T-VER'),'tver source label');
 const tverCount=Number((await page.locator('.province-row').first().locator('b').textContent()).replace(/[^0-9]/g,''));
 assert.equal(tverCount,topTver[1].projects,'top province project count matches the snapshot');
+await page.locator('#provinceMetric').selectOption('loss');await page.waitForFunction(()=>document.querySelector('.province-row b')?.textContent.includes('%'));
+assert.equal(await page.locator('.province-row').count(),77);assert.ok(await page.locator('input[name=overlay][value=loss]').isChecked(),'choosing the loss ranking must put the same quantity on the map');
+assert.ok((await page.locator('#overlayLegend').innerText()).includes('2021–2025'));
+const lossRates=await page.locator('.province-row b').allTextContents();assert.deepEqual(lossRates.map(parseFloat),lossRates.map(parseFloat).sort((a,b)=>b-a),'the ranking must be sorted by the number it shows');
 await page.locator('#provinceMetric').selectOption('fossil');
 await page.locator('.province-row').first().click();
 const cm=ledger.provinces.find(p=>p.pcode==='TH50');
