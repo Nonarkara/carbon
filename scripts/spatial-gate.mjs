@@ -311,6 +311,10 @@ for(const lang of ['th','en'])for(const width of [390,768,1024,1101,1440]){
  if(width>=768&&fit.page>fit.vh+1)findings.push({surface:at,width,kind:'page-scroll',severity:'high',el:'html',gap:fit.page-fit.vh,note:`a map-and-list view runs ${fit.page}px on a ${fit.vh}px screen`});
  if(width>=768&&fit.mapShare<.45)findings.push({surface:at,width,kind:'map-buried',severity:'high',el:'#map',gap:Math.round(fit.mapShare*100),note:`the map behind the ranking holds ${Math.round(fit.mapShare*100)}% of the screen`});
  await page.evaluate(()=>document.querySelector('#closeProvinces').click());
+ await page.waitForTimeout(250);
+ const frame=await page.evaluate(()=>{const m=document.querySelector('#map');if(!m.clientWidth)return null;const b=m.getBoundingClientRect(),rs=[...m.querySelectorAll('.leaflet-overlay-pane path')].map(p=>p.getBoundingClientRect()).filter(r=>r.width);
+  return {top:b.top,bottom:b.bottom,left:b.left,right:b.right,ptop:Math.min(...rs.map(r=>r.top)),pbottom:Math.max(...rs.map(r=>r.bottom)),pleft:Math.min(...rs.map(r=>r.left)),pright:Math.max(...rs.map(r=>r.right))};});
+ if(frame&&(frame.pbottom>frame.bottom+1||frame.ptop<frame.top-1||frame.pleft<frame.left-1||frame.pright>frame.right+1))findings.push({surface:`carbon-panel-${lang}`,width,kind:'stale-map-frame',severity:'high',el:'#map',gap:Math.round(frame.pbottom-frame.bottom),note:`after the panel changed, Thailand spills the map frame (${Math.round(frame.pbottom)} past ${Math.round(frame.bottom)})`});
  await page.locator('.stock-block').first().waitFor({state:'attached',timeout:10000});
  await page.evaluate(()=>document.querySelectorAll('#selectionCalculation details').forEach(d=>{d.open=true;}));
  for(const o of await page.evaluate(`(${collectPanelFit.toString()})('#selectionCalculation','.province-row',${JSON.stringify(PANEL_LIMITS)})`))findings.push({surface:`carbon-panel-${lang}`,width,...o});

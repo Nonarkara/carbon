@@ -48,6 +48,10 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       data.provinces.forEach(p=>byCode.set(p.pcode,p));byCode.set('TH',data.national);
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
         onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&!map.getContainer().classList.contains('measuring')&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
+      // At tablet width a panel opening or closing resizes the map; the frame must follow, or Thailand runs off its edge.
+      let framedSize='';new ResizeObserver(([e])=>{const {width:w,height:h}=e.contentRect,key=`${w}:${h}`;if(key===framedSize||!w||!h)return;framedSize=key;
+        if(innerWidth<768||innerWidth>1100)return;map.invalidateSize({pan:false});
+        if(S.sel?.kind==='national')fitThailand();else if(S.sel?.kind==='province')S.layer.eachLayer(l=>{if(l.feature.properties.pcode===S.sel.code)map.fitBounds(l.getBounds(),{padding:[30,30],animate:false});});}).observe(map.getContainer());
       fillPlaces();select({kind:'national',code:'TH'},false,false);setOverlay('stock');fitThailand();applyMetricLabels();
       registryReady.then(()=>{applyMetricLabels();if(S.src)render();});
     });
@@ -234,9 +238,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   }
   $('#openForestWatch').onclick=()=>Promise.all([ready,watchReady]).then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;document.body.dataset.view='rail';$('#ledgerDetails').open=true;($('#ledger .forest-watch')||$('#ledger .watch-status'))?.scrollIntoView({block:'start'});});
   const showOverlay=kind=>{document.querySelector(`input[name=overlay][value=${kind}]`).checked=true;setOverlay(kind);};
-  const openRanking=(metric,overlay)=>ready.then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=false;document.body.dataset.provinces='open';document.body.dataset.view='rail';document.querySelectorAll('.bottom-nav button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tab==='carbon')));if(metric)$('#provinceMetric').value=metric;renderProvinces();showOverlay(overlay);$('#tabBody').scrollTop=0;
-    // On a tablet the map returns beside the list; Leaflet measured it while it was hidden.
-    if(innerWidth<=1100&&map.getContainer().clientWidth){map.invalidateSize();if(S.sel?.kind==='national')fitThailand();}});
+  const openRanking=(metric,overlay)=>ready.then(()=>{setDrawing(false);onSelect();$('#provinceBrowser').hidden=false;document.body.dataset.provinces='open';document.body.dataset.view='rail';document.querySelectorAll('.bottom-nav button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tab==='carbon')));if(metric)$('#provinceMetric').value=metric;renderProvinces();showOverlay(overlay);$('#tabBody').scrollTop=0;});
   $('#exploreProvinces').onclick=()=>openRanking(null,'flux');
   $('#calculationTrace').addEventListener('click',e=>{if(e.target.closest('[data-loss-rank]'))openRanking('loss','loss');});
   $('#provinceMetric').onchange=()=>{renderProvinces();if($('#provinceMetric').value==='loss')showOverlay('loss');};document.addEventListener('langchange',applyMetricLabels);
