@@ -493,6 +493,13 @@ export function collectLaw(root,exemptions){
     // nothing is lost and there is no finding. Anything else means the pointer reaches the band
     // or a layer above the work, and the work is unreachable.
     if(t.contains(hit))continue;
+    // Content waiting below the edge of its own scrolling panel only has coordinates under the
+    // band. If the panel itself stops short of the band, scrolling the panel brings it into the
+    // clear. A panel that runs under the band is still reported below.
+    let port=t.parentElement;
+    while(port&&!(/auto|scroll/.test(getComputedStyle(port).overflowY)&&port.scrollHeight>port.clientHeight))port=port.parentElement;
+    if(port&&port!==document.body&&port!==document.documentElement){const pr=port.getBoundingClientRect();
+     if(Math.min(br.right,pr.right)-Math.max(br.left,pr.left)<=4||Math.min(br.bottom,pr.bottom)-Math.max(br.top,pr.top)<=4)continue;}
     // FIXED furniture lies over the work permanently: it does not move with the page, so what it
     // covers is covered in the reader's first view. That is the law's "obscure the work".
     //

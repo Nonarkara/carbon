@@ -162,6 +162,19 @@ let foundLaw=await law();
 assert.ok(foundLaw.some(o=>o.kind==='overlapping-chrome'),`overlapping-chrome must be detected, got ${JSON.stringify(foundLaw)}`);
 await page.evaluate(()=>{document.querySelector('#synthetic-work')?.closest('div')?.remove();document.querySelector('#synthetic-band')?.remove();});
 
+// --- 9a-port. A scrolling panel that stops above a fixed band hides nothing; one that runs under it does.
+for(const [top,height,defect] of [[100,260,false],[100,500,true]]){
+ await page.evaluate(([top,height])=>{
+  const port=document.createElement('div');port.id='synthetic-port';port.style.cssText=`position:fixed;left:20px;top:${top}px;width:300px;height:${height}px;overflow:hidden auto;background:#fff;z-index:9`;
+  port.innerHTML='<div style="height:380px"></div><p id="synthetic-port-row" style="margin:0;height:30px;background:#eee">row waiting in the panel</p><div style="height:900px"></div>';
+  document.body.append(port);
+  const band=document.createElement('div');band.id='synthetic-port-band';band.style.cssText='position:fixed;left:0;right:0;top:470px;height:60px;background:#000;z-index:99999';document.body.append(band);
+ },[top,height]);
+ const seen=(await law()).some(o=>o.kind==='overlapping-chrome'&&o.note.includes('row waiting'));
+ assert.equal(seen,defect,defect?'a row under a band, in a panel that runs under the band, must be reported':'a row merely below its panel edge must not be reported');
+ await page.evaluate(()=>{document.querySelector('#synthetic-port').remove();document.querySelector('#synthetic-port-band').remove();});
+}
+
 // --- 9a-bis. A STICKY band over content that scrolls past is NOT a defect. A sticky header that
 // content scrolls under is how every sticky header works, and reporting it would condemn a
 // correct layout. FIXED furniture is the opposite: it never moves, so what it covers is covered
