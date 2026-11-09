@@ -158,3 +158,5 @@ body.dashboard{font-size:1rem}
  .dashboard[data-view=rail]:not([data-about]) .stage .rail{height:100%;min-height:0;overflow:hidden}
  .dashboard[data-view=rail]:not([data-about]) .tab-body{height:100%;overflow:auto}
 }
+.stock-block h4{margin:8px 0 0;font-size:var(--text-meta);font-weight:600}
+.stock-strip{display:flex;height:12px;margin:6px 0}

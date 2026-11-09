@@ -310,6 +310,10 @@ for(const lang of ['th','en'])for(const width of [390,768,1024,1101,1440]){
  if(fit.rows<6)findings.push({surface:at,width,kind:'task-below-fold',severity:'high',el:'.province-row',gap:fit.rows,note:`only ${fit.rows} provinces on the first screen`});
  if(width>=768&&fit.page>fit.vh+1)findings.push({surface:at,width,kind:'page-scroll',severity:'high',el:'html',gap:fit.page-fit.vh,note:`a map-and-list view runs ${fit.page}px on a ${fit.vh}px screen`});
  if(width>=768&&fit.mapShare<.45)findings.push({surface:at,width,kind:'map-buried',severity:'high',el:'#map',gap:Math.round(fit.mapShare*100),note:`the map behind the ranking holds ${Math.round(fit.mapShare*100)}% of the screen`});
+ await page.evaluate(()=>document.querySelector('#closeProvinces').click());
+ await page.locator('.stock-block').first().waitFor({state:'attached',timeout:10000});
+ await page.evaluate(()=>document.querySelectorAll('#selectionCalculation details').forEach(d=>{d.open=true;}));
+ for(const o of await page.evaluate(`(${collectPanelFit.toString()})('#selectionCalculation','.province-row',${JSON.stringify(PANEL_LIMITS)})`))findings.push({surface:`carbon-panel-${lang}`,width,...o});
  console.log(`ranking ${lang}@${width}: ${fit.rows} rows on the first screen, page ${(fit.page/fit.vh).toFixed(2)} screens, map ${Math.round(fit.mapShare*100)}%`);
 }
 await browser.close();

@@ -55,6 +55,10 @@ def targets():
             for var in ['AGB', 'AGB_SD']:
                 name = f'{tile}_ESACCI-BIOMASS-L4-AGB{"_SD" if var == "AGB_SD" else ""}-MERGED-100m-{year}-fv7.0.tif'
                 t[f'cci_years/{year}/{name}'] = CCI.replace('/2020/', f'/{year}/') + name
+    # ESA's published 2019–2020 change product: build_stock_years.py checks its change flags against this band.
+    for tile in ['N10E090', 'N10E100', 'N20E090', 'N20E100', 'N30E090', 'N30E100']:
+        name = f'{tile}_ESACCI-BIOMASS-L4-DIFF-100m-2019_2020-fv7.0.tif'
+        t[f'cci_diff/{name}'] = CCI.replace('/2020/', '/2019_2020/') + name
     # JAXA FNF 2017, paired with CCI 2017 for the national forest-inventory check (scripts/ingest/nfi_check.py)
     for lon in range(97, 106):
         for lat in range(5, 21):
