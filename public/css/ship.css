@@ -162,3 +162,6 @@ body.dashboard{font-size:1rem}
 .stock-strip{display:flex;height:12px;margin:6px 0}
 .loss-actions .btn.small{font-size:var(--text-meta)}
 .stock-block summary{display:flex;align-items:center;width:max-content;min-height:32px}
+/* A date field is several segments plus a calendar button. On the button the input is neither :focus nor :focus-visible,
+   only :focus-within, so the ring vanished for the keyboard reader. */
+.dashboard input[type=date]:focus-within{outline:3px solid var(--focus);outline-offset:3px}

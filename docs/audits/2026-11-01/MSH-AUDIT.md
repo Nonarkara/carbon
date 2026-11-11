@@ -302,3 +302,11 @@ Found by the owner on the live page, after every gate had passed it. The gates o
 Also massacred: the four national KPI tiles above a list that does not use them, the close button stranded under 77 rows, "1%" beside "1.84%", and the bottom nav lit on Map while the panel was showing.
 
 New guard: `collectPanelFit` in `scripts/lib/msh-law.mjs`, run by the spatial gate on the opened ranking in Thai and English at 390, 768, 1024, 1101 and 1440, and proved able to fail in `scripts/spatial-detector-self-test.mjs`. Every right-hand panel now keeps the map beside it from 768 to 1100 px.
+
+## Map shift between panels, and the date fields' focus ring (11 November 2026)
+
+Both were left open by the independent audits of 9 November.
+
+**Map shift.** The summary strip above the map changes with the panel. At 768 and 1024 some of its hints wrapped to two or three lines on some panels only, so the strip ran 84 to 135 px and the map's top moved up to 33 px on a tab switch. The cause was copy, so the copy was cut, not the strip padded: every hint now fits one line at 768. The stock hint keeps its central band and its ceiling as symbols, `2020 · ±1% (≤110%) · CCI v7.0`, with the full floor–ceiling span in its title and in the ledger. Guard: the spatial gate opens all five panels in Thai and English at 768, 1024 and 1440 and fails if the map's top moves by more than 1 px. Restoring one long hint made it fail at 768 and 1024.
+
+**Keyboard.** A Tab walk of all five panels at 1440 in both languages found document order matching visual order everywhere, and one defect: the period dates lost their focus ring. A date field is three segments and a calendar button; on the button the input is neither `:focus` nor `:focus-visible`, only `:focus-within`. The ring now uses `:focus-within`. Guard: `scripts/flat-ui-browser-test.mjs` tabs through every segment of both dates in both languages; without the rule it fails on segment 4.

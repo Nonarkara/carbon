@@ -288,6 +288,22 @@ for(const s of MATRIX){
   });
  }
 }
+// The map must not move when the reader changes panel. The summary strip changes with the panel,
+// and its hints wrapped to two or three lines on some panels only, so the map jumped up to 33px.
+for(const lang of ['th','en'])for(const width of [768,1024,1440]){
+ await page.setViewportSize({width,height:HEIGHT(width)});
+ await page.goto(`${base}/?lang=${lang}`,{waitUntil:'domcontentloaded',timeout:20000});
+ await page.locator('#kStock').first().waitFor({timeout:10000});
+ await page.waitForFunction(()=>/\d/.test(document.querySelector('#kStockHint')?.textContent||''),{timeout:10000});
+ const tops=[];
+ for(const tab of ['carbon','project','calculate','evidence','sources']){
+  await page.evaluate(t=>{const n=document.querySelector(`.bottom-nav [data-tab=${t}]`);(n&&n.getClientRects().length?n:document.querySelector(`.lenses [data-tab=${t}]`)).click();},tab);
+  await page.waitForTimeout(150);
+  tops.push([tab,await page.evaluate(()=>Math.round(document.querySelector('#map').getBoundingClientRect().top))]);
+ }
+ const ys=tops.map(([,y])=>y);
+ if(Math.max(...ys)-Math.min(...ys)>1)findings.push({surface:`panels-${lang}`,width,kind:'shifting-map',severity:'high',el:'#map',gap:Math.max(...ys)-Math.min(...ys),note:`the map's top moves between panels: ${tops.map(([t,y])=>`${t} ${y}`).join(', ')}`});
+}
 // Panels are measured open. A gate that only measures the page as it loads never sees them.
 for(const lang of ['th','en'])for(const width of [390,768,1024,1101,1440]){
  const height=HEIGHT(width),at=`ranking-${lang}`;
