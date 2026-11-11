@@ -50,6 +50,9 @@ for(const lang of ['th','en']){
  await page.locator('#kStock').filter({hasText:'M'}).waitFor();
  await page.evaluate(()=>{document.querySelector('.lenses [data-tab=calculate]').click();const t=document.querySelector('#panelTitle');t.tabIndex=-1;t.focus();});
  const tabTo=async id=>{for(let i=0;i<40;i++){await page.keyboard.press('Tab');if(await page.evaluate(x=>document.activeElement?.id===x,id))return true;}return false;};
+ // Each pair of fields shares one top edge, even when one label wraps and its neighbour does not.
+ for(const [a,b] of await page.evaluate(()=>[...document.querySelectorAll('[data-panel=calculate] .pair')].map(p=>[...p.querySelectorAll('input,select')].slice(0,2).map(e=>Math.round(e.getBoundingClientRect().top)))))
+  assert.ok(Math.abs(a-b)<=1,`${lang}: paired fields sit at different heights (${a} vs ${b})`);
  for(const id of ['start','end']){
   assert.ok(await tabTo(id),`${lang}: Tab never reached the ${id} date`);
   for(let segment=1;await page.evaluate(x=>document.activeElement?.id===x,id);segment++){

@@ -112,8 +112,8 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#kAreaHint').textContent=s.cells!=null?t('boxHint').replace('{c}',fmt(s.cells)):t('forestShare').replace('{f}',fmt(100*s.forest_area_ha/s.area_ha,1));
     $('#kStock').textContent=stock?.tooCoarse?'—':big(stock?.value);
     const pct=b=>fmt(100*(b[1]-stock.value)/stock.value,b[1]-stock.value<.01*stock.value?2:0);
-    $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?.value!=null&&stock.value>0?`${S.manifest.datasets.cci.year} · ${stock.central?`±${pct(stock.central)}% (≤${pct(stock.conservative)}%)`:`±${pct(stock.optimistic)}–${pct(stock.conservative)}%`} · CCI ${S.manifest.datasets.cci.version}`:'—';
-    // The strip shows the central band and its ceiling as symbols, one line at every width; the ledger names all three.
+    $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?.value!=null&&stock.value>0?`${S.manifest.datasets.cci.year} · ${stock.central?`±${pct(stock.central)}–${pct(stock.conservative)}%`:`±${pct(stock.optimistic)}–${pct(stock.conservative)}%`} · CCI ${S.manifest.datasets.cci.version}`:'—';
+    // The strip shows the range from the central band to its ceiling, one line at every width; the title and the ledger name all three.
     $('#kStockHint').title=stock?.central?`${t('band')} ±${pct(stock.central)}% · ${t('bandSpan')} ±${pct(stock.optimistic)}–${pct(stock.conservative)}%`:'';
     $('#kRemove').textContent=big(rem?.value);$('#kEmit').textContent=big(em?.value);
     $('#kRemoveHint').textContent=$('#kEmitHint').textContent=rem?`GFW ${S.manifest.datasets.gfw.version.split(' ')[0]} · ${S.manifest.datasets.gfw.period}`:t('gridNotIngested').split('.')[0];

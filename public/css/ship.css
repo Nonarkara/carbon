@@ -165,3 +165,5 @@ body.dashboard{font-size:1rem}
 /* A date field is several segments plus a calendar button. On the button the input is neither :focus nor :focus-visible,
    only :focus-within, so the ring vanished for the keyboard reader. */
 .dashboard input[type=date]:focus-within{outline:3px solid var(--focus);outline-offset:3px}
+/* A wrapped label must not drop its field below its neighbour's: pairs share the fields' bottom edge. */
+.dashboard .pair{align-items:end}
