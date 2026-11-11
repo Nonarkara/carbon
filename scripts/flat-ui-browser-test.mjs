@@ -62,4 +62,19 @@ for(const lang of ['th','en']){
   }
  }
 }
+// On a touch screen :hover sticks to the last thing tapped. A tapped province row must not stay lit.
+{
+ const touch=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ const t=await touch.newPage();
+ await gotoRetry(t,new URL('/?lang=en',base).href,{waitUntil:'domcontentloaded'});
+ await t.locator('#kStock').filter({hasText:'M'}).waitFor();
+ assert.equal(await t.evaluate(()=>matchMedia('(hover:hover)').matches),false,'the touch context must report no hover');
+ await t.evaluate(()=>document.querySelector('#exploreProvinces').click());
+ const row=t.locator('.province-row').nth(2);await row.waitFor();await row.hover();
+ const lit=await row.evaluate(e=>[e.matches(':hover'),getComputedStyle(e).backgroundColor]);
+ const signal=await t.evaluate(()=>{const p=document.createElement('i');p.style.background='var(--signal)';document.querySelector('.dashboard').append(p);const c=getComputedStyle(p).backgroundColor;p.remove();return c;});
+ assert.ok(lit[0],'the probe must actually hover the row');
+ assert.notEqual(lit[1],signal,'a hovered province row is lit on a touch screen, where the highlight sticks after a tap');
+ await touch.close();
+}
 assert.deepEqual(errors,[]);await browser.close();console.log('Flat UI: dashboard/Bible/manual/research, TH/EN, phone/desktop, pseudo-elements, hover, active and keyboard focus passed.');

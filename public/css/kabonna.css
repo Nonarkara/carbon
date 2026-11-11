@@ -36,7 +36,7 @@ body.dashboard button:active,body.dashboard .btn:active {transform:none}
 .dashboard #exploreProvinces {background:var(--focus);color:#fff;border-color:var(--focus)}
 .dashboard #pickArea {background:var(--signal);color:var(--ink);border-color:var(--structure)}
 .dashboard #showVegetation,.dashboard #showAerosol,.dashboard #moreLayers {background:transparent;border:1px solid var(--rule-strong)}
-.dashboard #showVegetation:hover,.dashboard #showAerosol:hover,.dashboard #moreLayers:hover {background:var(--well);border-color:var(--structure)}
+@media (hover:hover) and (pointer:fine) {.dashboard #showVegetation:hover,.dashboard #showAerosol:hover,.dashboard #moreLayers:hover {background:var(--well);border-color:var(--structure)}}
 .dashboard #pickArea[aria-pressed=true] {background:var(--structure);color:#fff}
 .dashboard #startMap {font-size:11px;color:var(--ink-mid);max-width:185px;margin-left:4px}
 .dashboard .advanced-tools {bottom:10px;color:var(--ink);font-size:11px}
@@ -83,7 +83,9 @@ body.dashboard button:active,body.dashboard .btn:active {transform:none}
 .dashboard .select-actions .btn {min-height:40px;font-size:11px;padding:7px 10px}
 .dashboard .province-row {padding:12px 8px;border-bottom-color:var(--rule);font-size:13px}
 .dashboard .province-row:nth-child(even) {background:var(--well)}
-.dashboard .province-row:hover,.dashboard .province-row:focus-visible {background:var(--signal)}
+/* On a touch screen :hover sticks to whatever was tapped last, so the yellow row stayed lit after the finger left. */
+.dashboard .province-row:focus-visible {background:var(--signal)}
+@media (hover:hover) and (pointer:fine) {.dashboard .province-row:hover {background:var(--signal)}}
 .dashboard .province-row b {font-size:13px}
 .dashboard .province-row small {font-size:10px;color:var(--ink-low)}
 .dashboard .layer-panel,.dashboard .overlay-legend {background:var(--paper);border:1px solid var(--structure);box-shadow:none}
