@@ -23,8 +23,8 @@ assert.equal(await page.locator('#kStock').innerText(),mt(ledger.national.forest
 // The strip leads with the answer: the forest's net, with its sign named; removals and emissions are its parts, in one unit.
 const one=v=>new Intl.NumberFormat('en-GB',{minimumFractionDigits:1,maximumFractionDigits:1}).format(v/1e6);
 assert.equal(await page.locator('#kNet').innerText(),mt(ledger.national.gfw_net_mg_co2e/25));
-assert.ok((await page.locator('#kNetHint').textContent()).startsWith(ledger.national.gfw_net_mg_co2e<0?'Net sink':'Net source'));
-assert.equal(await page.locator('#kFlows').innerText(),`${one(ledger.national.gfw_removals_mg_co2/25)} / ${one(ledger.national.gfw_emissions_mg_co2e/25)} M`);
+assert.ok((await page.locator('.kpis [data-i18n=kNet]').textContent()).startsWith(ledger.national.gfw_net_mg_co2e<0?'Net sink':'Net source'),'the label line names the sign');
+assert.equal(await page.locator('#kFlows').innerText(),`${one(ledger.national.gfw_removals_mg_co2/25)}\u2009/\u2009${one(ledger.national.gfw_emissions_mg_co2e/25)} M`);
 assert.equal(await page.locator('.kpis[data-kpi=carbon] dl').first().locator('dd').getAttribute('id'),'kNet','the answer must be the first tile');
 await page.waitForFunction(()=>document.querySelector('#calculationTrace').textContent.includes('national forest inventory'));
 // The cross-check paragraph that carries "359 t/ha" is appended when the inventory data lands,
@@ -70,7 +70,7 @@ await page.locator('#provinceMetric').selectOption('fossil');
 await page.locator('.province-row').first().click();
 const cm=ledger.provinces.find(p=>p.pcode==='TH50');
 await page.locator('#place').selectOption('TH50');await page.waitForFunction(()=>document.querySelector('#carbonVerdict').textContent.startsWith('Chiang Mai'));
-assert.equal(await page.locator('#kStock').innerText(),mt(cm.forest_agb_mg*F));{const v=cm.gfw_net_mg_co2e/25;assert.equal(await page.locator('#kNet').innerText(),Math.abs(v)>=1e6?mt(v):new Intl.NumberFormat('en-GB',{maximumFractionDigits:0}).format(v));}
+assert.equal(await page.locator('#kStock').innerText(),mt(cm.forest_agb_mg*F));assert.equal(await page.locator('#kNet').innerText(),mt(cm.gfw_net_mg_co2e/25),'the net shares the M unit of its parts');
 await page.locator('#ledgerDetails').evaluate(e=>e.open=true);assert.match(await page.locator('#ledger').innerText(),/Climate TRACE 2024[\s\S]*Forest fires/);assert.equal(await page.locator('.fire-chart .bar').count(),12);
 // T-VER registry ledger block: appears below the landscape ledger with a side heading, snapshot line, and project list.
 assert.match(await page.locator('#ledger .tver-summary').first().innerText(),/T-VER|ทะเบียน/);assert.ok(await page.locator('#ledger .tver-item').count()>=1);assert.match(await page.locator('#ledger').innerText(),/tver\.tgo\.or\.th/);

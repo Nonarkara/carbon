@@ -54,3 +54,8 @@ test('the panel reads answer first: net, then stock, then the different quantity
   assert.ok(html.indexOf('<code')>html.indexOf('<details class="calc-how"'),'formulas sit inside the fold');
   assert.doesNotMatch(html.split('<details')[0],/\d{3},\d{3},\d{3}/,'the answer is not given to nine significant digits');
 });
+test('the panel net takes the unit of its parts, as the strip does',()=>{
+  const src={...n,gfw_removals_mg_co2:3.5e6*25,gfw_emissions_mg_co2e:3.1e6*25};
+  const html=renderCalculations({src,rows:[...rows(),{id:'forest_net',value:-418737}],datasets,conv,t,fmt,esc,getLang});
+  assert.match(html,/data-calculation="net"[^]*?calc-answer">-0\.42 M/);
+});

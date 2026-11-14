@@ -119,11 +119,13 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     $('#kStockHint').title=stock?.central?`${t('band')} ±${pct(stock.central)}% · ${t('bandSpan')} ±${pct(stock.optimistic)}–${pct(stock.conservative)}%`:'';
     // The answer first: is this forest a net sink or a net source? Removals and emissions are its two parts.
     const net=r('forest_net'),gfwTag=`GFW ${S.manifest.datasets.gfw.version.split(' ')[0]} · ${S.manifest.datasets.gfw.period}`;
-    $('#kNet').textContent=big(net?.value);
-    $('#kNetHint').textContent=net?.value!=null?`${t(net.value<0?'netSink':'netSource')} · GFW ${S.manifest.datasets.gfw.period}`:t('gridNotIngested').split('.')[0];
-    // Both parts in one unit, so a reader compares like with like.
+    // The net and its two parts share one unit, so the three compare at a glance.
     const mega=rem&&Math.max(Math.abs(rem.value),Math.abs(em.value))>=1e6,oneDp=new Intl.NumberFormat(getLang()==='th'?'th-TH':'en-GB',{minimumFractionDigits:1,maximumFractionDigits:1}),part=v=>mega?oneDp.format(v/1e6):fmt(v,0);
-    $('#kFlows').textContent=rem?`${part(rem.value)} / ${part(em.value)}${mega?' M':''}`:'—';
+    $('#kNet').textContent=net?.value==null?'—':mega?`${fmt(net.value/1e6,2)} M`:big(net.value);
+    // A bare minus can read as a loss, so the label line itself names the sign.
+    $('.kpis [data-i18n=kNet]').textContent=net?.value!=null?`${t(net.value<0?'netSink':'netSource')} · tCO₂e/${getLang()==='th'?'ปี':'yr'}`:t('kNet');
+    $('#kNetHint').textContent=net?.value!=null?t('gfwAverage').replace('{p}',S.manifest.datasets.gfw.period):t('gridNotIngested').split('.')[0];
+    $('#kFlows').textContent=rem?`${part(rem.value)}\u2009/\u2009${part(em.value)}${mega?' M':''}`:'—';
     $('#kFlowsHint').textContent=rem?gfwTag:t('gridNotIngested').split('.')[0];
     $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):!s.area_ha?t('emptySelection'):stock?.tooCoarse?t('tooCoarseGrid'):t('verdictBox').replace('{s}',big(stock?.value));
     $('#ledger').innerHTML=ledgerHTML(s);

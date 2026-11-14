@@ -161,9 +161,13 @@ body.dashboard{font-size:1rem}
 .stock-block h4,.loss-block h4{margin:8px 0 0;font-size:var(--text-meta);font-weight:600}
 .stock-strip{display:flex;height:12px;margin:6px 0}
 .loss-actions .btn.small{font-size:var(--text-meta)}
-.stock-block summary,.calc-how summary{display:flex;align-items:center;width:max-content;min-height:32px}
+/* A flex summary loses its native marker, so the fold draws its own caret and a hairline: it must read as a control. */
+.stock-block summary,.calc-how summary{display:flex;align-items:center;gap:6px;width:max-content;min-height:32px;padding:0 8px;border:1px solid var(--rule)}
+.stock-block summary::before,.calc-how summary::before{content:'▸'}.stock-block details[open]>summary::before,.calc-how[open]>summary::before{content:'▾'}
 /* A date field is several segments plus a calendar button. On the button the input is neither :focus nor :focus-visible,
    only :focus-within, so the ring vanished for the keyboard reader. */
 .dashboard input[type=date]:focus-within{outline:3px solid var(--focus);outline-offset:3px}
 /* A wrapped label must not drop its field below its neighbour's: pairs share the fields' bottom edge. */
 .dashboard .pair{align-items:end}
+/* At 360px and below a strip tile is about 135px: the figures step down so each stays on one line. */
+@media(max-width:360px){.dashboard .kpis dd{font-size:20px}.dashboard .kpis .unit{font-size:var(--text-meta)}}

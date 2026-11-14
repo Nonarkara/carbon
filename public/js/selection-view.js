@@ -26,13 +26,15 @@ export function renderCalculations({src,rows,datasets,conv,t,fmt,esc,getLang,nfi
  if(!src.area_ha)return `<p class="calc-alert">${esc(t('emptySelection'))}</p>`;
  const {R,CF}=stockChain(conv),c=COPY[getLang()]||COPY.en;
  // Millions with two decimals, like the strip: nine significant digits claimed a precision no input has.
+ // The net takes the unit of its parts, as the strip does, so one number never shows two ways.
  const big=v=>Math.abs(v)>=1e6?`${fmt(v/1e6,2)} M`:fmt(v,0);
  return selectionCalculations(src,rows,datasets,conv).sort((a,b)=>SHOW.indexOf(a.id)-SHOW.indexOf(b.id)).map(r=>{
   let substituted='';
   if(r.value!=null){const n=x=>fmt(x,2);substituted=r.id==='stock'?`${n(r.inputs[0])} t AGB × ${clean(1+R)} × ${clean(CF)} × 44 / 12`:r.id==='fossil'?`${n(r.inputs[0])} t C × 44 / 12`:`(${n(r.inputs[0])} − ${n(r.inputs[1])}) / ${r.inputs[2]}`;}
   // One plain line stays in view; the full caveats travel with the working.
+  const extra=r.id==='stock'&&r.value!=null&&!r.coarse?t('treeCoverNote'):'';
   const plain=r.coarse?t('coarseFormula'):r.value==null?t('gridNotIngested'):r.id==='net'?(r.value<0?c.sink:c.source):r.id==='fossil'?c.fossil:nfi?c.nfi.replace('{r}',fmt(nfi.comparison.mean_ratio_map_over_nfi,1)):'';
   const detail=r.id==='stock'&&r.value!=null&&!r.coarse?(nfi?t('nfiNote').replace('{r}',fmt(nfi.comparison.mean_ratio_map_over_nfi,1))+' ':'')+t('bandNote'):'';
-  return `<section class="calc-block ${r.id==='net'?'primary-calc':''}" data-calculation="${r.id}"><h3>${esc(t(r.title))}</h3><div class="calc-answer">${r.value==null?'—':big(r.value)} <small>${esc(r.unit)}</small></div><p>${esc(r.source)} · ${esc(t('globalRef'))}</p>${plain?`<p>${esc(plain)}</p>`:''}<details class="calc-how"><summary>${esc(c.how)}</summary><code>${esc(r.expression)}</code>${substituted?`<code class="substitution">${esc(substituted)}</code>`:''}${detail?`<p>${esc(detail)}</p>`:''}</details><a class="number-evidence" href="bible.html?lang=${getLang()}#${{stock:'forest-stock',fossil:'fossil',net:'forest-flux'}[r.id]}" target="_blank" rel="noopener">${esc(c.explain)}</a></section>`;
+  return `<section class="calc-block ${r.id==='net'?'primary-calc':''}" data-calculation="${r.id}"><h3>${esc(t(r.title))}</h3><div class="calc-answer">${r.value==null?'—':r.id==='net'&&Math.max(r.inputs[0],r.inputs[1])/r.inputs[2]>=1e6?`${fmt(r.value/1e6,2)} M`:big(r.value)} <small>${esc(r.unit)}</small></div><p>${esc(r.source)} · ${esc(t('globalRef'))}</p>${plain?`<p>${esc(plain)}</p>`:''}${extra?`<p>${esc(extra)}</p>`:''}<details class="calc-how"><summary>${esc(c.how)}</summary><code>${esc(r.expression)}</code>${substituted?`<code class="substitution">${esc(substituted)}</code>`:''}${detail?`<p>${esc(detail)}</p>`:''}</details><a class="number-evidence" href="bible.html?lang=${getLang()}#${{stock:'forest-stock',fossil:'fossil',net:'forest-flux'}[r.id]}" target="_blank" rel="noopener">${esc(c.explain)}</a></section>`;
  }).join('')+`<p class="hint">${esc(t('calcCredit'))}</p>`;
 }
