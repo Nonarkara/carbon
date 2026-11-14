@@ -147,11 +147,16 @@ export const SURFACES = [
       // A figure that drifts from its own trace is the failure this gate exists to catch.
       const stock = (await page.locator('#kStock').innerText()).trim();
       assert.match(stock, /^[\d.,]+\s*M$/, `${lang}@${width}: the national figure reads "${stock}", which is not a magnitude`);
-      const trace = (await page.locator('#calculationTrace').innerText()).trim();
-      const fromTrace = trace.match(/([\d.,]+)\s*tCO₂e/);
-      assert.ok(fromTrace, `${lang}@${width}: the calculation trace carries no tCO₂e figure`);
-      const exact = Number(fromTrace[1].replace(/[.,]/g, ''));
-      assert.ok(exact > 0, `${lang}@${width}: the trace's tCO₂e figure is not a number`);
+      // Redo the stock's own arithmetic from the substitution its working shows: AGB × (1 + R) × CF × 44 / 12.
+      const block = page.locator('#calculationTrace [data-calculation=stock]');
+      // The panel may be off screen at phone width, so the working is read from the document, not from pixels.
+      const workingNode = block.locator('details.calc-how code.substitution');
+      assert.ok(await workingNode.count(), `${lang}@${width}: the calculation trace carries no tCO₂e figure (no stock working to check against)`);
+      const working = (await workingNode.textContent()).trim();
+      const terms = (working.match(/[\d][\d,]*(?:\.\d+)?/g) || []).map(x => Number(x.replace(/,/g, '')));
+      assert.equal(terms.length, 5, `${lang}@${width}: the stock's working reads "${working}", not AGB × (1 + R) × CF × 44 / 12`);
+      const exact = terms[0] * terms[1] * terms[2] * terms[3] / terms[4];
+      assert.ok(exact > 0, `${lang}@${width}: the stock's working does not compute a positive figure`);
       const expected = new Intl.NumberFormat(lang === 'th' ? 'th-TH' : 'en-GB', {maximumFractionDigits: 2}).format(exact / 1e6);
       assert.equal(stock.replace(/\s*M$/, ''), expected, `${lang}@${width}: the headline says ${stock} but the trace computes ${expected} M`);
       // The area beside it must be an area, in hectares.

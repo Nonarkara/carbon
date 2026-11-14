@@ -45,3 +45,12 @@ test('empty selection renders a calc-alert and never a numeric answer',()=>{
   assert.match(html,/calc-alert/);
   assert.doesNotMatch(html,/calc-answer/);
 });
+test('the panel reads answer first: net, then stock, then the different quantity, with the working folded',()=>{
+  const net=n.gfw_net_mg_co2e/25;
+  const html=renderCalculations({src:n,rows:[...rows(),{id:'forest_net',value:net}],datasets,conv,t,fmt,esc,getLang});
+  const order=[...html.matchAll(/data-calculation="(\w+)"/g)].map(m=>m[1]);
+  assert.deepEqual(order,['net','stock','fossil']);
+  assert.match(html,net<0?/Net sink/:/Net source/,'the net names its sign in words');
+  assert.ok(html.indexOf('<code')>html.indexOf('<details class="calc-how"'),'formulas sit inside the fold');
+  assert.doesNotMatch(html.split('<details')[0],/\d{3},\d{3},\d{3}/,'the answer is not given to nine significant digits');
+});

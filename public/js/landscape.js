@@ -80,7 +80,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       S.src=byCode.get(sel.code);$('#place').value=sel.code;
       if(fit){if(sel.kind==='national')fitThailand();else S.layer.eachLayer(l=>{if(l.feature.properties.pcode===sel.code)map.fitBounds(l.getBounds(),{padding:[30,30]});});}
     }else{
-      $('#place').value='box';S.src=null;$('#calculationTrace').textContent=t('loading');$('#ledger').replaceChildren();$('#kStock').textContent=t('loading');$('#kRemove').textContent=$('#kEmit').textContent='—';
+      $('#place').value='box';S.src=null;$('#calculationTrace').textContent=t('loading');$('#ledger').replaceChildren();$('#kStock').textContent=t('loading');$('#kNet').textContent=$('#kFlows').textContent='—';
       const grid=await loadGrid(),{totals,cells}=sumSelection(grid,sel.box?{box:sel.box}:{polygons:sel.polygons});
       if(revision!==selectionRevision)return;S.src={...totals,cells,pcode:null};
       S.shape=(sel.box?L.rectangle([[sel.box.south,sel.box.west],[sel.box.north,sel.box.east]]):L.geoJSON(sel.geojson)).setStyle({color:'#ffcc00',weight:3,fillOpacity:.08,interactive:false}).addTo(map);
@@ -110,13 +110,21 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const stock=r('stock_forest'),rem=r('forest_removals'),em=r('forest_emissions');
     $('#kArea').replaceChildren(`${big(s.area_ha)} `,Object.assign(document.createElement('span'),{className:'unit',textContent:t('ha')}));
     $('#kAreaHint').textContent=s.cells!=null?t('boxHint').replace('{c}',fmt(s.cells)):t('forestShare').replace('{f}',fmt(100*s.forest_area_ha/s.area_ha,1));
+    // Satellite tree cover is not Thailand's official forest statistic; the strip says tree cover, the title says why.
+    $('#kAreaHint').title=s.cells!=null?'':t('treeCoverNote');
     $('#kStock').textContent=stock?.tooCoarse?'—':big(stock?.value);
     const pct=b=>fmt(100*(b[1]-stock.value)/stock.value,b[1]-stock.value<.01*stock.value?2:0);
     $('#kStockHint').textContent=stock?.tooCoarse?t('tooCoarseGrid'):stock?.value!=null&&stock.value>0?`${S.manifest.datasets.cci.year} · ${stock.central?`±${pct(stock.central)}–${pct(stock.conservative)}%`:`±${pct(stock.optimistic)}–${pct(stock.conservative)}%`} · CCI ${S.manifest.datasets.cci.version}`:'—';
     // The strip shows the range from the central band to its ceiling, one line at every width; the title and the ledger name all three.
     $('#kStockHint').title=stock?.central?`${t('band')} ±${pct(stock.central)}% · ${t('bandSpan')} ±${pct(stock.optimistic)}–${pct(stock.conservative)}%`:'';
-    $('#kRemove').textContent=big(rem?.value);$('#kEmit').textContent=big(em?.value);
-    $('#kRemoveHint').textContent=$('#kEmitHint').textContent=rem?`GFW ${S.manifest.datasets.gfw.version.split(' ')[0]} · ${S.manifest.datasets.gfw.period}`:t('gridNotIngested').split('.')[0];
+    // The answer first: is this forest a net sink or a net source? Removals and emissions are its two parts.
+    const net=r('forest_net'),gfwTag=`GFW ${S.manifest.datasets.gfw.version.split(' ')[0]} · ${S.manifest.datasets.gfw.period}`;
+    $('#kNet').textContent=big(net?.value);
+    $('#kNetHint').textContent=net?.value!=null?`${t(net.value<0?'netSink':'netSource')} · GFW ${S.manifest.datasets.gfw.period}`:t('gridNotIngested').split('.')[0];
+    // Both parts in one unit, so a reader compares like with like.
+    const mega=rem&&Math.max(Math.abs(rem.value),Math.abs(em.value))>=1e6,oneDp=new Intl.NumberFormat(getLang()==='th'?'th-TH':'en-GB',{minimumFractionDigits:1,maximumFractionDigits:1}),part=v=>mega?oneDp.format(v/1e6):fmt(v,0);
+    $('#kFlows').textContent=rem?`${part(rem.value)} / ${part(em.value)}${mega?' M':''}`:'—';
+    $('#kFlowsHint').textContent=rem?gfwTag:t('gridNotIngested').split('.')[0];
     $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):!s.area_ha?t('emptySelection'):stock?.tooCoarse?t('tooCoarseGrid'):t('verdictBox').replace('{s}',big(stock?.value));
     $('#ledger').innerHTML=ledgerHTML(s);
     const pcode=s.pcode||(S.sel.kind==='national'?'TH':null);

@@ -316,3 +316,18 @@ The same audit found the paired fields in Calculate (period dates, previous and 
 ## Touch (11 November 2026)
 
 No Xcode on this machine, so the iOS Simulator could not run; the walk used Playwright's WebKit (Safari's engine) emulating an iPhone 13 with touch, which is a proxy, not a device. Taps leave no focus ring, and the date fields show theirs only while being edited. One defect: `:hover` sticks to whatever a finger touched last, so a tapped province row stayed lit in the signal yellow, and the vegetation/aerosol/layers buttons kept their hover fill. Those hover rules now apply only where `(hover:hover) and (pointer:fine)`. Guard: the flat-UI test hovers a row in a touch context and fails if it is lit; ungating the rule made it fail. The yellow left on the bottom nav and the Tools button after a tap is their pressed and open state, which is correct.
+
+## Communication hierarchy and backend accuracy (15 November 2026)
+
+An independent auditor read the live site for the order in which it tells a reader things. Verdict REVISE. Found, ranked by how much each misleads:
+
+1. **"Forest 44.7%" read as an official statistic.** It is JAXA radar tree cover, which counts rubber and orchards; the Royal Forest Department's official forest cover for 2020 is 31.64%. The strip now says "Tree cover 44.7% · JAXA 2020", with the difference in its title and in both guides.
+2. **No answer on the first screen.** Four equal tiles made the reader subtract removals from emissions. The strip now leads with the forest's net per year, named "Net sink" or "Net source", in the weighted first tile; its two parts share the third tile in one unit; the area moves last.
+3. **False precision.** The panel showed the stock as 745,566,843 tCO₂e beside a ±5–116% range. Panel figures now use the strip's millions.
+4. **Panel order and jargon.** The panel now reads net, stock, fossil. Each block keeps its source and one plain line in view (net sink or source; "about 1.8× the national forest inventory average, cause not yet settled"; fossil CO₂ is a different quantity and is not netted against the forest). Formulas and the full caveats sit behind "How it is calculated".
+
+Not changed: the brand pair คาร์บอนนะ / Carbona, which is deliberate wordplay.
+
+Backend accuracy: every cooked dataset was rebuilt from raw. Ledger, loss series and stock series came back byte for byte, ESA flag agreement still 99.9996%. One gap: the ledger manifest did not list the hashes of the three GFW extracts behind the yearly loss series and the province ranking. It does now.
+
+Guards: the unit tests fix the panel order, the folded working and the absence of nine-digit answers; the browser flow asserts the net tile is first with its sign named; the live verification now redoes the stock's own arithmetic from the working the panel shows and requires it to equal the headline, and the falsifier proves it still fails when the working is gone.

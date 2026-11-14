@@ -20,7 +20,12 @@ const ledger=JSON.parse(await readFile('public/data/ledger/provinces.json','utf8
 const mt=v=>new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(v/1e6)+' M';
 await page.waitForFunction(()=>document.querySelector('#kStock').textContent.includes('M'));
 assert.equal(await page.locator('#kStock').innerText(),mt(ledger.national.forest_agb_mg*F));
-assert.equal(await page.locator('#kRemove').innerText(),mt(ledger.national.gfw_removals_mg_co2/25));
+// The strip leads with the answer: the forest's net, with its sign named; removals and emissions are its parts, in one unit.
+const one=v=>new Intl.NumberFormat('en-GB',{minimumFractionDigits:1,maximumFractionDigits:1}).format(v/1e6);
+assert.equal(await page.locator('#kNet').innerText(),mt(ledger.national.gfw_net_mg_co2e/25));
+assert.ok((await page.locator('#kNetHint').textContent()).startsWith(ledger.national.gfw_net_mg_co2e<0?'Net sink':'Net source'));
+assert.equal(await page.locator('#kFlows').innerText(),`${one(ledger.national.gfw_removals_mg_co2/25)} / ${one(ledger.national.gfw_emissions_mg_co2e/25)} M`);
+assert.equal(await page.locator('.kpis[data-kpi=carbon] dl').first().locator('dd').getAttribute('id'),'kNet','the answer must be the first tile');
 await page.waitForFunction(()=>document.querySelector('#calculationTrace').textContent.includes('national forest inventory'));
 // The cross-check paragraph that carries "359 t/ha" is appended when the inventory data lands,
 // which is after the trace has already been painted. Waiting on the trace alone reads the panel
@@ -30,7 +35,7 @@ await page.waitForFunction(()=>document.querySelector('#calculationTrace').textC
 await page.waitForFunction(()=>/359 t\/ha/.test(document.querySelector('#ledger').textContent||''),null,{timeout:30000});
 assert.match(await page.locator('#ledger').textContent(),/National forest inventory \(FREL 2021[\s\S]*359 t\/ha/);
 // Source labels on KPI hints travel from the manifest, not hardcoded strings.
-assert.equal(await page.locator('#kRemoveHint').textContent(),`GFW ${mf.datasets.gfw.version.split(' ')[0]} · ${mf.datasets.gfw.period}`);
+assert.equal(await page.locator('#kFlowsHint').textContent(),`GFW ${mf.datasets.gfw.version.split(' ')[0]} · ${mf.datasets.gfw.period}`);
 assert.ok((await page.locator('#kStockHint').textContent()).endsWith(`CCI ${mf.datasets.cci.version}`));
 // Non's Digest renders in the world rail with dated items and trends; the per-feed bible reading link stays.
 // Desktop opens the world feeds on request; open them the way a reader would.
@@ -40,7 +45,7 @@ assert.ok(await page.locator('.digest-trends .digest-trend').first().isVisible()
 assert.ok((await page.locator('#worldFeeds .world-item a[href*=bible]').count())>=1,'per-feed bible reading link');
 // The answer leads its section; the formula trace follows. Metric option labels travel from the manifest.
 assert.equal(await page.locator('[data-calculation=stock]').evaluate(e=>e.children[1].className),'calc-answer');
-assert.match(await page.locator('[data-calculation=stock] code').first().innerText(),new RegExp(`\\(1 \\+ ${mf.conversion.root_shoot}\\) × ${mf.conversion.carbon_fraction} × 44 / 12`));
+await page.locator('[data-calculation=stock] details.calc-how > summary').click();assert.match(await page.locator('[data-calculation=stock] code').first().innerText(),new RegExp(`\\(1 \\+ ${mf.conversion.root_shoot}\\) × ${mf.conversion.carbon_fraction} × 44 / 12`));
 assert.ok((await page.locator('#provinceMetric option[value=fossil]').textContent()).includes(` · ${mf.datasets.odiac.year}`));
 assert.ok((await page.locator('#provinceMetric option[value=stock]').textContent()).includes(` · ${mf.datasets.cci.year}`));
 assert.ok((await page.locator('#provinceMetric option[value=net]').textContent()).includes(mf.datasets.gfw.period));
@@ -65,7 +70,7 @@ await page.locator('#provinceMetric').selectOption('fossil');
 await page.locator('.province-row').first().click();
 const cm=ledger.provinces.find(p=>p.pcode==='TH50');
 await page.locator('#place').selectOption('TH50');await page.waitForFunction(()=>document.querySelector('#carbonVerdict').textContent.startsWith('Chiang Mai'));
-assert.equal(await page.locator('#kStock').innerText(),mt(cm.forest_agb_mg*F));assert.equal(await page.locator('#kEmit').innerText(),mt(cm.gfw_emissions_mg_co2e/25));
+assert.equal(await page.locator('#kStock').innerText(),mt(cm.forest_agb_mg*F));{const v=cm.gfw_net_mg_co2e/25;assert.equal(await page.locator('#kNet').innerText(),Math.abs(v)>=1e6?mt(v):new Intl.NumberFormat('en-GB',{maximumFractionDigits:0}).format(v));}
 await page.locator('#ledgerDetails').evaluate(e=>e.open=true);assert.match(await page.locator('#ledger').innerText(),/Climate TRACE 2024[\s\S]*Forest fires/);assert.equal(await page.locator('.fire-chart .bar').count(),12);
 // T-VER registry ledger block: appears below the landscape ledger with a side heading, snapshot line, and project list.
 assert.match(await page.locator('#ledger .tver-summary').first().innerText(),/T-VER|ทะเบียน/);assert.ok(await page.locator('#ledger .tver-item').count()>=1);assert.match(await page.locator('#ledger').innerText(),/tver\.tgo\.or\.th/);
@@ -75,7 +80,7 @@ assert.equal(await page.locator('#ledger .tver-portfolio').count(),5);assert.mat
 await page.locator('#pickArea').click();const mb=await page.locator('#map').boundingBox();
 await page.mouse.move(mb.x+mb.width*.35,mb.y+mb.height*.3);await page.mouse.down();await page.mouse.move(mb.x+mb.width*.6,mb.y+mb.height*.6,{steps:8});await page.mouse.up();
 await page.waitForFunction(()=>document.querySelector('#carbonVerdict').textContent.startsWith('Drawn box'));
-assert.equal(await page.locator('#place').inputValue(),'box');assert.match(await page.locator('#kStock').innerText(),/\d/);assert.match(await page.locator('#kStockHint').innerText(),/±[\d.]+–[\d.]+% · CCI/,'the strip keeps the range from the central band to its ceiling');assert.match(await page.locator('#kStockHint').getAttribute('title'),/floor–ceiling ±[\d.]+–[\d.]+%/,'the full floor–ceiling span stays one hover away');assert.equal(await page.locator('#kRemove').innerText(),'—');
+assert.equal(await page.locator('#place').inputValue(),'box');assert.match(await page.locator('#kStock').innerText(),/\d/);assert.match(await page.locator('#kStockHint').innerText(),/±[\d.]+–[\d.]+% · CCI/,'the strip keeps the range from the central band to its ceiling');assert.match(await page.locator('#kStockHint').getAttribute('title'),/floor–ceiling ±[\d.]+–[\d.]+%/,'the full floor–ceiling span stays one hover away');assert.equal(await page.locator('#kNet').innerText(),'—');
 assert.match(await page.locator('#ledger').innerText(),/not ingested[\s\S]*Not shown as zero/);
 await clickControl(page,'#moreLayers');for(const v of ['stock','fnf']){await page.locator(`input[name=overlay][value=${v}]`).check();await page.waitForFunction(()=>{const i=document.querySelector('img.leaflet-image-layer');return i&&i.complete&&i.naturalWidth>0;});}
 await page.locator('input[name=overlay][value=flux]').check();assert.ok(await page.locator('#overlayLegend').isVisible());
