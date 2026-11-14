@@ -204,6 +204,24 @@
      "bytes": 8409,
      "retrieved": "2026-09-25T19:40:29Z",
      "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql=select%20adm1%2C%20sum%28%22gfw_full_extent_gross_removals__Mg_CO2%22%29%20as%20removals_mg_co2%2C%20sum%28%22gfw_full_extent_gross_emissions_biomass_soil__Mg_CO2e%22%29%20as%20emissions_mg_co2e%2C%20sum%28%22gfw_full_extent_net_flux__Mg_CO2e%22%29%20as%20net_mg_co2e%2C%20sum%28%22gfw_flux_model_extent__ha%22%29%20as%20extent_ha%20from%20data%20where%20iso%3D%27THA%27%20and%20is__flux_model_extent%20%3D%20true%20and%20umd_tree_cover_density_2000__threshold%3D30%20group%20by%20adm1%20order%20by%20adm1"
+    },
+    "gfw/loss_adm1_tha_drivers.csv": {
+     "sha256": "f28f87ac5b4529516782940246a66ee04d5c0e1db200df9d2ccaeea2a722dd65",
+     "bytes": 1723878,
+     "retrieved": "2026-11-07T18:40:16Z",
+     "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_change/v20260327/download/csv?sql=select%20adm1%2C%20umd_tree_cover_loss__year%20as%20year%2C%20gfw_plantation_flux_model__type%20as%20plantation%2C%20wri_google_tree_cover_loss_drivers__driver%20as%20driver%2C%20sum%28umd_tree_cover_loss__ha%29%20as%20loss_ha%2C%20sum%28%22gfw_full_extent_gross_emissions_biomass_soil__Mg_CO2e%22%29%20as%20emissions_mg_co2e%20from%20data%20where%20iso%3D%27THA%27%20and%20is__flux_model_extent%20%3D%20true%20and%20umd_tree_cover_density_2000__threshold%3D30%20group%20by%20adm1%2C%20umd_tree_cover_loss__year%2C%20gfw_plantation_flux_model__type%2C%20wri_google_tree_cover_loss_drivers__driver"
+    },
+    "gfw/loss_adm1_tha_places.csv": {
+     "sha256": "e4bd85aef797ebccca82bbb8a5f2288940f990bcf3d0ae9bb37d6e1d6ee8718f",
+     "bytes": 1202580,
+     "retrieved": "2026-11-07T18:40:16Z",
+     "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_change/v20260327/download/csv?sql=select%20adm1%2C%20umd_tree_cover_loss__year%20as%20year%2C%20gfw_plantation_flux_model__type%20as%20plantation%2C%20is__umd_regional_primary_forest_2001%20as%20primary_forest%2C%20wdpa_protected_areas__iucn_cat%20as%20wdpa%2C%20sum%28umd_tree_cover_loss__ha%29%20as%20loss_ha%2C%20sum%28%22gfw_full_extent_gross_emissions_biomass_soil__Mg_CO2e%22%29%20as%20emissions_mg_co2e%20from%20data%20where%20iso%3D%27THA%27%20and%20is__flux_model_extent%20%3D%20true%20and%20umd_tree_cover_density_2000__threshold%3D30%20group%20by%20adm1%2C%20umd_tree_cover_loss__year%2C%20gfw_plantation_flux_model__type%2C%20is__umd_regional_primary_forest_2001%2C%20wdpa_protected_areas__iucn_cat"
+    },
+    "gfw/tree_cover_adm1_tha_2000.csv": {
+     "sha256": "5108c16148754c0c7f6a9b08e6db17be10117c50aaaa86a07e91c9d5bd88f8c1",
+     "bytes": 9959,
+     "retrieved": "2026-11-09T06:54:03Z",
+     "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql=select%20adm1%2C%20gfw_plantation_flux_model__type%20as%20plantation%2C%20sum%28umd_tree_cover_extent_2000__ha%29%20as%20extent_ha%20from%20data%20where%20iso%3D%27THA%27%20and%20is__flux_model_extent%20%3D%20true%20and%20umd_tree_cover_density_2000__threshold%3D30%20group%20by%20adm1%2C%20gfw_plantation_flux_model__type"
     }
    },
    "grid": null
