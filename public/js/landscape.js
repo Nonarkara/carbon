@@ -120,8 +120,11 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     // The answer first: is this forest a net sink or a net source? Removals and emissions are its two parts.
     const net=r('forest_net'),gfwTag=`GFW ${S.manifest.datasets.gfw.version.split(' ')[0]} · ${S.manifest.datasets.gfw.period}`;
     // The net and its two parts share one unit, so the three compare at a glance.
-    const mega=rem&&Math.max(Math.abs(rem.value),Math.abs(em.value))>=1e6,oneDp=new Intl.NumberFormat(getLang()==='th'?'th-TH':'en-GB',{minimumFractionDigits:1,maximumFractionDigits:1}),part=v=>mega?oneDp.format(v/1e6):fmt(v,0);
-    $('#kNet').textContent=net?.value==null?'—':mega?`${fmt(net.value/1e6,2)} M`:big(net.value);
+    // Once any figure in the strip reaches a million, every figure is in millions; a small one keeps two significant digits.
+    const loc=getLang()==='th'?'th-TH':'en-GB',oneDp=new Intl.NumberFormat(loc,{minimumFractionDigits:1,maximumFractionDigits:1}),sig2=new Intl.NumberFormat(loc,{maximumSignificantDigits:2});
+    const mega=Math.max(Math.abs(stock?.tooCoarse?0:stock?.value||0),Math.abs(rem?.value||0),Math.abs(em?.value||0))>=1e6;
+    const part=v=>!mega?fmt(v,0):Math.abs(v)>=1e6?oneDp.format(v/1e6):sig2.format(v/1e6);
+    $('#kNet').textContent=net?.value==null?'—':!mega?fmt(net.value,0):`${Math.abs(net.value)>=1e6?fmt(net.value/1e6,2):sig2.format(net.value/1e6)} M`;
     // A bare minus can read as a loss, so the label line itself names the sign.
     $('.kpis [data-i18n=kNet]').textContent=net?.value!=null?`${t(net.value<0?'netSink':'netSource')} · tCO₂e/${getLang()==='th'?'ปี':'yr'}`:t('kNet');
     $('#kNetHint').textContent=net?.value!=null?t('gfwAverage').replace('{p}',S.manifest.datasets.gfw.period):t('gridNotIngested').split('.')[0];

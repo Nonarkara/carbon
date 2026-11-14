@@ -59,3 +59,8 @@ test('the panel net takes the unit of its parts, as the strip does',()=>{
   const html=renderCalculations({src,rows:[...rows(),{id:'forest_net',value:-418737}],datasets,conv,t,fmt,esc,getLang});
   assert.match(html,/data-calculation="net"[^]*?calc-answer">-0\.42 M/);
 });
+test('a sub-million net beside a stock in millions is shown in millions too',()=>{
+  const src={...n,gfw_removals_mg_co2:9e5*25,gfw_emissions_mg_co2e:6.8e5*25};
+  const html=renderCalculations({src,rows:[...rows(),{id:'forest_net',value:222720}],datasets,conv,t,fmt,esc,getLang});
+  assert.match(html,/data-calculation="net"[^]*?calc-answer">0\.22 M/);
+});
