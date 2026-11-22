@@ -476,6 +476,19 @@ Four in five projects were registered in 2024–2026. Most have not yet reached 
 
 What the OTC tape in the snapshot shows: forestry and agriculture trades total 379,304 tCO₂e at a volume-weighted average of **฿416/tCO₂e**. Yearly averages run from ฿279 in 2023 (308,030 tCO₂e, the largest year) to ฿2,000 in 2022 (1,270 tCO₂e). There is no stable price band in these data.
 
+<div class="comparison-strip">
+<div class="compare-side">
+<h4>Standard T-VER · 246 projects (95.7%)</h4>
+<b>S-METH-13-01 to 13-06</b>
+<small>Predecessors: METH-FOR-01…04, METH-AGR-01/02 · crediting periods 10 yr (180), 7 yr (35), 20 yr (25), others 9–23 yr (6) · earliest start September 2013 · domestic voluntary use</small>
+</div>
+<div class="compare-side">
+<h4>Premium T-VER · 11 projects (4.3%)</h4>
+<b>P-METH-13-01, 13-02, 13-03, 13-05, 13-08</b>
+<small>A/R, mangrove, REDD+, IFM, rice · crediting periods 5 yr (3), 15 yr (5), 20 yr (2), 39 yr (1) · earliest start July 2023 · CORSIA-eligible 2024–2026 · Article 6 needs letter of authorization</small>
+</div>
+</div>
+
 ### Standard and Premium T-VER, as registered
 
 | | Standard T-VER | Premium T-VER |
