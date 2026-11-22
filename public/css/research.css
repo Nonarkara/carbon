@@ -50,6 +50,10 @@ body.guide.research{max-width:1200px;padding:0 32px;--chrome:43px}
 .claim-item{border-top:3px solid var(--brand);background:var(--well);padding:10px 12px;min-width:0}
 .claim-item h4{font:600 13px var(--font);margin:0 0 6px;color:var(--ink)}
 .claim-item p{font-size:12px;line-height:1.6;margin:0;color:var(--ink-mid)}
+.claim-item:first-child h4{color:var(--brand);font-size:14px}
+.claim-item:first-child p{color:var(--ink)}
+.claim-item:not(:first-child) h4{color:var(--ink-mid)}
+.claim-item:not(:first-child) p{color:var(--ink-mid)}
 /* Station strip: credit life stations as a sequential flow */
 .station-strip{display:flex;flex-wrap:wrap;gap:8px 14px;margin:18px 0;align-items:flex-start}
 .station{flex:1;min-width:150px;border:1px solid var(--rule-strong);background:var(--well);padding:10px 12px;position:relative}

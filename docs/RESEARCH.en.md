@@ -43,11 +43,25 @@ The study grew from an enquiry about AI-assisted forest-carbon assessment from T
 
 “How much carbon is in this forest?” and “How many credits can this project receive?” require different evidence. A forest can contain a great deal of carbon without that entire stock being available for a new credit claim.
 
-| Quantity | Plain meaning | What this workbench does |
-|---|---|---|
-| Carbon stock | Carbon held in the included tree pools at a date, expressed here as tCO₂e | Converts supplied biomass or accepts a compatible total tree-stock estimate |
-| Monitoring-period change | The difference between comparable dates, after applicable deductions | Calculates a signed estimate from the supplied inputs |
-| Issued credits | Units approved and recorded through the relevant programme | No registry connection; never inferred from the estimate |
+<div class="comparison-strip">
+<div class="compare-side">
+<h4>Carbon stock</h4>
+<b>Carbon held in tree pools at a date</b>
+<small>Expressed as tCO₂e · workbench converts supplied biomass or accepts a total tree-stock estimate</small>
+</div>
+<div class="compare-side">
+<h4>Monitoring-period change</h4>
+<b>Difference between comparable dates</b>
+<small>After deductions · signed estimate from supplied inputs</small>
+</div>
+<div class="compare-side">
+<h4>Issued credits</h4>
+<b>Units approved and recorded through the programme</b>
+<small>No registry connection · never inferred from the estimate</small>
+</div>
+</div>
+
+“How much carbon is in this forest?” and “How many credits can this project receive?” require different evidence. A forest can contain a great deal of carbon without that entire stock being available for a new credit claim.
 
 ```mermaid
 flowchart TD
@@ -432,6 +446,14 @@ Open the workbench, try the clearly labelled synthetic example, and follow a num
 
 On 13 June 2025 TGO presented four remote-sensing platforms that had met its assessment criteria for estimating forest carbon sequestration in T-VER forestry projects: GISTDA Carbon Atlas, THAICOM CarbonWatch, SCGC CERT+ and Varuna Smart Forest (PTT group) ([TGO news](https://ghgreduction.tgo.or.th/th/news/news-all/item/6114-tgo-ai-2.html)). The release says they reduce time and cost; it gives no percentage, and it does not describe them as verification. External bodies still verify. Each recognition belongs to that platform. This application is an independent, open screening tool and claims no TGO recognition.
 
+<div class="number-strip">
+<div class="number-card"><b class="brand">257</b><span>registered FOR&AGR projects · 2,194,333 tCO₂e/yr expected · median 771 tCO₂e/yr</span></div>
+<div class="number-card"><b class="brand">31</b><span>projects with credits issued · 733,914 tCO₂e issued in total · 12.1%</span></div>
+<div class="number-card"><b class="brand">75</b><span>projects include ป่าชุมชน (community forest) in the name · legal instrument not recorded</span></div>
+<div class="number-card"><b class="brand">32</b><span>projects mention mangrove · Department of Marine and Coastal Resources is developer on 30</span></div>
+<div class="number-card"><b class="brand">246 Standard · 11 Premium</b><span>Standard 95.7% · Premium 4.3% · 253 active · 2 ended · 1 revalidation · 1 withdrawn</span></div>
+</div>
+
 The [TGO T-VER database](https://tver.tgo.or.th/database/public/projects/1/1) publishes its full project list without login. A snapshot taken on 28 September 2026, limited to the forestry and agriculture sector (FOR&AGR), shows:
 
 - **257 registered projects**, with a combined ex-ante expectation of **2,194,333 tCO₂e per year** (median project 771 tCO₂e/yr)
@@ -582,7 +604,28 @@ Forest-carbon estimation from space is a crowded field. The systems below were r
 
 The four Thai platforms are the ones TGO recognised for T-VER forestry work in June 2025 (section 11). None publishes an accuracy figure that can be checked. The global vendors publish validation reports, mostly for their own models against LiDAR.
 
-### What คาร์บอนนะ does differently
+<div class="claim-strip">
+<div class="claim-item">
+<h4>Whole method and code published</h4>
+<p>Offline pipeline, fetch log with file hashes, and tests — all open.</p>
+</div>
+<div class="claim-item">
+<h4>A conservation rule</h4>
+<p>Provinces, drawn boxes and national total are sums of the same 100 m pixels and are tested to agree.</p>
+</div>
+<div class="claim-item">
+<h4>Uncertainty calibrated to the producer</h4>
+<p>Median SD ratios 1.23–1.47 across processing runs. A consistency diagnostic, not independent coverage validation.</p>
+</div>
+<div class="claim-item">
+<h4>Checked against Thailand's forest inventory</h4>
+<p>Across unmatched national populations, with published uncertainty and conditional allometric sensitivity.</p>
+</div>
+<div class="claim-item">
+<h4>Registry context kept apart</h4>
+<p>TGO's registered and issued tonnes sit beside satellite figures — never added to them.</p>
+</div>
+</div>
 
 Of the systems in this list, it is the one that publishes all of the following together for Thailand (Global Forest Watch also publishes open code for its flux model):
 
