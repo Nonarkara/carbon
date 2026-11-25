@@ -21,7 +21,7 @@ try{
   await waitFor(revision.short);
   // The current verifier reads every artifact from the selected checkout, not root/public.
   await command('node',[resolve(root,'scripts/release-smoke.mjs')],tree.dir,'preview exact bytes '+revision.short,{...localReleaseEnv(),BASE_URL:base});
-  await command('node',[resolve(root,'scripts/live-verify.mjs'),base],tree.dir,'preview user journeys '+revision.short);
+  await command('node',['scripts/live-verify.mjs',base],tree.dir,'preview user journeys '+revision.short);
   evidence.receipt.domains.push({base,commit:revision.short,lockSha256:lockHash,ok:true});await evidence.save();
   await tree.remove();tree=null;
  }

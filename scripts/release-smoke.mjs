@@ -14,8 +14,8 @@ for(const path of ['css/workspace.css','manifest.json','images/logos/axiom-navy-
  const r=await get('/'+path);assert.ok(r.ok,path);assert.equal(hash(Buffer.from(await r.arrayBuffer())),hash(await readFile('public/'+path)),path);checkedAssets.add(path);console.log('Exact live bytes: '+path);
 }
 // The inventory grows with features; a new imported module must not silently escape proof.
-// Cloudflare consumes _headers/_redirects as deployment configuration, not public routes.
-const remaining = (await assetManifest('public')).filter(({path}) => !checkedAssets.has(path) && !['_headers', '_redirects'].includes(path));
+// Cloudflare consumes these files as deployment configuration.
+const remaining = (await assetManifest('public')).filter(({path}) => !checkedAssets.has(path) && !['_headers', '_redirects', '_routes.json'].includes(path));
 let cursor = 0;
 await Promise.all(Array.from({length: 4}, async () => {
   while (cursor < remaining.length) {
