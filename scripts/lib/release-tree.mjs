@@ -20,7 +20,7 @@
 // from the caller's tree.
 import {execFileSync, execFile} from 'node:child_process';
 import {promisify} from 'node:util';
-import {mkdtemp, symlink, rm, mkdir, appendFile, readFile} from 'node:fs/promises';
+import {mkdtemp, rm, mkdir, appendFile, readFile} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join, resolve, dirname} from 'node:path';
@@ -38,19 +38,20 @@ const git = (args, cwd) =>
   execFileSync('git', args, {encoding: 'utf8', cwd: cwd ?? repoRoot()}).trim();
 
 /** The commit the caller is releasing: full sha, short sha and subject. */
-export function headCommit(cwd) {
+export function headCommit(cwd, revision = 'HEAD') {
   const root = cwd ?? repoRoot();
+  const sha = git(['rev-parse', '--verify', '--end-of-options', `${revision}^{commit}`], root);
   return {
-    sha: git(['rev-parse', 'HEAD'], root),
-    short: git(['rev-parse', '--short', 'HEAD'], root),
-    subject: git(['log', '-1', '--pretty=%s'], root),
+    sha,
+    short: git(['rev-parse', '--short', sha], root),
+    subject: git(['log', '-1', '--pretty=%s', sha], root),
   };
 }
 
 // Files that never reach public/ cannot make the served bytes differ from the commit.
 const NOT_SHIPPED = [/^public\/version\.json$/, /^public\/js\/geometry\.js$/];
 
-// The release links node_modules into the exported tree. It is a harness artefact of the
+// The release installs candidate-locked node_modules inside the exported tree. It is a harness artefact of the
 // export, never a published file, and in a scratch repository it is not gitignored.
 const isHarnessArtefact = path => path === 'node_modules' || path.startsWith('node_modules/');
 
@@ -104,36 +105,38 @@ export function assertCleanTree(cwd) {
  * Export a commit into a pristine worktree and build-ready directory.
  *
  * The worktree is a real checkout (it carries its own .git file), so the build script can
- * still ask git which commit it is building. node_modules is linked in rather than installed
- * again: the dependency set is the same tree's, and a release must not silently install a
- * different one.
+ * still ask git which commit it is building. Dependencies are installed separately by the
+ * release runner with npm ci in this tree. No mutable caller dependency directory is shared.
+ * Resolve an explicit revision once, before creating any temporary files.
  *
  * @param {{commit?:string, cwd?:string}} [opts]
  * @returns {Promise<{dir:string, commit:object, remove:() => Promise<void>}>}
  */
 export async function createPristineTree({commit, cwd} = {}) {
   const root = cwd ?? repoRoot();
-  const target = commit ? headCommit(root) : headCommit(root);
+  const target = headCommit(root, commit ?? 'HEAD');
   const parent = await mkdtemp(join(tmpdir(), 'carbon-release-'));
   const dir = join(parent, 'tree');
-  await exec('git', ['worktree', 'add', '--detach', dir, target.sha], {cwd: root});
-
-  const modules = join(root, 'node_modules');
-  if (!existsSync(modules)) {
+  try {
+    await exec('git', ['worktree', 'add', '--detach', dir, target.sha], {cwd: root});
+    await excludeFromGit(dir, 'node_modules');
+  } catch (error) {
+    await exec('git', ['worktree', 'remove', '--force', dir], {cwd: root}).catch(() => {});
     await rm(parent, {recursive: true, force: true});
-    throw new Error('node_modules is missing in the calling tree; run npm ci first');
+    throw error;
   }
-  await symlink(modules, join(dir, 'node_modules'), 'dir');
-  await excludeFromGit(dir, 'node_modules');
 
   return {
     dir,
     commit: target,
     async remove() {
       try {
-        await exec('git', ['worktree', 'remove', '--force', dir], {cwd: root});
-      } catch {
-        // The worktree may already be gone; the temp directory still has to go.
+        await exec('git', ['worktree', 'remove', '--force', dir], {cwd: root, timeout: 30000});
+      } catch (error) {
+        // A disposable directory is not permission to hide a failed unregister. Retain it
+        // for inspection if Git still knows it; only an already-removed tree is harmless.
+        const {stdout} = await exec('git', ['worktree', 'list', '--porcelain'], {cwd: root, timeout: 5000});
+        if (stdout.split('\n').includes(`worktree ${dir}`)) throw error;
       }
       await rm(parent, {recursive: true, force: true});
     },
@@ -143,10 +146,10 @@ export async function createPristineTree({commit, cwd} = {}) {
 /**
  * Keep a path out of git's status for this repository's worktrees.
  *
- * The linked node_modules is a harness artefact of the export. Left visible, it makes the
+ * The installed node_modules is a harness artefact of the export. Left visible, it makes the
  * published tree look dirty to git — and to the uploader, which reads the tree it runs in and
- * warns that a release of uncommitted work is being published. It is not; it is a link to the
- * same dependency set.
+ * warns that a release of uncommitted work is being published. The dependencies are instead
+ * installed from this candidate's package-lock.json.
  *
  * Git reads the exclude file from the common directory, not from the worktree's own, so that
  * is where the pattern goes. It is a local, uncommitted file, and the pattern it carries is

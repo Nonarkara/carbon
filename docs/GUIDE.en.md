@@ -50,6 +50,26 @@ Limits you will see on screen: a box counts Thai land only; datasets coarser tha
 4. Select **Export assessment JSON**. It includes the formula version, original inputs, interval, boundary, source labels and unverified status. **Export table CSV** is a compact numeric summary; keep the JSON for the full evidence trail.
 5. Select **Start over** before beginning a real assessment. Editing example values retains the illustrative warning until the session is reset.
 
+## Save, reopen and revise your work
+
+**Project → Save draft** exports a private `carbona-project.json` file at any stage, including before calculation. It keeps the exact unfinished form strings, validated boundary, source-file provenance, imported tree rows (even before you use them), equation confirmation and illustrative warning. A blank value stays blank. There is no automatic browser or cloud backup.
+
+1. Open **Project**, name the work and choose **Save draft**. Your browser offers the JSON download. The message **Exported** means a download was requested; check your Downloads folder and retain the file yourself.
+2. To resume, open **Project → Open project** and select that JSON (maximum 16 MB). The app validates its format, methodology, boundary and plot evidence before replacing anything. Cancel or an invalid file leaves your current work intact. If you have unsaved edits, confirm replacement only when you intend to discard them.
+3. Check the restored dates, quantity, source and boundary. **Drafts reopen without a result**. Open **Calculate → Calculate estimate** when the inputs are complete. Imported plot estimates are recalculated from the tree rows, never trusted from a saved total.
+4. You can also open a current **Export assessment JSON** file. Its completed inputs are recalculated with this supported methodology; an edited `result` or claimed issued-credit field has no authority. CSV is a report, not a resumable project file.
+5. Save a new draft after revising. The supported-browser leaving-page warning is a reminder, not a backup. TH/EN, views, and the embedded Thailand/Southeast Asia switch preserve the current Thai project in memory; reload/close does not.
+
+```mermaid
+flowchart LR
+ A["Unfinished inputs + local evidence"] --> B["Save draft · private JSON"]
+ B --> C["Open project · validate"]
+ C --> D["Review inputs → calculate afresh"]
+ D --> E["Export assessment · unverified result"]
+```
+
+Project geometry is deliberately absent from automatically written public links and browser history. Use the private draft or boundary download to exchange a parcel. A legacy link containing a boundary is removed from the address bar and offers an explicit local import; do not forward private links.
+
 ## 2. Import a project boundary
 
 Use a GeoJSON Polygon, MultiPolygon, Feature or FeatureCollection in **WGS84 longitude/latitude**. Coordinates are `[longitude, latitude]`, not `[latitude, longitude]`. A UTM shapefile must be reprojected before export to GeoJSON; renaming its extension does not convert it.

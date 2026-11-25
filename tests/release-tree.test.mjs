@@ -72,6 +72,25 @@ test('a built tree that no longer matches its commit is refused', async () => {
   }
 });
 
+test('capturing A then moving HEAD to B still exports A without caller dependencies', async () => {
+  const root = await scratchRepo();
+  try {
+    const captured = git(root, 'rev-parse', 'HEAD');
+    await writeFile(join(root, 'committed.txt'), 'new commit B\n');
+    git(root, 'add', '-A');
+    git(root, 'commit', '-qm', 'B must not replace captured A');
+    await writeFile(join(root, 'node_modules', 'unlocked.txt'), 'caller dependency contamination');
+    const tree = await createPristineTree({cwd: root, commit: captured});
+    try {
+      assert.equal(tree.commit.sha, captured);
+      assert.equal(git(tree.dir, 'rev-parse', 'HEAD'), captured);
+      assert.equal(await readFile(join(tree.dir, 'committed.txt'), 'utf8'), 'the committed truth\n');
+      assert.equal(existsSync(join(tree.dir, 'node_modules')), false, 'a release must install its own candidate-locked dependencies');
+    } finally { await tree.remove(); }
+    await assert.rejects(createPristineTree({cwd: root, commit: 'not-a-commit'}));
+  } finally { await rm(root, {recursive: true, force: true}); }
+});
+
 test('the release tree reports itself clean, so the uploader is told the truth', async () => {
   const root = await scratchRepo();
   try {
@@ -99,5 +118,5 @@ test('the release names the production branch explicitly', async () => {
   assert.match(script, /assertBuiltTreeMatchesCommit/, 'the release must check the built tree against the commit');
   assert.match(script, /verdicts\.push\(\{name: 'the browser suites', ok: await run\('npm', \['run', 'test:browser:all', '--', '--no-build'\]/, 'the release must count the full browser suite as a blocking verdict');
   assert.ok(script.indexOf("step('browser flows')") < script.indexOf("step('upload')"), 'browser interactions must be checked before publication');
-  assert.match(script, /runCommand\(command, args, \{\.\.\.options, env: localReleaseEnv\(\)\}\)/, 'every release command must use an environment without an inherited BASE_URL');
+  assert.match(script, /runCommand\(command, args, \{\.\.\.options, env: localReleaseEnv\(\), signal: cancellation\.signal/, 'every release command must use an environment without an inherited BASE_URL');
 });

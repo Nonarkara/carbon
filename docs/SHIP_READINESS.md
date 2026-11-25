@@ -11,7 +11,7 @@ Kabonna is an independent screening, teaching and supplied-measurement assessmen
 | Thai project workbench | Supplied dated measurements, explicit method/parameters and browser-local exports | Applicability, rights, additionality, external review and issuance are not established by software |
 | Organizational footprint | Bilingual study-design methods, worked teaching inventory and evidence planning | No complete CFO submission or country-specific factor engine |
 | Public registry context | Dated project registration and issuance snapshot with source limits | No transfer, retirement or entitlement transaction |
-| Bible / research | 68 paired chapters, 87 source entries, 24 original diagram topics in TH/EN | Authored interpretation with stated assumptions; not externally accredited training |
+| Bible / research | 68 paired chapters, 90 source entries, 24 original diagram topics in TH/EN | Authored interpretation with stated assumptions; not externally accredited training |
 | User files | In-memory processing; explicit downloads | No upload, persistence, account or backup; refresh loses work |
 
 ## The capability matrix is measured, not asserted

@@ -31,8 +31,8 @@ body.dashboard{font-size:1rem}
    boxes at the design system's own --control-block (28px fine pointer) — MSH wins over the
    44px rule for dense groups. The place selector is never the control that gives up width. */
 @media(min-width:1101px){
- body.dashboard>.top{display:flex;align-items:center;gap:8px 12px;padding:6px 16px;position:relative;z-index:1300;border-bottom:1px solid var(--ink)}
- .dashboard .workspace-bar{flex:1 1 auto;min-width:0;min-height:0;border-bottom:0;padding-block:0}
+ body.dashboard>.top{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:6px 16px;position:relative;z-index:1300;border-bottom:1px solid var(--ink)}
+ .dashboard .workspace-bar{flex:1 1 30rem;min-width:0;min-height:0;border-bottom:0;padding-block:0}
  .dashboard .workspace-bar .search{min-width:160px}
  /* The brand column sizes to the mark and wordmark; a fixed 140px floor made the selector slide under Read at 1101px. */
  .dashboard .workspace-bar{grid-template-columns:max-content minmax(160px,380px) max-content;justify-content:start}

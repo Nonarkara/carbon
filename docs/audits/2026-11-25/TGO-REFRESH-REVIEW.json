@@ -1,0 +1,61 @@
+{
+  "checkedAt": "2026-11-25T13:31:12.662066+00:00",
+  "source": "https://tver.tgo.or.th/database/Public/ProjectsResult",
+  "publicSnapshotRetained": "2026-09-28",
+  "method": "Existing tgo.py list_rows parser against fresh isolated raw directory, TH project-list POST for all four program/group combinations. No cached raw files reused. No personal fields published in this receipt.",
+  "results": [
+    {
+      "program": 1,
+      "group": 1,
+      "allRows": 654,
+      "forestryRows": 234,
+      "previousForestryRows": 234,
+      "addedKeys": [],
+      "removedKeys": [],
+      "listIssuedTco2e": 733854.0,
+      "previousIssuedTco2e": 733854.0,
+      "freshRawSha256": "36fb109aff452484ac2edee180cb79dc777aace29d3751ce2f3b91a4ee8e147a",
+      "status": "list-only comparison; details and province attribution not refreshed"
+    },
+    {
+      "program": 1,
+      "group": 2,
+      "allRows": 29,
+      "forestryRows": 12,
+      "previousForestryRows": 12,
+      "addedKeys": [],
+      "removedKeys": [],
+      "listIssuedTco2e": 0,
+      "previousIssuedTco2e": 0.0,
+      "freshRawSha256": "1256f7dc0c5f92924317ffc482403655445d6ef656567e2e0544b994a7583f5f",
+      "status": "list-only comparison; details and province attribution not refreshed"
+    },
+    {
+      "program": 2,
+      "group": 1,
+      "allRows": 9,
+      "forestryRows": 9,
+      "previousForestryRows": 9,
+      "addedKeys": [],
+      "removedKeys": [],
+      "listIssuedTco2e": 60.0,
+      "previousIssuedTco2e": 60.0,
+      "freshRawSha256": "50397f99a1fb47d53fa62fcc4cb9cba52d7908dcdd9321298f1426c8e9ffb861",
+      "status": "list-only comparison; details and province attribution not refreshed"
+    },
+    {
+      "program": 2,
+      "group": 2,
+      "allRows": 2,
+      "forestryRows": 2,
+      "previousForestryRows": 2,
+      "addedKeys": [],
+      "removedKeys": [],
+      "listIssuedTco2e": 0,
+      "previousIssuedTco2e": 0.0,
+      "freshRawSha256": "02fcbb22be3a14343247b287c380ecdf5f7d0ded20258c3cf6e013c2b2fdb890",
+      "status": "list-only comparison; details and province attribution not refreshed"
+    }
+  ],
+  "decision": "Retain complete last-good snapshot until every changed project has a full bilingual detail/issuance/province review. List-only totals are not a replacement dataset."
+}

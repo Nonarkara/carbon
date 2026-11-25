@@ -11,9 +11,11 @@ const RAD=Math.PI/180;
 // Grid: sparse Thai cells. Layout of grid.bin = Uint32 index[count] then Float32 layer[k][count] (little-endian).
 export function readGrid(buffer,meta){
   const {count,layers}=meta;
+  if(!Number.isInteger(count)||count<0||!Array.isArray(layers)||!layers.length||new Set(layers).size!==layers.length)throw new Error('invalid:gridMetadata');
   if(buffer.byteLength!==4*count*(1+layers.length))throw new Error('invalid:gridSize');
   const index=new Uint32Array(buffer,0,count),out={index,meta,layers:{}};
-  layers.forEach((name,i)=>{out.layers[name]=new Float32Array(buffer,4*count*(1+i),count);});
+  for(let i=0;i<count;i++)if(index[i]>=meta.cols*meta.rows||(i&&index[i]<=index[i-1]))throw new Error('invalid:gridIndex');
+  layers.forEach((name,i)=>{const data=new Float32Array(buffer,4*count*(1+i),count);if(data.some(v=>!Number.isFinite(v)||v<0))throw new Error('invalid:gridValue');out.layers[name]=data;});
   return out;
 }
 export function cellBounds(meta,i){
@@ -34,6 +36,22 @@ function polygonsOf(geojson){
   return g.flatMap(x=>x.type==='Polygon'?[x.coordinates]:x.type==='MultiPolygon'?x.coordinates:[]);
 }
 export function polygonContains(polys,x,y){return polys.some(p=>ringContains(p[0],x,y)&&!p.slice(1).some(h=>ringContains(h,x,y)));}
+// A cell row samples the same four latitudes in many columns. Cache the exact
+// ray intersections (same formula and strict comparison as ringContains), never
+// approximate/simplify the boundary. Sixteen scanlines bound memory even for
+// unsorted grids or many rings; eviction only recomputes the same intersections.
+export function scanlineContains(polys){
+  const lines=new Map();
+  return (_polys,x,y)=>{
+    let line=lines.get(y);
+    if(!line){
+      line=polys.map(p=>p.map(ring=>{const crossings=[];for(let i=0,j=ring.length-1;i<ring.length;j=i++){const [xi,yi]=ring[i],[xj,yj]=ring[j];if((yi>y)!==(yj>y))crossings.push((xj-xi)*(y-yi)/(yj-yi)+xi);}return crossings;}));
+      if(lines.size>=16)lines.delete(lines.keys().next().value);lines.set(y,line);
+    }
+    const inside=crossings=>{let hit=false;for(const edge of crossings)if(x<edge)hit=!hit;return hit;};
+    return line.some(p=>inside(p[0])&&!p.slice(1).some(inside));
+  };
+}
 // Outer-ring vertices, plus their average only when that point sits in filled area.
 // A centroid in a hole, or outside a concave ring, is not a province probe.
 export function probePoints(geojson){
@@ -45,9 +63,9 @@ export function probePoints(geojson){
   return pts;
 }
 // ponytail: 4×4 sub-samples per cell, equal-weighted; exact rectangle overlap is used for drawn boxes.
-export function polygonFraction(cell,polys,n=4){
+export function polygonFraction(cell,polys,n=4,contains=polygonContains){
   let hit=0;const dx=(cell.east-cell.west)/n,dy=(cell.north-cell.south)/n;
-  for(let a=0;a<n;a++)for(let b=0;b<n;b++)if(polygonContains(polys,cell.west+(a+.5)*dx,cell.south+(b+.5)*dy))hit++;
+  for(let a=0;a<n;a++)for(let b=0;b<n;b++)if(contains(polys,cell.west+(a+.5)*dx,cell.south+(b+.5)*dy))hit++;
   return hit/(n*n);
 }
 // Sum every layer over the selection. All layers are additive per-cell totals, so each scales linearly with the
@@ -58,11 +76,11 @@ export function sumSelection(grid,selection){
   const {meta,index}=grid,names=Object.keys(grid.layers),totals=Object.fromEntries(names.map(n=>[n,0]));
   const box=selection.box||bboxOf(selection.polygons);
   const k=meta.block,sd=grid.layers.forest_sd_mg,blocks=k&&sd?new Map():null;
-  let cells=0;
+  let cells=0;const contains=selection.box?null:scanlineContains(selection.polygons);
   for(let i=0;i<index.length;i++){
     const c=cellBounds(meta,index[i]);
     if(c.east<=box.west||c.west>=box.east||c.north<=box.south||c.south>=box.north)continue;
-    const f=selection.box?rectFraction(c,box):polygonFraction(c,selection.polygons);
+    const f=selection.box?rectFraction(c,box):polygonFraction(c,selection.polygons,4,contains);
     if(!f)continue;cells++;
     for(const n of names)totals[n]+=f*grid.layers[n][i];
     if(blocks){const row=Math.floor(index[i]/meta.cols),col=index[i]%meta.cols,key=Math.floor(row/k)*meta.cols+Math.floor(col/k);blocks.set(key,(blocks.get(key)||0)+f*sd[i]);}

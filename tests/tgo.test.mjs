@@ -22,10 +22,14 @@ test('Unavailable registry cannot block local assessment export or masquerade as
   assert.equal(context.provinces,null);assert.equal(context.status,'unavailable');
   assert.equal(context.notParcelOverlap,true);assert.equal(context.snapshotDate,null);
   assert.doesNotThrow(()=>JSON.stringify({tverRegistryContext:context}));
-  globalThis.fetch=async path=>({ok:true,json:async()=>path.includes('tver-forestry')?d:{type:'FeatureCollection',features:[]}});
-  const loaded=initRegistry({t:k=>k,fmt:v=>String(v),getLang:()=> 'en'});
-  await loaded.ready;
-  const checked=loaded.contextFor(boundary);
+  const peer=initRegistry({t:k=>k,fmt:v=>String(v),getLang:()=> 'th'});
+  await assert.rejects(peer.ready,/offline registry/);
+  const geo=JSON.parse(readFileSync('public/data/ledger/provinces.geojson','utf8'));
+  globalThis.fetch=async path=>new Response(JSON.stringify(path.includes('tver-forestry')?d:geo),{status:200,headers:{'content-type':'application/json'}});
+  const loaded=registry;
+  await loaded.retry();
+  assert.equal(peer.data().snapshot,d.snapshot,'a retry updates the other instrument without sharing its view state');
+  const checked=loaded.contextFor({type:'Polygon',coordinates:[[[0,0],[.1,0],[.1,.1],[0,.1],[0,0]]]});
   assert.equal(checked.status,'province-context');assert.deepEqual(checked.provinces,[]);
   assert.equal(checked.snapshotDate,d.snapshot);assert.equal(checked.source,d.source.registry);
  }finally{globalThis.fetch=original;}

@@ -1,48 +1,48 @@
 ## What a border is for
 Carbon does not stop at a border, but accounting does. This is the single most important thing to understand about international carbon markets, and it is the reason a forest in Sabah and a factory in Rotterdam are connected by a treaty rather than by physics.
 
-Every country reports its greenhouse gas inventory to the UNFCCC. Indonesia reports its forest removals as a **sink** — tonnes removed from the atmosphere. Under the Kyoto Convention a developed country buying those tonnes would take the credit for itself, while Indonesia's own reported numbers still showed the removal. The same tonne was being counted on two sides of the ledger. This is not a hypothetical; it is the historical reason Article 6 exists.
+Countries report physical greenhouse gas emissions and removals in national inventories. A forest removal belongs in the host country's inventory whether or not a credit is sold. The separate question is which country may count an authorised mitigation outcome toward its climate target. If both host and buyer used the same outcome toward their targets, their accounting would overstate the collective result. Article 6.2 addresses that accounting risk through authorisation, reporting and corresponding adjustments; an inventory entry is not itself a transferable credit.
 
 ## Article 6 in one mechanism
-Article 6 of the Paris Agreement creates a way for a country to **sell** a reduction it has counted, without anyone double-counting it.
+Article 6.2 of the Paris Agreement supports authorised transfers of mitigation outcomes between countries. A project credit, an authorised outcome and an outcome used toward an NDC are distinct stages. The following is a simplified **NDC-use example**, not a universal sequence for issuance or other authorised uses.
 
 The fix is the **corresponding adjustment**, and it is worth following step by step because it is the clearest example of a technical mechanism reshaping national accounting:
 
 | Step | Country Y (host, sells) | Country X (buyer) |
 |---|---|---|
-| 1. Project reduces 5 tCO₂e | Counts 5 tCO₂e as a removal | — |
-| 2. Authorises the transfer | Authorises sale | — |
-| 3. Corresponding adjustment applied | **Adds 5 tCO₂e back** into its own inventory | — |
-| 4. Transfers the credit | Credit issued | — |
-| 5. Applies its own adjustment | — | **Subtracts 5 tCO₂e** from its inventory |
-| 6. Uses it toward its target | Cannot also count the removal | Counts it toward its commitment |
+| 1. Project achieves mitigation of 5 tCO₂e | A measured reduction or removal | — |
+| 2. Verified units issued | Programme registry records the units | — |
+| 3. Host authorises the transfer | Specifies the authorised use | — |
+| 4. Adjustment for first transfer | **Adds 5 tCO₂e** to its NDC emissions balance | — |
+| 5. Buyer uses the outcome toward its NDC | — | **Subtracts 5 tCO₂e** from its NDC emissions balance |
+| 6. Physical GHG inventories | Not changed by the transfer | Not changed by the transfer |
 
-Singapore's own explanatory annex for the Thailand agreement states this arithmetic directly: when Country X receives five tonnes from Country Y, Country Y adds five to its inventory and Country X reduces five from its.
+The UNFCCC Article 6.2 Reference Manual makes the boundary explicit: corresponding adjustments change the **NDC emissions balance**, not the national greenhouse gas inventory. Authorisation, first transfer, reporting and use have their own rules and timing. A registry record does not prove these steps occurred, and this system does not perform or certify them.
 
-Note what this means physically: **nothing was emitted and nothing was absorbed.** The atmosphere did not change. What moved is *permission to count*. A corresponding adjustment is an accounting act, not an environmental one.
+Note what the transfer itself does physically: **it emits or removes no additional gas**. The physical mitigation comes from the project. What moves through the accounting chain is permission to count an eligible outcome. That permission still needs evidence; a corresponding adjustment cannot repair an unproven baseline or a forest that was never protected.
 
 <div data-figure="border-article6"></div>
 
-## Who has actually signed
-Singapore has concluded or signed Implementation Agreements with twelve countries. Four are ASEAN members, and only one of those is in force:
+## Read the partner list without overstating it
+Singapore's official page, updated **20 November 2026** and checked **25 November**, lists **14 partners** under a combined category: negotiations substantively concluded **or** Implementation Agreement signed. It does not establish that all 14 agreements are signed. Four listed partners are in Southeast Asia; three are explicitly marked entered into force:
 
 | Country | Region | Status |
 |---|---|---|
-| Thailand | ASEAN | **Entered into force** (signed 19 August 2025 — Singapore's first ASEAN agreement) |
-| Vietnam | ASEAN | Signed, not yet in force |
-| Philippines | ASEAN | Signed, not yet in force |
-| Lao PDR | ASEAN | Signed, not yet in force |
-| Bhutan, Chile, Ghana, Mongolia, Peru, Rwanda | Other | Entered into force |
-| Papua New Guinea, Paraguay | Other | Signed, not yet in force |
+| Thailand | ASEAN | **Marked entered into force**; signing date 19 August 2025 is a separate event |
+| Vietnam | ASEAN | **Marked entered into force** |
+| Philippines | ASEAN | Listed; not marked entered into force on this page |
+| Lao PDR | ASEAN | **Marked entered into force** |
+| Bhutan, Chile, Ghana, Mongolia, Peru, Rwanda, Zambia | Other | Marked entered into force |
+| Kenya, Papua New Guinea, Paraguay | Other | Listed; not marked entered into force on this page |
 
-The asymmetry is the story. Thailand is the only ASEAN country with a live agreement, and Thailand is also the one country in this system with a fully published public project registry — which is why this tool can show you T-VER projects at all.
+These are publisher annotations, not a legal opinion or a guarantee that a particular project can export. Re-check the country agreement, eligibility list and authorisation rules before a transaction. The app integrates a T-VER snapshot for Thailand; that implementation choice does not mean other countries lack public registries.
 
 <div data-figure="border-ledger"></div>
 
-An agreement is not cosmetic. Under Singapore's International Carbon Credit framework, **credits from projects hosted in a country without an agreement cannot offset carbon-tax liability at all**, and eligible credits may cover only 5% of a company's tax. That is a hard commercial constraint: it decides which projects are worth building.
+An agreement is one eligibility gate under Singapore's International Carbon Credit framework, not automatic acceptance of every credit from that country. Credits must also satisfy applicable eligibility, authorisation and surrender requirements. The base quota is **5% of taxable emissions**, not 5% of the money owed. Singapore permits unused emissions-year 2025 quota to carry into 2026; current guidance and applicable permissions therefore matter more than an unconditional “5% every year” slogan. This is operational context, not a prediction of credit price or permission to trade.
 
 ## The regional layer: ACCF
-Twelve bilateral agreements do not make a market. In November 2024 at COP29, five industry associations signed a Memorandum of Collaboration creating the **ASEAN Common Carbon Framework** (ACCF): the Malaysia Carbon Market Association, Indonesia Carbon Trade Association, Thailand Carbon Markets Club, Singapore Sustainable Finance Association, and the ASEAN Alliance on Carbon Markets.
+Bilateral arrangements alone do not make a market. In November 2024 at COP29, five industry associations signed a Memorandum of Collaboration creating the **ASEAN Common Carbon Framework** (ACCF): the Malaysia Carbon Market Association, Indonesia Carbon Trade Association, Thailand Carbon Markets Club, Singapore Sustainable Finance Association, and the ASEAN Alliance on Carbon Markets.
 
 Two things are worth being precise about:
 
@@ -54,56 +54,56 @@ Two things are worth being precise about:
 If you are building a forest or mangrove project in Southeast Asia and want the credit to be worth more than a voluntary claim, three questions decide your design:
 
 1. **Which country's NDC are you helping?** The host country's target constrains how much it can authorise for export.
-2. **Which demand do you need?** A voluntary buyer will pay for a good story. A compliance buyer with a corresponding adjustment will pay for a precise accounting chain.
+2. **Which use is intended?** A voluntary claim and a regulated use can have different eligibility, authorisation and retirement requirements. Neither a compelling story nor a corresponding-adjustment label guarantees quality or a buyer.
 3. **Which registry?** Credits only move cleanly between systems that have agreed how to talk to each other.
 
-That is why the boundaries in this system are drawn where they are. The workbench can tell you what a boundary area would be worth in carbon terms. It cannot tell you whether you may sell it, because that answer belongs to the host country's authority and the programme's rules — never to a map.
+That is why this system keeps its boundaries explicit. The workbench estimates a supported stock-change scenario from supplied evidence. It does not value a project, establish entitlement or decide whether a credit may be sold. Those questions require project evidence, programme rules and the relevant authorities; a map alone cannot answer them.
 <!-- TH -->
 ## พรมแดนมีไว้ทำอะไร
-คาร์บอนไม่หยุดที่พรมแดน แต่การบัญชีหยุด สิ่งนี้สำคัญที่สุดที่ต้องเข้าใจเกี่ยวกับตลาดคาร์บอนระหว่างประเทศ และเป็นเหตุผลว่าป่าในรัฐซาบah์กับโรงงานในรอเตอร์ดัมถูกเชื่อมด้วยอนุสัญญา ไม่ใช่ด้วยฟิสิกส์
+คาร์บอนไม่หยุดที่พรมแดน แต่การบัญชีมีขอบเขต นี่เป็นเรื่องสำคัญของตลาดคาร์บอนระหว่างประเทศ ป่าในรัฐซาบาห์กับโรงงานในรอเตอร์ดัมอาจเชื่อมกันด้วยกติกาการนับ โดยไม่ใช่การย้ายก๊าซจากที่หนึ่งไปอีกที่หนึ่ง
 
-ทุกประเทศรายงานบัญชีก๊าซเรือนกระจกของตนต่อ UNFCCC อินโดนีเซียรายงานการดูดกลับจากป่าของตนเป็น **แหล่งดูดซับ** ภายใต้อนุสัญญาเกียวโต ประเทศที่พัฒนาแล้วที่ซื้อหน่วยเหล่านั้นจะนับเครดิตเป็นของตน ในขณะที่ตัวเลขของอินโดนีเซียเองยังคงแสดงการดูดกลับนั้น โทนเดียวกันถูกนับทั้งสองด้านของบัญชี นี่ไม่ใช่สมมติฐาน แต่เป็นเหตุการณ์ในอดีตที่เป็นเหตุผลว่าข้อ 6 จึงถูกสร้างขึ้น
+ประเทศรายงานการปล่อยและการดูดกลับจริงในบัญชีก๊าซเรือนกระจกแห่งชาติ การดูดกลับจากป่าอยู่ในบัญชีของประเทศเจ้าบ้านไม่ว่าจะขายเครดิตหรือไม่ แต่คำถามอีกข้อคือ ประเทศใดนำผลลดก๊าซที่ได้รับอนุญาตไปนับตามเป้าหมายได้ หากเจ้าบ้านและผู้ซื้อใช้ผลเดียวกันตามเป้าหมายทั้งคู่ ผลรวมจะถูกอ้างเกินจริง ข้อ 6.2 จัดการความเสี่ยงนี้ด้วยการอนุญาต การรายงาน และการปรับสมดุล ตัวเลขในบัญชีไม่ได้เป็นเครดิตที่โอนได้โดยอัตโนมัติ
 
 ## ข้อ 6 ในกลไกเดียว
-ข้อ 6 ของข้อตกลงปารีสเปิดทางให้ประเทศ **ขาย** การลดการปล่อยที่ตนได้นับไว้ โดยไม่ให้มีการนับซ้ำ
+ข้อ 6.2 ของข้อตกลงปารีสรองรับการโอนผลลดก๊าซที่ได้รับอนุญาตระหว่างประเทศ เครดิตโครงการ ผลที่ได้รับอนุญาต และผลที่ใช้ตาม NDC เป็นคนละขั้นตอน ตัวอย่างต่อไปนี้เป็น **การใช้ตาม NDC อย่างง่าย** ไม่ใช่ลำดับบังคับของการออกเครดิตทุกโครงการหรือการใช้เพื่อวัตถุประสงค์อื่น
 
 วิธีแก้คือ **การปรับสมดุลที่สอดคล้องกัน** (corresponding adjustment) ควรไล่ดูทีละขั้นตอน เพราะเป็นตัวอย่างที่ชัดเจนที่สุดว่ากลไกทางเทคนิคเปลี่ยนรูปแบบบัญชีระดับประเทศอย่างไร
 
 | ขั้นตอน | ประเทศ ย (เจ้าบ้าน ผู้ขาย) | ประเทศ ข (ผู้ซื้อ) |
 |---|---|---|
-| 1. โครงการลด 5 tCO₂e | นับ 5 tCO₂e เป็นการดูดกลับ | — |
-| 2. อนุญาตให้โอน | อนุญาตการขาย | — |
-| 3. ใช้การปรับสมดุล | **เพิ่ม 5 tCO₂e กลับ** เข้าบัญชีของตน | — |
-| 4. โอนเครดิต | ออกเครดิต | — |
-| 5. ใช้การปรับสมดุลของตน | — | **หัก 5 tCO₂e** ออกจากบัญชีของตน |
-| 6. ใช้เพื่อเดินหน้าเป้าหมาย | นับการดูดกลับซ้ำไม่ได้ | นับเข้าเดินหน้าพันธกรรมของตน |
+| 1. เกิดผลลดก๊าซ 5 tCO₂e | การลดหรือดูดกลับที่วัดได้ | — |
+| 2. ทวนสอบและออกหน่วย | บันทึกหน่วยตามทะเบียนโครงการ | — |
+| 3. เจ้าบ้านอนุญาตการโอน | ระบุวัตถุประสงค์การใช้ | — |
+| 4. ปรับเมื่อโอนครั้งแรก | **บวก 5 tCO₂e** เข้าดุลการปล่อยตาม NDC | — |
+| 5. ผู้ซื้อใช้ผลตาม NDC | — | **หัก 5 tCO₂e** จากดุลการปล่อยตาม NDC |
+| 6. บัญชีก๊าซทางกายภาพ | ไม่เปลี่ยนเพราะการโอน | ไม่เปลี่ยนเพราะการโอน |
 
-เอกสารแนบของสิงคโปร์สำหรับข้อตกลงกับไทยระบุคณิตนี้ไว้ตรงๆ ว่า เมื่อประเทศ ข ได้รับห้าตันจากประเทศ ย ประเทศ ย ต้องเพิ่มห้าตันเข้าบัญชีของตน และประเทศ ข ต้องหักห้าตันออก
+คู่มือข้อ 6.2 ของ UNFCCC ระบุชัดว่า การปรับสมดุลเปลี่ยน **ดุลการปล่อยตาม NDC** ไม่ใช่บัญชีก๊าซเรือนกระจกแห่งชาติ การอนุญาต การโอนครั้งแรก การรายงาน และการใช้มีเงื่อนไขกับเวลาแยกกัน รายการในทะเบียนไม่ได้พิสูจน์ว่าทำครบ และระบบนี้ไม่ได้ดำเนินการหรือรับรองขั้นตอนเหล่านั้น
 
-สิ่งที่ต้องสังเกตคือ **ไม่มีการปล่อยและไม่มีการดูดซับ** บรรยากาศไม่เปลี่ยนแปลง สิ่งที่เคลื่อนไปคือ *สิทธิ์ในการนับ* การปรับสมดุลเป็นการกระทำทางบัญชี ไม่ใช่การกระทำต่อสิ่งแวดล้อม
+สิ่งที่ต้องสังเกตคือ **ตัวการโอนเองไม่ปล่อยหรือดูดก๊าซเพิ่ม** ผลทางกายภาพเกิดจากโครงการ สิ่งที่เปลี่ยนมือคือสิทธิ์ในการนับผลที่เข้าเกณฑ์ สิทธิ์นั้นยังต้องมีหลักฐาน การปรับสมดุลแก้กรณีฐานที่ไม่มีหลักฐาน หรือป่าที่ไม่ได้รับการคุ้มครองจริงไม่ได้
 
 <div data-figure="border-article6"></div>
 
-## ใครลงนามจริงบ้าง
-สิงคโปร์ได้ทำข้อตกลงหรือเจรจาข้อตกลงกับสิบสองประเทศ มีสี่ประเทศในอาเซียน และมีเพียงหนึ่งประเทศที่ข้อตกลงมีผลบังคับใช้แล้ว
+## อ่านรายชื่อคู่เจรจาโดยไม่อ้างเกินหลักฐาน
+หน้าทางการของสิงคโปร์อัปเดต **20 พฤศจิกายน 2026** ตรวจ **25 พฤศจิกายน** ระบุ **14 ประเทศ** ในหมวดรวมว่า เจรจาได้ข้อสรุปในสาระสำคัญ **หรือ** ลงนาม IA ไม่ได้ยืนยันว่าลงนามครบทั้ง 14 ประเทศ ในเอเชียตะวันออกเฉียงใต้มีรายชื่อสี่ประเทศ และสามประเทศถูกระบุชัดว่ามีผลบังคับใช้แล้ว
 
 | ประเทศ | ภูมิภาค | สถานะ |
 |---|---|---|
-| ไทย | อาเซียน | **มีผลบังคับใช้** (ลงนาม 19 สิงหาคม 2568 — ข้อตกลงแรกของสิงคโปร์กับประเทศอาเซียน) |
-| เวียดนาม | อาเซียน | ลงนามแล้ว ยังไม่มีผลบังคับใช้ |
-| ฟิลิปปินส์ | อาเซียน | ลงนามแล้ว ยังไม่มีผลบังคับใช้ |
-| ลาว | อาเซียน | ลงนามแล้ว ยังไม่มีผลบังคับใช้ |
-| ภูฎีชน ชิลี กานา มองโกเลีย เปรู รวันดา | อื่น ๆ | มีผลบังคับใช้ |
-| ปาปัวนิวกินี ปารากวาย | อื่น ๆ | ลงนามแล้ว ยังไม่มีผลบังคับใช้ |
+| ไทย | อาเซียน | **ระบุว่ามีผลบังคับใช้** วันลงนาม 19 สิงหาคม 2568 เป็นอีกเหตุการณ์หนึ่ง |
+| เวียดนาม | อาเซียน | **ระบุว่ามีผลบังคับใช้** |
+| ฟิลิปปินส์ | อาเซียน | มีชื่อ แต่หน้านี้ไม่ได้ระบุว่ามีผลบังคับใช้ |
+| ลาว | อาเซียน | **ระบุว่ามีผลบังคับใช้** |
+| ภูฏาน ชิลี กานา มองโกเลีย เปรู รวันดา แซมเบีย | อื่น ๆ | ระบุว่ามีผลบังคับใช้ |
+| เคนยา ปาปัวนิวกินี ปารากวาย | อื่น ๆ | มีชื่อ แต่หน้านี้ไม่ได้ระบุว่ามีผลบังคับใช้ |
 
-ความไม่สมมาตรคือประเด็นหลัก ไทยเป็นประเทศอาเซียนเพียงประเทศเดียวที่ข้อตกลงมีผลแล้ว และไทยก็เป็นประเทศเดียวในระบบนี้ที่มีทะเบียนโครงการสาธารณะครบถ้วน ซึ่งเป็นเหตุผลที่เครื่องมือนี้จึงแสดงโครงการ T-VER ให้คุณดูได้
+นี่คือสถานะที่ผู้เผยแพร่ระบุ ไม่ใช่ความเห็นทางกฎหมายหรือการรับประกันว่าโครงการใดส่งออกได้ ก่อนทำธุรกรรมต้องตรวจข้อตกลง เกณฑ์เครดิต และกฎการอนุญาตของประเทศ ระบบนี้เชื่อมชุดข้อมูล T-VER ของไทย การเลือกเชื่อมแหล่งนี้ไม่ได้แปลว่าประเทศอื่นไม่มีทะเบียนสาธารณะ
 
 <div data-figure="border-ledger"></div>
 
-ข้อตกลงไม่ใช่เรื่องพิธีการ ภายใต้กรอบเครดิตคาร์บอนระหว่างประเทศของสิงคโปร์ **เครดิตจากโครงการในประเทศที่ไม่มีข้อตกลง หักลดภาระภาษีคาร์บอนไม่ได้เลย** และเครดิตที่เข้าเกณฑ์หักลดได้ไม่เกิน 5% ของภาษีของบริษัท นี่เป็นข้อจำกัดเชิงพาณิชย์ที่ชัดเจน เป็นตัวกำหนดว่าโครงการใดคุ้มค่าที่จะสร้าง
+ข้อตกลงเป็นเงื่อนไขหนึ่งในกรอบ ICC ของสิงคโปร์ ไม่ได้ทำให้เครดิตทุกหน่วยจากประเทศนั้นใช้ได้ ยังต้องผ่านเกณฑ์ การอนุญาต และการส่งมอบ โควตาฐานคือ **5% ของการปล่อยที่เสียภาษี** ไม่ใช่ 5% ของเงินภาษี สิงคโปร์อนุญาตให้ยกโควตาปีการปล่อย 2025 ที่เหลือไปปี 2026 ได้ จึงต้องตรวจคำแนะนำล่าสุดและการอนุญาตที่เกี่ยวข้อง แทนการยึดว่า “5% ทุกปี” โดยไม่มีข้อยกเว้น นี่เป็นบริบทการใช้งาน ไม่ใช่การทำนายราคาหรืออนุญาตให้ซื้อขาย
 
 ## ชั้นระดับภูมิภาค: ACCF
-ข้อตกลมีสองฝ่ายสิบสองฉบับไม่ได้ทำให้เกิดตลาด ในเดือนพฤศจิกายน 2568 ที่ COP29 สมาคมธุรกิจห้าองค์กรลงนามบันทึกความร่วมมือก่อตั้ง **กรอบคาร์บอนร่วมอาเซียน** (ACCF) ได้แก่ สมาคมตลาดคาร์บอนมาเลเซีย สมาคมการค้าคาร์บอนอินโดนีเซีย ชลับคาร์บอนมาร์เก็ตไทย สมาคมการเงินยั่งยืนสิงคโปร์ และ ASEAN Alliance on Carbon Markets
+ข้อตกลงสองฝ่ายอย่างเดียวไม่ได้ทำให้เกิดตลาด ในเดือนพฤศจิกายน 2024 ที่ COP29 สมาคมธุรกิจห้าองค์กรลงนามบันทึกความร่วมมือก่อตั้ง **กรอบคาร์บอนร่วมอาเซียน** (ACCF) ได้แก่ สมาคมตลาดคาร์บอนมาเลเซีย สมาคมการค้าคาร์บอนอินโดนีเซีย ชมรมคาร์บอนมาร์เก็ตไทย สมาคมการเงินยั่งยืนสิงคโปร์ และ ASEAN Alliance on Carbon Markets
 
 มีสองประเด็นที่ควรระบุให้ชัด
 
@@ -115,7 +115,7 @@ That is why the boundaries in this system are drawn where they are. The workbenc
 ถ้าคุณกำลังสร้างโครงการป่าในกัมพูชา อินโดนีเซีย มาเลเซีย หรือเวียดนาม และอยากให้เครดิตมีค่ามากกว่าคำกล่าวอ้างภาคสมัครใจ มีสามคำถามที่กำหนดการออกแบบทั้งหมด
 
 1. **คุณกำลังช่วยเป้าหมายของประเทศใด** เป้าหมายของประเทศเจ้าบ้านกำหนดว่าอนุญาตให้ส่งออกได้มากที่เท่าไร
-2. **คุณต้องการอุปสงค์แบบใด** ผู้ซื้อสมัครใจจ่ายเงินให้เรื่องเล่าที่ดี ผู้ซื้อตามกฎหมายที่มีการปรับสมดุลจ่ายเงินให้สายบัญชีที่แม่นยำ
+2. **จะนำไปใช้แบบใด** คำกล่าวอ้างภาคสมัครใจกับการใช้ตามกฎหมายอาจมีเกณฑ์ การอนุญาต และการยกเลิกเครดิตต่างกัน เรื่องเล่าที่ดีหรือป้ายว่าปรับสมดุลแล้วไม่ได้รับประกันคุณภาพหรือผู้ซื้อ
 3. **ใช้ทะเบียนใด** เครดิตจะโอนข้ามได้อย่างราบรื่นระหว่างระบบที่ตกลงกันว่าจะ "คุยกัน" อย่างไร
 
-นี่คือเหตุผลที่ระบบนี้กำหนดขอบเขตไว้ตรงนั้น เครื่องมือบอกได้ว่าพื้นที่ขอบเขตนั้นมีค่าคาร์บอนเท่าไร แต่บอกไม่ได้ว่าคุณขายได้หรือไม่ เพราะคำตอบนั้นเป็นของหน่วยงานประเทศเจ้าบ้านและกฎของโครงการ ไม่ใช่ของแผนที่
+นี่คือเหตุผลที่ระบบระบุขอบเขตความสามารถให้ชัด เครื่องมือประมาณกรณีการเปลี่ยนสต็อกที่รองรับจากหลักฐานที่ผู้ใช้ใส่ ไม่ได้ประเมินมูลค่าโครงการ ยืนยันสิทธิ์ หรือตัดสินว่าขายเครดิตได้หรือไม่ คำตอบเหล่านั้นต้องใช้หลักฐานโครงการ กติกา และหน่วยงานที่เกี่ยวข้อง แผนที่อย่างเดียวตอบไม่ได้

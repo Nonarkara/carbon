@@ -1,0 +1,229 @@
+[
+  {
+    "name": "wdi-forest",
+    "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/AG.LND.FRST.K2?format=json&date=2023&per_page=1000",
+    "checkedAt": "2026-11-25T13:31:42.581852+00:00",
+    "status": 200,
+    "metadata": {
+      "page": 1,
+      "pages": 1,
+      "per_page": 1000,
+      "total": 11,
+      "sourceid": "2",
+      "lastupdated": "2026-11-11"
+    },
+    "observations": [
+      {
+        "date": "2023",
+        "value": 3800,
+        "countryiso3code": "BRN"
+      },
+      {
+        "date": "2023",
+        "value": 958063.4,
+        "countryiso3code": "IDN"
+      },
+      {
+        "date": "2023",
+        "value": 69506.4,
+        "countryiso3code": "KHM"
+      },
+      {
+        "date": "2023",
+        "value": 131067.1,
+        "countryiso3code": "LAO"
+      },
+      {
+        "date": "2023",
+        "value": 276747.4,
+        "countryiso3code": "MMR"
+      },
+      {
+        "date": "2023",
+        "value": 190047.4,
+        "countryiso3code": "MYS"
+      },
+      {
+        "date": "2023",
+        "value": 73537.4,
+        "countryiso3code": "PHL"
+      },
+      {
+        "date": "2023",
+        "value": 158,
+        "countryiso3code": "SGP"
+      },
+      {
+        "date": "2023",
+        "value": 199235.1,
+        "countryiso3code": "THA"
+      },
+      {
+        "date": "2023",
+        "value": 10560.3,
+        "countryiso3code": "TLS"
+      },
+      {
+        "date": "2023",
+        "value": 147449.4,
+        "countryiso3code": "VNM"
+      }
+    ]
+  },
+  {
+    "name": "wdi-cover",
+    "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/AG.LND.FRST.ZS?format=json&date=2023&per_page=1000",
+    "checkedAt": "2026-11-25T13:31:42.582391+00:00",
+    "status": 200,
+    "metadata": {
+      "page": 1,
+      "pages": 1,
+      "per_page": 1000,
+      "total": 11,
+      "sourceid": "2",
+      "lastupdated": "2026-11-11"
+    },
+    "observations": [
+      {
+        "date": "2023",
+        "value": 72.1062618595825,
+        "countryiso3code": "BRN"
+      },
+      {
+        "date": "2023",
+        "value": 50.6266271281612,
+        "countryiso3code": "IDN"
+      },
+      {
+        "date": "2023",
+        "value": 39.3759347382733,
+        "countryiso3code": "KHM"
+      },
+      {
+        "date": "2023",
+        "value": 56.788171577123,
+        "countryiso3code": "LAO"
+      },
+      {
+        "date": "2023",
+        "value": 42.4023472811681,
+        "countryiso3code": "MMR"
+      },
+      {
+        "date": "2023",
+        "value": 57.8442854968802,
+        "countryiso3code": "MYS"
+      },
+      {
+        "date": "2023",
+        "value": 24.6629104202301,
+        "countryiso3code": "PHL"
+      },
+      {
+        "date": "2023",
+        "value": 21.8352681039248,
+        "countryiso3code": "SGP"
+      },
+      {
+        "date": "2023",
+        "value": 38.9976511577835,
+        "countryiso3code": "THA"
+      },
+      {
+        "date": "2023",
+        "value": 71.0174848688635,
+        "countryiso3code": "TLS"
+      },
+      {
+        "date": "2023",
+        "value": 47.0439557284106,
+        "countryiso3code": "VNM"
+      }
+    ]
+  },
+  {
+    "name": "wdi-co2",
+    "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/EN.GHG.CO2.MT.CE.AR5?format=json&date=2023&per_page=1000",
+    "checkedAt": "2026-11-25T13:31:42.582621+00:00",
+    "status": 200,
+    "metadata": {
+      "page": 1,
+      "pages": 1,
+      "per_page": 1000,
+      "total": 11,
+      "sourceid": "2",
+      "lastupdated": "2026-11-11"
+    },
+    "observations": [
+      {
+        "date": "2023",
+        "value": 9.7036,
+        "countryiso3code": "BRN"
+      },
+      {
+        "date": "2023",
+        "value": 772.5618,
+        "countryiso3code": "IDN"
+      },
+      {
+        "date": "2023",
+        "value": 18.9162,
+        "countryiso3code": "KHM"
+      },
+      {
+        "date": "2023",
+        "value": 25.7437,
+        "countryiso3code": "LAO"
+      },
+      {
+        "date": "2023",
+        "value": 31.241,
+        "countryiso3code": "MMR"
+      },
+      {
+        "date": "2023",
+        "value": 282.3786,
+        "countryiso3code": "MYS"
+      },
+      {
+        "date": "2023",
+        "value": 162.4527,
+        "countryiso3code": "PHL"
+      },
+      {
+        "date": "2023",
+        "value": 56.1013,
+        "countryiso3code": "SGP"
+      },
+      {
+        "date": "2023",
+        "value": 275.0344,
+        "countryiso3code": "THA"
+      },
+      {
+        "date": "2023",
+        "value": 0.6644,
+        "countryiso3code": "TLS"
+      },
+      {
+        "date": "2023",
+        "value": 390.7253,
+        "countryiso3code": "VNM"
+      }
+    ]
+  },
+  {
+    "name": "tgo-market-2026",
+    "url": "https://carbonmarket.tgo.or.th/modules/home/ajax_pbi_data_event.php",
+    "checkedAt": "2026-11-25T13:31:42.582851+00:00",
+    "status": 200,
+    "publishedFields": {
+      "volume": "14,819",
+      "value": "13,836,537",
+      "transaction": "46",
+      "average": "933.70",
+      "price_min": "150",
+      "price_max": "2,000"
+    }
+  }
+]

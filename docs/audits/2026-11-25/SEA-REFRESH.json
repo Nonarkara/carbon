@@ -1,0 +1,15 @@
+{
+  "changed": [
+    "retrievedAt",
+    "sources forest/cover/co2 WDI release2026-10-08\u21922026-11-11",
+    "fresh WDI raw hashes and retrieval dates"
+  ],
+  "unchanged": [
+    "all11country figures and2000\u20132023history",
+    "all family-specific totals",
+    "GFW version and per-file original retrieval dates",
+    "geometry bytes",
+    "all limitations including10/11 mangrove withholding"
+  ],
+  "build": "Existing scripts/ingest/southeast_asia.py, isolated ROOT; no ledger writes"
+}

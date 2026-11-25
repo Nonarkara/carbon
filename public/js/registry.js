@@ -1,18 +1,29 @@
 // TGO T-VER registry snapshot (forestry & agriculture). Registry facts sit beside satellite estimates, never mixed:
 // expected = developer's ex-ante estimate at registration; issued = credits TGO has certified. Province-level only.
 import {polygonsOf,polygonContains,probePoints} from './ledger.js';
+import {loadJSON} from './data-load.js';
+import {validRegistry,validProvinceGeometry} from './source-contracts.js';
 
 export function issuedProjectCount(projects){
   return projects.filter(p=>(p.issued_tco2e||0)>0).length;
 }
 
 export const TVER_CLASSES=[[0,'#f3efe0'],[1,'#d9c98f'],[2,'#b89b3c'],[5,'#7a6200'],[10,'#3d3100']];
+// Two instruments consume the same immutable registry evidence. A successful
+// explicit retry updates both; their formatting and selected province remain local.
+const consumers=new Set();
+async function readSources(){
+ const [d,g]=await Promise.all([loadJSON('data/tgo/tver-forestry.json',{validate:validRegistry}),loadJSON('data/ledger/provinces.geojson',{validate:validProvinceGeometry})]);
+ for(const receive of consumers)receive(d,g);
+ return d;
+}
 
 export function initRegistry({t,fmt,getLang}){
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let D=null,geo=null;
-  const ready=Promise.all([fetch('data/tgo/tver-forestry.json'),fetch('data/ledger/provinces.geojson')].map(p=>p.then(r=>{if(!r.ok)throw Error('registry');return r.json();})))
-    .then(([d,g])=>{D=d;geo=g;return d;});
+  consumers.add((d,g)=>{D=d;geo=g;});
+  let ready=readSources();
+  const retry=()=>ready=readSources();
   const th=()=>getLang()==='th';
   const date=s=>s?new Intl.DateTimeFormat(th()?'th-TH':'en-GB',{dateStyle:'medium'}).format(new Date(s+'T00:00:00')):'—';
   const n0=v=>v==null?'—':fmt(v,0);
@@ -111,5 +122,5 @@ ${nat?`<p class="hint">${esc(t('tverNationNote').replace('{m}',D.multi.projects)
       notParcelOverlap:true};
   }
   const byProvince=pc=>D?D.provinces[pc]:null;
-  return {ready,section,overlapHTML,byProvince,data:()=>D,provincesOf,contextFor};
+  return {get ready(){return ready;},retry,section,overlapHTML,byProvince,data:()=>D,provincesOf,contextFor};
 }

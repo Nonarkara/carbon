@@ -39,3 +39,7 @@ article,#reader-index,.prose h2,.prose h3{scroll-margin-top:calc(var(--reader-he
  header{gap:4px}
  #indexJump .indexJump-wide{display:none}
 }
+
+/* Keep the live header and a compact status visible while the corpus is assembled. */
+main[aria-busy=true]{visibility:hidden}
+#readerLoading{position:absolute;top:calc(var(--reader-header,40px) + 8px);left:16px;margin:0;font-size:14px}

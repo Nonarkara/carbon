@@ -172,11 +172,11 @@ Carbona exports evidence for review and shows published registry records as cont
 ก่อนอ้างเครดิต ต้องตรวจประเภทกิจกรรม สิทธิที่ดินและคาร์บอน baseline/additionality เมื่อกำหนด การติดตาม ความไม่แน่นอน ค่าหัก leakage และกติกาการย้อนกลับ ข้อกำหนดต่างกันตามระเบียบวิธีและโปรแกรม แผนที่สวยไม่แทนการตรวจอิสระหรือคำตัดสินของหน่วยออกเครดิต
 
 คาร์บอนนะส่งออกหลักฐานเพื่อให้ตรวจ และแสดงทะเบียนเผยแพร่เป็นบริบท ไม่ออก โอน หรือยกเลิกเครดิต ห้ามเอาสต็อกคูณราคาตลาดแล้วเสนอเป็นรายได้ที่โครงการจะได้รับจริง`,['method','tver','iso2','iso3'],['Estimate + evidence','Eligibility / method / monitoring','Independent assurance + authority decision','Registry issuance'],['ค่าประมาณ + หลักฐาน','คุณสมบัติ / วิธี / ติดตาม','ตรวจอิสระ + หน่วยงานตัดสิน','ออกเครดิตในทะเบียน'],['registry','offsets','standards']);
-add('registry','credits','Read the Thai project and credit ledger','อ่านทะเบียนโครงการและเครดิตไทย','Expected tonnes and issued tonnes use different clocks.','ตันคาดการณ์กับตันรับรองใช้เวลาคนละแบบ',`The local TGO FOR & AGR snapshot is dated **28 September 2026**. Project expected reductions are annual forecasts (tCO₂e/year). Issued credits are recorded amounts from issuance events, not annual forecasts. A registered project can have no issuance yet.
+add('registry','credits','Read the Thai project and credit ledger','อ่านทะเบียนโครงการและเครดิตไทย','Expected tonnes and issued tonnes use different clocks.','ตันคาดการณ์กับตันรับรองใช้เวลาคนละแบบ',`The local TGO FOR & AGR snapshot is dated **25 November 2026**. Project expected reductions are annual forecasts (tCO₂e/year). Issued credits are recorded amounts from issuance events, not annual forecasts. A registered project can have no issuance yet.
 
 Counts use unique project keys. A multi-province project can appear in several provincial lists; its full tonnes are kept in the multi-province bucket for national conservation, not assigned in full to each province. Unlocated projects remain unlocated. A shared province is a screening connection, not a confirmed parcel overlap.
 
-Portfolio charts count projects or sum the labelled tonnes. Issuance timelines follow issuance dates; developer and family charts use the published classification. Check the record link for detail. This is a dated snapshot, not a live registry connection.`, `ข้อมูล TGO FOR & AGR ในระบบเป็น snapshot **28 กันยายน 2026** ยอดลดที่คาดเป็นรายปี (tCO₂e/ปี) ส่วนเครดิตรับรองเป็นยอดจากเหตุการณ์ออกเครดิต ไม่ใช่ยอดคาดการณ์รายปี โครงการขึ้นทะเบียนแล้วอาจยังไม่มีการออกเครดิต
+Portfolio charts count projects or sum the labelled tonnes. Issuance timelines follow issuance dates; developer and family charts use the published classification. Check the record link for detail. This is a dated snapshot, not a live registry connection.`, `ข้อมูล TGO FOR & AGR ในระบบเป็น snapshot **25 พฤศจิกายน 2026** ยอดลดที่คาดเป็นรายปี (tCO₂e/ปี) ส่วนเครดิตรับรองเป็นยอดจากเหตุการณ์ออกเครดิต ไม่ใช่ยอดคาดการณ์รายปี โครงการขึ้นทะเบียนแล้วอาจยังไม่มีการออกเครดิต
 
 นับด้วยรหัสโครงการไม่ซ้ำ โครงการหลายจังหวัดอาจอยู่ในหลายรายชื่อจังหวัด แต่ตันทั้งหมดอยู่ในกลุ่มหลายจังหวัดเพื่อรักษายอดประเทศ ไม่แจกยอดเต็มให้ทุกจังหวัด โครงการไม่มีพิกัดยังอยู่กลุ่มไม่ทราบที่ตั้ง จังหวัดเดียวกันเป็นเพียงความเชื่อมโยงสำหรับคัดกรอง ไม่ใช่ยืนยันว่าแปลงทับซ้อน
 
@@ -242,16 +242,16 @@ add('forest-watch','forest','Forest Watch: alerts are a reason to investigate','
 
 High confidence means a source system has repeated evidence; highest means multiple systems detected change. These are categories, not probabilities to multiply by carbon stock. The integrated grid is 10 m, with Landsat alerts resampled from 30 m. We use the older integrated deforestation-alert summary, not the newer global vegetation-disturbance layer.
 
-The pinned **v20261005** summary covers **5 September–4 October 2026**, filtered to its **tree-cover 2022 mask**. It is a snapshot. Sensor coverage, clouds and retrospective confidence changes affect detections; alert date need not equal event date. A zero means no record in this query.
+The pinned **v20261125** summary covers **26 October–24 November 2026**, filtered to its **tree-cover 2022 mask**. It is a snapshot. Sensor coverage, clouds and retrospective confidence changes affect detections; alert date need not equal event date. A zero means no record in this query.
 
 **What to do next:** inspect recent imagery, visit the location, record the affected boundary and cause, then apply the project's prescribed monitoring method. Never turn alert hectares into emissions or lost credits by multiplying by a province average. Drawn areas have no alert calculation here. JSON export preserves the snapshot and confidence breakdown; CSV remains the separate carbon ledger.`, `เลือก **ประเทศไทย** หรือจังหวัดบนแผนที่ แล้วอ่านส่วน **เฝ้าดูป่า** ซึ่งแสดงพื้นที่แจ้งเตือนใน 30 วัน แยกความเชื่อมั่นเบื้องต้น สูง และสูงสุด ตัวเลขหลักรวมสูงกับสูงสุด ส่วนกราฟรายวันรวมทั้งสามระดับ กดชื่อจังหวัดในรายการระดับประเทศเพื่อเริ่มตรวจสอบ
 
 ความเชื่อมั่นสูงหมายถึงระบบต้นทางมีหลักฐานซ้ำ สูงสุดหมายถึงหลายระบบตรวจพบการเปลี่ยนแปลง เป็นหมวดหลักฐาน ไม่ใช่ความน่าจะเป็นสำหรับคูณคาร์บอนสะสม กริดรวมขนาด 10 เมตรมีข้อมูล Landsat ที่ปรับจาก 30 เมตร เราใช้ชุดแจ้งเตือนการสูญเสียเรือนยอดเดิม ไม่ใช่ชั้นการรบกวนพืชพรรณทั่วโลกรุ่นใหม่
 
-รุ่น **v20261005** ครอบคลุม **5 กันยายน–4 ตุลาคม 2026** กรองด้วย **หน้ากากเรือนยอดปี 2022** เป็นข้อมูล ณ วันที่ ไม่ใช่ข้อมูลสด เมฆ ขอบเขตเซนเซอร์ และการแก้ระดับความเชื่อมั่นย้อนหลังมีผลต่อการตรวจพบ วันที่แจ้งเตือนอาจไม่ใช่วันเกิดเหตุ ศูนย์หมายถึงไม่มีรายการในคำค้นนี้
+รุ่น **v20261125** ครอบคลุม **26 ตุลาคม–24 พฤศจิกายน 2026** กรองด้วย **หน้ากากเรือนยอดปี 2022** เป็นข้อมูล ณ วันที่ ไม่ใช่ข้อมูลสด เมฆ ขอบเขตเซนเซอร์ และการแก้ระดับความเชื่อมั่นย้อนหลังมีผลต่อการตรวจพบ วันที่แจ้งเตือนอาจไม่ใช่วันเกิดเหตุ ศูนย์หมายถึงไม่มีรายการในคำค้นนี้
 
 **ทำอะไรต่อ:** ตรวจภาพล่าสุด ลงพื้นที่ บันทึกขอบเขตและสาเหตุ แล้วใช้วิธีติดตามที่โครงการกำหนด อย่านำเฮกตาร์แจ้งเตือนคูณค่าเฉลี่ยคาร์บอนจังหวัดเพื่ออ้างปริมาณปล่อยหรือเครดิตที่สูญเสีย พื้นที่ที่วาดไม่มีการคำนวณแจ้งเตือนในระบบนี้ ส่งออก JSON เพื่อเก็บรุ่นและระดับความเชื่อมั่น ส่วน CSV ยังคงเป็นบัญชีคาร์บอนแยกต่างหาก`,['gfw-watch','gfw-alert-method'],['Dated satellite detections','Confidence + province context','Imagery and field investigation','Method-specific monitoring evidence'],['การตรวจพบจากดาวเทียมพร้อมวันที่','ความเชื่อมั่น + บริบทจังหวัด','ตรวจภาพและลงพื้นที่','หลักฐานตามวิธีติดตามของโครงการ'],['number-passport']);
-chapters.find(c=>c.id==='forest-watch').reviewed='2026-10-05';
+chapters.find(c=>c.id==='forest-watch').reviewed='2026-11-25';
 
 chapters.push(...designChapters);
 

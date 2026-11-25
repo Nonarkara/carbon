@@ -1,0 +1,126 @@
+[
+  {
+    "name": "gfw-alert-versions",
+    "url": "https://data-api.globalforestwatch.org/dataset/gadm__integrated_alerts__adm1_daily_alerts",
+    "checkedAt": "2026-11-25T13:28:15.733008+00:00",
+    "timeoutSeconds": 25,
+    "status": 200,
+    "finalURL": "https://data-api.globalforestwatch.org/dataset/gadm__integrated_alerts__adm1_daily_alerts",
+    "contentType": "application/json",
+    "bytes": 242,
+    "sha256": "c3c3494609c5efb7989d4aafbf7f3955164f076a27e8813d65d79839d1e886ec",
+    "jsonTopLevel": [
+      "data",
+      "status"
+    ],
+    "datasetSummary": {
+      "dataset": "gadm__integrated_alerts__adm1_daily_alerts",
+      "versions": [
+        "v20261123",
+        "v20261125"
+      ],
+      "is_downloadable": true
+    },
+    "verdict": "reachable; full ingest/reconciliation still required"
+  },
+  {
+    "name": "gfw-flux-versions",
+    "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary",
+    "checkedAt": "2026-11-25T13:28:15.733635+00:00",
+    "timeoutSeconds": 25,
+    "status": 200,
+    "finalURL": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary",
+    "contentType": "application/json",
+    "bytes": 223,
+    "sha256": "4ea1de6aa86b96c897c9c3f94bca0816b05de889d8c6a5aec27bfd03eb34bcf0",
+    "jsonTopLevel": [
+      "data",
+      "status"
+    ],
+    "datasetSummary": {
+      "dataset": "carbonflux_adm1_summary",
+      "versions": [
+        "v20250515",
+        "v20260327"
+      ],
+      "is_downloadable": true
+    },
+    "verdict": "reachable; full ingest/reconciliation still required"
+  },
+  {
+    "name": "gfw-alert-pinned-today",
+    "url": "https://data-api.globalforestwatch.org/dataset/gadm__integrated_alerts__adm1_daily_alerts/v20261125",
+    "checkedAt": "2026-11-25T13:28:15.733851+00:00",
+    "timeoutSeconds": 25,
+    "status": 200,
+    "finalURL": "https://data-api.globalforestwatch.org/dataset/gadm__integrated_alerts__adm1_daily_alerts/v20261125",
+    "contentType": "application/json",
+    "bytes": 434,
+    "sha256": "d428476db374aca90a4962a80627b6e9a6957578e72cbb343626b1ebf72853be",
+    "jsonTopLevel": [
+      "data",
+      "status"
+    ],
+    "datasetSummary": {
+      "dataset": "gadm__integrated_alerts__adm1_daily_alerts"
+    },
+    "verdict": "reachable; full ingest/reconciliation still required"
+  },
+  {
+    "name": "wdi-forest",
+    "url": "https://api.worldbank.org/v2/country/THA/indicator/AG.LND.FRST.K2?format=json&date=2023&per_page=1000",
+    "checkedAt": "2026-11-25T13:28:15.734023+00:00",
+    "timeoutSeconds": 25,
+    "error": "timeout: The read operation timed out",
+    "verdict": "upstream review unavailable; retain last-good snapshot"
+  },
+  {
+    "name": "tgo-list",
+    "url": "https://tver.tgo.or.th/database/Public/ProjectsResult",
+    "checkedAt": "2026-11-25T13:28:15.734214+00:00",
+    "timeoutSeconds": 25,
+    "status": 200,
+    "finalURL": "https://tver.tgo.or.th/database/Public/ProjectsResult",
+    "contentType": "text/html; charset=utf-8",
+    "bytes": 1726276,
+    "sha256": "36fb109aff452484ac2edee180cb79dc777aace29d3751ce2f3b91a4ee8e147a",
+    "jsonTopLevel": "not JSON",
+    "verdict": "reachable; full ingest/reconciliation still required"
+  },
+  {
+    "name": "tgo-market",
+    "url": "https://carbonmarket.tgo.or.th/modules/home/ajax_pbi_data_event.php",
+    "checkedAt": "2026-11-25T13:28:15.734426+00:00",
+    "timeoutSeconds": 25,
+    "status": 200,
+    "finalURL": "https://carbonmarket.tgo.or.th/modules/home/ajax_pbi_data_event.php",
+    "contentType": "text/html; charset=UTF-8",
+    "bytes": 221,
+    "sha256": "9399226942cfc42e18f203fcccf022dd3dc17e31e1ee75a1996223c2a7d46fe8",
+    "jsonTopLevel": [
+      "status",
+      "title",
+      "transaction",
+      "project",
+      "average",
+      "value",
+      "volume",
+      "price_min",
+      "price_max"
+    ],
+    "verdict": "reachable; full ingest/reconciliation still required"
+  },
+  {
+    "name": "sg-article6",
+    "url": "https://www.carbonmarkets-cooperation.gov.sg/our-art6-cooperation/",
+    "checkedAt": "2026-11-25T13:28:15.734678+00:00",
+    "timeoutSeconds": 25,
+    "status": 200,
+    "finalURL": "https://www.carbonmarkets-cooperation.gov.sg/our-art6-cooperation/",
+    "contentType": "text/html",
+    "bytes": 464506,
+    "sha256": "43e6a4fbb783cb8c47e66f4a2a7065d2c1668c5d3f07ddff988eace8790e2ba8",
+    "jsonTopLevel": "not JSON",
+    "verdict": "reachable; full ingest/reconciliation still required"
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "checkedDate": "2026-11-25",
+  "pipeline": "scripts/ingest/tgo.py, fresh isolated raw directory; every bilingual list,257project details and22market queries fetched anew",
+  "unchanged": [
+    "all257project identities,crediting periods,issuances and expected values",
+    "national/province/multi/unlocated conservation",
+    "province membership sets",
+    "location word/number multisets",
+    "terms: no stated reuse licence; attribution and project links remain",
+    "no contacts detected in public extract"
+  ],
+  "sourceOrderingChanges": {
+    "location_th": 32,
+    "provinces": 18
+  },
+  "changes": [
+    {
+      "family": "for_agr",
+      "year": 2026,
+      "previous": {
+        "year": 2026,
+        "transactions": 36,
+        "volume_tco2e": 6704.0,
+        "value_thb": 4469579.0,
+        "avg_thb": 666.7,
+        "min_thb": 250.0,
+        "max_thb": 2000.0
+      },
+      "updated": {
+        "year": 2026,
+        "transactions": 46,
+        "volume_tco2e": 14819.0,
+        "value_thb": 13836537.0,
+        "avg_thb": 933.7,
+        "min_thb": 150.0,
+        "max_thb": 2000.0
+      }
+    },
+    {
+      "family": "all",
+      "year": 2026,
+      "previous": {
+        "year": 2026,
+        "transactions": 624,
+        "volume_tco2e": 472457.0,
+        "value_thb": 23399939.0,
+        "avg_thb": 49.53,
+        "min_thb": 20.0,
+        "max_thb": 2000.0
+      },
+      "updated": {
+        "year": 2026,
+        "transactions": 1045,
+        "volume_tco2e": 669478.0,
+        "value_thb": 40530403.0,
+        "avg_thb": 60.54,
+        "min_thb": 20.0,
+        "max_thb": 2000.0
+      }
+    }
+  ],
+  "snapshot": {
+    "previous": "2026-09-28",
+    "updated": "2026-11-25"
+  },
+  "rawSha256": "e31133f661ab8b26a28bbe6e0dbdb626124d30ef27b1f76c2e7625f8740857e9",
+  "pipelineSha256": "81987e01dc6d251a76890717e73d7d956c4c1a01a4a5b90bc2454cdba18760ac"
+}

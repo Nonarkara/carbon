@@ -1,0 +1,124 @@
+{
+  "old": {
+    "version": "v20261005",
+    "window": {
+      "start": "2026-09-05",
+      "endExclusive": "2026-10-05",
+      "days": 30
+    },
+    "national": {
+      "area_ha": {
+        "nominal": 1.1603999999999999,
+        "high": 147.83210000000003,
+        "highest": 0
+      },
+      "pixels": {
+        "nominal": 96,
+        "high": 12475,
+        "highest": 0
+      },
+      "daily_ha": [
+        9.7208,
+        27.0683,
+        28.0271,
+        1.7037,
+        2.4584,
+        0.0705,
+        0.0,
+        19.773099999999996,
+        10.933799999999998,
+        15.841299999999999,
+        0.59,
+        4.9337,
+        0.4402,
+        0.0,
+        0.5003,
+        7.8931,
+        0.0699,
+        16.782999999999998,
+        1.6355,
+        0.0,
+        0.0697,
+        0.0,
+        0.0,
+        0.0,
+        0.4801,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "rawSha256": "ac18978370b787330c5f72e5f8d294b85295cd59ae94753474a24410b02c05c3"
+  },
+  "candidate": {
+    "version": "v20261125",
+    "window": {
+      "start": "2026-10-26",
+      "endExclusive": "2026-11-25",
+      "days": 30
+    },
+    "national": {
+      "area_ha": {
+        "nominal": 1.4950000000000003,
+        "high": 418.15079999999983,
+        "highest": 0
+      },
+      "pixels": {
+        "nominal": 124,
+        "high": 35375,
+        "highest": 0
+      },
+      "daily_ha": [
+        78.2122,
+        64.4302,
+        26.9267,
+        11.0451,
+        50.181799999999996,
+        24.829,
+        54.6553,
+        9.632000000000001,
+        62.62640000000001,
+        10.858000000000002,
+        0.5233,
+        1.9259,
+        0.14300000000000002,
+        14.148000000000001,
+        4.3551,
+        0.41479999999999995,
+        0.0237,
+        0.0,
+        0.048600000000000004,
+        3.0150999999999994,
+        1.4828000000000001,
+        0.0,
+        0.0,
+        0.09680000000000001,
+        0.07200000000000001,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "rawSha256": "598fdb1ee35c1d57e22bde6ccaf8d1d34baff905a58be7fd3c50d5acdadd809b",
+    "retrievedAt": "2026-11-25T13:29:07.839456+00:00",
+    "countryCheck": {
+      "source": "https://data-api.globalforestwatch.org/dataset/gadm__integrated_alerts__adm1_daily_alerts/v20261125/download/csv?sql=select%20gfw_integrated_alerts__confidence%20as%20confidence%2C%20sum%28alert__count%29%20as%20pixels%2C%20sum%28alert_area__ha%29%20as%20area_ha%20from%20data%20where%20iso%3D%27THA%27%20and%20is__tree_cover_2022%3Dtrue%20and%20gfw_integrated_alerts__date%20%3E%3D%20%272026-10-26%27%20and%20gfw_integrated_alerts__date%20%3C%20%272026-11-25%27%20group%20by%20gfw_integrated_alerts__confidence%20order%20by%20confidence",
+      "rawSha256": "de3553aadd1fa824ef06dff26ce09f91d65ca59a075f05bc68e46d297cbd00cb",
+      "result": "Province sums match independent country query at each confidence level"
+    }
+  },
+  "unchanged": [
+    "schemaVersion",
+    "dataset",
+    "mask",
+    "licence",
+    "confidenceLevels",
+    "limitations",
+    "77 province identities"
+  ],
+  "validation": "Every province daily sum equals its confidence area; each confidence pixel/area sum equals independent country query."
+}

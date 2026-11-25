@@ -17,3 +17,6 @@
   Cache-Control: no-cache
 /sea.html
   Cache-Control: no-cache
+
+/data/*
+  Cache-Control: public, max-age=0, must-revalidate

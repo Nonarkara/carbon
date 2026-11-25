@@ -1,0 +1,126 @@
+{
+  "checkedAt": "2026-11-25T14:10:48.859Z",
+  "identity": "Working candidate based on fb178be; final source identity is in release receipt",
+  "platform": "darwin 27.2.0 arm64",
+  "cpu": "Apple M5 Max",
+  "browser": "159.0.8154.6",
+  "profile": "Headless Chromium; no network/CPU throttling; 1s observation after actual content+fonts; cold/warm same context. External tiles/feeds separate; cross-origin transfer may be hidden by Timing-Allow-Origin.",
+  "rows": [
+    {
+      "name": "thailand",
+      "cache": "cold",
+      "beforeBody": 3527872,
+      "afterBody": 2292880,
+      "changePct": -35.00671226166936,
+      "beforeLCP": 236,
+      "afterLCP": 936,
+      "beforeCLS": 0.0003071476209152811,
+      "afterCLS": 0.0003071476209152811,
+      "longTasks": [
+        67,
+        147,
+        83
+      ],
+      "errors": []
+    },
+    {
+      "name": "thailand",
+      "cache": "warm",
+      "beforeBody": 3527872,
+      "afterBody": 2292880,
+      "changePct": -35.00671226166936,
+      "beforeLCP": 196,
+      "afterLCP": 752,
+      "beforeCLS": 0.0003071476209152811,
+      "afterCLS": 0.0003071476209152811,
+      "longTasks": [
+        133
+      ],
+      "errors": []
+    },
+    {
+      "name": "sea",
+      "cache": "cold",
+      "beforeBody": 549970,
+      "afterBody": 550593,
+      "changePct": 0.11327890612216063,
+      "beforeLCP": 1104,
+      "afterLCP": 232,
+      "beforeCLS": 0.011439670468099468,
+      "afterCLS": 0.011444265767839894,
+      "longTasks": [],
+      "errors": []
+    },
+    {
+      "name": "sea",
+      "cache": "warm",
+      "beforeBody": 549970,
+      "afterBody": 550593,
+      "changePct": 0.11327890612216063,
+      "beforeLCP": 124,
+      "afterLCP": 304,
+      "beforeCLS": 0.011444265767839894,
+      "afterCLS": 0.011439670468099468,
+      "longTasks": [
+        58
+      ],
+      "errors": []
+    },
+    {
+      "name": "bible",
+      "cache": "cold",
+      "beforeBody": 1543652,
+      "afterBody": 1557546,
+      "changePct": 0.9000733325905008,
+      "beforeLCP": 156,
+      "afterLCP": 124,
+      "beforeCLS": 0.726901161903519,
+      "afterCLS": 0.04310365779560092,
+      "longTasks": [],
+      "errors": []
+    },
+    {
+      "name": "bible",
+      "cache": "warm",
+      "beforeBody": 1543652,
+      "afterBody": 1557546,
+      "changePct": 0.9000733325905008,
+      "beforeLCP": 88,
+      "afterLCP": 52,
+      "beforeCLS": 0.7269450949802967,
+      "afterCLS": 0.038426622192552176,
+      "longTasks": [],
+      "errors": []
+    },
+    {
+      "name": "research",
+      "cache": "cold",
+      "beforeBody": 495323,
+      "afterBody": 497361,
+      "changePct": 0.4114486910561377,
+      "beforeLCP": 356,
+      "afterLCP": 336,
+      "beforeCLS": 0.015038566153184555,
+      "afterCLS": 0.015038566153184555,
+      "longTasks": [
+        180
+      ],
+      "errors": []
+    },
+    {
+      "name": "research",
+      "cache": "warm",
+      "beforeBody": 495323,
+      "afterBody": 497361,
+      "changePct": 0.4114486910561377,
+      "beforeLCP": 416,
+      "afterLCP": 316,
+      "beforeCLS": 0.015038566153184555,
+      "afterCLS": 0.015038566153184555,
+      "longTasks": [
+        155
+      ],
+      "errors": []
+    }
+  ]
+}

@@ -12,10 +12,20 @@ Source / ซอร์ส: https://github.com/Nonarkara/carbon
 3. `npm run test:browser:all` — every browser suite against the same kind of self-started server. For a single flow, `npm run test:browser` is enough.
 4. Scan secrets with `gitleaks git --redact` and `gitleaks dir public --redact`; run `npm audit`.
 5. Commit source, tests and docs with an `Agent: codex` or appropriate attribution trailer; push to main.
-6. `npm run deploy` runs `scripts/release.mjs`: it checks the tree is clean, exports HEAD into a pristine worktree, builds there, runs `npm test`, `npm run test:spatial` and `npm run test:deep` against that build, and uploads that measured directory with `--branch main` so it lands on the production alias. A release cannot ship without the law passing, and it cannot ship bytes the commit does not contain.
-7. Inspect `/version.json`, security headers, TH/EN guides, then `BASE_URL=https://carbon.nonarkara.org npm run test:browser` and `npm run test:release` for exact deployed bytes.
+6. `npm run deploy` runs `scripts/release.mjs`: it checks the tree is clean, captures the exact commit, obtains the project release lock, exports that revision into a pristine worktree, and runs an isolated `npm ci --include=dev` there. It builds, runs unit tests, the full browser suites, spatial gates and deep audit, then uploads those measured bytes with `--branch main`. A caller's changed HEAD or mutable `node_modules` cannot replace the captured source/dependencies.
+7. Release completion waits for the captured commit, walks the live primary domain, and verifies every public artifact, security headers, private-path exclusion and public-feed envelopes on **both** domains. Only then, after owned-resource cleanup, does it print PASS. Inspect the durable receipt printed by the command; `npm run test:release` remains available for an independent exact-byte check from the same build.
 
 การ build หลัง commit ทำให้ version ตรงกับซอร์สที่เผยแพร่ ต้องตรวจรุ่นบน URL หลัก ไม่ใช้เพียงข้อความสำเร็จจาก Wrangler เป็นหลักฐาน ส่วน GitHub Actions ตรวจ build/test แต่ไม่ได้ deploy อัตโนมัติ การ deploy สร้าง build จากสำเนา commit ที่สะอาด (pristine worktree) ไม่ใช่จากโฟลเดอร์ที่ทำงานอยู่ เพื่อให้ไฟล์ที่แก้ไขค้างอยู่ของใครไม่หลุดเข้าไปในรุ่นที่เผยแพร่
+
+รุ่นใหม่ยึด commit ที่จับไว้ตั้งแต่เริ่ม แม้ HEAD ในโฟลเดอร์ทำงานจะเปลี่ยนภายหลัง ติดตั้ง dependency จาก lockfile ของรุ่นนั้นในโฟลเดอร์แยก ไม่ยืม `node_modules` จากผู้เรียก มีล็อกไม่ให้เผยแพร่โครงการเดียวกันพร้อมกัน และตรวจไฟล์จริงกับขอบเขตความปลอดภัยบนทั้งสองโดเมนก่อนรายงาน PASS
+
+## Release ownership and receipts / เจ้าของงานและหลักฐานออกรุ่น
+
+The lock and receipts live under the repository's **common Git directory**, in `carbon-release/` (normally `.git/carbon-release/`), outside `public/` and outside the disposable build. `production.lock/owner.json` records PID, acquisition time, commit and an ownership token. A second release fails clearly; it never kills or replaces the first. If the owner crashed, inspect that exact PID/process and worktree before removing a stale lock. Do not delete a lock merely because another release is slow. SIGINT/SIGTERM abort only process groups created by this release, stop retries, save a cancelled receipt and attempt cleanup.
+
+Each receipt records source revision, candidate lock SHA-256, Node/npm versions, dependency mode, gate exit codes/attempts/timings, both-domain outcomes and cleanup status. `assets.json` records every public file's size and SHA-256. Receipts do not capture environment variables, credential values, child stdout or user project files. A verified upload with failed cleanup still exits unsuccessfully; inspect `cleanupErrors` rather than assuming PASS. Git metadata must be retained to retain these local receipts; copy a reviewed receipt into the audit record when permanent archival is needed.
+
+ล็อกและหลักฐานอยู่ใน Git metadata ไม่อยู่ในเว็บสาธารณะหรือโฟลเดอร์ชั่วคราว หลักฐานเก็บ commit, hash ของ lockfile, รุ่นเครื่องมือ, ผลและเวลาของแต่ละ gate, ผลทั้งสองโดเมน และสถานะเก็บกวาด ไม่เก็บ environment, token, stdout หรือไฟล์โครงการของผู้ใช้ หากเจ้าของงานหยุดกะทันหัน ให้ตรวจ PID และ worktree ที่ตรงกันก่อนปลดล็อก ห้ามหยุด runner อื่นด้วยชื่อโปรเซส การยกเลิกจะหยุดเฉพาะลูกของงานนี้และเก็บสถานะ cancelled ไว้
 
 ## Credentials / ข้อมูลรับรองสิทธิ
 

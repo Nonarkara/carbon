@@ -43,25 +43,11 @@ The study grew from an enquiry about AI-assisted forest-carbon assessment from T
 
 “How much carbon is in this forest?” and “How many credits can this project receive?” require different evidence. A forest can contain a great deal of carbon without that entire stock being available for a new credit claim.
 
-<div class="comparison-strip">
-<div class="compare-side">
-<h4>Carbon stock</h4>
-<b>Carbon held in tree pools at a date</b>
-<small>Expressed as tCO₂e · workbench converts supplied biomass or accepts a total tree-stock estimate</small>
-</div>
-<div class="compare-side">
-<h4>Monitoring-period change</h4>
-<b>Difference between comparable dates</b>
-<small>After deductions · signed estimate from supplied inputs</small>
-</div>
-<div class="compare-side">
-<h4>Issued credits</h4>
-<b>Units approved and recorded through the programme</b>
-<small>No registry connection · never inferred from the estimate</small>
-</div>
-</div>
-
-“How much carbon is in this forest?” and “How many credits can this project receive?” require different evidence. A forest can contain a great deal of carbon without that entire stock being available for a new credit claim.
+| Quantity | Plain meaning | What this workbench does |
+|---|---|---|
+| Carbon stock | Carbon held in the included tree pools at a date, expressed here as tCO₂e | Converts supplied biomass or accepts a compatible total tree-stock estimate |
+| Monitoring-period change | The difference between comparable dates, after applicable deductions | Calculates a signed estimate from the supplied inputs |
+| Issued credits | Units approved and recorded through the relevant programme | No live registry or issuance connection; never inferred from the estimate |
 
 ```mermaid
 flowchart TD
@@ -213,13 +199,6 @@ All three ranges describe random error only. They exclude systematic map bias, w
 ### Checked against Thailand's forest inventory
 
 A satellite map should be checked against field measurements before its totals are trusted. Thailand's forest reference level submitted to the UNFCCC ([FREL/FRL, modified July 2021](https://redd.unfccc.int/media/modified_thailand_rl_july2021.pdf)) publishes what the national forest inventory found: mean aboveground biomass per forest type from cycle 3 plots measured 2013–2018 (reference year 2017; Table 13), and the area of each forest type in 2016 (Table 6). The pipeline compares the two at national scale, with a nominal 2017 reference but differing measurement years and forest populations, rather than matched plots against pixels ([Réjou-Méchain et al. 2019](https://doi.org/10.1007/s10712-019-09532-0)). Script: `scripts/ingest/nfi_check.py`; result: [`nfi-check.json`](data/ledger/nfi-check.json).
-
-<div class="number-strip">
-<div class="number-card"><b class="brand">23.8 Mha</b><span>Map forest area vs 17.2 Mha in inventory — 38% more</span></div>
-<div class="number-card"><b class="brand">165 t/ha</b><span>Map biomass per ha vs 90.5 t/ha — 82% higher</span></div>
-<div class="number-card"><b class="brand">2.5×</b><span>Map total biomass vs inventory — 3.94 vs 1.56 Gt</span></div>
-<div class="number-card"><b class="brand">3.48 Gt CO₂e</b><span>Inventory carbon stock, ±0.25 Gt at 95%</span></div>
-</div>
 
 | | National forest inventory (FREL) | ESA CCI 2017 over JAXA FNF 2017 forest |
 |---|---:|---:|
@@ -433,15 +412,7 @@ Open the workbench, try the clearly labelled synthetic example, and follow a num
 
 On 13 June 2025 TGO presented four remote-sensing platforms that had met its assessment criteria for estimating forest carbon sequestration in T-VER forestry projects: GISTDA Carbon Atlas, THAICOM CarbonWatch, SCGC CERT+ and Varuna Smart Forest (PTT group) ([TGO news](https://ghgreduction.tgo.or.th/th/news/news-all/item/6114-tgo-ai-2.html)). The release says they reduce time and cost; it gives no percentage, and it does not describe them as verification. External bodies still verify. Each recognition belongs to that platform. This application is an independent, open screening tool and claims no TGO recognition.
 
-<div class="number-strip">
-<div class="number-card"><b class="brand">257</b><span>registered FOR&AGR projects · 2,194,333 tCO₂e/yr expected · median 771 tCO₂e/yr</span></div>
-<div class="number-card"><b class="brand">31</b><span>projects with credits issued · 733,914 tCO₂e issued in total · 12.1%</span></div>
-<div class="number-card"><b class="brand">75</b><span>projects include ป่าชุมชน (community forest) in the name · legal instrument not recorded</span></div>
-<div class="number-card"><b class="brand">32</b><span>projects mention mangrove · Department of Marine and Coastal Resources is developer on 30</span></div>
-<div class="number-card"><b class="brand">246 Standard · 11 Premium</b><span>Standard 95.7% · Premium 4.3% · 253 active · 2 ended · 1 revalidation · 1 withdrawn</span></div>
-</div>
-
-The [TGO T-VER database](https://tver.tgo.or.th/database/public/projects/1/1) publishes its full project list without login. A snapshot taken on 28 September 2026, limited to the forestry and agriculture sector (FOR&AGR), shows:
+The [TGO T-VER database](https://tver.tgo.or.th/database/public/projects/1/1) publishes its full project list without login. A snapshot taken on 25 November 2026, limited to the forestry and agriculture sector (FOR&AGR), shows:
 
 - **257 registered projects**, with a combined ex-ante expectation of **2,194,333 tCO₂e per year** (median project 771 tCO₂e/yr)
 - **31 projects** have had credits issued, **733,914 tCO₂e** in total
@@ -461,20 +432,7 @@ The [TGO T-VER database](https://tver.tgo.or.th/database/public/projects/1/1) pu
 
 Four in five projects were registered in 2024–2026. Most have not yet reached the end of a first monitoring period, so no credit could have been issued. This snapshot cannot tell whether verification cost also holds projects back: it contains no verification fees, and the page does not estimate them.
 
-What the OTC tape in the snapshot shows: forestry and agriculture trades total 379,304 tCO₂e at a volume-weighted average of **฿416/tCO₂e**. Yearly averages run from ฿279 in 2023 (308,030 tCO₂e, the largest year) to ฿2,000 in 2022 (1,270 tCO₂e). There is no stable price band in these data.
-
-<div class="comparison-strip">
-<div class="compare-side">
-<h4>Standard T-VER · 246 projects (95.7%)</h4>
-<b>S-METH-13-01 to 13-06</b>
-<small>Predecessors: METH-FOR-01…04, METH-AGR-01/02 · crediting periods 10 yr (180), 7 yr (35), 20 yr (25), others 9–23 yr (6) · earliest start September 2013 · domestic voluntary use</small>
-</div>
-<div class="compare-side">
-<h4>Premium T-VER · 11 projects (4.3%)</h4>
-<b>P-METH-13-01, 13-02, 13-03, 13-05, 13-08</b>
-<small>A/R, mangrove, REDD+, IFM, rice · crediting periods 5 yr (3), 15 yr (5), 20 yr (2), 39 yr (1) · earliest start July 2023 · CORSIA-eligible 2024–2026 · Article 6 needs letter of authorization</small>
-</div>
-</div>
+What the OTC tape in the snapshot shows: forestry and agriculture trades total 387,419 tCO₂e at a volume-weighted average of **฿431/tCO₂e**. Yearly averages run from ฿279 in 2023 (308,030 tCO₂e, the largest year) to ฿2,000 in 2022 (1,270 tCO₂e). There is no stable price band in these data.
 
 ### Standard and Premium T-VER, as registered
 
@@ -522,7 +480,7 @@ The registry data on the map describe institutions: where projects are registere
 
 ## 12 · What the registry says about itself — slices TGO does not aggregate for you
 
-Pulling all 257 records turns TGO's flat listing into slices the public site does not aggregate. They appear in the **T-VER block of the national map view**, beside the project list and the OTC table. The figures below were computed from the snapshot `data/tgo/tver-forestry.json` (28 September 2026); the app computes the same slices from that file.
+Pulling all 257 records turns TGO's flat listing into slices the public site does not aggregate. They appear in the **T-VER block of the national map view**, beside the project list and the OTC table. The figures below were computed from the snapshot `data/tgo/tver-forestry.json` (25 November 2026); the app computes the same slices from that file.
 
 | Slice | What it says |
 |---|---|
@@ -533,7 +491,7 @@ Pulling all 257 records turns TGO's flat listing into slices the public site doe
 | **Developers** | By project count: Royal Forest Department 35, Department of Marine and Coastal Resources 27, BAAC 12, Rubber Authority of Thailand 10, Department of National Parks 9. By expected tCO₂e/yr: Rubber Authority 653,175, Royal Forest Department 458,576, DMCR 210,920. Names are kept as printed, so two spellings of one foundation stay separate. |
 | **Where** | Ranked by expected tonnes of **single-province** projects: Nan, Chiang Rai, Surat Thani, Rayong and Chiang Mai hold 33.3% of national expected volume. Multi-province projects (52; 1,075,734 tCO₂e/yr) are outside this ranking. Single-province 199, multi-province 52, no province named 6. |
 | **Issuance timeline (tCO₂e)** | 2016 1.5k, 2017 16, 2018 0.8k, 2022 5.6k, 2023 130k, **2024 424k**, 2025 57k, 2026 115k to date. Of 2024, 419,513 tCO₂e (98.9%) is one REDD+ issuance: Doi Tung Development Project, Chiang Rai (reg. 077). |
-| **OTC trades (FOR&AGR)** | Yearly average ฿279 (2023) to ฿2,000 (2022); yearly volume 16 tCO₂e (2021) to 308,030 tCO₂e (2023); volume-weighted average ฿416/tCO₂e. 2026 is year-to-date. |
+| **OTC trades (FOR&AGR)** | Yearly average ฿279 (2023) to ฿2,000 (2022); yearly volume 16 tCO₂e (2021) to 308,030 tCO₂e (2023); volume-weighted average ฿431/tCO₂e. 2026 is year-to-date. |
 
 ### Why this is useful to TGO without being an integration
 
@@ -651,7 +609,7 @@ These are the next improvements, in roughly that order of value for the effort.
 
 A carbon estimate is more useful when it helps someone decide where to go next. GFW's portal separates discoverable datasets, source metadata, downloads and alerts. We adopt that discipline: a versioned, inspectable alert snapshot beside the carbon ledger, with a field-investigation path instead of a new claim to credits.
 
-**Implemented:** `gadm__integrated_alerts__adm1_daily_alerts v20261005`, Thailand, 5 September–4 October 2026 (end-exclusive 5 October), filtered to `is__tree_cover_2022=true`. The API returns hectares and alert-pixel counts grouped by province, detection date and confidence. This is the legacy integrated deforestation-alert product (UMD/GLAD + WUR), not the newer global DIST-ALERT vegetation-disturbance product. [Source metadata](https://data-api.globalforestwatch.org/dataset/gfw_integrated_alerts), [download and provenance](data/gfw/watch.json).
+**Implemented:** `gadm__integrated_alerts__adm1_daily_alerts v20261125`, Thailand, 26 October–24 November 2026 (end-exclusive 25 November), filtered to `is__tree_cover_2022=true`. The API returns hectares and alert-pixel counts grouped by province, detection date and confidence. This is the legacy integrated deforestation-alert product (UMD/GLAD + WUR), not the newer global DIST-ALERT vegetation-disturbance product. [Source metadata](https://data-api.globalforestwatch.org/dataset/gfw_integrated_alerts), [download and provenance](data/gfw/watch.json).
 
 The rail separates nominal, high and highest confidence. Its headline is high + highest **area**, not an event count; its daily chart includes all confidence levels. Province buttons identify the five largest recorded high/highest areas. This is an investigation priority within the query, not a forest-risk score or normalized province comparison. Large provinces, sensor availability, weather and detection lag affect totals. The integrated grid is 10 m; resampling does not create new 10 m Landsat information. Confidence upgrades and removals of unconfirmed alerts can revise historical totals. A zero is absence of recorded detections, not proof of intact forest.
 
@@ -659,7 +617,7 @@ The rail separates nominal, high and highest confidence. Its headline is high + 
 
 No alert is converted into tonnes, assigned to a drawn parcel, deducted from a project or treated as an issued-credit reversal. Province context remains separate from the workbench. JSON export includes the complete selected snapshot; carbon CSV retains only carbon rows. Public files include the exact query, raw SHA-256, mask, dates, attribution and CC BY 4.0 licence. The ingestion script rejects unknown provinces, unexpected confidence values, negative areas and out-of-window dates. Tests reconcile national, province and daily totals.
 
-**Reproduction:** `python3 scripts/ingest/gfw_watch.py --date 2026-10-05`. Future refreshes must select an available dataset version and rebuild/deploy; the snapshot does not silently refresh. No user boundary is sent to GFW. The public CSV download succeeded without authentication; absent CORS is handled by offline ingestion. An account subscription alone does not configure a Data API key: none is configured here. Authenticated raster ingestion remains a separate step, so drawn-area flux remains unavailable.
+**Reproduction:** `python3 scripts/ingest/gfw_watch.py --date 2026-11-25`. Future refreshes must select an available dataset version and rebuild/deploy; the snapshot does not silently refresh. No user boundary is sent to GFW. The public CSV download succeeded without authentication; absent CORS is handled by offline ingestion. An account subscription alone does not configure a Data API key: none is configured here. Authenticated raster ingestion remains a separate step, so drawn-area flux remains unavailable.
 
 
 ## 17 · What a carbon footprint is — and which footprint this tool measures
@@ -670,35 +628,13 @@ Short answer: a carbon footprint is an emissions account assigned to something y
 
 The [GHG Protocol Corporate Standard](https://ghgprotocol.org/corporate-standard) (revised 2004) divided a company's emissions into three scopes, and the vocabulary stuck far beyond companies. **Scope 1** is what you burn yourself: fuel in owned vehicles and boilers, process emissions, fugitive releases. **Scope 2** is the energy you buy — electricity, steam, heat — accounted with dated grid factors, location-based or market-based, and the choice must be disclosed. **Scope 3** is everything up and down the value chain: the [Corporate Value Chain Standard](https://ghgprotocol.org/corporate-value-chain-scope-3-standard) (2011) names fifteen categories from purchased goods to end-of-life treatment, and in most sectors Scope 3 dominates the total. A product footprint asks the same question per unit of function through life-cycle assessment (ISO 14040/14044; [ISO 14067](https://www.iso.org/standard/71206.html) for the carbon claim). A territorial inventory asks it per country under the IPCC 2006 Guidelines — that is the shape of Thailand's BTR1 (2022), the same report the carbon map carries as a cross-check. Consumption-based accounting then reassigns trade: the emissions of imported goods follow the importer, not the exporter.
 
-<div class="station-strip">
-<div class="station">
-<b>This tool: none</b>
-<h4>Corporate inventory</h4>
-<p>GHG Protocol + ISO 14064-1 · tCO₂e per year by scope · reporting year</p>
-</div>
-<div class="station">
-<b>This tool: none</b>
-<h4>Product footprint</h4>
-<p>ISO 14067 via LCA · tCO₂e per functional unit · life cycle</p>
-</div>
-<div class="station">
-<b>This tool: cross-check beside the map</b>
-<h4>Territorial inventory</h4>
-<p>IPCC 2006 · Thailand's BTR1 (2022) · MtCO₂e per year · calendar year</p>
-</div>
-<div class="station">
-<b>This tool: the tool itself</b>
-<h4>Landscape screening</h4>
-<p>Open data · tCO₂e stock · tCO₂e/yr flux · each dataset's own period</p>
-</div>
-<div class="station">
-<b>This tool: arithmetic for supplied measurements only</b>
-<h4>Credit project</h4>
-<p>T-VER-S-METH-13-01 v2 · tCO₂e over a monitoring period · baseline → monitoring date</p>
-</div>
-</div>
-
-<p>The scopes, in one paragraph each: <strong>Scope 1</strong> is what you burn yourself — fuel in owned vehicles and boilers, process emissions, fugitive releases. <strong>Scope 2</strong> is the energy you buy — electricity, steam, heat — accounted with dated grid factors, location-based or market-based, and the choice must be disclosed. <strong>Scope 3</strong> is everything up and down the value chain: fifteen categories from purchased goods to end-of-life treatment, and in most sectors Scope 3 dominates the total. A product footprint asks the same question per unit of function through life-cycle assessment. A territorial inventory asks it per country under the IPCC 2006 Guidelines — that is the shape of Thailand's BTR1 (2022), the same report the carbon map carries as a cross-check. Consumption-based accounting then reassigns trade: the emissions of imported goods follow the importer, not the exporter.</p>
+| Footprint | Governing standard | Unit | Period | This tool's role |
+|---|---|---|---|---|
+| Corporate inventory | GHG Protocol Corporate + Scope 3 · ISO 14064-1:2018 | tCO₂e per year, by scope | Reporting year | None — no activity data is collected here |
+| Product footprint | ISO 14067:2018 via LCA (ISO 14040/14044) | tCO₂e per functional unit | Life cycle | None |
+| Territorial inventory | IPCC 2006 Guidelines · Thailand's BTR1 (2022) | MtCO₂e per year | Calendar year | Cross-check table beside the map |
+| Landscape screening | This workbench, from open data | tCO₂e stock · tCO₂e/yr flux | Each dataset's own period | The tool itself |
+| Credit project | T-VER-S-METH-13-01 v2 (or the fitting method) | tCO₂e over a monitoring period | Baseline → monitoring date | Arithmetic for supplied measurements only |
 
 ```mermaid
 flowchart LR
@@ -791,8 +727,6 @@ Short answer: a credit is a registry entry with a serial number, a vintage and a
 | Retirement | Status: available → used, permanently | Serial, vintage, the period it was measured over | Registry retirement records |
 | Claim | A public statement attaches to the retirement | Scope and period of the claim must match the unit's | The claimant's report, audited against the registry |
 
-<p><strong>Issuance</strong> is where units come into existence: a qualified party verifies measured change against an approved methodology, and the registry mints units carrying a vintage (the monitoring period) and serials. Issued is not the same as sold, and sold is not the same as used — the T-VER snapshot in this tool shows the gap plainly: 257 registered projects, 31 with credits certified at all. <strong>Holding and transfer</strong> move ownership between registry accounts; a transfer changes who owns the argument, not the atmosphere. Double-claiming risk lives here, which is why serials exist: one unit, one claim, ever. <strong>Retirement</strong> (or cancellation) marks a unit permanently used — a held unit is an asset, a retired unit is a spent one. <strong>The claim</strong> is what the retiree then says in public, and it is the station where the market's confusion concentrates.</p>
-
 ```mermaid
 flowchart LR
  A["Monitoring period: measured, dated change"] --> B["Verification by a qualified party"]
@@ -808,11 +742,11 @@ A vintage names the monitoring period the tonnes were measured over; a 2020-vint
 
 ### Article 6, in one honest paragraph
 
-The Paris Agreement's Article 6 lets countries cooperate: 6.2 governs bilaterally traded internationally transferred mitigation outcomes (ITMOs), 6.4 defines a new central crediting mechanism, and both require **corresponding adjustments** so the selling country's inventory does not count the same tonnes its buyer claims — double counting between countries, not just between companies. Thailand's side of this machinery lives in its FREL and its BTR submissions, both referenced elsewhere in this notebook. The workbench displays none of it: Article 6 is context for reading national claims, not a calculation any map can perform.
+Article 6.2 supports cooperative approaches and international transfers of mitigation outcomes; Article 6.4 establishes a separate crediting mechanism. Authorized international use requires the applicable authorization, reporting and corresponding-adjustment rules; not every issued or voluntary credit automatically qualifies. A corresponding adjustment changes the **NDC accounting emissions balance**, not the physical national greenhouse-gas inventory. See the [UNFCCC Article 6.2 reference manual, version 3 (April 2025)](https://unfccc.int/sites/default/files/resource/Article_6.2_Reference_Manual.pdf). A forest reference level or BTR alone is not a project authorization. Here Article 6 is context for evaluating a claim, not a calculation or eligibility decision performed by the map. Checked 25 November 2026.
 
 ### The claim discipline
 
-A retirement is permanent; the claim built on it is a separate artefact with its own rules. Offsetting-style claims ("this product is carbon neutral") require the retirement to match the claimed scope and period, and must follow the claim language their framework allows — [ISO 14068-1:2023](https://www.iso.org/standard/43279.html) now governs carbon-neutrality claims and phases them toward net-zero transition claims, and the GHG Protocol is revising how market instruments interact with scope accounting. Contribution-style claims ("we funded the restoration of X hectares, expected to remove Y tonnes over Z years") are the more defensible shape: they describe a funding act, not a cancelled debt. Five questions audit any credit claim: which registry, which serial and vintage, retired or merely held, does the claimed scope and period match the unit, and who verified the underlying change. A claim that cannot answer all five is a story, not an accounting entry.
+A retirement is permanent; the claim built on it is a separate artefact with its own rules. Offsetting-style claims ("this product is carbon neutral") require the retirement to match the claimed scope and period, and must follow the claim language their framework allows — [ISO 14068:2026](https://www.iso.org/standard/14068) addresses carbon neutrality, prioritizing emission reductions and value-chain removals before offsetting. ISO reports that this September 2026 edition replaces ISO 14068-1:2023 by changing its title and number, with the remaining content unchanged. It does not establish net-zero requirements. This public-catalogue check is not a compliance opinion (25 November 2026). Contribution-style claims ("we funded the restoration of X hectares, expected to remove Y tonnes over Z years") are the more defensible shape: they describe a funding act, not a cancelled debt. Five questions audit any credit claim: which registry, which serial and vintage, retired or merely held, does the claimed scope and period match the unit, and who verified the underlying change. A claim that cannot answer all five is a story, not an accounting entry.
 
 ### Where this tool stops
 
@@ -844,8 +778,8 @@ Each original response is hashed and cached outside the public site. The public 
 
 ### Source versions / รุ่นข้อมูล
 
-- [FAO forest area / WDI AG.LND.FRST.K2](https://data.worldbank.org/indicator/AG.LND.FRST.K2) and [forest share AG.LND.FRST.ZS](https://data.worldbank.org/indicator/AG.LND.FRST.ZS): 2023 observations; WDI 2026-10-08; CC BY 4.0.
-- [EDGAR / IEA / WDI EN.GHG.CO2.MT.CE.AR5](https://data.worldbank.org/indicator/EN.GHG.CO2.MT.CE.AR5): 2023; CO₂ excluding LULUCF; WDI 2026-10-08; CC BY 4.0.
+- [FAO forest area / WDI AG.LND.FRST.K2](https://data.worldbank.org/indicator/AG.LND.FRST.K2) and [forest share AG.LND.FRST.ZS](https://data.worldbank.org/indicator/AG.LND.FRST.ZS): 2023 observations; WDI 2026-11-11; CC BY 4.0.
+- [EDGAR / IEA / WDI EN.GHG.CO2.MT.CE.AR5](https://data.worldbank.org/indicator/EN.GHG.CO2.MT.CE.AR5): 2023; CO₂ excluding LULUCF; WDI 2026-11-11; CC BY 4.0.
 - [GFW carbonflux_adm1_summary v20260327](https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327): forest carbon flux v1.4.3; 2001–2025; source threshold 30; CC BY 4.0.
 - [Natural Earth v5.1.2, 1:50m countries](https://github.com/nvkelso/natural-earth-vector/tree/v5.1.2): public-domain orientation geometry.
 - [Download exact results, source URLs, hashes and checks](data/sea/snapshot.json). [Rebuild script](https://github.com/Nonarkara/carbon/blob/main/scripts/ingest/southeast_asia.py).

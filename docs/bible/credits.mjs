@@ -2,10 +2,10 @@ import {readFileSync} from 'node:fs';
 const read=p=>readFileSync(new URL(p,import.meta.url),'utf8');
 const specs=[
  ['sea-what-is-a-credit','A carbon credit, from the smoke upwards','เครดิตคาร์บอน ตั้งแต่ควันจนถึงตั๋วใบที่ซื้อขาย','Burn, then atmosphere, then the record that can be traded.','เผาไหม้ แล้วบรรยากาศ แล้วบันทึกที่ซื้อขายได้',['sea-market','sea-market-data']],
- ['sea-borders','How a credit crosses a border without being counted twice','เครดิตข้ามพรมแดนโดยไม่ถูกนับซ้ำ','Two national inventories, one corresponding adjustment, one tonne.','บัญชีสองประเทศ การปรับสมดุลหนึ่งครั้ง โทนเดียว',['sg-art6','sg-th-ia','accf']],
+ ['sea-borders','How a credit crosses a border without being counted twice','เครดิตข้ามพรมแดนโดยไม่ถูกนับซ้ำ','Two NDC accounting balances, one transfer, one tonne.','ดุลบัญชี NDC สองประเทศ การโอนหนึ่งครั้ง คาร์บอนหนึ่งตัน',['sg-art6','sg-th-ia','unfccc-art6-manual','sg-icc-criteria','sg-icc-rollover','accf']],
  ['sea-industry','Where Southeast Asia\'s credits come from, and what that changes','เครดิตของเอเชียตะวันออกเฉียงใต้มาจากไหน และเปลี่ยนอะไร','Issuance by country, then the projects the market has not built.','การออกเครดิตรายประเทศ แล้วหมวดที่ตลาดยังไม่สร้าง',['sea-market','sea-market-data','acmf-vcm']]
 ];
-export const creditChapters=specs.map(([id,en,th,se,st,sources])=>{const [bodyEn,bodyTh]=read(`./sea/${id}.md`).split('\n<!-- TH -->\n');if(!bodyTh)throw Error('Missing Thai '+id);return {id,group:'credits',title:{en,th},summary:{en:se,th:st},body:{en:bodyEn,th:bodyTh},sources,reviewed:'2026-10-20',related:id==='sea-what-is-a-credit'?['sea-borders','sea-industry','credits','scopes','fossil','atmosphere']:id==='sea-borders'?['sea-what-is-a-credit','sea-industry','credits','offsets','sea-governance']:['sea-what-is-a-credit','sea-borders','credits','sea-ecosystems'],diagram:{en:['Start from the physics of burning','Measure the change against a baseline','Pass independent review','Issue once, on a single registry'],th:['เริ่มจากฟิสิกส์ของการเผาไหม้','วัดการเปลี่ยนแปลงเทียบกรณีฐาน','ผ่านการทวนสอบอิสระ','ออกครั้งเดียว ในทะเบียนเดียว']}};});
+export const creditChapters=specs.map(([id,en,th,se,st,sources])=>{const [bodyEn,bodyTh]=read(`./sea/${id}.md`).split('\n<!-- TH -->\n');if(!bodyTh)throw Error('Missing Thai '+id);return {id,group:'credits',title:{en,th},summary:{en:se,th:st},body:{en:bodyEn,th:bodyTh},sources,reviewed:id==='sea-borders'?'2026-11-25':'2026-10-20',related:id==='sea-what-is-a-credit'?['sea-borders','sea-industry','credits','scopes','fossil','atmosphere']:id==='sea-borders'?['sea-what-is-a-credit','sea-industry','credits','offsets','sea-governance']:['sea-what-is-a-credit','sea-borders','credits','sea-ecosystems'],diagram:{en:['Start from the physics of burning','Measure the change against a baseline','Pass independent review','Issue once, on a single registry'],th:['เริ่มจากฟิสิกส์ของการเผาไหม้','วัดการเปลี่ยนแปลงเทียบกรณีฐาน','ผ่านการทวนสอบอิสระ','ออกครั้งเดียว ในทะเบียนเดียว']}};});
 
 const market=JSON.parse(read('../../public/data/sea/carbon-market.json'));
 const snap=JSON.parse(read('../../public/data/sea/snapshot.json'));
@@ -76,7 +76,7 @@ export function creditFigures(lang){
 ${[['วัดได้','มีตัวเลขและวันที่'],['ลด/กักเก็บ','เทียบกับกรณีฐาน'],['ทวนสอบ','หน่วยงานอิสระตรวจซ้ำ'],['ทะเบียน','บันทึกที่เดียว'],['ออก','หลังผ่านทุกขั้น']].map((r,i)=>`<rect x="${34+i*110}" y="${52}" width="98" height="38" fill="#1643c5"/><text x="${83+i*110}" y="${68}" font-size="11" fill="#fff" text-anchor="middle" font-weight="600">${r[0]}</text><text x="${83+i*110}" y="${83}" font-size="9" fill="#fff" text-anchor="middle">${r[1]}</text>`).join('')}
 <rect x="16" y="118" width="568" height="196" fill="#fff" stroke="#161616" stroke-width="2"/>
 <text x="32" y="142" font-size="12" font-weight="600">สิ่งที่แต่ละข้อกันไม่ให้เกิด</text>
-${[['ไม่มีวันที่','แผนลอย ๆ ที่ไม่มีตัวเลข'],['ไม่มีกรณีฐาน','ให้เครดิตสิ่งที่จะเกิดอยู่แล้ว'],['ไม่มีผู้ตรวจ','เชื่อสเปรดชีตของผู้พัฒนาเอง'],['ไม่มีทะเบียน','ผู้ซื้อสองรายอ้างโทนเดียวกัน'],['ออกเร็วเกินไป','เครดิตของสิ่งที่ยังไม่เกิดขึ้น']].map((r,i)=>{const y=160+i*30;return `<rect x="34" y="${y}" width="530" height="24" fill="${i%2?'#f7f7f5':'#fff'}" stroke="#ccccca"/><text x="44" y="${y+16}" font-size="11" font-weight="600">${r[0]}</text><text x="180" y="${y+16}" font-size="11" fill="#383838">${r[1]}</text>`;}).join('')}`);
+${[['ไม่มีวันที่','แผนลอย ๆ ที่ไม่มีตัวเลข'],['ไม่มีกรณีฐาน','ให้เครดิตสิ่งที่จะเกิดอยู่แล้ว'],['ไม่มีผู้ตรวจ','เชื่อสเปรดชีตของผู้พัฒนาเอง'],['ไม่มีทะเบียน','ผู้ซื้อสองรายอ้างหนึ่งตันกัน'],['ออกเร็วเกินไป','เครดิตของสิ่งที่ยังไม่เกิดขึ้น']].map((r,i)=>{const y=160+i*30;return `<rect x="34" y="${y}" width="530" height="24" fill="${i%2?'#f7f7f5':'#fff'}" stroke="#ccccca"/><text x="44" y="${y+16}" font-size="11" font-weight="600">${r[0]}</text><text x="180" y="${y+16}" font-size="11" fill="#383838">${r[1]}</text>`;}).join('')}`);
  }else{
   out['credit-physics']=fig('From burning to a changed energy balance',
   `<defs><marker id="aA" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#161616"/></marker><marker id="aB" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#bd251b"/></marker></defs>
@@ -136,44 +136,44 @@ ${[['No date','an intention with no number'],['No baseline','crediting what was 
  // --- Corresponding adjustment: the same arithmetic diagram in both languages, drawn from the treaty text.
  const host=th?'ประเทศ ย (เจ้าบ้าน / ผู้ขาย)':'Country Y (host / seller)',buyer=th?'ประเทศ ข (ผู้ซื้อ)':'Country X (buyer)';
  const rows=th?
-  [['1. โครงการลด 5 tCO₂e','นับเป็นการดูดกลับ 5','—'],
-   ['2. อนุญาตให้โอน','อนุญาตการขาย','—'],
-   ['3. การปรับสมดุล','เพิ่มกลับ 5 เข้าบัญชีตน','—'],
-   ['4. โอนเครดิต','ออกเครดิต','—'],
-   ['5. ปรับสมดุลฝ่ายรับ','—','หัก 5 ออกจากบัญชีตน'],
-   ['6. ใช้เพื่อเดินหน้าเป้าหมาย','นับซ้ำไม่ได้','นับเข้าเดินหน้าได้']]:
-  [['1. Project reduces 5 tCO₂e','counts 5 as a removal','—'],
-   ['2. Authorises the transfer','authorises the sale','—'],
-   ['3. Corresponding adjustment','adds 5 back to its inventory','—'],
-   ['4. Credit transfers','issues the credit','—'],
-   ['5. Receiving-side adjustment','—','subtracts 5 from its inventory'],
-   ['6. Used toward the target','cannot also count it','counts it toward commitment']];
- out['border-article6']=fig(th?'การปรับสมดุลตามข้อ 6: โทนเดียว นับได้ครั้งเดียว':'Article 6 corresponding adjustment: one tonne, counted once',
+  [['1. เกิดผลลดก๊าซ 5 tCO₂e','ลดหรือดูดกลับจริง 5','—'],
+   ['2. ทวนสอบและออกหน่วย','ทะเบียนตามกติกาโครงการ','—'],
+   ['3. อนุญาตการโอน','อนุญาตวัตถุประสงค์การใช้','—'],
+   ['4. ปรับเมื่อโอนครั้งแรก','ดุลการปล่อย NDC +5','—'],
+   ['5. ผู้ซื้อใช้ตาม NDC','—','ดุลการปล่อย NDC −5'],
+   ['6. บัญชีก๊าซทางกายภาพ','ไม่เปลี่ยนเพราะการโอน','ไม่เปลี่ยนเพราะการโอน']]:
+  [['1. Mitigation of 5 tCO₂e','reduces or removes 5','—'],
+   ['2. Verified units issued','programme registry','—'],
+   ['3. Host authorises transfer','authorised purpose of use','—'],
+   ['4. First-transfer adjustment','NDC emissions balance +5','—'],
+   ['5. Buyer uses toward NDC','—','NDC emissions balance −5'],
+   ['6. Physical GHG inventory','unchanged by transfer','unchanged by transfer']];
+ out['border-article6']=fig(th?'การปรับสมดุลตามข้อ 6: หนึ่งตัน นับได้ครั้งเดียว':'Article 6 corresponding adjustment: one tonne, counted once',
  `<text x="60" y="26" font-size="12" font-weight="600">${esc(host)}</text><text x="380" y="26" font-size="12" font-weight="600">${esc(buyer)}</text>
 <rect x="16" y="36" width="568" height="188" fill="#fff" stroke="#161616" stroke-width="2"/>
 <line x1="316" y1="36" x2="316" y2="224" stroke="#161616" stroke-width="1.5"/>
 ${rows.map((r,i)=>{const y=48+i*29;const key=(i===2||i===4);return `<rect x="22" y="${y}" width="566" height="26" fill="${key?(i===2?'#ffdf00':'#1643c5'):'#f7f7f5'}"/><text x="30" y="${y+17}" font-size="10.5" font-weight="600"${key&&i===4?' fill="#fff"':''}>${r[0]}</text><text x="176" y="${y+17}" font-size="10"${key&&i===4?' fill="#fff"':''}>${r[1]}</text><text x="330" y="${y+17}" font-size="10"${key&&i===4?' fill="#fff"':''}>${r[2]}</text>`;}).join('')}
 <rect x="16" y="238" width="568" height="92" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/>
 <text x="30" y="260" font-size="12" font-weight="600">${th?'สิ่งที่ไม่เปลี่ยน':'What did not change'}</text>
-<text x="30" y="280" font-size="11">${th?'ไม่มีการปล่อย ไม่มีการดูดซับ บรรยากาศไม่เปลี่ยน':'Nothing was emitted. Nothing was absorbed. The atmosphere did not change.'}</text>
+<text x="30" y="280" font-size="11">${th?'การโอนเองไม่ปล่อยหรือดูดก๊าซเพิ่ม ผลกายภาพมาจากโครงการ':'The transfer itself emits or removes nothing; mitigation happens in the project.'}</text>
 <text x="30" y="298" font-size="11" font-weight="600">${th?'สิ่งที่เปลี่ยนคือ “สิทธิ์ในการนับ” ไม่ใช่สภาพแวดล้อม':'What moved is permission to count — not the environment.'}</text>
-<text x="30" y="313" font-size="9.5">${th?'เลขาธิการการตลาดคาร์บอนสิงคโปร์ (แนบ ข้อตกลงไทย–สิงคโปร์) ระบุคณิตนี้ไว้ตรง ๆ':'Singapore Carbon Markets Cooperation, Annex C to the Singapore–Thailand Implementation Agreement'}</text>`,th?'การปรับสมดุลเป็นการกระทำทางบัญชี ไม่ใช่การกระทำต่อสิ่งแวดล้อม':'A corresponding adjustment is an accounting act, not an environmental one.');
+<text x="30" y="313" font-size="9.5">${th?'UNFCCC คู่มือข้อ 6.2 · ตัวอย่างการใช้ตาม NDC ไม่ใช่ลำดับบังคับของทุกโครงการ':'UNFCCC Article 6.2 manual · NDC-use example, not a universal issuance sequence'}</text>`,th?'ปรับดุลการปล่อยตาม NDC ไม่แก้บัญชีก๊าซทางกายภาพ การใช้เพื่อวัตถุประสงค์อื่นมีกติกาเฉพาะ':'Adjust the NDC emissions balance, not the physical inventory. Other authorised uses have their own rules.');
 
  const iaRows=market.article6.singapore_ias.filter(r=>r.region==='asean');
- out['border-ledger']=fig(th?'ข้อตกลงข้อ 6 ของสิงคโปร์: อาเซียนมีสี่ มีผลบังคับใช้หนึ่ง':"Singapore's Article 6 agreements: four ASEAN, one in force",
+ out['border-ledger']=fig(th?`คู่เจรจาข้อ 6 ของสิงคโปร์: อาเซียน ${iaRows.length} ระบุมีผล ${iaRows.filter(r=>r.status==='entered_into_force').length}`:`Singapore Article 6 partners: ${iaRows.length} ASEAN, ${iaRows.filter(r=>r.status==='entered_into_force').length} marked in force`,
  `<rect x="16" y="14" width="568" height="120" fill="#fff" stroke="#161616" stroke-width="2"/>
-<text x="30" y="32" font-size="12" font-weight="600">${th?'ประเทศอาเซียนที่ลงนามกับสิงคโปร์':'ASEAN countries signed with Singapore'}</text>
-${iaRows.map((r,i)=>{const y=42+i*16;const live=r.status==='entered_into_force';return `<text x="34" y="${y+10}" font-size="11" font-weight="600">${esc(r.country)}</text><rect x="${live?200:296}" y="${y}" width="${live?96:86}" height="14" fill="${live?'#1643c5':'#f0f0ee'}" stroke="#161616"/><text x="${live?248:339}" y="${y+11}" font-size="9.5" text-anchor="middle" fill="${live?'#fff':'#161616'}">${live?(th?'มีผลบังคับใช้':'In force'):(th?'ยังไม่มีผล':'Not yet in force')}</text>`;}).join('')}
-<text x="30" y="119" font-size="9.5" fill="#383838">${th?'ทั้งสิบสองประเทศนอกอาเซียน: ภูฎี ชิลี กานา มองโกเลีย เปรู รวันดา ปาปัวนิวกินี ปารากวาย (7 มีผล, 2 ยังไม่มีผล)':'The other eight: Bhutan, Chile, Ghana, Mongolia, Peru, Rwanda in force; Papua New Guinea, Paraguay signed'}</text>
+<text x="30" y="32" font-size="12" font-weight="600">${th?'รายชื่อเจรจาสรุปสาระสำคัญหรือลงนาม · 20 พ.ย. 2026':'Negotiations concluded or IA signed · publisher 20 Nov 2026'}</text>
+${iaRows.map((r,i)=>{const y=42+i*16;const live=r.status==='entered_into_force';return `<text x="34" y="${y+10}" font-size="11" font-weight="600">${esc(r.country)}</text><rect x="200" y="${y}" width="350" height="14" fill="${live?'#1643c5':'#f0f0ee'}" stroke="#161616"/><text x="210" y="${y+11}" font-size="9.5" fill="${live?'#fff':'#161616'}">${live?(th?'ผู้เผยแพร่ระบุว่ามีผลบังคับใช้':'Publisher marks entered into force'):(th?'มีชื่อ แต่ไม่ได้ระบุว่ามีผลบังคับใช้':'Listed; not marked entered into force')}</text>`;}).join('')}
+<text x="30" y="119" font-size="9.5" fill="#383838">${th?'รายชื่อรวม 14 ประเทศ ไม่ใช่หลักฐานว่าลงนามครบ 14 ข้อตกลง':'14 partners in a grouped list does not prove 14 signed agreements'}</text>
 <rect x="16" y="140" width="568" height="96" fill="#fff4d6" stroke="#161616" stroke-width="2"/>
-<text x="30" y="162" font-size="12" font-weight="600">${th?'ข้อตกลงนี้มีผลต่อราคาจริง':'An agreement changes what a credit is worth'}</text>
-<text x="30" y="184" font-size="11">${th?'เครดิตจากโครงการในประเทศที่ไม่มีข้อตกลง หักลดภาระภาษีคาร์บอนไม่ได้เลย':'Credits from a country without an agreement cannot offset carbon tax at all.'}</text>
-<text x="30" y="204" font-size="11">${th?'เครดิตที่เข้าเกณฑ์ หักลดภาระภาษีได้ไม่เกิน 5% ต่อปี':'Eligible credits may cover only 5% of tax liability per year.'}</text>
-<text x="30" y="221" font-size="9.5" fill="#383838">${th?'กรอบเครดิตคาร์บอนระหว่างประเทศของสิงคโปร์':'Singapore International Carbon Credit framework'}</text>
+<text x="30" y="162" font-size="12" font-weight="600">${th?'ข้อตกลงเป็นเงื่อนไขหนึ่ง ยังต้องตรวจเครดิตแต่ละหน่วย':'An IA is one gate; each credit still needs eligibility checks'}</text>
+<text x="30" y="184" font-size="11">${th?'กรอบ ICC สิงคโปร์ต้องมี IA และผ่านเกณฑ์ การอนุญาต และการส่งมอบ':'Singapore ICC use requires an IA, eligibility, authorisation and surrender.'}</text>
+<text x="30" y="204" font-size="11">${th?'โควตาฐาน 5% ของการปล่อยที่เสียภาษี ไม่ใช่ 5% ของเงินภาษี':'Base quota: 5% of taxable emissions, not 5% of the monetary tax bill.'}</text>
+<text x="30" y="221" font-size="9.5" fill="#383838">${th?'โควตาปี 2025 ที่เหลือยกไปปี 2026 ได้ ตรวจคำแนะนำล่าสุดก่อนใช้':'Unused 2025 quota may carry into 2026; check current guidance before use'}</text>
 <rect x="16" y="242" width="568" height="94" fill="#edf1ff" stroke="#1643c5" stroke-width="2"/>
-<text x="30" y="264" font-size="12" font-weight="600">${th?'ทำไมไทยถึงสำคัญเป็นพิเศษ':'Why Thailand matters here'}</text>
-<text x="30" y="285" font-size="11">${th?'ไทยเป็นประเทศอาเซียนเพียงประเทศเดียวที่ข้อตกลงมีผลแล้ว (19 ส.ค. 2568)':'Thailand is the only ASEAN country with an agreement in force (19 Aug 2025).'}</text>
-<text x="30" y="305" font-size="11">${th?'และเป็นประเทศเดียวในระบบนี้ที่มีทะเบียนโครงการสาธารณะ จึงตรวจสอบได้':'It is also the only country here with a public project registry — which is why this tool can show T-VER projects at all.'}</text>
+<text x="30" y="264" font-size="12" font-weight="600">${th?'ทำไมเครื่องมือนี้แสดงทะเบียนไทย':'Why this tool shows the Thai registry'}</text>
+<text x="30" y="285" font-size="11">${th?'ไทย ลาว และเวียดนามถูกระบุว่ามีผลแล้ว ณ วันที่ตรวจ':'Thailand, Lao PDR and Vietnam are marked in force at this check.'}</text>
+<text x="30" y="305" font-size="11">${th?'ระบบเชื่อมชุดข้อมูล T-VER เท่านั้น ไม่ได้สรุปว่าประเทศอื่นไม่มีทะเบียน':'Only T-VER is integrated here; this does not mean other countries lack registries.'}</text>
 <text x="30" y="321" font-size="9.5" fill="#383838">${th?'ACCF เป็นกรอบของสมาคมธุรกิจ ไม่ใช่อนุสัญญาอาเซียน และไม่ไล่หาความเป็นเอกฉันท์':'The ACCF is an industry framework, not an ASEAN treaty, and does not seek uniformity.'}</text>`,th?'สถานะข้อตกลงเปลี่ยนได้ตลอดเวลา ตรวจสอบก่อนอ้างอิงเสมอ':'Agreement status is time-sensitive. Re-check before citing.');
 
  // Regional issuance, drawn from the deployed market JSON.

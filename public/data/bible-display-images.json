@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "generator": "scripts/optimize-bible-images.py",
+  "images": [
+    {
+      "id": "grinnell",
+      "path": "images/bible/grinnell-display.webp",
+      "width": 842,
+      "height": 544,
+      "bytes": 112470,
+      "sha256": "68a15f3d6112fbde8b2830ad29b80af6adab102c34b53d8f4018faadc02d51af",
+      "sourceSha256": "69250638a795638374facab040e9510fd332443886176001b9d4d09d893dcd06",
+      "modifications": "Display derivative: max 1200px, WebP quality84; original downloadable unchanged"
+    },
+    {
+      "id": "lake-mead",
+      "path": "images/bible/lake-mead-display.webp",
+      "width": 720,
+      "height": 650,
+      "bytes": 136368,
+      "sha256": "e7c553273c7ac7e019fe2628eed4c55b020a8de2a0ff767dcf69b0bd537ea8aa",
+      "sourceSha256": "49af249f7d673ad4e5dd27505a034b5c56f7e0e212abb8d820803e9d419b2de8",
+      "modifications": "Display derivative: max 1200px, WebP quality84; original downloadable unchanged"
+    },
+    {
+      "id": "coral",
+      "path": "images/bible/coral-display.webp",
+      "width": 1200,
+      "height": 900,
+      "bytes": 242052,
+      "sha256": "4bb19f945652842727602d45321e7ba685783b89948700d7f012ec61116929f3",
+      "sourceSha256": "ccce677d4b7cd47f351cd503392f38c52bd82ce1ef855b1e83582d638a8732f3",
+      "modifications": "Display derivative: max 1200px, WebP quality84; original downloadable unchanged"
+    }
+  ]
+}

@@ -80,3 +80,42 @@ test('a real failure is not retried, even when a retry is allowed', async () => 
   assert.notEqual(code, 0);
   assert.equal(attempts(path), 1, 'a real failure is tried once');
 });
+
+test('cancellation stops only owned descendants and is recorded without retry', async () => {
+  const {spawn} = await import('node:child_process');
+  const innocent = spawn(process.execPath, ['-e', 'setInterval(()=>{},1000)'], {stdio: 'ignore'});
+  const path = marker();
+  const controller = new AbortController();
+  let receipt;
+  try {
+    const running = run(process.execPath, ['-e', `
+      const {spawn}=require('node:child_process');
+      const child=spawn(process.execPath,['-e','setInterval(()=>{},1000)'],{stdio:'inherit'});
+      require('node:fs').writeFileSync(process.env.CARBON_RELEASE_RUN_MARKER, String(child.pid));
+      setInterval(()=>{},1000);
+    `], {signal: controller.signal, label: 'owned cancellation fixture', retryOnceOn: INTERRUPTED, onResult: value => { receipt = value; }});
+    for (let i = 0; i < 100 && !existsSync(path); i++) await new Promise(resolve => setTimeout(resolve, 20));
+    assert.ok(existsSync(path), 'owned descendant started');
+    const childPid = Number(readFileSync(path, 'utf8'));
+    controller.abort();
+    assert.equal(await running, 130);
+    assert.equal(receipt.cancelled, true);
+    assert.equal(receipt.attempts, 1);
+    assert.doesNotThrow(() => process.kill(innocent.pid, 0), 'unrelated runner stays alive');
+    // The OS can briefly retain a terminated child as a zombie; ps state distinguishes it
+    // from an executable orphan without sending signals to unrelated processes.
+    const {execFileSync} = await import('node:child_process');
+    let state = '';
+    try { state = execFileSync('ps', ['-o', 'stat=', '-p', String(childPid)], {encoding: 'utf8'}).trim(); } catch {}
+    assert.ok(!state || state.startsWith('Z'), `owned child must be stopped, got ${state}`);
+  } finally {
+    innocent.kill();
+    rmSync(path, {force: true});
+  }
+});
+
+test('cancellation before launch starts no child and a failed executable records failure', async () => {
+  const controller = new AbortController(); controller.abort();
+  assert.equal(await run(process.execPath, ['-e', 'process.exit(0)'], {signal: controller.signal}), 130);
+  assert.equal(await run('carbon-no-such-executable', [], {label: 'missing executable fixture'}), 1);
+});

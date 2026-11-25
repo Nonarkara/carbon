@@ -25,7 +25,7 @@ const one=v=>new Intl.NumberFormat('en-GB',{minimumFractionDigits:1,maximumFract
 assert.equal(await page.locator('#kNet').innerText(),mt(ledger.national.gfw_net_mg_co2e/25));
 assert.ok((await page.locator('.kpis [data-i18n=kNet]').textContent()).startsWith(ledger.national.gfw_net_mg_co2e<0?'Net sink':'Net source'),'the label line names the sign');
 assert.equal(await page.locator('#kFlows').innerText(),`${one(ledger.national.gfw_removals_mg_co2/25)}\u2009/\u2009${one(ledger.national.gfw_emissions_mg_co2e/25)} M`);
-assert.equal(await page.locator('.kpis[data-kpi=carbon] dl').first().locator('dd').getAttribute('id'),'kNet','the answer must be the first tile');
+assert.equal(await page.locator('.kpis[data-kpi=carbon] dl').first().locator('dd:not(.kpi-hint)').getAttribute('id'),'kNet','the answer must be the first tile');
 await page.waitForFunction(()=>document.querySelector('#calculationTrace').textContent.includes('national forest inventory'));
 // The cross-check paragraph that carries "359 t/ha" is appended when the inventory data lands,
 // which is after the trace has already been painted. Waiting on the trace alone reads the panel
@@ -117,7 +117,7 @@ for(const width of [1280,768,390,375]){
  if(width<=700){assert.ok(await page.locator('#kStock').isVisible());await page.waitForFunction(()=>/M/.test(document.querySelector('#kStock').textContent));await page.locator('.bottom-nav [data-tab=project]').click();await page.locator('#example').click();await page.locator('#boundaryInfo').waitFor({state:'visible'});await page.locator('.bottom-nav [data-tab=calculate]').click();await page.locator('[type=submit]').click();assert.match(await page.locator('#result').innerText(),/218\.86/);await page.locator('.bottom-nav [data-view=map]').click();assert.ok(await page.locator('#map').isVisible());}
  await page.screenshot({path:`test-results/viewport-${width}.png`,fullPage:true});
 }
-for(const lang of ['en','th']){await gotoRetry(page, base+`/guide-${lang}.html`);assert.equal(await page.locator('.doc-diagram').count(),3);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
+for(const lang of ['en','th']){await gotoRetry(page, base+`/guide-${lang}.html`);assert.equal(await page.locator('.doc-diagram').count(),[...(await readFile(`docs/GUIDE.${lang}.md`,'utf8')).matchAll(/^```mermaid/gm)].length,'every authored operating diagram is rendered');assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
 // Research opens separately, preserving browser-local project inputs.
 for(const width of [1280,768,375]){
  await page.setViewportSize({width,height:900});

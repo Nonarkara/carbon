@@ -120,3 +120,27 @@ body[data-about]{grid-template-columns:minmax(0,1fr)}body[data-about] .stage,.ab
 .forest-watch h3{font-size:14px;margin:0 0 6px}.watch-answer{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:8px 0}.watch-answer b{font:600 28px var(--num)}.watch-answer span{font-size:12px}
 .watch-confidence{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:8px 0}.watch-confidence div{border:1px solid var(--rule-strong);padding:6px}.watch-confidence dt{font-size:11px}.watch-confidence dd{margin:2px 0 0;font:600 12px var(--num)}
 .forest-watch figure{margin:10px 0}.forest-watch figcaption,.forest-watch details{font-size:11px}.watch-bars{display:grid;grid-template-columns:repeat(30,minmax(0,1fr));align-items:end;gap:2px;height:65px;margin:6px 0;border-bottom:1px solid var(--ink)}.watch-bars i{display:block;background:var(--ink);min-width:0}.forest-watch table{width:100%;font:400 11px var(--num)}.forest-watch th{text-align:left}.watch-ranking{display:grid;gap:3px}.watch-ranking button{display:flex;justify-content:space-between;gap:8px;width:100%;font-size:12px;text-align:left;padding:6px 8px}.watch-links{font-size:11px;overflow-wrap:anywhere}
+
+/* Metadata is a valid second definition, with the same footprint as its former small element. */
+.dashboard .kpis dd.kpi-hint{margin:0;min-height:0;font:inherit;letter-spacing:normal;line-height:inherit}
+
+/* Missing data is a status, not a display-sized quantity. Real results keep the numeric scale. */
+.dashboard .kpis dd[data-status="pending"],.dashboard .kpis dd.unavailable{font:600 var(--text-body)/1.4 var(--font);letter-spacing:normal}
+
+/* Enlarged phone text has its own reading place: complete summaries inside the
+   existing panes, while the map retains the initial working viewport. */
+@media(max-width:700px){
+ body.dashboard[data-large-summary][data-view]:not([data-region]):not([data-about]){height:100dvh;min-height:0;overflow:hidden;box-sizing:border-box;grid-template-rows:auto minmax(0,1fr);padding-bottom:calc(var(--nav-space,64px) - 8px)}
+ body.dashboard[data-large-summary] .tab-body .kpis{grid-template-columns:minmax(0,1fr);margin:8px 0}
+ body.dashboard[data-large-summary] .tab-body .kpis dl{border-left:0;border-right:0}
+ body.dashboard[data-large-summary] .tab-body .kpis dd:not(.kpi-hint){overflow-wrap:normal;word-break:normal;white-space:normal}
+}
+@media(max-width:700px){
+ body.dashboard[data-large-summary][data-view]:not([data-region]):not([data-about])>.stage{height:100%;min-height:0}
+ body.dashboard[data-large-summary][data-view]:not([data-region]):not([data-about]) .stage .map-wrap{height:100%;min-height:0}
+}
+.numeric-token{white-space:nowrap}
+@media(max-width:700px){body.dashboard[data-large-summary] .tab-body .kpis #kStock[data-status="ready"],body.dashboard[data-large-summary] .tab-body .kpis #kNet[data-status="ready"]{white-space:nowrap}}
+/* One quantity-line track keeps the map anchored when panels change. Status text
+   stays body-sized; enlarged-phone readouts live in their panes and need no reservation. */
+.dashboard:not([data-large-summary])>.kpis dd[data-status="pending"],.dashboard:not([data-large-summary])>.kpis dd.unavailable{min-block-size:calc(var(--text-display)*1.4)}

@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "retrievedAt": "2026-10-20T13:25:15.882802+00:00",
+  "retrievedAt": "2026-11-25T13:36:48.802304+00:00",
   "scope": "Eleven geographic Southeast Asian countries",
   "observationYear": 2023,
   "sources": {
     "forest": {
       "name": "FAO / World Bank WDI",
-      "version": "WDI 2026-10-08",
+      "version": "WDI 2026-11-11",
       "indicator": "AG.LND.FRST.K2",
       "period": "2023",
       "unit": "km²",
@@ -16,7 +16,7 @@
     },
     "cover": {
       "name": "FAO / World Bank WDI",
-      "version": "WDI 2026-10-08",
+      "version": "WDI 2026-11-11",
       "indicator": "AG.LND.FRST.ZS",
       "period": "2023",
       "unit": "% of land area",
@@ -26,7 +26,7 @@
     },
     "co2": {
       "name": "EDGAR / IEA / World Bank WDI",
-      "version": "WDI 2026-10-08",
+      "version": "WDI 2026-11-11",
       "indicator": "EN.GHG.CO2.MT.CE.AR5",
       "period": "2023",
       "unit": "Mt CO2e/year (CO2 only)",
@@ -1595,21 +1595,21 @@
   "receipts": {
     "AG.LND.FRST.K2.json": {
       "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/AG.LND.FRST.K2?format=json&date=2000:2023&per_page=1000",
-      "sha256": "fd389e88c307dc1516f31697519435dcef577bfce763e179817e54b068e5169c",
+      "sha256": "0d24b402f565636150c56a0fbcfd12b47027fbf9e9dd5ecb618dd65ad7fac01a",
       "bytes": 53728,
-      "retrievedAt": "2026-10-20T12:07:13.942358+00:00"
+      "retrievedAt": "2026-11-25T13:32:49.593951+00:00"
     },
     "AG.LND.FRST.ZS.json": {
       "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/AG.LND.FRST.ZS?format=json&date=2000:2023&per_page=1000",
-      "sha256": "90f5513520dd0423e6ed87ba428e30617e98c349180a02eb79a0209b6c63e6e6",
+      "sha256": "61c2f93748e4b9d4fef7edde4e4a0650a6dae23b706a45c05896a05f0799a558",
       "bytes": 58246,
-      "retrievedAt": "2026-10-20T12:07:41.710833+00:00"
+      "retrievedAt": "2026-11-25T13:32:51.622687+00:00"
     },
     "EN.GHG.CO2.MT.CE.AR5.json": {
       "url": "https://api.worldbank.org/v2/country/BRN;KHM;IDN;LAO;MYS;MMR;PHL;SGP;THA;TLS;VNM/indicator/EN.GHG.CO2.MT.CE.AR5?format=json&date=2000:2023&per_page=1000",
-      "sha256": "abe59067db69975847d41f285335fc902f387692fc9c24d3f1ceec7c0a738c9a",
+      "sha256": "3ec479e18207a099c94bce74e241e94b3d6ee767988578f07ed7cf4b84394adb",
       "bytes": 67235,
-      "retrievedAt": "2026-10-20T12:08:47.353534+00:00"
+      "retrievedAt": "2026-11-25T13:33:52.453124+00:00"
     },
     "gfw.csv": {
       "url": "https://data-api.globalforestwatch.org/dataset/carbonflux_adm1_summary/v20260327/download/csv?sql=select%20iso%2C%20sum%28%22gfw_full_extent_gross_removals__Mg_CO2%22%29%20as%20removals_mg_co2%2C%20sum%28%22gfw_full_extent_gross_emissions_biomass_soil__Mg_CO2e%22%29%20as%20emissions_mg_co2e%2C%20sum%28%22gfw_full_extent_net_flux__Mg_CO2e%22%29%20as%20net_mg_co2e%20from%20data%20where%20iso%20in%20%28%27BRN%27%2C%27KHM%27%2C%27IDN%27%2C%27LAO%27%2C%27MYS%27%2C%27MMR%27%2C%27PHL%27%2C%27SGP%27%2C%27THA%27%2C%27TLS%27%2C%27VNM%27%29%20and%20is__flux_model_extent%20%3D%20true%20and%20umd_tree_cover_density_2000__threshold%3D30%20group%20by%20iso%20order%20by%20iso",

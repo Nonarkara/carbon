@@ -5,7 +5,7 @@ import {watchRecord,priorityArea,validWatch,renderForestWatch} from '../public/j
 const data=JSON.parse(readFileSync('public/data/gfw/watch.json'));
 const provinces=JSON.parse(readFileSync('public/data/ledger/provinces.json')).provinces;
 test('GFW dated mask, version, source and all 77 province identities travel together',()=>{
- assert.equal(data.version,'v20261005');assert.equal(data.window.days,30);assert.equal(data.mask,'is__tree_cover_2022=true');
+ assert.equal(data.version,'v20261125');assert.equal(data.window.days,30);assert.equal(data.mask,'is__tree_cover_2022=true');
  assert.equal(data.dates[0],data.window.start);assert.ok(data.dates.at(-1)<data.window.endExclusive);
  assert.equal(data.dates.length,30);assert.equal(new Set(data.dates).size,30);
  assert.match(data.rawSha256,/^[a-f0-9]{64}$/);assert.equal(data.licence,'CC BY 4.0');
@@ -28,8 +28,8 @@ test('TH/EN context renders real values, table, five province actions and bounda
  for(const lang of ['th','en']){
   const html=renderForestWatch(data,'TH',{lang,fmt:(v,d)=>v.toFixed(d),esc:s=>s,provinces});
   assert.equal((html.match(/data-watch-province=/g)||[]).length,5);
-  assert.equal((html.match(/<tr>/g)||[]).length,31);assert.ok(html.includes('v20261005'));
-  assert.ok(html.includes('#forest-watch'));assert.ok(html.includes('2026-09-05'));
+  assert.equal((html.match(/<tr>/g)||[]).length,31);assert.ok(html.includes(data.version));
+  assert.ok(html.includes('#forest-watch'));assert.ok(html.includes(data.window.start));
  }
  assert.equal(watchRecord(data,'parcel'),null);
  assert.equal(renderForestWatch(data,'parcel',{}),'');

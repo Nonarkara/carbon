@@ -1,0 +1,20 @@
+{
+  "public/js/app.js": "98ed84b64f7200597ebba47870d9519537c5b4d44e2a1eb1f34a559277f78fc1",
+  "public/js/assessment-session.js": "0fe0e965be3ad27d945a6e2aea5902078543f3dda7dff0f9d41b063433da4f49",
+  "public/js/evidence-task.js": "d81cb0bc37b2fa9aa93cd5f18b85cbddde05734398a8fceb1acc4d8286b1d4e0",
+  "public/js/evidence-worker.js": "ca8c3af978067a6ee4bce54ccb5e302f2c55d616141a68825e7b0df0196dada2",
+  "public/js/data-load.js": "f5fe6fe33497c20a8b04678c8beda97144670bfccd27b39f6937a400508e1b5b",
+  "public/js/source-contracts.js": "80c7e84af46c78e953df184095beeb2c30bc1b26078e32134d5bd82a507218f9",
+  "public/js/source-health.js": "a04fba0915c7e83412c2c26c0fb428d57c6463799f7a1fea1fa72af9a79bc344",
+  "public/js/landscape.js": "6ca39e6bc0fe09fa830fcf78fe4500d9c06a42a94c8d318147bfc93cfbf6813c",
+  "public/js/region-entry.js": "d861396c1be110ca7e2f2582e175b5a9e2b5f992c272c2ed7faef9746c2dea27",
+  "public/js/registry.js": "d8a2f6b93d8952dfdd6f9a063285e8fd5c83f5c5160721ede4367b56561dc0af",
+  "public/js/bible.js": "5b21900b5285c6f5afb04641947fdaa17fe0eba018e2a7beb69662868caef40f",
+  "public/css/app.css": "e54316d7ae814f5adecbbbe456576fd795ed952ae3c0043d8b619feb4868edd2",
+  "public/css/ship.css": "81bae591c02a42c254393293d969ff90e13589a4fd3a846bc77c7efa45445005",
+  "public/css/research.css": "e48200cda1bb9002a6f1466387e4945128e2e3260ba28a02febe4367eaac55bc",
+  "scripts/lib/release-operations.mjs": "3a11e37b272031869a19ba0cf7335b7f39c0f052a6190256cb53f0d07cb129e2",
+  "docs/RESEARCH.th.md": "2d8affaac0828803f590920e22ff6917fdd1399efcc7955e21df25f6d673006d",
+  "docs/RESEARCH.en.md": "ef3648e6d6f8b811ce029eb81b371b23b85e78683425d8e108d345204ea7070c",
+  "public/js/ledger.js": "45d32a4843029c427e795b5cb7804ce05cf21d19e808bfcf6e7bb84f16dcd13f"
+}

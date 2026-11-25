@@ -1,7 +1,9 @@
 // Dated GFW evidence, deliberately separate from the carbon ledger and project inputs.
 export function validWatch(data){
- const record=r=>r&&['nominal','high','highest'].every(k=>Number.isFinite(r.area_ha?.[k])&&r.area_ha[k]>=0)&&Array.isArray(r.daily_ha)&&r.daily_ha.length===30&&r.daily_ha.every(v=>Number.isFinite(v)&&v>=0);
- return data?.schemaVersion===1&&/^v\d{8}$/.test(data.version)&&data.mask==='is__tree_cover_2022=true'&&data.unit==='ha'&&Array.isArray(data.dates)&&data.dates.length===30&&data.dates.every(d=>/^\d{4}-\d{2}-\d{2}$/.test(d))&&data.window?.start===data.dates[0]&&data.window?.endExclusive>data.dates.at(-1)&&record(data.national)&&data.provinces&&Object.keys(data.provinces).length===77&&Object.entries(data.provinces).every(([k,r])=>/^TH\d{2}$/.test(k)&&record(r));
+ const levels=['nominal','high','highest'],sum=a=>a.reduce((s,v)=>s+v,0),close=(a,b)=>Math.abs(a-b)<1e-6;
+ const record=r=>r&&levels.every(k=>Number.isFinite(r.area_ha?.[k])&&r.area_ha[k]>=0&&Number.isInteger(r.pixels?.[k])&&r.pixels[k]>=0)&&Array.isArray(r.daily_ha)&&r.daily_ha.length===30&&r.daily_ha.every(v=>Number.isFinite(v)&&v>=0)&&close(sum(r.daily_ha),sum(levels.map(k=>r.area_ha[k])));
+ if(!(data?.schemaVersion===1&&data.dataset==='gadm__integrated_alerts__adm1_daily_alerts'&&/^v\d{8}$/.test(data.version)&&data.mask==='is__tree_cover_2022=true'&&data.unit==='ha'&&data.licence==='CC BY 4.0'&&Array.isArray(data.dates)&&data.dates.length===30&&data.dates.every((d,i)=>/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number.isFinite(Date.parse(d))&&(!i||Date.parse(d)-Date.parse(data.dates[i-1])===864e5))&&data.window?.days===30&&data.window.start===data.dates[0]&&Date.parse(data.window.endExclusive)-Date.parse(data.dates.at(-1))===864e5&&record(data.national)&&data.provinces&&Object.keys(data.provinces).length===77&&Object.entries(data.provinces).every(([k,r])=>/^TH\d{2}$/.test(k)&&record(r))))return false;
+ return levels.every(k=>close(sum(Object.values(data.provinces).map(r=>r.area_ha[k])),data.national.area_ha[k])&&sum(Object.values(data.provinces).map(r=>r.pixels[k]))===data.national.pixels[k]);
 }
 export function watchRecord(data,pcode){return pcode==='TH'?data.national:data.provinces[pcode]||null;}
 export function priorityArea(record){return record.area_ha.high+record.area_ha.highest;}

@@ -37,7 +37,7 @@ for(const lang of ['th','en'])for(const width of [320,370,375,700,701,768,1440])
   for(const [key,field] of Object.entries(FIELDS)){
    const row=page.locator(`#countryNumbers div[data-number="${key}"]`);
    assert.equal(await row.count(),1,`${iso}: the country panel has no ${key} row`);
-   const value=(await row.locator('dd').innerText()).trim(),note=(await row.locator('small').innerText()).trim();
+   const value=(await row.locator('dd:not(.source-note)').innerText()).trim(),note=(await row.locator('small').innerText()).trim();
    assert.ok(/\d{4}/.test(note),`${iso} ${key}: the source note carries no period, got "${note}"`);
    const raw=iso==='SEA'?(snap.totals[field].value):c[field];
    if(raw===null||raw===undefined){

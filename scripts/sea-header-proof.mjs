@@ -59,7 +59,7 @@ try{for(const lang of ['th','en'])for(const [width,height]of WIDTHS){
  assert.equal(reset.lines,1,`reset label wraps at ${width}px: ${reset.text}`);
  assert.ok(reset.need<=reset.box,`reset label ${reset.need}px does not fit its ${reset.box}px box at ${width}px`);
  // A shortened label must keep the whole phrase where a pointer or a screen reader can reach it.
- if(reset.text!==reset.title)assert.ok(reset.title.length>reset.text.length&&reset.aria===reset.title,`reset label "${reset.text}" loses its full phrase`);
+ if(reset.text!==reset.title)assert.ok(reset.title.length>reset.text.length&&reset.aria?.includes(reset.title)&&reset.aria?.startsWith(reset.text),`reset label "${reset.text}" loses its full phrase`);
  // The same view must carry the same name on every screen. A reader who changes device meets
  // one thing under two words, and the one word the phone can afford is the one that must win.
  const names=await page.evaluate(()=>{const out={};for(const o of document.querySelector('#seaView').options){const btn=document.querySelector(`button[data-sea-view="${o.value}"]`);out[o.value]={select:o.text,button:btn?btn.textContent:null};}return out;});

@@ -1,0 +1,32 @@
+{
+  "reviewDate": "2026-11-25",
+  "freshGfwAttempt": "HTTP504 during existing southeast_asia.py GFW country query; rejected before publication",
+  "decision": "Fresh WDI releases plus unchanged-version SHA-verified last-good GFW/NaturalEarth files. Original per-file retrievaldates preserved, not relabelled as fresh.",
+  "reused": [
+    {
+      "file": "gfw.csv",
+      "sha256": "a503108b2be248d9c719a2bb66567637d9734442b66d4cb6f608c2015dd8c313",
+      "retrievedAt": "2026-10-20T12:09:03.984062+00:00"
+    },
+    {
+      "file": "gfw-loss-stock.csv",
+      "sha256": "ee0142242ec94ddcf09d810adf602d043fc3b25632eee581e17b1032a2a3bdef",
+      "retrievedAt": "2026-10-20T12:12:23.066142+00:00"
+    },
+    {
+      "file": "gfw-mangrove.csv",
+      "sha256": "098e0cb02eac2b02a2b9ba2a736f163945658ab8effce1a7ceb81fc82ff4eb6d",
+      "retrievedAt": "2026-10-20T12:12:41.543831+00:00"
+    },
+    {
+      "file": "gfw-peat.csv",
+      "sha256": "bdaf097775eb78594964aeca35dc0a65c3248cb1417384a772e7cd347f05d8e9",
+      "retrievedAt": "2026-10-20T12:12:57.245761+00:00"
+    },
+    {
+      "file": "natural-earth.json",
+      "sha256": "3e458fc036ad0a66411f2c1e6cac49c5d7bfb81cb1123bc513b22511a2b7fdeb",
+      "retrievedAt": "2026-10-20T12:10:47.080466+00:00"
+    }
+  ]
+}

@@ -9,7 +9,7 @@
 // Tables are never nested in this project, so a non-greedy block match is safe.
 
 const TABLE = /<table\b[\s\S]*?<\/table>/g;
-const WRAPPER_OPEN = '<div class="table-scroll">';
+const WRAPPER_OPEN = '<div class="table-scroll" tabindex="0" role="region" aria-label="Table / ตาราง">';
 
 /** @param {string} html @returns {string} */
 export function wrapTables(html) {
@@ -17,7 +17,7 @@ export function wrapTables(html) {
   return html.replace(TABLE, (block, offset, whole) => {
     // Already wrapped? The builder emits its own wrappers for audit tables.
     const before = whole.slice(0, offset);
-    if (before.endsWith(WRAPPER_OPEN)) return block;
+    if (/<div\b[^>]*class="table-scroll"[^>]*>$/.test(before)) return block;
     return `${WRAPPER_OPEN}${block}</div>`;
   });
 }

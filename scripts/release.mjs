@@ -16,10 +16,19 @@
 //
 // Usage: npm run deploy
 import {resolve} from 'node:path';
+import {execFileSync} from 'node:child_process';
+import {acquireReleaseLock, createReleaseReceipt, lockfileIdentity, finishRelease} from './lib/release-operations.mjs';
 import {assertCleanTree, createPristineTree, assertBuiltTreeMatchesCommit, headCommit, repoRoot, treeState} from './lib/release-tree.mjs';
 import {run as runCommand, INTERRUPTED, localReleaseEnv} from './lib/release-run.mjs';
 const root = repoRoot();
-const run = (command, args, options) => runCommand(command, args, {...options, env: localReleaseEnv()});
+const cancellation = new AbortController();
+let evidence, ownedLock, pristine;
+const run = (command, args, options) => runCommand(command, args, {...options, env: localReleaseEnv(), signal: cancellation.signal, onResult: evidence?.recordPhase});
+const cancel = signal => { console.error(`Release cancellation requested (${signal}); stopping owned children and preserving the receipt.`); cancellation.abort(); };
+const onTerm = () => cancel('SIGTERM');
+const onInt = () => cancel('SIGINT');
+process.on('SIGTERM', onTerm);
+process.on('SIGINT', onInt);
 
 // A release that stops must still clean up after itself: the pristine worktree it exported
 // lives in the repository's worktree list and in the temporary directory. process.exit() would
@@ -35,6 +44,11 @@ const productionBranch = process.env.CLOUDFLARE_BRANCH || 'main';
 // points a gate at whatever server a caller chooses, and a release must be verified against the
 // surface its users reach.
 const liveBase = process.env.CLOUDFLARE_LIVE_URL || 'https://carbon.nonarkara.org';
+const liveDomains = [...new Set([liveBase, 'https://carbon.nonarkara.org', 'https://forest-carbon-thailand.pages.dev'])];
+for (const domain of liveDomains) {
+  const url = new URL(domain);
+  if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash || url.pathname !== '/') throw new Error('Release verification URLs must be HTTPS origins without credentials or query state');
+}
 
 /**
  * Wait for the edge to serve the commit that was just uploaded.
@@ -43,12 +57,13 @@ const liveBase = process.env.CLOUDFLARE_LIVE_URL || 'https://carbon.nonarkara.or
  * propagate a new deployment. The wait is generous on purpose: a slow edge is a condition to
  * wait out, not a failure, and a tight budget here would fail releases that did ship.
  */
-async function waitForLiveCommit(short, budgetMs = 180000) {
+async function waitForLiveCommit(short, base = liveBase, budgetMs = 180000) {
   const deadline = Date.now() + budgetMs;
   let served = null;
   while (Date.now() < deadline) {
+    if (cancellation.signal.aborted) fail('FAIL release: cancelled before live verification');
     try {
-      const res = await fetch(`${liveBase}/version.json`, {signal: AbortSignal.timeout(5000)});
+      const res = await fetch(`${base}/version.json`, {signal: AbortSignal.timeout(5000)});
       if (res.ok) {
         const body = await res.json();
         served = body?.commit || null;
@@ -104,14 +119,28 @@ async function main() {
     fail(`FAIL release: ${err.message}`);
   }
   console.log(`release tree is clean at ${commit.short}`);
+  ownedLock = await acquireReleaseLock(root, commit.sha);
+  evidence = await createReleaseReceipt(root, commit);
+  evidence.receipt.project = project;
+  evidence.receipt.branch = productionBranch;
+  evidence.receipt.npm = execFileSync('npm', ['--version'], {encoding: 'utf8'}).trim();
+  await evidence.save();
+  console.log(`durable release receipt: ${evidence.dir}`);
+  if (cancellation.signal.aborted) fail('FAIL release: cancelled before export');
 
   // 2. Export the commit. Everything below happens in the export, never in the caller's tree.
   step('pristine release tree');
-  const tree = await createPristineTree({commit: commit.sha});
+  const tree = pristine = await createPristineTree({commit: commit.sha});
   console.log(`exported ${commit.short} to ${tree.dir}`);
   console.log(`  ${commit.subject}`);
 
-  try {
+    step('candidate dependencies');
+    const lockHash = await lockfileIdentity(tree.dir);
+    evidence.receipt.lockSha256 = lockHash;
+    evidence.receipt.dependencyMode = 'isolated npm ci --include=dev';
+    await evidence.save();
+    if (await run('npm', ['ci', '--include=dev', '--ignore-scripts=false', '--no-audit', '--no-fund'], {cwd: tree.dir, label: 'candidate dependency install'}) !== 0) fail('FAIL release: candidate dependencies did not install');
+    if (await lockfileIdentity(tree.dir) !== lockHash) fail('FAIL release: the candidate lockfile changed during dependency installation');
     step('build');
     if (await run('npm', ['run', 'build'], {cwd: tree.dir, label: 'the build'}) !== 0) fail('FAIL release: the build failed');
 
@@ -171,6 +200,7 @@ async function main() {
 
     // 3. The built tree must still be the commit.
     step('built tree');
+    await evidence.captureAssets(resolve(tree.dir, 'public'));
     const built = await assertBuiltTreeMatchesCommit(tree.dir);
     if (!built.ok) {
       fail(`FAIL release: the build changed files the commit does not contain:\n${built.changed.map(p => '  ' + p).join('\n')}`);
@@ -183,7 +213,7 @@ async function main() {
     // not the caller's, which another agent may be writing to at this moment.
     step('upload');
     const code = await run('npx', [
-      'wrangler', 'pages', 'deploy',
+      '--no-install', 'wrangler', 'pages', 'deploy',
       '--project-name', project,
       '--branch', productionBranch,
       '--commit-hash', commit.sha,
@@ -201,20 +231,38 @@ async function main() {
     const liveCode = await run('node', ['scripts/live-verify.mjs', liveBase], {cwd: tree.dir, label: 'the live verification', retryOnceOn: INTERRUPTED});
     if (liveCode !== 0) fail(`FAIL release: the live site did not verify at ${liveBase}`);
 
-    console.log(`\nPASS release: ${commit.short} built, measured, uploaded to ${project} (${productionBranch}) and verified live at ${liveBase}.`);
-  } finally {
-    await tree.remove();
-  }
+    step('both-domain exact-byte and security verification');
+    for (const base of liveDomains) {
+      await waitForLiveCommit(commit.short, base);
+      const domainCode = await runCommand('node', ['scripts/release-smoke.mjs'], {cwd: tree.dir, label: `release smoke ${base}`, env: {...localReleaseEnv(), BASE_URL: base}, signal: cancellation.signal, onResult: evidence.recordPhase, retryOnceOn: INTERRUPTED});
+      evidence.receipt.domains.push({base, commit: commit.short, ok: domainCode === 0});
+      await evidence.save();
+      if (domainCode !== 0) fail(`FAIL release: exact-byte/security verification failed at ${base}`);
+    }
+    evidence.receipt.status = 'verified';
+    await evidence.save();
+
 }
+
 
 try {
   await main();
 } catch (err) {
-  if (err instanceof ReleaseFailure) {
-    console.error(err.message);
-    process.exit(1);
+  process.exitCode = cancellation.signal.aborted ? 130 : 1;
+  if (evidence) evidence.receipt.status = cancellation.signal.aborted ? 'cancelled' : 'failed';
+  if (err instanceof ReleaseFailure) console.error(err.message);
+  else {
+    console.error('FAIL release: the release could not be completed');
+    console.error(err?.message || 'Unknown operational failure');
   }
-  console.error('FAIL release: the release could not be completed');
-  console.error(err?.stack || err);
-  process.exit(1);
+} finally {
+  const cleanupErrors = await finishRelease({tree: pristine, evidence, lock: ownedLock});
+  if (cleanupErrors.length) {
+    process.exitCode = process.exitCode || 1;
+    console.error(`FAIL release: ${cleanupErrors.join(', ')}; inspect the durable receipt and exact lock/worktree owner`);
+  }
+  if (evidence) console.log(`Release receipt retained at ${evidence.dir}`);
+  if (!process.exitCode && evidence?.receipt.status === 'verified') console.log(`\nPASS release: ${evidence.receipt.commit.short} built, measured, uploaded to ${project} (${productionBranch}) and verified live on ${liveDomains.join(', ')}. Receipt: ${evidence.dir}`);
+  process.removeListener('SIGTERM', onTerm);
+  process.removeListener('SIGINT', onInt);
 }

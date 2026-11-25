@@ -1,3 +1,4 @@
+import {createEvidenceTask} from './evidence-task.js';
 import {renderForestWatch,watchRecord,validWatch} from './forest-watch.js';
 // Carbon map lens: province / drawn box / project boundary → landscape ledger. Rendering only; arithmetic lives in ledger.js.
 import {readGrid,sumSelection,ledgerRows,polygonsOf,boxSideKm,bboxOf} from './ledger.js';
@@ -6,6 +7,9 @@ import {renderCalculations} from './selection-view.js';
 import {lossHTML,lossFigures,driverName} from './loss-view.js';
 import {stockHTML} from './stock-view.js';
 import {initRegistry} from './registry.js';
+import {loadJSON,loadBinary,resourceStatus} from './data-load.js';
+import {validStockYears,validLossYears,validLedgerManifest,validProvinceLedger,validProvinceGeometry,validNFI} from './source-contracts.js';
+import {sourceHealthHTML} from './source-health.js';
 const TVER_CLASSES=[[0,'#f3efe0'],[1,'#d9c98f'],[2,'#b89b3c'],[5,'#7a6200'],[10,'#3d3100']];
 // Non's Digest surfaces a moving-bar block on the carbon map when the digest module is wired in.
 let digestBars=()=>'';
@@ -25,26 +29,52 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const S={data:null,manifest:null,grid:null,gridPromise:null,sel:null,src:null,rows:[],layer:null,shape:null,overlay:null,atmos:null,drawing:false};
   const byCode=new Map();let watchData=null,watchStatus='loading';
-  const watchReady=fetch('data/gfw/watch.json').then(r=>{if(!r.ok)throw Error('watch');return r.json();}).then(d=>{if(!validWatch(d))throw Error('watch:invalid');watchData=d;watchStatus='ready';if(S.src)render();}).catch(()=>{watchStatus='unavailable';if(S.src)render();});const lossReady=fetch('data/gfw/loss-years.json').then(r=>r.ok?r.json():null).catch(()=>null).then(d=>{S.loss=d;applyMetricLabels();if(S.src)render();});let suppressMapClickUntil=0;let selectionRevision=0;
+  const kpiStatus=status=>['#kArea','#kStock','#kNet','#kFlows'].forEach(id=>$(id).dataset.status=status);kpiStatus('pending');
+  const optionalStatus={watch:'loading',loss:'loading',stockYears:'loading',nfi:'loading'};
+  const optionalPaths={watch:'data/gfw/watch.json',loss:'data/gfw/loss-years.json',stockYears:'data/cci/stock-years.json',nfi:'data/ledger/nfi-check.json'};
+  const validators={watch:validWatch,loss:validLossYears,stockYears:validStockYears,nfi:validNFI};
+  async function loadOptional(key){
+    optionalStatus[key]='loading';
+    try{const data=await loadJSON(optionalPaths[key],{validate:validators[key]});
+      if(key==='watch'){watchData=data;watchStatus='ready';}else S[key]=data;
+      optionalStatus[key]='ready';
+    }catch{optionalStatus[key]='unavailable';if(key==='watch')watchStatus='unavailable';}
+    if(S.manifest)applyMetricLabels();if(S.src)render();
+  }
+  const watchReady=loadOptional('watch'),lossReady=loadOptional('loss');let suppressMapClickUntil=0;let selectionRevision=0;const selectionTask=createEvidenceTask();
   const applyMetricLabels=()=>{const ds=S.manifest?.datasets;if(!ds)return;
     const o=$('#provinceMetric').options;
     o[0].textContent=`${t('metricFossil')} · ${ds.odiac.year}`;
     o[1].textContent=`${t('metricStock')} · ${ds.cci.year}`;
     o[2].textContent=getLang()==='th'?`${t('metricNet')} · เฉลี่ย ${ds.gfw.period}`:`${t('metricNet')} · ${ds.gfw.period} mean`;
     o[3].textContent=`${t('tverMetric')} · ${registry?.data()?.snapshot?.slice(0,4)||(getLang()==='th'?'ยังไม่มีข้อมูล':'unavailable')}`.trim();o[3].disabled=!registry.data();
-    o[4].textContent=`${t('metricLoss')} · ${S.loss?.meta.years.at(-5)}–${S.loss?.meta.years.at(-1)}`;o[4].disabled=!S.loss;document.querySelector('input[name=overlay][value=loss]').disabled=!S.loss;
+    o[4].textContent=S.loss?`${t('metricLoss')} · ${S.loss.meta.years.at(-5)}–${S.loss.meta.years.at(-1)}`:`${t('metricLoss')} · ${getLang()==='th'?'ข้อมูลไม่พร้อม':'unavailable'}`;o[4].disabled=!S.loss;document.querySelector('input[name=overlay][value=loss]').disabled=!S.loss;
     const overlay=document.querySelector('input[name=overlay][value=tver]');if(overlay)overlay.disabled=!registry.data();};
 
   const registry=initRegistry({t,fmt,getLang});
   // Optional context must never reject the landscape's operating readiness. Attach now,
   // before the independently fetched ledger finishes, to avoid an unhandled rejection.
   const registryReady=registry.ready.catch(()=>null);
-  const ready=Promise.all(['manifest.json','provinces.json','provinces.geojson'].map(f=>fetch('data/ledger/'+f).then(r=>{if(!r.ok)throw Error('ledger:'+f);return r.json();})))
+  async function loadCore(){
+    try{return await Promise.all([loadJSON('data/ledger/manifest.json',{validate:validLedgerManifest}),loadJSON('data/ledger/provinces.json',{validate:validProvinceLedger}),loadJSON('data/ledger/provinces.geojson',{validate:validProvinceGeometry})]);}
+    catch{
+      // Keep operating readiness pending while the user chooses a retry; callers do
+      // not inherit a permanently rejected promise after a transient source outage.
+      kpiStatus('unavailable');['#kArea','#kStock','#kNet','#kFlows'].forEach(id=>$(id).textContent='—');
+      const notice=document.createElement('div');notice.className='lrow unavailable';
+      const copy=document.createElement('p');copy.setAttribute('role','alert');copy.textContent=getLang()==='th'?'โหลดแหล่งข้อมูลแผนที่ไม่สำเร็จ ยังไม่มีผลคำนวณ ลองโหลดอีกครั้งได้':'Map source files could not be loaded. No result is available. Retry when ready.';
+      const retry=Object.assign(document.createElement('button'),{type:'button',className:'btn small',textContent:getLang()==='th'?'ลองโหลดข้อมูลแผนที่อีกครั้ง':'Retry map sources'});retry.dataset.retryCore='';
+      notice.append(copy,retry);$('#ledger').replaceChildren(notice);$('#ledgerDetails').open=true;
+      if(document.body.dataset.view==='map'&&!document.body.dataset.about&&(!document.body.dataset.mode||document.body.dataset.mode==='carbon')){document.body.dataset.view='rail';document.querySelectorAll('.bottom-nav button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tab==='carbon')));}
+      await new Promise(resolve=>{retry.onclick=()=>{retry.disabled=true;copy.textContent=t('loading');resolve();};});
+      return loadCore();
+    }
+  }
+  const ready=loadCore()
     .then(([manifest,data,geo])=>{
       S.manifest=manifest;S.data=data;
       // National forest-inventory check (optional file): shown beside the map figure, never applied to it.
-      fetch('data/cci/stock-years.json').then(r=>r.ok?r.json():null).then(d=>{S.stockYears=d;if(S.src)render();}).catch(()=>{});
-      fetch('data/ledger/nfi-check.json').then(r=>r.ok?r.json():null).then(n=>{S.nfi=n;if(S.src)render();}).catch(()=>{});
+      loadOptional('stockYears');loadOptional('nfi');
       data.provinces.forEach(p=>byCode.set(p.pcode,p));byCode.set('TH',data.national);
       S.layer=L.geoJSON(geo,{style:()=>({color:'#f6f4ec',weight:.6,opacity:.45,fillOpacity:0}),
         onEachFeature:(f,l)=>l.on('click',()=>{if(!S.drawing&&!map.getContainer().classList.contains('measuring')&&Date.now()>suppressMapClickUntil)select({kind:'province',code:f.properties.pcode});})}).addTo(map);
@@ -66,13 +96,14 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
 
   async function loadGrid(){
     if(S.grid)return S.grid;
-    S.gridPromise??=fetch('data/ledger/grid.bin').then(r=>{if(!r.ok)throw Error('ledger:grid');return r.arrayBuffer();}).then(b=>S.grid=readGrid(b,S.manifest.grid));
+    S.gridPromise??=loadBinary('data/ledger/grid.bin',{validate:b=>{readGrid(b,S.manifest.grid);return true;}}).then(b=>S.grid=readGrid(b,S.manifest.grid)).catch(error=>{S.gridPromise=null;throw error;});
     return S.gridPromise;
   }
 
   // user=false for the default selection made when data arrive: it must not pull the reader off another tab.
   async function select(sel,fit=true,user=true){
-    const revision=++selectionRevision;if(user)onSelect();S.sel=sel;$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;if(S.shape){map.removeLayer(S.shape);S.shape=null;}
+    if(!S.data||!S.manifest){message(getLang()==='th'?'ข้อมูลแผนที่ยังไม่พร้อม กดลองโหลดข้อมูลแผนที่อีกครั้ง แล้วเลือกพื้นที่ใหม่':'Map sources are not ready. Retry map data, then select the area again.');return false;}
+    const revision=++selectionRevision;selectionTask.cancel();if(user)onSelect();S.sel=sel;$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;if(S.shape){map.removeLayer(S.shape);S.shape=null;}
     styleProvinces();
     // At tablet width the map stays beside the panel, so the view changes before the fit, or the fit frames the wrong size.
     if(user&&innerWidth>=768&&innerWidth<=1100&&sel.kind!=='national'){document.body.dataset.view='rail';document.querySelectorAll('.bottom-nav button').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.tab==='carbon')));map.invalidateSize();}
@@ -80,10 +111,20 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       S.src=byCode.get(sel.code);$('#place').value=sel.code;
       if(fit){if(sel.kind==='national')fitThailand();else S.layer.eachLayer(l=>{if(l.feature.properties.pcode===sel.code)map.fitBounds(l.getBounds(),{padding:[30,30]});});}
     }else{
-      $('#place').value='box';S.src=null;$('#calculationTrace').textContent=t('loading');$('#ledger').replaceChildren();$('#kStock').textContent=t('loading');$('#kNet').textContent=$('#kFlows').textContent='—';
-      const grid=await loadGrid(),{totals,cells}=sumSelection(grid,sel.box?{box:sel.box}:{polygons:sel.polygons});
+      kpiStatus('pending');$('#place').value='box';S.src=null;$('#calculationTrace').textContent=t('loading');$('#ledger').replaceChildren();$('#kStock').textContent=t('loading');$('#kNet').textContent=$('#kFlows').textContent='—';
+      $('#kArea').textContent='—';['#kAreaHint','#kStockHint','#kNetHint','#kFlowsHint'].forEach(id=>$(id).textContent=t('loading'));$('#carbonVerdict').textContent=t('loading');$('#selectionName').textContent=$('#mapLabel').textContent=getLang()==='th'?'พื้นที่ที่เลือก':'Selected area';
+      let grid,selectionResult;
+      try{grid=await loadGrid();if(revision!==selectionRevision)return;selectionResult=sel.box?sumSelection(grid,{box:sel.box}):await selectionTask.run('landscape',{grid,selection:{polygons:sel.polygons}});}catch(error){
+        if(revision!==selectionRevision)return;
+        kpiStatus('unavailable');$('#kStock').textContent='—';['#kAreaHint','#kStockHint','#kNetHint','#kFlowsHint'].forEach(id=>$(id).textContent='—');$('#carbonVerdict').textContent=getLang()==='th'?'ข้อมูลพื้นที่ไม่พร้อม':'Area data unavailable';
+        $('#calculationTrace').textContent=getLang()==='th'?'ข้อมูลพื้นที่หรือการคำนวณยังไม่พร้อม ลองอีกครั้งได้':'Area data or calculation is unavailable. No selection result is available. You can retry.';
+        const retry=Object.assign(document.createElement('button'),{type:'button',className:'btn small',textContent:getLang()==='th'?'ลองโหลดพื้นที่อีกครั้ง':'Retry area data'});
+        retry.dataset.retryGrid='';retry.onclick=()=>select(sel,fit,false);$('#calculationTrace').append(' ',retry);return;
+      }
+      const {totals,cells}=selectionResult;
       if(revision!==selectionRevision)return;S.src={...totals,cells,pcode:null};
       S.shape=(sel.box?L.rectangle([[sel.box.south,sel.box.west],[sel.box.north,sel.box.east]]):L.geoJSON(sel.geojson)).setStyle({color:'#ffcc00',weight:3,fillOpacity:.08,interactive:false}).addTo(map);
+      if(fit&&sel.kind==='boundary')map.fitBounds(S.shape.getBounds(),{padding:[30,30]});
     }
     render();if(innerWidth<=1100&&sel.kind!=='national'){document.body.dataset.view='rail';document.querySelectorAll('.bottom-nav button').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.tab==='carbon')));}
   }
@@ -108,6 +149,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const s=S.src;S.rows=rowsFor();const r=id=>S.rows.find(x=>x.id===id);
     if(onState)onState({kind:S.sel.kind,code:S.sel.code,box:S.sel.box,polygons:S.sel.polygons,geojson:S.sel.geojson});
     const stock=r('stock_forest'),rem=r('forest_removals'),em=r('forest_emissions');
+    kpiStatus('ready');$('#kStock').dataset.status=stock?.tooCoarse||stock?.value==null?'unavailable':'ready';$('#kNet').dataset.status=r('forest_net')?.value==null?'unavailable':'ready';$('#kFlows').dataset.status=rem?'ready':'unavailable';
     $('#kArea').replaceChildren(`${big(s.area_ha)} `,Object.assign(document.createElement('span'),{className:'unit',textContent:t('ha')}));
     $('#kAreaHint').textContent=s.cells!=null?t('boxHint').replace('{c}',fmt(s.cells)):t('forestShare').replace('{f}',fmt(100*s.forest_area_ha/s.area_ha,1));
     // Satellite tree cover is not Thailand's official forest statistic; the strip says tree cover, the title says why.
@@ -128,7 +170,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     // A bare minus can read as a loss, so the label line itself names the sign.
     $('.kpis [data-i18n=kNet]').textContent=net?.value!=null?`${t(net.value<0?'netSink':'netSource')} · tCO₂e/${getLang()==='th'?'ปี':'yr'}`:t('kNet');
     $('#kNetHint').textContent=net?.value!=null?t('gfwAverage').replace('{p}',S.manifest.datasets.gfw.period):t('gridNotIngested').split('.')[0];
-    $('#kFlows').textContent=rem?`${part(rem.value)}\u2009/\u2009${part(em.value)}${mega?' M':''}`:'—';
+    if(rem){const token=(value,suffix='')=>Object.assign(document.createElement('span'),{className:'numeric-token',textContent:part(value)+suffix});$('#kFlows').replaceChildren(token(rem.value),'\u2009/\u2009',token(em.value,mega?' M':''));}else $('#kFlows').textContent='—';
     $('#kFlowsHint').textContent=rem?gfwTag:t('gridNotIngested').split('.')[0];
     $('#carbonVerdict').textContent=rem?t('verdictLine').replace('{n}',placeName(s)).replace('{r}',big(rem.value)).replace('{e}',big(em.value)):!s.area_ha?t('emptySelection'):stock?.tooCoarse?t('tooCoarseGrid'):t('verdictBox').replace('{s}',big(stock?.value));
     $('#ledger').innerHTML=ledgerHTML(s);
@@ -139,6 +181,9 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const tverHTML=registry.section(pcode);
     if(tverHTML)$('#ledger').insertAdjacentHTML('beforeend',tverHTML);
     if(S.sel.kind==='national'){const bars=digestBars();if(bars)$('#ledger').insertAdjacentHTML('beforeend',bars);}
+    $('#ledger').insertAdjacentHTML('beforeend',sourceHealthHTML({manifest:S.manifest,status:optionalStatus,paths:optionalPaths,resourceStatus,watch:watchData,registry:registry.data(),lang:getLang(),esc}));
+    $('#ledger').querySelectorAll('[data-retry-source]').forEach(button=>button.onclick=()=>loadOptional(button.dataset.retrySource));
+    const retryRegistry=$('#ledger [data-retry-registry]');if(retryRegistry)retryRegistry.onclick=()=>{retryRegistry.disabled=true;registry.retry().then(()=>{applyMetricLabels();render();}).catch(()=>render());};
     $('#selectionName').textContent=S.sel.kind==='province'||S.sel.kind==='national'?placeName(s):getLang()==='th'?'พื้นที่ที่เลือก':'Selected area';
     $('#mapLabel').textContent=$('#selectionName').textContent;
     $('#calculationTrace').innerHTML=renderCalculations({src:s,rows:S.rows,datasets:S.manifest.datasets,conv:S.manifest.conversion,t,fmt,esc,getLang,nfi:S.nfi})+(s.area_ha?lossHTML({data:S.loss,code:S.sel.kind==='national'?'TH':S.sel.kind==='province'?S.sel.code:null,lang:getLang(),fmt,esc})+stockHTML({data:S.stockYears,code:S.sel.kind==='national'?'TH':S.sel.kind==='province'?S.sel.code:null,lang:getLang(),fmt,esc,toCo2e:S.manifest.conversion.agb_to_co2e}):'');
@@ -259,7 +304,7 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
   $('#provinceMetric').onchange=()=>{renderProvinces();if($('#provinceMetric').value==='loss')showOverlay('loss');};document.addEventListener('langchange',applyMetricLabels);
   $('#closeProvinces').onclick=()=>{$('#provinceBrowser').hidden=true;delete document.body.dataset.provinces;};
   $('#nationalView').onclick=()=>select({kind:'national',code:'TH'});
-  $('#useBoundary').onclick=()=>{const b=getBoundary();if(!b){message(t('noBoundaryYet'));return;}const polygons=polygonsOf(b.geojson);select({kind:'boundary',polygons,geojson:b.geojson,box:null}).then(()=>map.fitBounds(S.shape.getBounds(),{padding:[30,30]})).catch(err=>message(String(err.message||err)));};
+  $('#useBoundary').onclick=()=>{const b=getBoundary();if(!b){message(t('noBoundaryYet'));return;}const polygons=polygonsOf(b.geojson);select({kind:'boundary',polygons,geojson:b.geojson,box:null}).catch(err=>message(String(err.message||err)));};
   $('#place').addEventListener('change',()=>{setDrawing(false);const v=$('#place').value;if(v==='TH')select({kind:'national',code:'TH'});else if(byCode.has(v))select({kind:'province',code:v});});
 
   // ---- overlays ----
@@ -319,6 +364,8 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
       selection:S.sel.kind==='box'?{kind:'box',bbox:S.sel.box}:S.sel.kind==='boundary'?{kind:'project-boundary',geojson:S.sel.geojson}:{kind:S.sel.kind,pcode:S.src.pcode,name_en:S.src.name_en,name_th:S.src.name_th},
       rows:S.rows,crossChecks:{climatetrace_2024:S.src.climatetrace_2024||null,btr1_2022:S.src.btr1_2022||null},
       tverRegistry:tverInfo,
+      sourceStatus:Object.fromEntries(Object.entries(optionalPaths).map(([key,path])=>[key,{...resourceStatus(path),status:optionalStatus[key]}])),
+      optionalEvidence:{stockYears:S.stockYears?{meta:S.stockYears.meta,scope:'national-and-province-only',notParcelInput:true}:null,loss:S.loss?{meta:S.loss.meta,scope:'national-and-province-only',notParcelInput:true}:null,nfi:S.nfi?{source:S.nfi.nfi.source,url:S.nfi.nfi.url,referenceYear:S.nfi.nfi.reference_year,plotYears:S.nfi.nfi.plot_years,caveats:S.nfi.caveats,notParcelInput:true}:null},
       forestWatch:pcode&&watchData?{dataset:watchData.dataset,version:watchData.version,window:watchData.window,mask:watchData.mask,unit:watchData.unit,lastAlertDate:watchData.lastAlertDate,attribution:watchData.attribution,source:watchData.source,rawSha256:watchData.rawSha256,countryCheck:watchData.countryCheck,retrievedAt:watchData.retrievedAt,licence:watchData.licence,limitations:watchData.limitations,dates:watchData.dates,record:watchRecord(watchData,pcode)}:null,
       conversion:S.manifest.conversion,conservation:S.manifest.conservation,datasets:S.manifest.datasets};
   }
@@ -327,5 +374,5 @@ export function initLandscape({map,t,fmt,getLang,getBoundary,download,message,on
     const body=S.rows.map(r=>[r.id,r.value??'',r.unit,r.dataset.name,r.dataset.version||'',r.dataset.year||r.dataset.period||'',r.central?.[0]??'',r.central?.[1]??'',r.conservative?.[0]??'',r.conservative?.[1]??'',r.optimistic?.[0]??'',r.optimistic?.[1]??'',r.unavailable||(r.tooCoarse?'below-dataset-resolution':'')]);
     download('carbon-ledger.csv','﻿'+[head,...body].map(x=>x.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n'),'text/csv;charset=utf-8');};
 
-  return {ready,select,fitThailand,render:()=>{if(S.data){fillPlaces();render();if(S.overlayKind)setOverlay(S.overlayKind);}if(S.atmos)$('#atmosNote').textContent=t(ATMOS[$('#atmos').value].note);},invalidate:()=>{},setDigestBars:fn=>{digestBars=fn;if(S.data)render();}};
+  return {ready,select,fitThailand,clearProjectSelection:()=>{if(S.sel?.kind==='boundary')select({kind:'national',code:'TH'},false,false);},render:()=>{if(S.data){fillPlaces();render();if(S.overlayKind)setOverlay(S.overlayKind);}if(S.atmos)$('#atmosNote').textContent=t(ATMOS[$('#atmos').value].note);},invalidate:()=>{},setDigestBars:fn=>{digestBars=fn;if(S.data)render();}};
 }

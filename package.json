@@ -31,6 +31,7 @@
     "@turf/kinks": "^7.4.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.1",
     "esbuild": "^0.28.2",
     "marked": "^18.2.1",
     "playwright": "^1.65.1",
