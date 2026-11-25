@@ -215,10 +215,10 @@ All three ranges describe random error only. They exclude systematic map bias, w
 A satellite map should be checked against field measurements before its totals are trusted. Thailand's forest reference level submitted to the UNFCCC ([FREL/FRL, modified July 2021](https://redd.unfccc.int/media/modified_thailand_rl_july2021.pdf)) publishes what the national forest inventory found: mean aboveground biomass per forest type from cycle 3 plots measured 2013–2018 (reference year 2017; Table 13), and the area of each forest type in 2016 (Table 6). The pipeline compares the two at national scale, with a nominal 2017 reference but differing measurement years and forest populations, rather than matched plots against pixels ([Réjou-Méchain et al. 2019](https://doi.org/10.1007/s10712-019-09532-0)). Script: `scripts/ingest/nfi_check.py`; result: [`nfi-check.json`](data/ledger/nfi-check.json).
 
 <div class="number-strip">
-<div class="number-card"><b class="brand">23.8 Mha</b><span>Map forest area vs 17.2 Mha in inventory — 39% more</span></div>
+<div class="number-card"><b class="brand">23.8 Mha</b><span>Map forest area vs 17.2 Mha in inventory — 38% more</span></div>
 <div class="number-card"><b class="brand">165 t/ha</b><span>Map biomass per ha vs 90.5 t/ha — 82% higher</span></div>
 <div class="number-card"><b class="brand">2.5×</b><span>Map total biomass vs inventory — 3.94 vs 1.56 Gt</span></div>
-<div class="number-card"><b class="brand">3.48 Gt</b><span>Inventory carbon stock; map has no comparable total</span></div>
+<div class="number-card"><b class="brand">3.48 Gt CO₂e</b><span>Inventory carbon stock, ±0.25 Gt at 95%</span></div>
 </div>
 
 | | National forest inventory (FREL) | ESA CCI 2017 over JAXA FNF 2017 forest |
@@ -255,19 +255,6 @@ The atmosphere layers answer a different question from the ledger:
 Directly, plume by plume, satellites can turn XCO₂ into an emission only for large, isolated sources. A study of power plants seen by OCO-2 and OCO-3 kept 106 usable cases out of about 23,000 candidate tracks ([Atmospheric Chemistry and Physics, 2023](https://acp.copernicus.org/articles/23/6599/2023/)). Atmospheric inversions using OCO-2 estimate coarse national and regional net fluxes ([Byrne et al. 2023](https://essd.copernicus.org/articles/15/963/2023/)), not provincial totals. For this reason the atmosphere layers ([NASA GIBS](https://nasa-gibs.github.io/gibs-api-docs/)) are pictures with labels and never numbers.
 
 ### Two national accounts, side by side
-
-<div class="comparison-strip">
-<div class="compare-side">
-<h4>GFW forest model · 2001–2025 average</h4>
-<b>−21.2 Mt CO₂e/yr net</b>
-<small>92.9 Mt removals · 71.7 Mt emissions · satellite-mapped forest &gt;30% cover · stand-replacing loss</small>
-</div>
-<div class="compare-side">
-<h4>BTR1 2022 · whole LULUCF sector</h4>
-<b>−107.9 Mt CO₂e net</b>
-<small>156.8 Mt removals · 48.6 Mt emissions · includes cropland remaining cropland · managed land</small>
-</div>
-</div>
 
 | Account | Removals | Emissions | Net | Scope |
 |---|---:|---:|---:|---|
@@ -617,28 +604,7 @@ Forest-carbon estimation from space is a crowded field. The systems below were r
 
 The four Thai platforms are the ones TGO recognised for T-VER forestry work in June 2025 (section 11). None publishes an accuracy figure that can be checked. The global vendors publish validation reports, mostly for their own models against LiDAR.
 
-<div class="claim-strip">
-<div class="claim-item">
-<h4>Whole method and code published</h4>
-<p>Offline pipeline, fetch log with file hashes, and tests — all open.</p>
-</div>
-<div class="claim-item">
-<h4>A conservation rule</h4>
-<p>Provinces, drawn boxes and national total are sums of the same 100 m pixels and are tested to agree.</p>
-</div>
-<div class="claim-item">
-<h4>Uncertainty calibrated to the producer</h4>
-<p>Median SD ratios 1.23–1.47 across processing runs. A consistency diagnostic, not independent coverage validation.</p>
-</div>
-<div class="claim-item">
-<h4>Checked against Thailand's forest inventory</h4>
-<p>Across unmatched national populations, with published uncertainty and conditional allometric sensitivity.</p>
-</div>
-<div class="claim-item">
-<h4>Registry context kept apart</h4>
-<p>TGO's registered and issued tonnes sit beside satellite figures — never added to them.</p>
-</div>
-</div>
+### What คาร์บอนนะ does differently
 
 Of the systems in this list, it is the one that publishes all of the following together for Thailand (Global Forest Watch also publishes open code for its flux model):
 
@@ -653,7 +619,7 @@ It is also free and needs no account. It does not claim higher accuracy than the
 ### What the others do that this one does not yet
 
 - **Higher resolution and LiDAR-trained models** (Sylvera, Kanop, Planet). The 100 m ESA map cannot see individual trees, and drawn boxes work at about 2.8 km.
-- **Annual time series** (CTrees, Chloris, Sylvera). This map uses one stock year. CCI v7 has yearly maps and a change product with its own quality flag, which would allow change estimates without subtracting two maps naively.
+- **Annual time series at parcel scale** (CTrees, Chloris, Sylvera). Since 9 November 2026 this map reports CCI v7 biomass for every year 2015–2024 by province, and reads change only through ESA's own quality flags (section 06). The stock and flux figures beside the map still use one year, and change is not reported for a drawn box.
 - **Field-calibrated models for Thai forest types** (GISTDA). Here, Thai field data enter only as a national check, not as a calibration.
 - **More than one biomass map.** Map-to-map disagreement is often larger than any single map's stated error ([Araza et al. 2023](https://www.sciencedirect.com/science/article/pii/S1569843223000961)). Adding CTrees AGB (CC BY 4.0, yearly, with uncertainty) as a second map would show that spread by province.
 - **Sample-based province estimates from GEDI lidar footprints** combined with the map through small-area estimation ([Ståhl et al. 2016](https://forestecosyst.springeropen.com/articles/10.1186/s40663-016-0064-9)). This needs an Earthdata account.
@@ -706,29 +672,29 @@ The [GHG Protocol Corporate Standard](https://ghgprotocol.org/corporate-standard
 
 <div class="station-strip">
 <div class="station">
-<b>Scope 1 · what you burn</b>
+<b>This tool: none</b>
 <h4>Corporate inventory</h4>
-<p>GHG Protocol + ISO 14064-1 · tCO₂e per year by scope · reporting year · this tool: none</p>
+<p>GHG Protocol + ISO 14064-1 · tCO₂e per year by scope · reporting year</p>
 </div>
 <div class="station">
-<b>Scope 2 · energy you buy</b>
+<b>This tool: none</b>
 <h4>Product footprint</h4>
-<p>ISO 14067 via LCA · tCO₂e per functional unit · life cycle · this tool: none</p>
+<p>ISO 14067 via LCA · tCO₂e per functional unit · life cycle</p>
 </div>
 <div class="station">
-<b>Scope 3 · value chain</b>
+<b>This tool: cross-check beside the map</b>
 <h4>Territorial inventory</h4>
-<p>IPCC 2006 · Thailand's BTR1 (2022) · MtCO₂e per year · calendar year · cross-check beside map</p>
+<p>IPCC 2006 · Thailand's BTR1 (2022) · MtCO₂e per year · calendar year</p>
 </div>
 <div class="station">
-<b>Landscape screening</b>
-<h4>This workbench</h4>
-<p>Open data · tCO₂e stock · tCO₂e/yr flux · each dataset's own period · the tool itself</p>
+<b>This tool: the tool itself</b>
+<h4>Landscape screening</h4>
+<p>Open data · tCO₂e stock · tCO₂e/yr flux · each dataset's own period</p>
 </div>
 <div class="station">
-<b>Credit project</b>
-<h4>T-VER-S-METH-13-01 v2</h4>
-<p>tCO₂e over monitoring period · baseline → monitoring date · arithmetic for supplied measurements only</p>
+<b>This tool: arithmetic for supplied measurements only</b>
+<h4>Credit project</h4>
+<p>T-VER-S-METH-13-01 v2 · tCO₂e over a monitoring period · baseline → monitoring date</p>
 </div>
 </div>
 
@@ -818,28 +784,12 @@ Short answer: a credit is a registry entry with a serial number, a vintage and a
 
 **Issuance** is where units come into existence: a qualified party verifies measured change against an approved methodology, and the registry mints units carrying a vintage (the monitoring period) and serials. Issued is not the same as sold, and sold is not the same as used — the T-VER snapshot in this tool shows the gap plainly: 257 registered projects, 31 with credits certified at all. **Holding and transfer** move ownership between registry accounts; a transfer changes who owns the argument, not the atmosphere. Double-claiming risk lives here, which is why serials exist: one unit, one claim, ever. **Retirement** (or cancellation) marks a unit permanently used — a held unit is an asset, a retired unit is a spent one. **The claim** is what the retiree then says in public, and it is the station where the market's confusion concentrates.
 
-<div class="station-strip">
-<div class="station">
-<b>Station 1 · Issuance</b>
-<h4>Units come into existence</h4>
-<p>A qualified party verifies measured change against an approved methodology. The registry mints units carrying a vintage and serials. Issued is not sold; sold is not used.</p>
-</div>
-<div class="station">
-<b>Station 2 · Holding &amp; transfer</b>
-<h4>Ownership moves between accounts</h4>
-<p>A transfer changes who owns the argument, not the atmosphere. Double-claiming risk lives here — one unit, one claim, ever.</p>
-</div>
-<div class="station">
-<b>Station 3 · Retirement</b>
-<h4>Status: available → used, permanently</h4>
-<p>A held unit is an asset; a retired unit is a spent one. The retirement date tells when the environmental argument was spent.</p>
-</div>
-<div class="station">
-<b>Station 4 · The claim</b>
-<h4>A public statement attaches to retirement</h4>
-<p>The station where market confusion concentrates. Scope and period of the claim must match the unit's.</p>
-</div>
-</div>
+| Station | What changes | What must never change | Where a reader verifies |
+|---|---|---|---|
+| Issuance | Units come into existence | Methodology version, monitoring dates, vintage | Registry project page |
+| Transfer | Owner of record | Serial, vintage, status stays unspent | Registry holding records |
+| Retirement | Status: available → used, permanently | Serial, vintage, the period it was measured over | Registry retirement records |
+| Claim | A public statement attaches to the retirement | Scope and period of the claim must match the unit's | The claimant's report, audited against the registry |
 
 <p><strong>Issuance</strong> is where units come into existence: a qualified party verifies measured change against an approved methodology, and the registry mints units carrying a vintage (the monitoring period) and serials. Issued is not the same as sold, and sold is not the same as used — the T-VER snapshot in this tool shows the gap plainly: 257 registered projects, 31 with credits certified at all. <strong>Holding and transfer</strong> move ownership between registry accounts; a transfer changes who owns the argument, not the atmosphere. Double-claiming risk lives here, which is why serials exist: one unit, one claim, ever. <strong>Retirement</strong> (or cancellation) marks a unit permanently used — a held unit is an asset, a retired unit is a spent one. <strong>The claim</strong> is what the retiree then says in public, and it is the station where the market's confusion concentrates.</p>
 
