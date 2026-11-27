@@ -35,7 +35,7 @@
     "esbuild": "^0.28.2",
     "marked": "^18.2.1",
     "playwright": "^1.65.1",
-    "wrangler": "^4.164.0"
+    "wrangler": "^4.167.0"
   },
   "overrides": {
     "sharp": "0.35.5",
